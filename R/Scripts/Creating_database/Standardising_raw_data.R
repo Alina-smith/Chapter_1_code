@@ -30,12 +30,13 @@ Gavrilko <- read_xlsx(database_path, sheet = "Gavrilko")
 LT <- read_xlsx(database_path, sheet = "Laplace-Treyture")
 NO <- read_xlsx(database_path, sheet = "Neury-Ormanni")
 rimet2012 <- read_xlsx(database_path, sheet = "Rimet 2012")
-sources <- read_xlsx(database_path, sheet = "original.source")
+original_sources_raw <- read_xlsx(database_path, sheet = "original_source")
+sources <- read_xlsx(database_path, sheet = "source")
 location <- read_xlsx(database_path, sheet = "location")
 
-########################################## orignal source database ====
+##### Original source dataframe ----
 # rimmet has been put first to make it easier with the ref.code numbering
-original_source <- sources %>% 
+original_source <- original_sources_raw %>% 
   rename(
     authors = Authors,
     year = Year,
@@ -45,11 +46,11 @@ original_source <- sources %>%
     ref.code = Ref.code
   ) %>% 
   mutate(
-    source.code = row_number()
+    original.source.code = row_number()
   ) %>% 
-  relocate(source.code, ref.code, database, authors, year, title, publisher, pub.type)
+  relocate(original.source.code, ref.code, database, authors, year, title, publisher, pub.type)
 
-saveRDS(original_source, file = "R/Data/Standardised_data/original_source.rds")
+saveRDS(original_source, file = "R/Data_outputs/Standardised_data/original_source.rds")
 
 ############################################################### Rimmet ====
 # Reorganise and mutate
@@ -83,7 +84,7 @@ rimmet_subset <- rimet %>%
       stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
       TRUE ~ "adult"),
     
-    ### Extracting info from biovol.nots
+    ### Extracting info from biovol.notes
     ## Year (make all into in 0000 format)
     sample.start.year = case_when(
       stri_detect_regex(biovol.notes, "\\b\\d{4}[-\u2013]\\d{4}\\b|\\b\\d{4}\\b") ~ stri_extract_first_regex(biovol.notes, "\\b\\d{4}"),
@@ -119,21 +120,22 @@ rimmet_subset <- rimet %>%
   ) %>% 
   select(- database) %>% 
   
-  # Add in biovol.ref info - match any of the location codes with the ref.code in orignal.source
-  left_join(select(original_source, source.code, ref.code), by = c("location.code" = "ref.code")) %>% 
-  rename(biovol.ref = source.code) %>% 
+  # Add in biovol.ref info - match any of the location codes with the ref.code in original source
+  left_join(select(original_source, original.source.code, ref.code), by = c("location.code" = "ref.code")) %>% 
+  rename(biovol.ref = original.source.code) %>% 
+  mutate(biovol.ref = as.character(biovol.ref)) %>% 
   
   # remove redundant columns
   select(-location.code, - biovol.notes) %>% 
   
   # Add in extra info and reorder
   mutate(
-    source = 'Rimet & Druart., 2018',
+    source.code = '1',
     sample.month = NA_character_,
   ) %>%
-  relocate(source, original.taxa.name, life.stage, cell.biovol, cells.per.nu, nu.biovol, nu.biovol.mucilage, biovol.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude)
+  relocate(source.code, original.taxa.name, life.stage, cell.biovol, cells.per.nu, nu.biovol, nu.biovol.mucilage, biovol.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude)
 
-saveRDS(rimmet_subset, file = "R/Data/Standardised_data/rimmet_subset.rds")
+saveRDS(rimmet_subset, file = "R/Data_outputs/Standardised_data/rimmet_subset.rds")
 
 ################################################################################### Kremer ====
 # organize kremer raw data
@@ -224,19 +226,20 @@ kremer_subset <- kremer %>%
   select(- sample.date, -nu) %>% 
   
   # Add in biovol.ref info
-  left_join(select(original_source, source.code, ref.code), by = c("original.source" = "ref.code")) %>% 
+  left_join(select(original_source, original.source.code, ref.code), by = c("original.source" = "ref.code")) %>% 
   select(- original.source) %>% 
-  rename(biovol.ref = source.code) %>% 
+  rename(biovol.ref = original.source.code) %>% 
+  mutate(biovol.ref = as.character(biovol.ref)) %>% 
   
   # Add in extra info
   mutate(
-    source = 'Kremer et al., 2014'
+    source.code = '2'
   ) %>%
   
   # Reorder
-  relocate(source, original.taxa.name, life.stage, cell.biovol, nu.biovol, cells.per.nu, biovol.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude)
+  relocate(source.code, original.taxa.name, life.stage, cell.biovol, nu.biovol, cells.per.nu, biovol.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude)
 
-saveRDS(kremer_subset, file = "R/Data/Standardised_data/kremer_subset.rds")
+saveRDS(kremer_subset, file = "R/Data_outputs/Standardised_data/kremer_subset.rds")
 
 ############################################################### Odume ====
 
@@ -284,13 +287,13 @@ odume_subset_raw <- odume %>%
   
   # add in original.source infor for all the measurements
   mutate(ref.code = "odume et al") %>% 
-  left_join(select(original_source, ref.code, source.code), by = "ref.code") %>% 
+  left_join(select(original_source, ref.code, original.source.code), by = "ref.code") %>% 
   mutate(
-    length.ref = as.character(source.code),
-    width.ref = as.character(source.code),
-    height.ref = as.character(source.code)
+    length.ref = as.character(original.source.code),
+    width.ref = as.character(original.source.code),
+    height.ref = as.character(original.source.code)
   ) %>% 
-  select(-source.code, -ref.code) %>% 
+  select(-original.source.code, -ref.code) %>% 
   
   # Add extra info and reorder
   mutate(
@@ -299,7 +302,7 @@ odume_subset_raw <- odume %>%
     continent = "Africa",
     latitude = "-24.175147",
     longitude = "19.227253",
-    source = 'Odume et al., 2023 ',
+    source.code = '3',
     sample.start.year = NA_character_,
     sample.end.year = NA_character_,
     sample.month = NA_character_
@@ -468,9 +471,9 @@ odume_subset <- bind_rows(odume_exact,odume_approx, odume_lwh, odume_or, odume_r
     min.width = NA,
     max.width = NA
   ) %>% 
-  relocate(source, original.taxa.name, life.stage, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude)
+  relocate(source.code, original.taxa.name, life.stage, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude)
 
-saveRDS(odume_subset, file = "R/Data/Standardised_data/odume_subset.rds")
+saveRDS(odume_subset, file = "R/Data_outputs/Standardised_data/odume_subset.rds")
 
 ############################################################### Hebert ====
 # Reorganise and mutate
@@ -544,7 +547,7 @@ hebert_subset <- hebert %>%
   
   #Add in extra info
   mutate(
-    source = 'Hebert et al., 2016',
+    source.code = '4',
     life.stage = "adult",
     min.width = NA,
     max.width = NA,
@@ -562,9 +565,9 @@ hebert_subset <- hebert %>%
     sample.month = NA_character_,
     data.method = NA_character_
   ) %>%
-  relocate(source, original.taxa.name, biomass.ref, length.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude, min.length, max.length, avg.length, min.width, max.width, avg.width, min.height, max.height, avg.height, min.biomass, max.biomass, avg.biomass, data.method)
+  relocate(source.code, original.taxa.name, biomass.ref, length.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude, min.length, max.length, avg.length, min.width, max.width, avg.width, min.height, max.height, avg.height, min.biomass, max.biomass, avg.biomass, data.method)
 
-saveRDS(hebert_subset, file = "R/Data/Standardised_data/hebert_subset.rds")
+saveRDS(hebert_subset, file = "R/Data_outputs/Standardised_data/hebert_subset.rds")
 
 # get all the refernces
 hebert_ref_biomass <-  hebert_subset %>% 
@@ -623,13 +626,13 @@ gavrilko_subset <- Gavrilko %>%
       TRUE ~ "adult"),
     
     # add in extra info
-    source = "Gavrilko et al., 2021",
+    source.code = "5",
     location = "European Russia",
     continent = "Europe"
   )
 
 ## Save
-saveRDS(gavrilko_subset, file = "R/Data/Standardised_data/gavrilko_subset.rds")
+saveRDS(gavrilko_subset, file = "R/Data_outputs/Standardised_data/gavrilko_subset.rds")
 
 ###############################################################  Laplace-Treyture ----
 lt_subset <- LT %>% 
@@ -664,9 +667,9 @@ lt_subset <- LT %>%
   ) %>% 
   
   # Add in source info
-  mutate(source = "Laplace-Treyture et al., 2021") %>% 
-  left_join(select(original_source, source.code, ref.code), by = c("source" = "ref.code")) %>% 
-  rename(biovol.ref = source.code) %>% 
+  mutate(source.code = "6") %>% 
+  # left_join(select(original_source, source.code, ref.code), by = c("source" = "ref.code")) %>% 
+  # rename(biovol.ref = source.code) %>% 
   
   # Add in extra info
   mutate(
@@ -678,12 +681,13 @@ lt_subset <- LT %>%
     country = "France",
     continent = "Europe",
     latitude = NA_character_,
-    longitude = NA_character_
+    longitude = NA_character_,
+    biovol.ref = NA_character_
   ) %>% 
-  relocate(source, original.taxa.name, life.stage, cell.biovol, cells.per.nu, nu.biovol, biovol.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude)
+  relocate(source.code, original.taxa.name, life.stage, cell.biovol, cells.per.nu, nu.biovol, biovol.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude)
 
 ## Save
-saveRDS(lt_subset, file = "R/Data/Standardised_data/lt_subset.rds")
+saveRDS(lt_subset, file = "R/Data_outputs/Standardised_data/lt_subset.rds")
 
 ###############################################################  Neury-Ormanni ----
 no_subset <- NO %>% 
@@ -736,10 +740,12 @@ no_subset <- NO %>%
       stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b") ~ "larvae",
       stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
       TRUE ~ "adult"
-    )
+    ),
+    # add source
+    source.code = "7"
   )
 
-saveRDS(no_subset, file = "R/Data/Standardised_data/no_subset.rds")
+saveRDS(no_subset, file = "R/Data_outputs/Standardised_data/no_subset.rds")
 
 ###############################################################  Rimet 2012 ----   
 rimet2012_subset <- rimet2012 %>% 
@@ -760,10 +766,13 @@ rimet2012_subset <- rimet2012 %>%
       stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b") ~ "larvae",
       stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
       TRUE ~ "adult"
-    )
+    ),
+    
+    # add source
+    source.code = "8"
   )
 
-saveRDS(rimet2012_subset, file = "R/Data/Standardised_data/rimet2012_subset.rds")
+saveRDS(rimet2012_subset, file = "R/Data_outputs/Standardised_data/rimet2012_subset.rds")
 
 
 ############################################# Combine together ====
@@ -775,6 +784,6 @@ standardised_raw <- bind_rows(kremer_subset, rimmet_subset, hebert_subset, odume
   )%>% 
   # remove data with a 0 cell.biovol (for some reason can't filter this so have to maunally removed based on uid)
   filter(!(raw.uid %in% c("3046", "14402", "36324", "43875", "117691", "120016", "124937", "132283", "133473", "203570"))) %>% 
-  relocate(raw.uid, source, original.taxa.name, life.stage, cell.biovol, nu.biovol, nu.biovol.mucilage, cells.per.nu, biovol.ref, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, min.biomass, max.biomass, avg.biomass, biomass.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude, data.method)
+  relocate(raw.uid, source.code, original.taxa.name, life.stage, cell.biovol, nu.biovol, nu.biovol.mucilage, cells.per.nu, biovol.ref, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, min.biomass, max.biomass, avg.biomass, biomass.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude, data.method)
 
-saveRDS(all_raw, file = "R/Data/Standardised_data/standardised_raw.rds")
+saveRDS(standardised_raw, file = "R/Data_outputs/Standardised_data/standardised_raw.rds")
