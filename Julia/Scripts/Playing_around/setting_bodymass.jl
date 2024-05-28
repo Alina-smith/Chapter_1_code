@@ -66,3 +66,5 @@ sim_M = simulate(params, B0)
 # Visualize
 plot_M = plot(sim_M, label = ["Producer" "Consumer" "Top consumer";])
 title!("M")
+
+# make minor edit to check github is working
