@@ -63,9 +63,9 @@ function cascade_model_tian(C; mprod = [], minvert=[])
 
     ## Reorder columns as the provived vector of producer masses and zoomasses [mprod; minvert]
     A_resorted = A[idx, idx]
-    fw = FoodWeb(A_resorted, M = [mprod; minvert], species = [phyto_names; invert_names],
-                 metabolic_class = [repeat(["producer"], nprod); repeat(["invertebrate"], ninvert)]
-    )
+    fw = Foodweb(A_resorted)
+    #fw = Foodweb(A_resorted, M = [mprod; minvert], species = [phyto_names; invert_names],
+    #             metabolic_class = [repeat(["producer"], nprod); repeat(["invertebrate"], ninvert)])
     fw
 end
 

@@ -2,34 +2,36 @@
 
 ## Packages
 # Install
-# import Pkg 
-# Pkg.activate(".")
-# Pkg.add("Plots")
-# Pkg.add("Statistics")
-# Pkg.add("Random")
-# Pkg.add("Distributions")
-# Pkg.add("StatsBase")
-# Pkg.add("StatsPlots")
-# Pkg.add("DifferentialEquations")
-# Pkg.add("CSV")
-# Pkg.add("DataFrames")
-# Pkg.add("DelimitedFiles")
-# Pkg.add("XLSX")
+import Pkg 
+Pkg.activate(".")
+Pkg.add("EcologicalNetworksDynamics")
+Pkg.add("Plots")
+Pkg.add("Statistics")
+Pkg.add("Random")
+Pkg.add("Distributions")
+Pkg.add("StatsBase")
+Pkg.add("StatsPlots")
+Pkg.add("DifferentialEquations")
+Pkg.add("CSV")
+Pkg.add("DataFrames")
+Pkg.add("DelimitedFiles")
+Pkg.add("XLSX")
 
 
 # Packages
 using DataFrames, Plots, Random, Distributions, XLSX, StatsPlots
 using DifferentialEquations, EcologicalNetworksDynamics
 using LinearAlgebra
-include("cascademodel.jl")
+include("Julia/Scripts/cascade_model.jl")
 
 ####### Experiemnts
 
 # import my body size data
-tian_data = DataFrame(XLSX.readtable("Data/tian_biovolume.xlsx", "biomass"))
+tian_data = DataFrame(XLSX.readtable("Raw_data/Tian_data.xlsx", "tian_data"))
+
 # seperate into two vectors for phytoplankton and zoo phytoplankton
-tian_biomass_P = Float64.(tian_data[occursin.("P", tian_data.code), "mass_mg"])
-tian_biomass_Z = Float64.(tian_data[occursin.("Z", tian_data.code), "mass_mg"])
+tian_biomass_P = Float64.(tian_data[occursin.("P", tian_data.code), "mass.mg"])
+tian_biomass_Z = Float64.(tian_data[occursin.("Z", tian_data.code), "mass.mg"])
 
 ## Experiment 1
 # Recreate Fig 8 with values K = 2 and K = 4
@@ -41,16 +43,22 @@ C = 0.1
 
 # set the seed
 Random.seed!(12325)
+#fw_fig8 = cascade_model_tian(C; mprod = tian_biomass_P, minvert = tian_biomass_Z)
 
-# use cascade model to make the network 
-fw_fig8 = cascade_model_tian(C; mprod = tian_biomass_P, minvert = tian_biomass_Z)
+# use built in cascade model to make the network 
+S = 88
+foodweb = Foodweb(cascade_model(S, C))
+lg = LogisticGrowth(K = 2)
+fr = BioenergeticResponse(h = 1.2, c = 0.1)
+m = default_model(foodweb,lg,fr)
+B0 = rand(S)
+t = 1_00
+out = simulate(m, B0, t)
 
-# 2) Define model parameters
-#initial biomass
-B0_fig8 = fill(0.05, S)
+plot(out)
 
 # logistic growth with K=0.002 (convert from mg to g)
-LG_fig8=LogisticGrowth(fw_fig8, K = 2, a = (diag = 1.0, offdiag = 1.0))
+LG_fig8=LogisticGrowth(fw_temp, K = 2, ProducersCompetition = (diag = 1.0, offdiag = 1.0))
 
 # set functional response
 fr_fig8 = BioenergeticResponse(fw_fig8, h = 1, c = 0.1)
