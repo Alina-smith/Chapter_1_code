@@ -1,3 +1,6 @@
+using EcologicalNetworksDynamics, LinearAlgebra
+using Random
+using Plots
 ## cascade model function
 # Zooplankton can eat phytoplankton and other zooplankton samller than them, phytoplankton canno eat anything
 function cascade_model_tian(C; mprod = [], minvert=[])
@@ -69,7 +72,22 @@ function cascade_model_tian(C; mprod = [], minvert=[])
     fw
 end
 
-# # Test the final connectance for cascade
-# fw_test = cascade_model_tian(.2; mprod = [1, 10], minvert = [5, 8, 15])
-# sum(fw_test.A) / ((richness(fw_test) - 1) * richness(fw_test)) ## all good
+# Use the Model
 
+# producer and invert masses
+mprod = [1, 3, 10]
+minvert = [5, 8, 15]
+
+Random.seed!(234)
+fw_test = cascade_model_tian(.2; mprod = [1, 3, 10], minvert = [5, 8, 15])
+m = default_model(fw,  
+        BodyMass([mprod;minvert]),
+        BioenergeticResponse(h = 1))
+B0 = rand(6)
+t = 1_00
+out = simulate(m, B0, t)
+
+plot(out)
+
+# test cascade connectance
+# sum(fw_test.A) / ((size(fw_test.A)[1] - 1) * size(fw_test.A)[1]) ## all good
