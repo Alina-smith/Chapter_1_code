@@ -41,8 +41,11 @@ tian_group_z = Float64.(tian_group[occursin.("zooplankton", tian_group.group), "
 
  
 # 1) Make the structural network
-# loop through the different levels of aggregation
+## Prep:
+# Calculate S for each network
 S_levels = [length(tian_genus_p)+length(tian_genus_z), length(tian_family_p)+length(tian_family_z), length(tian_order_p)+length(tian_order_z)]
+
+# Array of phyto and zoo for cascade model to loop through
 mprod = [tian_genus_p, tian_family_p, tian_order_p]
 minvert = [tian_genus_z, tian_family_z, tian_order_z]
 
@@ -52,16 +55,16 @@ reps = 5
 # set the seed
 Random.seed!(12325)
 
-# Make networks
+## Make networks using cascade model
 begin
     # list to store networks
     global networks = []
 
     # while loop
-    for n in 1:reps
+    for n in 1:reps # loop through to make repeats
         for i in 1:length(S_levels)
             # make network 
-            A = cascade_model_tian(0.15; mprod = mprod[i], minvert = minvert[i])
+            A = cascade_model_tian(0.15; mprod = mprod[i], minvert = minvert[i]) #select the number of producer and invertebrates that correspond to the level of aggregation (S)
             # add the network to the set
             push!(networks, A)
         end
@@ -70,14 +73,16 @@ end
 
 networks[1]
 
-#  2) simulate
+# 2) Simulate
 
+## Prep:
 # make collecting dataframe
 df_collect_tian_agg = DataFrame(Network = [], aggregation_level = [], S = [], FinalRichness = [], FinalBiomass = [], FinalStability = [])
 df_collect_tian_agg
 # make an array of the aggregation levels repeated the number of reps to add into data frame
 agg_level = repeat(["Genus", "Family", "Order"], reps)
 
+## Simulate
 for i in 1:length(networks) # for each network in the network array
     # 1) Define network and size
     A0 = networks[i]
@@ -85,7 +90,7 @@ for i in 1:length(networks) # for each network in the network array
 
     # 2) Define parameters
     # logistic growth with K = 2
-    LG = LogisticGrowth(A0, K = 2, a = (diag = 1.0, offdiag = 1.0))
+    LG = LogisticGrowth(A0, K = 2, a = (diag = 1.0, offdiag = 1.0)) # set producer competition so all proders have equal competition
 
     # functional response
     fr = BioenergeticResponse(A0, h = 1)
@@ -94,7 +99,7 @@ for i in 1:length(networks) # for each network in the network array
     params = ModelParameters(A0, producer_growth = LG, functional_response = fr)
 
     # 3) Define initial biomass of populations
-    B0 = fill(0.05, size(S)) # make an array the legnth of the first 
+    B0 = fill(0.05, S) # make an array the legnth of S
 
     # 4) Simulate
     sim = simulate(params, B0, extinction_threshold = 1e-10)
