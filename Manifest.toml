@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "ecedb5b4c4b18ba5bbb4883653fbf2841ecd7bca"
+project_hash = "9f1861f7894b5cc76a20a41092e14a6e7d59eb95"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -445,6 +445,12 @@ version = "0.1.10"
 git-tree-sha1 = "2140cd04483da90b2da7f99b2add0750504fc39c"
 uuid = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
 version = "0.1.2"
+
+[[deps.EzXML]]
+deps = ["Printf", "XML2_jll"]
+git-tree-sha1 = "380053d61bb9064d6aa4a9777413b40429c79901"
+uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+version = "1.2.0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -1751,6 +1757,12 @@ git-tree-sha1 = "cd1659ba0d57b71a464a29e64dbc67cfe83d54e7"
 uuid = "76eceee3-57b5-4d4a-8e66-0e911cebbf60"
 version = "1.6.1"
 
+[[deps.XLSX]]
+deps = ["Artifacts", "Dates", "EzXML", "Printf", "Tables", "ZipFile"]
+git-tree-sha1 = "319b05e790046f18f12b8eae542546518ef1a88f"
+uuid = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
+version = "0.10.1"
+
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
 git-tree-sha1 = "52ff2af32e591541550bd753c0da8b9bc92bb9d9"
@@ -1912,6 +1924,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "e92a1a012a10506618f10b7047e478403a046c77"
 uuid = "c5fb5394-a638-5e4d-96e5-b29de1b5cf10"
 version = "1.5.0+0"
+
+[[deps.ZipFile]]
+deps = ["Libdl", "Printf", "Zlib_jll"]
+git-tree-sha1 = "f492b7fe1698e623024e873244f10d89c95c340a"
+uuid = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
+version = "0.10.1"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]

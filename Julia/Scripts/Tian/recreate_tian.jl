@@ -21,15 +21,15 @@
 using DataFrames, Plots, Random, Distributions, XLSX, StatsPlots
 using DifferentialEquations, EcologicalNetworksDynamics
 using LinearAlgebra
-include("cascademodel.jl")
+include("cascade_model.jl")
 
 ####### Experiemnts
 
 # import my body size data
-tian_data = DataFrame(XLSX.readtable("Data/tian_biovolume.xlsx", "biomass"))
+tian_data = DataFrame(XLSX.readtable("Raw_data/Tian_data.xlsx", "tian_data"))
 # seperate into two vectors for phytoplankton and zoo phytoplankton
-tian_biomass_P = Float64.(tian_data[occursin.("P", tian_data.code), "mass_mg"])
-tian_biomass_Z = Float64.(tian_data[occursin.("Z", tian_data.code), "mass_mg"])
+tian_biomass_P = Float64.(tian_data[occursin.("P", tian_data.code), "mass.mg"])
+tian_biomass_Z = Float64.(tian_data[occursin.("Z", tian_data.code), "mass.mg"])
 
 ## Experiment 1
 # Recreate Fig 8 with values K = 2 and K = 4
@@ -49,7 +49,7 @@ fw_fig8 = cascade_model_tian(C; mprod = tian_biomass_P, minvert = tian_biomass_Z
 #initial biomass
 B0_fig8 = fill(0.05, S)
 
-# logistic growth with K=0.002 (convert from mg to g)
+# logistic growth with K = 2
 LG_fig8=LogisticGrowth(fw_fig8, K = 2, a = (diag = 1.0, offdiag = 1.0))
 
 # set functional response
