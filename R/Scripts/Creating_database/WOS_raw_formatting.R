@@ -15,6 +15,11 @@ arnoldt_s_2024 <- read.csv(here("Raw_data/WOS/Raw", "Arnoldt_S_2024.csv"))
 sildever_s_2024 <- read.csv(here("Raw_data/WOS/Raw", "Sildever_S_2024.csv"))
 zou_yp_2024 <- read.csv(here("Raw_data/WOS/Raw", "Zou_YP_2024.csv"))
 blackburn_dp_2023 <- read.csv(here("Raw_data/WOS/Raw", "Blackburn_DP_2023.csv"))
+rogalski_ma_2023 <- read.csv(here("Raw_data/WOS/Raw", "Rogalski_MA_2023.csv"))
+ramaekers_l_2023_adult <- read.csv(here("Raw_data/WOS/Raw", "Ramaekers_L_2023_adult.csv"))
+ramaekers_l_2023_juvenile <- read.csv(here("Raw_data/WOS/Raw", "Ramaekers_L_2023_juvenile.csv"))
+klasios_n_2023 <- read.csv(here("Raw_data/WOS/Raw", "Klasios_N_2023.csv"))
+theus_me_2023 <- read.csv(here("Raw_data/WOS/Raw", "Theus_ME_2023.csv"))
 
 murphy_ca_2023 <- read.csv(here("Raw_data/WOS/Raw", "Murphy_CA_2023.csv"))
 
@@ -76,19 +81,19 @@ wander_hl_2024_subset <- wander_hl_2024 %>%
     sample.month = stri_replace_all_fixed(sample.month, "-", ""),
     
     life.stage = case_when(
-      stri_detect_regex(original.taxa.name, "Nauplii|Nauplius") ~ "juvenile",
-      TRUE ~ "adult"
+      stri_detect_regex(original.taxa.name, "Nauplii|Nauplius") ~ "Juvenile",
+      TRUE ~ "Adult"
         ),
     
     # add new columns
     source.code = "2",
     original.source.code = "2",
-    data.type = "raw",
-    sample.origin = "location",
+    data.type = "Raw",
+    sample.origin = "Captured",
     country = "USA",
     continent = "North America",
-    habitat = "reservoir",
-    measuring.technique = "body length",
+    habitat = "Reservoir",
+    measuring.technique = "Body length",
     sex = NA
   ) %>% 
   select(
@@ -172,23 +177,17 @@ arnoldt_s_2024_subset <- arnoldt_s_2024 %>%
    country = "Sweeden",
    continent = "Europe",
    
-   # Extra info
-   data.type = "raw",
-   sample.origin = "location",
+   ## Extra info
+   # source
    source.code = "3",
    original.source.code = "3",
-   measuring.technique = "Prosome length",
-   experimental.design = "in-situ"
-   
+   experimental.design = "In-situ",
+   data.type = "Raw",
+   sample.origin = "Captured",
+   measuring.technique = "Prosome length"
   ) %>% 
   select(
     source.code, original.source.code, experimental.design, original.taxa.name, life.stage, sex, measuring.technique, data.type, sample.origin, sample.year, sample.month,
-    habitat, location, country, continent, latitude, longitude,
-    body.length
-  ) %>% 
-  relocate(
-    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
-    sample.year, sample.month,
     habitat, location, country, continent, latitude, longitude,
     body.length
   )
@@ -264,14 +263,14 @@ sildever_s_2024_subset <- sildever_s_2024 %>%
     original.taxa.name = "Limnomonas gaiensis",
     source.code = "4",
     original.source.code = "4",
-    measuring.technique = "geometric - Hillebrand/Sun&Liu",
-    data.type = "average",
-    sample.origin = "location",
+    measuring.technique = "Geometric - Hillebrand/Sun&Liu",
+    data.type = "Average",
+    sample.origin = "Captured",
     life.stage = NA,
     sample.year = NA_character_,
     sample.month = NA_character_,
     sex = NA,
-    experimental.design = "ex-situ - lab"
+    experimental.design = "Ex-situ - lab"
       ) %>% 
   select(-strain) %>% 
   relocate(
@@ -303,33 +302,27 @@ zou_yp_2024_subset <- zou_yp_2024 %>%
     ),
     
     ## nu
-    nu = "cell",
+    nu = "Cell",
     
     ## extra info
     source.code = "5",
     original.source.code = "5",
     life.stage = NA,
     sex = NA,
-    measuring.technique = "Hillebrand",
+    measuring.technique = "Geometric - Hillebrand",
     data.type = "Raw",
-    sample.origin = "cultured",
+    sample.origin = "Cultured",
     sample.year = NA_character_,
     sample.month = NA_character_,
-    habitat = "Micrososm",
-    location = "lab",
+    habitat = "Lab",
+    location = "Carolina Biological Supply Company",
     country = "USA",
     continent = "North America",
-    latitude = NA,
-    longitude = NA,
-    experimental.design = "ex-situ - lab"
+    latitude = "36.048254",
+    longitude = "-79.592173",
+    experimental.design = "Ex-situ - lab"
     ) %>% 
   select(
-    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
-    sample.year, sample.month,
-    habitat, location, country, continent, latitude, longitude,
-    nu, cell.biovol
-  ) %>% 
-  relocate(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
     sample.year, sample.month,
     habitat, location, country, continent, latitude, longitude,
@@ -423,21 +416,15 @@ blackburn_dp_2023_subset <- blackburn_dp_2023 %>%
     source.code = "6",
     original.source.code = "6",
     sex = NA,
-    measuring.technique = "body length",
+    measuring.technique = "Body length",
     data.type = "Raw",
-    sample.origin = "location",
+    sample.origin = "Captured",
     country = "Canada",
     continent = "North America",
     sample.month = "08",
-    experimental.design = "in-situ"
+    experimental.design = "In-situ"
   ) %>% 
   select(
-    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
-    sample.year, sample.month,
-    habitat, location, country, continent, latitude, longitude,
-    body.length
-  ) %>% 
-  relocate(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
     sample.year, sample.month,
     habitat, location, country, continent, latitude, longitude,
@@ -447,26 +434,293 @@ blackburn_dp_2023_subset <- blackburn_dp_2023 %>%
 ## Save
 saveRDS(blackburn_dp_2023_subset, file = "Raw_data/WOS/Formatted/blackburn_dp_2023_subset.rds")
 
+## 8 rogalski_ma_2023 ----
+rogalski_ma_2023_subset <- rogalski_ma_2023 %>% 
+  ## rename columns i want to keep
+  rename(
+    body.length = Day7_length_mm
+  ) %>% 
+  ## Select data I want
+  mutate(
+    # rename treatment lakes to find ones to use
+    Trt = case_when(
+      Trt == "E" ~ "Egypt",
+      Trt == "S" ~ "Sewell",
+      Trt == "H" ~ "Hall",
+      TRUE ~ NA
+    )
+  ) %>% 
+  filter(
+   Lake == Trt, # keep ones which were reared in the same water they were caught from
+   Lake != "Sewell" # this is a brackish location
+  ) %>% 
+  mutate(
+    # location info
+    location = case_when(
+      Lake == "Egypt" ~ "Egypt pond",
+      Lake == "Hall" ~ "Hall pond",
+      TRUE ~ NA
+    ),
+    
+    latitude = case_when(
+      location == "Egypt pond" ~ "44.518972",
+      location == "Hall pond" ~"44.217999"
+    ),
+    
+    longitude = case_when(
+      location == "Egypt pond" ~ "-70.050440",
+      location == "Hall pond" ~ "-70.456746"
+    ),
+    
+    habitat = "Pond",
+    country = "USA",
+    continent = "North America",
+    
+    ## extra info
+    original.taxa.name = "Daphnia ambigua",
+    source.code = "8",
+    original.source.code = "8",
+    sex = NA,
+    life.stage = "Adult",
+    measuring.technique = "Eye to base of tail spine",
+    data.type = "Raw",
+    sample.origin = "Captured",
+    sample.year = "2019",
+    sample.month = NA,
+    experimental.design = "Ex-situ - lab"
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length
+  )
 
+## Save
+saveRDS(rogalski_ma_2023_subset, file = "Raw_data/WOS/Formatted/rogalski_ma_2023_subset.rds")
 
+## 9 Ramaekers_l_2023 ----
+ramaekers_l_2023_adult_subset <- ramaekers_l_2023_adult %>% 
+  ## select control data
+  filter(
+    Treatment == "C"
+  ) %>% 
+  ## rename columns I want to keep
+  rename(
+    body.length = BS
+  ) %>% 
+  mutate(
+    ## location
+    habitat = "Pond",
+    location = "West-Flanders",
+    country = "Belgium",
+    continent = "Europe",
+    latitude = "51.053069",
+    longitude = "3.145816",
+    
+    ## extra info
+    original.taxa.name = "Daphnia magna",
+    source.code = "9",
+    original.source.code = "9",
+    sex = NA,
+    life.stage = "Adult",
+    measuring.technique = "Eye to base of tail spine",
+    data.type = "Raw",
+    sample.origin = "Captured",
+    sample.year = "2019",
+    sample.month = NA,
+    experimental.design = "Ex-situ - lab"
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length
+  )
 
-
-
-
-
+ramaekers_l_2023_juvenile_subset <-  ramaekers_l_2023_juvenile %>% 
+  ## select control data
+  filter(
+    Treatment == "C"
+  ) %>% 
+  ## rename columns I want to keep
+  rename(
+    body.length = MeanBS
+  ) %>% 
+  mutate(
+    ## location
+    habitat = "Pond",
+    location = "West-Flanders",
+    country = "Belgium",
+    continent = "Europe",
+    latitude = "51.053069",
+    longitude = "3.145816",
+    
+    ## extra info
+    original.taxa.name = "Daphnia magna",
+    source.code = "9",
+    original.source.code = "9",
+    sex = NA,
+    life.stage = "Juvenile",
+    measuring.technique = "Eye to base of tail spine",
+    data.type = "Average",
+    sample.origin = "Captured",
+    sample.year = "2019",
+    sample.month = NA,
+    experimental.design = "Ex-situ - lab"
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length
+  )
   
-## combine together
-all_wos_raw <- bind_rows(arnoldt_s_2024_subset, sildever_s_2024_subset, zou_yp_2024_subset, blackburn_dp_2023_subset) %>% 
+## Join adult and juvenile together
+ramaekers_l_2023_subset <- rbind(ramaekers_l_2023_juvenile_subset, ramaekers_l_2023_adult_subset)
+## Save
+saveRDS(ramaekers_l_2023_subset, file = "Raw_data/WOS/Formatted/ramaekers_l_2023_subset.rds")
+
+## klasios_n_2023 ----
+klasios_n_2023_subset <- klasios_n_2023 %>% 
+  ## Rename columns to keep
+  rename(
+    original.taxa.name = ZooplanktonGroup,
+    body.length = LengthMicron,
+    body.width = WidthMicron
+  ) %>% 
+  mutate(
+    ## Location info
+    habitat = "Lake",
+    location = stri_c(Lake, "lake", sep = " "),
+    country = "Canada",
+    continent = "North America",
+    
+    latitude = case_when(
+      Lake == "alta" ~ "50.116730",
+      Lake == "brohm" ~ "49.821217",
+      Lake == "chilliwack" ~ "49.057445",
+      Lake == "cultus" ~ "49.057367",
+      Lake == "deer" ~ "49.236103",
+      Lake == "cowichan" ~ "48.876629",
+      Lake == "lizard" ~ "48.606232",
+      Lake == "pixie" ~ "48.595024"
+    ),
+    
+    longitude = case_when(
+      Lake == "alta" ~ "-122.981553",
+      Lake == "brohm" ~ "-123.135023",
+      Lake == "chilliwack" ~ "-121.414463",
+      Lake == "cultus" ~ "-121.982622",
+      Lake == "deer" ~ "-122.971390",
+      Lake == "cowichan" ~ "-124.266104",
+      Lake == "lizard" ~ "-124.223017",
+      Lake == "pixie" ~ "-124.197592"
+    ),
+    
+    ## extra info
+    source.code = "10",
+    original.source.code = "10",
+    sex = NA,
+    life.stage = NA,
+    measuring.technique = NA,
+    data.type = "Raw",
+    sample.origin = "Captured",
+    sample.year = "2021",
+    sample.month = "08 - 09",
+    experimental.design = "In-situ"
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length, body.width
+  )
+
+## Save
+saveRDS(klasios_n_2023_subset, file = "Raw_data/WOS/Formatted/klasios_n_2023_subset.rds")
+
+## theus_me_2023 ----
+theus_me_2023_subset <- theus_me_2023 %>% 
+  ## keep temp 18 and 23 and bpa 0 and 2 as these are reported naturally
+  filter(
+    Temp %in% c("18", "23") & BPA %in% c("0", "2")
+  ) %>% 
+  ## rename columns to keep
+  rename(
+    cell.biovol = avg_bv_per_count
+  ) %>% 
+  mutate(
+    ## species name
+    original.taxa.name = case_when(
+      Species == "Cv" ~ "Chlorella vulgaris",
+      Species == "Sq" ~ "Scenedesmus quadricauda",
+      Species == "Ab" ~ "Ankistrodesmus braunii",
+    ),
+    
+    ## location
+    habitat = "Lab",
+    location = "University of Texas",
+    country = "USA",
+    continent = "North America",
+    latitude = "30.287523",
+    longitude = "-97.739757",
+    
+    ## extra info
+    source.code = "11",
+    original.source.code = "11",
+    sex = NA,
+    life.stage = "Active",
+    measuring.technique = "Geometric - Sun and Liu",
+    data.type = "Raw",
+    sample.origin = "Cultured",
+    sample.year = "2021",
+    sample.month = "01 - 03",
+    experimental.design = "Ex-situ - lab"
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    cell.biovol
+  )
+
+## Save
+saveRDS(theus_me_2023_subset, file = "Raw_data/WOS/Formatted/theus_me_2023_subset.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## combine together ----
+all_wos_raw <- bind_rows(arnoldt_s_2024_subset, sildever_s_2024_subset, zou_yp_2024_subset, blackburn_dp_2023_subset, rogalski_ma_2023_subset, ramaekers_l_2023_subset, klasios_n_2023_subset, theus_me_2023_subset) %>% 
   relocate(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
     sample.year, sample.month,
     habitat, location, country, continent, latitude, longitude,
-    body.length,
+    body.length, body.width,
     nu, min.cell.length, max.cell.length, cell.length, cell.length.se,
     min.cell.width, max.cell.width, cell.width, cell.width.se,
     min.cell.biovol, max.cell.biovol, cell.biovol
   )
 
+exp <- all_wos_raw %>% 
+  filter(
+    sample.origin == "Lab culture"
+  )
 
 
 
