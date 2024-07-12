@@ -20,6 +20,13 @@ ramaekers_l_2023_adult <- read.csv(here("Raw_data/WOS/Raw", "Ramaekers_L_2023_ad
 ramaekers_l_2023_juvenile <- read.csv(here("Raw_data/WOS/Raw", "Ramaekers_L_2023_juvenile.csv"))
 klasios_n_2023 <- read.csv(here("Raw_data/WOS/Raw", "Klasios_N_2023.csv"))
 theus_me_2023 <- read.csv(here("Raw_data/WOS/Raw", "Theus_ME_2023.csv"))
+grzesiuk_m_2023 <- read.csv(here("Raw_data/WOS/Raw", "Grzesiuk_M_2023.csv"))
+zheng_sw_2022 <- read.csv(here("Raw_data/WOS/Raw", "Zheng_SW_2022.csv"))
+baker_hk_2022 <- read.csv(here("Raw_data/WOS/Raw", "Baker_HK_2022.csv"))
+gu_l_2022 <- read.csv(here("Raw_data/WOS/Raw", "Gu_L_2022.csv"))
+
+
+lachapelle_j_2022 <- read.csv(here("Raw_data/WOS/Raw", "Lachapelle_J_2022.csv"))
 
 murphy_ca_2023 <- read.csv(here("Raw_data/WOS/Raw", "Murphy_CA_2023.csv"))
 
@@ -106,8 +113,7 @@ wander_hl_2024_subset <- wander_hl_2024 %>%
 
 ## Save
 saveRDS(wander_hl_2024_subset, file = "Raw_data/WOS/Formatted/wander_hl_2024_subset.rds")
-
-## 3 Arnoldt S 2024 ----
+5## 3 Arnoldt S 2024 ----
 arnoldt_s_2024_subset <- arnoldt_s_2024 %>% 
   filter(
     Type == "Freshwater",
@@ -270,7 +276,7 @@ sildever_s_2024_subset <- sildever_s_2024 %>%
     sample.year = NA_character_,
     sample.month = NA_character_,
     sex = NA,
-    experimental.design = "Ex-situ - lab"
+    experimental.design = "Ex-situ - indoor measocosms"
       ) %>% 
   select(-strain) %>% 
   relocate(
@@ -320,7 +326,7 @@ zou_yp_2024_subset <- zou_yp_2024 %>%
     continent = "North America",
     latitude = "36.048254",
     longitude = "-79.592173",
-    experimental.design = "Ex-situ - lab"
+    experimental.design = "Ex-situ - indoor measocosms"
     ) %>% 
   select(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
@@ -487,7 +493,7 @@ rogalski_ma_2023_subset <- rogalski_ma_2023 %>%
     sample.origin = "Captured",
     sample.year = "2019",
     sample.month = NA,
-    experimental.design = "Ex-situ - lab"
+    experimental.design = "Ex-situ - indoor measocosms"
   )%>% 
   select(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
@@ -529,7 +535,7 @@ ramaekers_l_2023_adult_subset <- ramaekers_l_2023_adult %>%
     sample.origin = "Captured",
     sample.year = "2019",
     sample.month = NA,
-    experimental.design = "Ex-situ - lab"
+    experimental.design = "Ex-situ - indoor measocosms"
   )%>% 
   select(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
@@ -567,7 +573,7 @@ ramaekers_l_2023_juvenile_subset <-  ramaekers_l_2023_juvenile %>%
     sample.origin = "Captured",
     sample.year = "2019",
     sample.month = NA,
-    experimental.design = "Ex-situ - lab"
+    experimental.design = "Ex-situ - indoor measocosms"
   )%>% 
   select(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
@@ -581,7 +587,7 @@ ramaekers_l_2023_subset <- rbind(ramaekers_l_2023_juvenile_subset, ramaekers_l_2
 ## Save
 saveRDS(ramaekers_l_2023_subset, file = "Raw_data/WOS/Formatted/ramaekers_l_2023_subset.rds")
 
-## klasios_n_2023 ----
+## 10 klasios_n_2023 ----
 klasios_n_2023_subset <- klasios_n_2023 %>% 
   ## Rename columns to keep
   rename(
@@ -627,7 +633,7 @@ klasios_n_2023_subset <- klasios_n_2023 %>%
     data.type = "Raw",
     sample.origin = "Captured",
     sample.year = "2021",
-    sample.month = "08 - 09",
+    sample.month = "08-09",
     experimental.design = "In-situ"
   )%>% 
   select(
@@ -640,7 +646,7 @@ klasios_n_2023_subset <- klasios_n_2023 %>%
 ## Save
 saveRDS(klasios_n_2023_subset, file = "Raw_data/WOS/Formatted/klasios_n_2023_subset.rds")
 
-## theus_me_2023 ----
+## 11 theus_me_2023 ----
 theus_me_2023_subset <- theus_me_2023 %>% 
   ## keep temp 18 and 23 and bpa 0 and 2 as these are reported naturally
   filter(
@@ -675,8 +681,8 @@ theus_me_2023_subset <- theus_me_2023 %>%
     data.type = "Raw",
     sample.origin = "Cultured",
     sample.year = "2021",
-    sample.month = "01 - 03",
-    experimental.design = "Ex-situ - lab"
+    sample.month = "01-03",
+    experimental.design = "Ex-situ - indoor measocosms"
   )%>% 
   select(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
@@ -688,14 +694,215 @@ theus_me_2023_subset <- theus_me_2023 %>%
 ## Save
 saveRDS(theus_me_2023_subset, file = "Raw_data/WOS/Formatted/theus_me_2023_subset.rds")
 
+## 12 grzesiuk_m_2023 ----
+grzesiuk_m_2023_subset <- grzesiuk_m_2023 %>% 
+  ## filter for non fluoxetine ones
+  filter(
+    treatment == "no fluoxetine"
+  ) %>% 
+  mutate(
+    ## Source
+    source.code = "12",
+    original.source.code = "12",
+    experimental.design = "Ex-situ - indoor measocosms",
+    data.type = "Raw",
+    measuring.technique = "Head to edge of carapace, tail spine excluded",
+    sample.origin = "Captured",
+    
+    ## Taxa
+    original.taxa.name = "Daphnia magna",
+    life.stage = "Adult",
+    sex = "Female",
+    
+    ## Date
+    sample.year = NA,
+    sample.month = NA,
+    
+    ## Location
+    habitat = "Pond",
+    location = "Książęca Park",
+    country = "Poland",
+    continent = "Europe",
+    latitude = "52.231368",
+    longitude = "21.028677",
+    
+    ## Body size
+    # convert cm to mm
+    body.length = size..cm.*10,
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length
+  )
+
+## Save
+saveRDS(grzesiuk_m_2023_subset, file = "Raw_data/WOS/Formatted/grzesiuk_m_2023_subset.rds")
+
+## 13 zheng_sw_2022 ----
+zheng_sw_2022_subset <- zheng_sw_2022 %>% 
+  mutate(
+    ## Source
+    source.code = "13",
+    original.source.code = "13",
+    experimental.design = "In-situ",
+    data.type = "Averages",
+    measuring.technique = NA,
+    sample.origin = "Collected",
+    
+    ## Taxa
+    original.taxa.name = taxa,
+    life.stage = NA,
+    sex = NA,
+    
+    ## Date
+    sample.year = "2018-2019",
+    sample.month = "09-11, 03-05",
+    
+    ## Location
+    habitat = "Lake",
+    location = case_when(
+      lake == "GH" ~ "Lake Gehu",
+      lake == "TM" ~ "Lake Tianmu",
+      lake == "DS" ~ "Lake Dianshan",
+      lake == "HZ" ~ "Lake Hongze",
+      lake == "TH" ~ "Lake Taihu",
+      lake == "QD" ~ "Qiandao",
+      TRUE ~ NA
+    ),
+    country = "China",
+    continent = "Asia",
+    latitude = case_when(
+      lake == "GH" ~ "31.599094",
+      lake == "TM" ~ "31.296373",
+      lake == "DS" ~ "31.127766",
+      lake == "HZ" ~ "33.282035",
+      lake == "TH" ~ "31.204605",
+      lake == "QD" ~ "29.597444",
+      TRUE ~ NA
+    ),
+    longitude = case_when(
+      lake == "GH" ~ "119.792778",
+      lake == "TM" ~ "119.421114",
+      lake == "DS" ~ "120.973334",
+      lake == "HZ" ~ "118.698675",
+      lake == "TH" ~ "120.165293",
+      lake == "QD" ~ "118.960566",
+      TRUE ~ NA
+    )
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length 
+  )
+
+## Save
+saveRDS(zheng_sw_2022_subset, file = "Raw_data/WOS/Formatted/zheng_sw_2022_subset.rds")
 
 
+## 14 lachapelle_j_2022 ----
+lachapelle_j_2022_subset <- lachapelle_j_2022 %>% 
+  ## select freshwater that was raised in freshwater
+  filter(
+    Environment == "FW" & Habitat == "home" & Invasion == "mono-culture"
+  ) %>% 
+  mutate(
+    ## Source
+    source.code = "14",
+    original.source.code = "14",
+    experimental.design = "Ex-situ - indoor measocosms",
+    data.type = "Raw",
+    measuring.technique = "Flow cytometry",
+    sample.origin = "Cultured",
+    
+    ## Taxa
+    original.taxa.name = "Chlamydomonas moewusii",
+    life.stage = "Active",
+    sex = NA,
+    
+    ## Date
+    sample.year = NA,
+    sample.month = NA,
+    
+    ## Location
+    habitat = "Lab",
+    location = NA,
+    country = NA,
+    continent = NA,
+    latitude = NA,
+    longitude = NA,
+    
+    ## Body size
+    nu = "Cell",
+    cell.biovol = size,
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    nu, cell.biovol 
+  )
 
+## Save
+saveRDS(lachapelle_j_2022_subset, file = "Raw_data/WOS/Formatted/lachapelle_j_2022_subset.rds")
 
+## 15 Baker_HK_2022 ----
+baker_hk_2022_subset <- baker_hk_2022 %>% 
+  ## select ones that were either from a fishless lake and then reared in a fishless microcosm or from a fish lake and reared in a fish microcosm
+  filter(
+    community == "Naive" & treatment == "Control" |
+      community == "Experienced" & treatment == "Caged" |
+      community == "Experienced" & treatment == "Free"  
+      ) %>% 
+  mutate(
+    ## Source
+    source.code = "15",
+    original.source.code = "15",
+    experimental.design = "Ex-situ - outdoor mesocosms",
+    data.type = "Raw",
+    measuring.technique = NA,
+    sample.origin = "Collected",
+    
+    ## Taxa
+    original.taxa.name = Species,
+    life.stage = NA,
+    sex = NA,
+    
+    ## Date
+    sample.year = "2018",
+    sample.month = case_when(
+      Sample %in% c("1", "2") ~ "07",
+      Sample %in% c("3", "4") ~ "08",
+      TRUE ~ NA
+    ),
+    
+    ## Location
+    habitat = "Outdoor measocosm",
+    location = "Mammoth Lakes",
+    country = "USA",
+    continent = "North America",
+    latitude = "37.613887",
+    longitude = "-118.832778",
+    
+    ## Body size
+    body.length = length
+  )%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    body.length
+  )
 
-
-
-
+## Save
+saveRDS(baker_hk_2022_subset, file = "Raw_data/WOS/Formatted/baker_hk_2022_subset.rds")
+  
+## 17 gu_l_2022 ----
+gu_l_2022_subset <- gu_l_2022 %>% 
+  
 
 
 
@@ -706,7 +913,8 @@ saveRDS(theus_me_2023_subset, file = "Raw_data/WOS/Formatted/theus_me_2023_subse
 
 
 ## combine together ----
-all_wos_raw <- bind_rows(arnoldt_s_2024_subset, sildever_s_2024_subset, zou_yp_2024_subset, blackburn_dp_2023_subset, rogalski_ma_2023_subset, ramaekers_l_2023_subset, klasios_n_2023_subset, theus_me_2023_subset) %>% 
+all_wos_raw <- bind_rows(arnoldt_s_2024_subset, sildever_s_2024_subset, zou_yp_2024_subset, blackburn_dp_2023_subset, rogalski_ma_2023_subset, ramaekers_l_2023_subset, klasios_n_2023_subset, theus_me_2023_subset, grzesiuk_m_2023_subset, zheng_sw_2022_subset,
+                         lachapelle_j_2022_subset, baker_hk_2022_subset) %>% 
   relocate(
     source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
     sample.year, sample.month,
@@ -717,12 +925,46 @@ all_wos_raw <- bind_rows(arnoldt_s_2024_subset, sildever_s_2024_subset, zou_yp_2
     min.cell.biovol, max.cell.biovol, cell.biovol
   )
 
-exp <- all_wos_raw %>% 
-  filter(
-    sample.origin == "Lab culture"
+
+
+
+mutate(
+  ## Source
+  source.code = ,
+  original.source.code = ,
+  experimental.design = ,
+  data.type = ,
+  measuring.technique = ,
+  sample.origin = ,
+  
+  ## Taxa
+  original.taxa.name = ,
+  life.stage = ,
+  sex = ,
+  
+  ## Date
+  sample.year = ,
+  sample.month = ,
+  
+  ## Location
+  habitat = ,
+  location = ,
+  country = ,
+  continent =,
+  latitude = ,
+  longitude = ,
+  
+  ## Body size
+)%>% 
+  select(
+    source.code, original.source.code, experimental.design, data.type, sample.origin, measuring.technique, original.taxa.name, life.stage, sex,
+    sample.year, sample.month,
+    habitat, location, country, continent, latitude, longitude,
+    nu, cell.biovol 
   )
 
-
+## Save
+saveRDS(, file = "Raw_data/WOS/Formatted/.rds")
 
 
 
