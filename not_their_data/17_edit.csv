@@ -1,54 +1,52 @@
-"","doi","Column2"
-"1","10.1016/j.simyco.2019.05.001",NA
-"2","10.1016/j.simyco.2015.10.003",NA
-"3","10.1128/JCM.42.11.5315-5319.2004",NA
-"4","10.1016/j.simyco.2020.05.001",NA
-"5","10.1016/j.simyco.2015.10.004",NA
-"6","10.3114/sim.2010.65.01",NA
-"7","10.1016/j.simyco.2017.11.003",NA
-"8","10.3114/sim.2007.58.05",NA
-"9","10.3389/fmicb.2020.01303",NA
-"10","10.3114/sim.2008.61.02",NA
-"11","10.3767/003158511X606239",NA
-"12","10.1016/j.simyco.2015.10.002",NA
-"13","10.3389/fmicb.2020.572596",NA
-"14","10.1016/j.riam.2009.09.001",NA
-"15","10.1007/s13225-020-00453-7",NA
-"16","10.1094/PDIS-07-19-1383-PDN",NA
-"17","10.1038/s41598-020-69718-0",NA
-"18","10.1016/j.simyco.2014.08.001",NA
-"19","10.3114/fuse.2020.05.04",NA
-"20","10.3114/fuse.2021.07.10",NA
-"21","10.1016/j.simyco.2021.100116",NA
-"22","10.3767/persoonia.2019.43.01",NA
-"23","10.3767/persoonia.2019.43.05",NA
-"24","10.1007/s10482-013-9943-z",NA
-"25","10.3767/003158510X500705",NA
-"26","10.1038/s41598-017-07807-3",NA
-"27","",NA
-"28","10.3852/mycologia.97.3.718",NA
-"29","10.1094/PD-89-0177",NA
-"30","10.3767/003158508X324227",NA
-"31","10.3767/003158516X691582",NA
-"32","10.3767/003158515X685364",NA
-"33","10.1099/ijs.0.018499-0",NA
-"34","10.1016/j.simyco.2020.01.002",NA
-"35","10.2307/3761998",NA
-"36","10.1128/CMR.13.2.236",NA
-"37","10.1080/22221751.2020.1785333",NA
-"38","10.1080/12298093.2018.1551854",NA
-"39","10.5941/MYCO.2014.42.4.401",NA
-"40","10.15560/16.4.907",NA
-"41","10.5941/MYCO.2015.43.4.392",NA
-"42",NA,""
-"43",NA,"The forcible discharge distance of ascospores of Gibberelia zeae"
-"44",NA,"Clonostachys moreaui (Hypocreales, Bionectriaceae), a new species from the island of Madeira (Portugal)"
-"45",NA,"Thermophilic fungi: taxonomy and biogeography"
-"46",NA,"Isaria takamizusanensis is the anamorph of Cordyceps ryogamimontana, warranting a new combination, Purpureocillium takamizusanense comb. Nov"
-"47",NA,"Isaria takamizusanensis is the anamorph of Cordyceps ryogamimontana, warranting a new combination, Purpureocillium takamizusanense comb. nov"
-"48",NA,"Descriptions of medical fung"
-"49",NA,"Rhodosporidium diobovatum sp. n., the perfect form of an asporogenous yeast (Rhodotorula sp.)"
-"50",NA,"A taxonomic summary and revision of Rhizophydium (Rhizophydiales, Chytridiomycota"
-"51",NA,"A new species of Mortierella, and an associated sporangiiferous mycoparasite in a new genus, Nothadelphia"
-"52",NA,"Characterization of a zygomycete fungus, Mortierella minutissima from freshwater of Yeongsan river in Korea"
-"53",NA,"Molecular characterization and genetic diversity of four undescribed novel oleaginous Mortierella alpina strains from Libya"
+"","References","doi"
+"1","Marin-Felix Y, Hernández-Restrepo M, Iturrieta-González I, et al. Genera of phytopathogenic fungi: GOPHY 3. Stud Mycol. 2019;94:1-124. Published 2019 Jun 13. doi:10.1016/j.simyco.2019.05.001","10.1016/j.simyco.2019.05.001"
+"2","Chen Q, Jiang JR, Zhang GZ, Cai L, Crous PW. Resolving the Phoma enigma. Stud Mycol. 2015;82:137-217. doi:10.1016/j.simyco.2015.10.003","10.1016/j.simyco.2015.10.003"
+"3","Pendle S, Weeks K, Priest M, et al. Phaeohyphomycotic soft tissue infections caused by the coelomycetous fungus Microsphaeropsis arundinis. J Clin Microbiol. 2004;42(11):5315-5319. doi:10.1128/JCM.42.11.5315-5319.2004","10.1128/JCM.42.11.5315-5319.2004"
+"4","Hou LW, Groenewald JZ, Pfenning LH, Yarden O, Crous PW, Cai L. The phoma-like dilemma. Stud Mycol. 2020;96:309-396. Published 2020 May 21. doi:10.1016/j.simyco.2020.05.001","10.1016/j.simyco.2020.05.001"
+"5","Chen Q, Jiang JR, Zhang GZ, Cai L, Crous PW. Resolving the Phoma enigma. Stud Mycol. 2015;82:137-217. doi:10.1016/j.simyco.2015.10.004","10.1016/j.simyco.2015.10.004"
+"6","Aveskamp MM, de Gruyter J, Woudenberg JH, Verkley GJ, Crous PW. Highlights of the Didymellaceae: A polyphasic approach to characterise Phoma and related pleosporalean genera. Stud Mycol. 2010;65:1-60. doi:10.3114/sim.2010.65.01","10.3114/sim.2010.65.01"
+"7","Valenzuela-Lopez N, Cano-Lira JF, Guarro J, et al. Coelomycetous Dothideomycetes with emphasis on the families Cucurbitariaceae and Didymellaceae. Stud Mycol. 2018;90:1-69. doi:10.1016/j.simyco.2017.11.003","10.1016/j.simyco.2017.11.003"
+"8","Schubert K, Groenewald JZ, Braun U, et al. Biodiversity in the Cladosporium herbarum complex (Davidiellaceae, Capnodiales), with standardisation of methods for Cladosporium taxonomy and diagnostics. Stud Mycol. 2007;58:105-156. doi:10.3114/sim.2007.58.05","10.3114/sim.2007.58.05"
+"9","Pem D, Jeewon R, Selcuk F, et al. Ribosomal and Protein Gene Phylogeny Reveals Novel Saprobic Fungal Species From Juglans regia and Urtica dioica. Front Microbiol. 2020;11:1303. Published 2020 Jun 30. doi:10.3389/fmicb.2020.01303","10.3389/fmicb.2020.01303"
+"10","Zalar P, Gostincar C, de Hoog GS, Ursic V, Sudhadham M, Gunde-Cimerman N. Redefinition of Aureobasidium pullulans and its varieties. Stud Mycol. 2008;61:21-38. doi:10.3114/sim.2008.61.02","10.3114/sim.2008.61.02"
+"11","Crous PW, Summerell BA, Swart L, et al. Fungal pathogens of Proteaceae. Persoonia. 2011;27:20-45. doi:10.3767/003158511X606239","10.3767/003158511X606239"
+"12","Tanaka K, Hirayama K, Yonezawa H, et al. Revision of the Massarineae (Pleosporales, Dothideomycetes). Stud Mycol. 2015;82:75-136. doi:10.1016/j.simyco.2015.10.002","10.1016/j.simyco.2015.10.002"
+"13","Zhang Z, Dong C, Chen W, et al. The Enigmatic Thelebolaceae (Thelebolales, Leotiomycetes): One New Genus Solomyces and Five New Species. Front Microbiol. 2020;11:572596. Published 2020 Oct 29. doi:10.3389/fmicb.2020.572596","10.3389/fmicb.2020.572596"
+"14","Yilmaz N, Visagie CM, Houbraken J, Frisvad JC, Samson RA. Polyphasic taxonomy of the genus Talaromyces. Stud Mycol. 2014;78:175-341. doi:10.1016/j.simyco.2014.08.001","10.1016/j.simyco.2014.08.001"
+"15","Crous PW, Schumacher RK, Wood AR, Groenewald JZ. The Genera of Fungi - G5: Arthrinium, Ceratosphaeria, Dimerosporiopsis, Hormodochis, Lecanostictopsis, Lembosina, Neomelanconium, Phragmotrichum, Pseudomelanconium, Rutola, and Trullula. Fungal Syst Evol. 2020;5:77-98. doi:10.3114/fuse.2020.05.04","10.3114/fuse.2020.05.04"
+"16","Pintos Á, Alvarado P. Phylogenetic delimitation of Apiospora and Arthrinium. Fungal Syst Evol. 2021;7:197-221. doi:10.3114/fuse.2021.07.10","10.3114/fuse.2021.07.10"
+"17","Crous PW, Lombard L, Sandoval-Denis M, et al. Fusarium: more than a node or a foot-shaped basal cell. Stud Mycol. 2021;98:100116. Published 2021 Aug 17. doi:10.1016/j.simyco.2021.100116","10.1016/j.simyco.2021.100116"
+"18","Lombard L, Sandoval-Denis M, Lamprecht SC, Crous PW. Epitypification of Fusarium oxysporum - clearing the taxonomic chaos. Persoonia. 2019;43:1-47. doi:10.3767/persoonia.2019.43.01","10.3767/persoonia.2019.43.01"
+"19","Xia JW, Sandoval-Denis M, Crous PW, Zhang XG, Lombard L. Numbers to names - restyling the Fusarium incarnatum-equiseti species complex. Persoonia. 2019;43:186-221. doi:10.3767/persoonia.2019.43.05","10.3767/persoonia.2019.43.05"
+"20","Damm U, Fourie PH, Crous PW. Coniochaeta (Lecythophora), Collophora gen. nov. and Phaeomoniella species associated with wood necroses of Prunus trees. Persoonia. 2010;24:60-80. doi:10.3767/003158510X500705","10.3767/003158510X500705"
+"21","Chen K, Zhuang WY. Discovery from a large-scaled survey of Trichoderma in soil of China. Sci Rep. 2017;7(1):9090. Published 2017 Aug 22. doi:10.1038/s41598-017-07807-3","10.1038/s41598-017-07807-3"
+"22","Damm U, Mostert L, Crous PW, Fourie PH. Novel Phaeoacremonium species associated with necrotic wood of Prunus trees. Persoonia. 2008;20:87-102. doi:10.3767/003158508X324227","10.3767/003158508X324227"
+"23","Lombard L, Houbraken J, Decock C, et al. Generic hyper-diversity in Stachybotriaceae. Persoonia. 2016;36:156-246. doi:10.3767/003158516X691582","10.3767/003158516X691582"
+"24","Giraldo A, Gené J, Sutton DA, et al. Phylogeny of Sarocladium (Hypocreales). Persoonia. 2015;34:10-24. doi:10.3767/003158515X685364","10.3767/003158515X685364"
+"25","Li AH, Yuan FX, Groenewald M, et al. Diversity and phylogeny of basidiomycetous yeasts from plant leaves and soil: Proposal of two new orders, three new families, eight new genera and one hundred and seven new species. Stud Mycol. 2020;96:17-140. Published 2020 Jan 28. doi:10.1016/j.simyco.2020.01.002","10.1016/j.simyco.2020.01.002"
+"26","Ribes JA, Vanover-Sams CL, Baker DJ. Zygomycetes in human disease. Clin Microbiol Rev. 2000;13(2):236-301. doi:10.1128/CMR.13.2.236","10.1128/CMR.13.2.236"
+"27","Karunarathna SC, Dong Y, Karasaki S, et al. Discovery of novel fungal species and pathogens on bat carcasses in a cave in Yunnan Province, China. Emerg Microbes Infect. 2020;9(1):1554-1566. doi:10.1080/22221751.2020.1785333","10.1080/22221751.2020.1785333"
+"28","Nguyen TTT, Park SW, Pangging M, Lee HB. Molecular and Morphological Confirmation of Three Undescribed Species of Mortierella from Korea. Mycobiology. 2019;47(1):31-39. Published 2019 Mar 23. doi:10.1080/12298093.2018.1551854","10.1080/12298093.2018.1551854"
+"29","Verkley GJ, Gené J, Guarro J, Pérez-Santonja JJ, Rodríguez AE, Colom MF, Alio JL, Ferrer C. Pyrenochaeta keratinophila sp. nov., isolated from an ocular infection in Spain. Rev Iberoam Micol. 2010 Mar 31;27(1):22-4. doi: 10.1016/j.riam.2009.09.001. Epub 2009 Dec 1. PMID: 19955009.",NA
+"30","Zhang Z F, Zhou S Y, Eurwilaichitr L, et al. Culturable mycobiota from Karst caves in China II, with descriptions of 33 new species[J]. Fungal Diversity, 2021, 106(1): 29-136.",NA
+"31","Ding T, Li Z, Guo L, et al. First Report of Leaf Spots and Necrosis Caused by Paraphaeosphaeria recurvifoliae on Yucca gloriosa in China[J]. Plant Disease, 2020, 104(3): 986-986.",NA
+"32","Ariyawansa H A, Tsai I, Thambugala K M, et al. Species diversity of Pleosporalean taxa associated with Camellia sinensis (L.) Kuntze in Taiwan[J]. Scientific reports, 2020, 10(1): 1-20.",NA
+"33","Khan, Z., Gené, J., Ahmad, S. et al. Coniochaeta polymorpha, a new species from endotracheal aspirate of a preterm neonate, and transfer of Lecythophora species to Coniochaeta . Antonie van Leeuwenhoek 104, 243–252 (2013).",NA
+"34","Schmale III D G, Arntsen Q A, Bergstrom G C. The forcible discharge distance of ascospores of Gibberella zeae[J]. Canadian Journal of Plant Pathology, 2005, 27(3): 376-382.",NA
+"35","Leslie J F, Summerell B A, Bullock S, et al. Description of Gibberella sacchari and neotypification of its anamorph Fusarium sacchari[J]. Mycologia, 2005, 97(3): 718-724.",NA
+"36","Lechat C, Fournier J, Gasch A. Clonostachys moreaui (Hypocreales, Bionectriaceae), a new species from the island of Madeira (Portugal)[J]. 2020.",NA
+"37","Salar R K, Aneja K R. Thermophilic fungi: taxonomy and biogeography[J]. Journal of Agricultural Technology, 2007, 3(1): 77-107.",NA
+"38","Rooney-Latham S, Eskalen A, Gubler W D. Teleomorph formation of Phaeoacremonium aleophilum, cause of esca and grapevine decline in California[J]. Plant Disease, 2005, 89(2): 177-184.",NA
+"39","Ban S, Azuma Y, Sato H, et al. Isaria takamizusanensis is the anamorph of Cordyceps ryogamimontana, warranting a new combination, Purpureocillium takamizusanense comb. nov[J]. International Journal of Systematic and Evolutionary Microbiology, 2015, 65(Pt_8): 2459-2465.",NA
+"40","Laich F, Vaca I, Chávez R. Rhodotorula portillonensis sp. nov., a basidiomycetous yeast isolated from Antarctic shallow-water marine sediment. Int J Syst Evol Microbiol. 2013 Oct;63(Pt 10):3884-3891. doi: 10.1099/ijs.0.052753-0. Epub 2013 Aug 9. PMID: 23934251.",NA
+"41","Libkind D, Sampaio JP, van Broock M. Cystobasidiomycetes yeasts from Patagonia (Argentina): description of Rhodotorula meli sp. nov. from glacial meltwater. Int J Syst Evol Microbiol. 2010 Sep;60(Pt 9):2251-2256. doi: 10.1099/ijs.0.018499-0. Epub 2009 Oct 30. PMID: 19880630.",NA
+"42","Kidd S, Halliday C L, Alexiou H, et al. Descriptions of medical fungi[M]. David Ellis, 2016.",NA
+"43","Newell S Y, Hunter I L. Rhodosporidium diobovatum sp. n., the perfect form of an asporogenous yeast (Rhodotorula sp.)[J]. Journal of bacteriology, 1970, 104(1): 503-508.",NA
+"44","Longcore J E. Rhizophydium brooksianum sp. nov., a multipored chytrid from soil[J]. Mycologia, 2004, 96(1): 162-171.",NA
+"45","Letcher P M, Powell M J. A taxonomic summary and revision of Rhizophydium (Rhizophydiales, Chytridiomycota)[M]. Tuscaloosa, AL, USA: University Printing, The University of Alabama, 2012.",NA
+"46","Yadav D R, Kim S W, Babu A G, et al. First report of Mortierella alpina (Mortierellaceae, Zygomycota) isolated from crop field soil in Korea[J]. Mycobiology, 2014, 42(4): 401-404.",NA
+"47","Degawa Y, Gams W. A new species of Mortierella, and an associated sporangiiferous mycoparasite in a new genus, Nothadelphia[J]. Stud. Mycol, 2004, 50(2): 567-572.",NA
+"48","Nguyen T T T, Lee H B. Characterization of a zygomycete fungus, Mortierella minutissima from freshwater of Yeongsan river in Korea[J]. The Korean Journal of Mycology, 2016, 44(4): 346-349.",NA
+"49","Eltariki F E M, Tiwari K, Alhoot M A. Molecular characterization and genetic diversity of four undescribed novel oleaginous Mortierella alpina strains from Libya[J]. F1000Research, 2021, 10(895): 895.",NA
+"50","Gonçalves C M, de Oliveira R J V, da Silva R M F, et al. Mortierella verticillata Linnem.(Mortierellomycota, Mortierellales) isolated from mountainous environments: a first report from South America[J]. Check List, 2020, 16: 907.",NA
+"51","Lee H W, Nguyen T T T, Mun H Y, et al. Confirmation of two undescribed fungal species from Dokdo of Korea based on current classification system using multi loci[J]. Mycobiology, 2015, 43(4): 392-401.",NA
