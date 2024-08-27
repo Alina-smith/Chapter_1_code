@@ -1,0 +1,103 @@
+taxa.name,size,citation,source.code
+Amphorides quadrilineata,20000,2,526
+Balanion comatum,2500,2,526
+Balanion planctonicum,1700,3,527
+Balanion planctonicum,1800,4,528
+Bromeliothrix metopoides,8570,5,529
+Coleps sp.,18400,6,530
+Colpidium campylum,35000,7,531
+C. colpoda,50543,7,531
+C. kleini,49670,46,532
+C. kleini,43270,46,532
+C. kleini,33160,46,532
+C. kleini,28890,46,532
+C. kleini,26750,46,532
+Cyclidium glaucoma,517,7,531
+Didinium nasutum,859000,8,533
+Eutintinnus pectinis,13894,9,534
+Favella ehrenbergii,16800,10,535
+F. ehrenbergii,16800,10,535
+F. taraikaensis,318550,13,536
+Glaucoma scintillans,4500,7,531
+Glaucomides bromelicola,8250,14,537
+Halteria cf. grandinella,3754,15,538
+Helicostomella subulata,14542,9,534
+Helicostomella subulata,14542,9,534
+Helicostomella subulata,14542,9,534
+Histiobalantium bodamicum,34000,4,528
+H. bodamicum,40941,16,539
+H. bodamicum,34628,16,539
+H. bodamicum,26749,16,539
+H. bodamicum,32557,16,539
+Lohmanniella oviformis,3799,17,540
+Meseres corlissi,52196,18,541
+Metacylis angulata,N.A.,12,542
+Parallelostrombidium siculum,28575,19,543
+Parallelostrombidium siculum,28575,19,543
+Pelagostrobilidium spirale,150000,20,544
+P. cf. spirale,11494,21,545
+P. neptuni,110000,19,543
+P. mirabile,40980,22,546
+Rimostrombidium lacustris,113000,4,528
+R. veniliae,19635,19,543
+Strobilidium spiralis,150000,17,540
+Strobilidium sp. 1,33680,23,547
+Strobilidium sp. 2,11400,24,548
+Strombidinopsis cheshiri,92000,25,549
+S. jeokjo,382279,26,550
+S. multiauris,186000,27,551
+Strombidinopsis sp. 1,560000,28,552
+Strombidinopsis sp. 2,63141,29,553
+Strombidinopsis sp. 3,N.A.,12,542
+Strombidium acutum,28686,17,540
+Str. capitatum,64140,19,543
+Str. capitatum,64140,"19, 47",NA
+Str. conicum,38299,17,540
+Strombidium sp. 1,28420,17,540
+Strombidium sp. 2,13790,30,555
+Str. reticulatum,40000,20,544
+Str.rassoulzadegani,33510,31,556
+Str. sulcatum,9000,32,557
+Str. cf. sulcatum,24020,33,558
+Str. cf. sulcatum,24020,33,558
+Str. cf. sulcatum,41710,34,559
+Str. vestitum,8205,17,540
+Tiarina fusus,25400,35,560
+Tintinnopsis acuminata,6873,36,561
+T. acuminata,6712,36,561
+T. acuminata,6501,36,561
+T. dadayi,69000,21,545
+T. vasculum,82567,36,561
+T. vasculum,80003,36,561
+T. vasculum,76950,36,561
+Urotricha farcta,4460,48,562
+U. farcta,6380,48,562
+U. farcta,3860,48,562
+U. farcta,2190,48,562
+U. farcta,4050,48,562
+U. farcta,2650,48,562
+U. furcata,2750,3,527
+Vorticella natans,20539,16,539
+V. natans,22068,16,539
+V. natans,29455,16,539
+V. natans,17848,16,539
+Coleps spetai,33155,"37, 38",NA
+Coleps spetai,34574,37,563
+Coleps spetai,33939,37,563
+Didinium nasutum,782000,39,565
+Didinium nasutum,859000,8,533
+Euplotes patella,96400,42,566
+Glaucomides bromelicola,6981,37,563
+Glaucomides bromelicola,6815,37,563
+Glaucomides bromelicola,6635,37,563
+Glaucomides bromelicola,6119,37,563
+Meseres corlissi,50784,"37, 43",NA
+Meseres corlissi,57685,"37, 43",NA
+Meseres corlissi,68829,"37, 43",NA
+Meseres corlissi,55741,"37, 43",NA
+Meseres corlissi,53672,"37, 43",NA
+Meseres corlissi,58365,"37, 43",NA
+Mesodinium pulex,1432,44,568
+Strombidium capitatum,N.A.,47,554
+Strombidium sulcatum,9000,32,557
+Uronema marinum,5100,45,569

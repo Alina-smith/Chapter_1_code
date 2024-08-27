@@ -74,3 +74,96 @@ write.csv(new_list, "new_list.csv")
 
 
 
+## getting reference list from secondar sources into same format as WOS
+## Data
+zotero_source_list <- read_xlsx(here("Raw_data", "zotero_original_source_list.xlsx"), sheet = "source_list")
+zotero_source_list_full_name <- read_xlsx(here("Raw_data", "zotero_original_source_list.xlsx"), sheet = "full_name")
+
+full_name_list <- zotero_source_list_full_name %>% 
+  mutate(
+    # author
+    author = stri_extract_first_regex(source, ".*(?=, \\d{4}\\.)"),
+    # doi
+    doi = stri_extract_first_regex(source, "https://doi.org/(?<=https://doi.org/).*"),
+  ) 
+
+
+# creatng columns for each part of the reference
+zotero_source_list_edit <- zotero_source_list %>% 
+  mutate(
+    source.edit = source,
+    
+    # year
+    year = stri_extract_first_regex(source.edit, "\\(\\d{4}\\)|\\(\\d{4}\\w*\\)"),# select the date in the bracket
+    year = stri_replace_all_regex(year, "\\(|\\)", ""), # remove bracket
+    source.edit = stri_replace_first_regex(source.edit, "\\(\\d{4}\\)",""),
+    
+    doi = stri_extract_first_regex(source.edit, "https://doi.org/(?<=https://doi.org/).*"),
+    source.edit = stri_replace_first_regex(source.edit, "Available at: https://doi.org/(?<=https://doi.org/).*",""),
+   
+    page = stri_extract_first_regex(source.edit, "(?<= pp. | p. )\\S+(–\\S+)*"),
+    source.edit = stri_replace_first_regex(source.edit, " pp. \\S+(–\\S+)*| p. \\S+(–\\S+)*",""),
+    
+    issue = stri_extract_first_regex(source.edit, "")
+    
+    volume_issue = stri_extract_first_regex(source.edit, ", \\d+(–\\d+)*(\\(\\d+(–\\d+)*\\))*"),
+     
+  )
+
+)
+    
+    # issue
+    issue = stri_extract_first_regex(source.edit, "\\(\\d+(–\\d+)*\\), pp.( \\d+(–\\d+)*)*|\\(\\d+(–\\d+)*\\), p.( \\d+(–\\d+)*)*"))
+
+# get issue by selecting digits that are followed by pp. so avoid getting things from title when issue isn't stated
+    issue = stri_extract_first_regex(issue, "\\d+(–\\d+)*") # select just the digits
+    
+    
+    )
+
+pp. 91–98
+
+
+
+,
+    year = stri_extract_first_regex(year, "(\\d{4})"),
+    source.edit = stri_replace_first_regex(source.edit, "(, \\d{4}\\.)",""),
+    
+    # doi
+    doi = stri_extract_first_regex(source.edit, "(?<=https://doi.org/).*"),
+    source.edit = stri_replace_first_regex(source.edit, "(?<=https://doi.org/).*",""),
+    source.edit = stri_replace_first_regex(source.edit, "https://doi.org/","")
+  ) 
+
+%>% 
+  select(source.edit, journal_volume)
+  
+. Hydrobiologia 232,
+
+https://doi.org/
+(?<=b)a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
