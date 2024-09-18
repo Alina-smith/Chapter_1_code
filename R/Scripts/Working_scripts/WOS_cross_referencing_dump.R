@@ -216,14 +216,49 @@ secondary_source_list <- original_sources %>%
     !is.na(secondary.duplicate.source.code) | !is.na(primary.duplicate.source.code)
   )
 
+## finding secondary data papers i deleted ( ones that have data but don't say which data point is which source)
+shortlist_sources <- read_xlsx(here("Raw_data", "Master_WOS_data.xlsx"), sheet = "sources_shortlist") %>% 
+  filter(
+    list.name == "original source"
+  )
 
+all_sources <- read_xlsx(here("Raw_data", "Master_WOS_data.xlsx"), sheet = "secondary_data_original_raw")%>% 
+  mutate(
+    original.source.code = as.character(source.code)
+  )
 
+deleted_check <- anti_join(check, deleted, by = "source.code") %>% 
+  distinct(source.code)
 
+check <- data.frame(source.code = 201:308) %>% 
+  mutate(
+    source.code = as.character(source.code)
+  )
 
+deleted <- shortlist_sources %>% 
+  mutate(
+    source.code = as.character(source.code)
+  ) %>% 
+  distinct(
+    source.code
+  )
 
-
-
-
-
+edit_223 <- read_xlsx(here("Raw_data", "Master_WOS_data.xlsx"), sheet = "223") %>% 
+  mutate(
+    min.body.size = case_when(
+      BioVol_C1 == "1" ~ "5",
+      BioVol_C2 == "1" ~ "100",
+      BioVol_C3 == "1" ~ "300",
+      BioVol_C4 == "1" ~ "600",
+      BioVol_C5 == "1" ~ "1500",
+    ),
+    
+    max.body.size = case_when(
+      BioVol_C1 == "1" ~ "100",
+      BioVol_C2 == "1" ~ "300",
+      BioVol_C3 == "1" ~ "600",
+      BioVol_C4 == "1" ~ "1500"
+    )
+  )
 
 

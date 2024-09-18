@@ -66,8 +66,31 @@ edit_208 <- raw_208 %>%
 
 write_csv(edit_208, "R/Data_outputs/WOS/208_edit.csv")
 
-
-
+## 223
+edit_223 <- read_xlsx(here("Raw_data", "WOS", "223.xlsx"), sheet = "223") %>% 
+  mutate(
+    min.body.size = case_when(
+      BioVol_C1 == "1" ~ "5",
+      BioVol_C2 == "1" ~ "100",
+      BioVol_C3 == "1" ~ "300",
+      BioVol_C4 == "1" ~ "600",
+      BioVol_C5 == "1" ~ "1500",
+    ),
+    
+    max.body.size = case_when(
+      BioVol_C1 == "1" ~ "100",
+      BioVol_C2 == "1" ~ "300",
+      BioVol_C3 == "1" ~ "600",
+      BioVol_C4 == "1" ~ "1500",
+      TRUE ~ NA
+    ),
+    
+    type = case_when(
+      is.na(max.body.size) ~ "min",
+      TRUE ~ "range"
+    )
+  )
+write_csv(edit_223, "R/Data_outputs/WOS/223_edit.csv")
 
 
 ## getting reference list from secondary sources into same format as WOS
