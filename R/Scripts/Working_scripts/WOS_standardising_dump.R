@@ -8,11 +8,17 @@ library(stringi)
 library(taxize)
 library(ggplot2)
 library(here)
+library(data.table)
 
 ## Data 
 wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data")
+sources <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
 
 wos_data <- wos_raw_body %>%
+  ## Remove NA body size
+  filter(
+    !is.na(body.size)
+  ) %>% 
   mutate(
     ## body size measurments
     # seperate out the body size measurement method into the method and then a column with additional notes on the method like what is measured etc
@@ -44,8 +50,49 @@ wos_data <- wos_raw_body %>%
       units == "cm" ~ "mm",
       units == "nm" ~ "μm",
       TRUE ~ units
-    )
+    ),
+    
+    ## format dates
+    # make the same type
+    sample.start.year = as.character(sample.start.year),
+    sample.end.year = as.character(sample.end.year),
+    sample.end.date.full = as.character(sample.end.date.full),
+    
+    # take year and month from sample.start.date.full
+    sample.start.year = case_when(
+      !is.na(sample.start.date.full) ~ stri_extract_first_regex(sample.start.date.full, "\\d{4}"),
+      TRUE ~ sample.start.year
+    ),
+    
+    sample.start.month = case_when(
+      !is.na(sample.start.date.full) ~ stri_extract_first_regex(sample.start.date.full, "(?<=\\d{4}-)\\d{2}"),
+      TRUE ~ sample.start.year
+    ),
+    
+    # take year from sample.end.year.full
+    sample.end.year = case_when(
+      !is.na(sample.end.date.full) ~ stri_extract_first_regex(sample.end.date.full, "\\d{4}"),
+      TRUE ~ sample.end.year
+    ),
+    
+    sample.end.month = case_when(
+      !is.na(sample.end.date.full) ~ stri_extract_first_regex(sample.end.date.full, "(?<=\\d{4}-)\\d{2}"),
+      TRUE ~ sample.end.year
+    ),
+  ) %>% 
+  select(-sample.end.date.full, -sample.start.date.full) %>% 
+  mutate(
+    ## life stage
+    # sort out captals
+    life.stage = stri_replace_all_regex(life.stage, "A", "a")
   )
+
+
+
+
+
+
+
 
 early_graph <- wos_data %>% 
   mutate(
@@ -61,9 +108,15 @@ early_graph <- wos_data %>%
   )
 
 
+life_stage <- wos_data %>% 
+  filter(
+    life.stage != "adult" & life.stage != "juvenile"
+  )
 
-
-
+full_date <- wos_data %>% 
+  filter(
+    !is.na(sample.start.date.full)
+  )
 
 sixteen <- wos_data %>% 
   filter(source.code == "16")
@@ -96,4 +149,17 @@ mm_type <- mm %>%
 
 method <- wos_data %>% 
   distinct(body.size.method)
+
+
+sources_code <- sources %>% 
+  select(original.source.code)
+
+source_check <- sources_code[duplicated(sources), ]
+
+lake_names <- wos_raw_body %>% 
+  filter(source.code == "82") %>% 
+  distinct(paper.location.1)
+  
+
+
 
