@@ -11,13 +11,38 @@ library(here)
 library(data.table)
 
 ## Data 
-wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data")
+wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data", guess_max = 40000)
 sources <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
 
 wos_data <- wos_raw_body %>%
-  ## Remove NA body size
+  mutate(
+    ## body.size - calculating values when average isn't given
+    # make the same type
+    total.bs = as.numeric(total.bs),
+    abundance = as.numeric(abundance),
+    body.size = as.numeric(body.size),
+    min.body.size = as.numeric(min.body.size),
+    max.body.size = as.numeric(max.body.size),
+    
+    body.size = case_when(
+      # divide total population biovolume by abundance
+      !is.na(total.bs) ~ total.bs/abundance,
+      # take average of range values when the average isn't given already
+      measurement.type == "range" & is.na(body.size) ~ (min.body.size*max.body.size)/2,
+      # select min values
+      measurement.type == "min" & is.na(body.size) ~ min.body.size,
+      # select max values
+      measurement.type == "max" & is.na(body.size) ~ max.body.size,
+      # keep the rest the same
+      TRUE ~ body.size
+    )) %>% 
+  # remove NAs and 0 in source 71
   filter(
-    !is.na(body.size)
+    !is.na(body.size) & body.size != "0"
+  ) %>% 
+  select(
+    -total.bs,
+    -abundance
   ) %>% 
   mutate(
     ## body size measurments
@@ -52,6 +77,22 @@ wos_data <- wos_raw_body %>%
       TRUE ~ units
     ),
     
+    ## life stage
+    # sort out captals
+    life.stage = stri_replace_all_regex(life.stage, "A", "a"),
+    
+    # change to either adult or juvenile
+    life.stage = case_when(
+      stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile") ~ "juvenile",
+      stri_detect_fixed(life.stage, "adult") ~ "adult",
+      source.code == "263" & stri_detect_regex(life.stage, "Instar") ~ "juvenile",
+      source.code == "263" & stri_detect_regex(life.stage, "Instar|C|N") ~ "juvenile",
+      TRUE ~ life.stage
+    )
+    )
+
+
+    
     ## format dates
     # make the same type
     sample.start.year = as.character(sample.start.year),
@@ -84,14 +125,62 @@ wos_data <- wos_raw_body %>%
   mutate(
     ## life stage
     # sort out captals
-    life.stage = stri_replace_all_regex(life.stage, "A", "a")
+    life.stage = stri_replace_all_regex(life.stage, "A", "a"),
+    
+    # change to either adult or juvenile
+    life.stage = case_when(
+      stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile") ~ "juvenile",
+      stri_detect_fixed(life.stage, "adult") ~ "adult",
+      source.code == "263" & stri_detect_regex(life.stage, "Instar") ~ "juvenile",
+      source.code == "263" & stri_detect_regex(life.stage, "Instar|C|N") ~ "juvenile",
+      TRUE ~ life.stage
+    )
   )
 
 
 
+start_date <- wos_raw_body %>% 
+  filter(
+    !is.na(sample.start.date.full)
+  ) %>% 
+  mutate(
+    keep = case_when(
+      stri_detect_regex(sample.start.date.full, "/") ~ "no",
+      TRUE ~ "yes"
+    )
+  ) %>% 
+  filter(
+    keep == "yes"
+  ) %>% 
+  select(
+    source.code, sample.start.date.full, keep
+  )
+
+start_date_sources <- start_date %>% 
+  distinct(source.code)
+
+true <- wos_raw_body %>% 
+  filter(
+    sample.end.date.full == "TRUE"
+  ) 
+%>% 
+  distinct(source.code)
+
+eighty_four <- wos_raw_body %>% 
+  filter(
+    source.code == "84"
+  )
 
 
+twenty_five <- wos_data %>% 
+  filter(
+    source.code == "25"
+  )
 
+two_6_3 <- wos_data %>% 
+  filter(
+    source.code == "263"
+  )
 
 
 early_graph <- wos_data %>% 
@@ -107,6 +196,10 @@ early_graph <- wos_data %>%
     body.size
   )
 
+two_0_3 <- wos_data %>% 
+  filter(
+    source.code == "203"
+  )
 
 life_stage <- wos_data %>% 
   filter(
