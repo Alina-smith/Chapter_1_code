@@ -1,6 +1,6 @@
 ## standadising the WOS data dump
 
-# Packages
+#### Packages
 library(tidyr)
 library(tidyverse)
 library(readxl)
@@ -10,13 +10,18 @@ library(ggplot2)
 library(here)
 library(data.table)
 
-## Data 
+#### Data ---- 
 wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data", guess_max = 40000)
-sources <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
+sources_shortlist <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
 
+#### Standardising ----
 wos_data <- wos_raw_body %>%
   mutate(
-    ## body.size - calculating values when average isn't given
+    ## body.size 
+    # replacing , with .
+    body.size = stri_replace_all_regex(body.size, ",", "."),
+    
+    # calculating values when average isn't given
     # make the same type
     total.bs = as.numeric(total.bs),
     abundance = as.numeric(abundance),
@@ -35,7 +40,8 @@ wos_data <- wos_raw_body %>%
       measurement.type == "max" & is.na(body.size) ~ max.body.size,
       # keep the rest the same
       TRUE ~ body.size
-    )) %>% 
+      )
+    ) %>% 
   # remove NAs and 0 in source 71
   filter(
     !is.na(body.size) & body.size != "0"
@@ -75,7 +81,9 @@ wos_data <- wos_raw_body %>%
       units == "cm" ~ "mm",
       units == "nm" ~ "μm",
       TRUE ~ units
-    ),
+      )
+    )
+,
     
     ## life stage
     # sort out captals
@@ -90,7 +98,6 @@ wos_data <- wos_raw_body %>%
       TRUE ~ life.stage
     )
     )
-
 
     
     ## format dates
@@ -253,6 +260,117 @@ lake_names <- wos_raw_body %>%
   filter(source.code == "82") %>% 
   distinct(paper.location.1)
   
+
+#### cross referencing -----
+## get a list of the source codes in the sources.shortlist sheet
+sources_shortlist_codes <- sources_shortlist %>% 
+  select(source.code)
+
+## Get a list of source codes using in body.size sheet
+# Source codes of primary data
+primary_source_codes <- wos_data %>% 
+  select(
+    source.code) %>% 
+  distinct(source.code) %>% 
+  mutate(
+    source.code = as.character(source.code),
+    # make a column to say it is primary for later use
+    source.type = "primary"
+  )
+
+# Source codes from secondary data
+    # when it is a primary source then it will have the primary source as the original source as well and I want to remove these to make a list of just original sources cited in secondary source list
+secondary_source_codes <- wos_data %>%
+  
+  # Select original.source.code columns
+  select(
+    original.source.code.1,
+    original.source.code.2,
+    original.source.code.3,
+    original.source.code.4,
+    original.source.code.5,
+    original.source.code.6
+  ) %>% 
+  
+  # make all the same type
+  mutate(
+    original.source.code.1 = as.character(original.source.code.1),
+    original.source.code.2 = as.character(original.source.code.2),
+    original.source.code.3 = as.character(original.source.code.3),
+    original.source.code.4 = as.character(original.source.code.4),
+    original.source.code.5 = as.character(original.source.code.5),
+    original.source.code.6 = as.character(original.source.code.6)
+  ) %>% 
+  
+  # put all sources codes into one column
+  pivot_longer(
+    cols = 1:6,
+    values_to = "source.code"
+    ) %>% 
+  
+  # remove duplicates
+  distinct(source.code) %>% 
+  
+  # remove NAs 
+  filter(!is.na(source.code)) %>% 
+  
+  ## Remove primary sources from original sources
+  left_join(., primary_source_codes, by = "source.code") %>% 
+  
+  # add in secondary to source.type column
+  mutate(
+    source.type = if_else(
+      is.na(source.type),"secondary", source.type
+    )
+  ) %>% 
+  
+  # select just secondary sources
+  filter(
+    source.type == "secondary"
+  )
+
+# combine secondary and primary source code
+used_source_codes <- bind_rows(primary_source_codes, secondary_source_codes)
+
+### Formatting the full source list
+## Checking for sources I didn't end up using
+delete_sources <- anti_join(sources_shortlist_codes, used_source_codes, by = "source.code") %>% 
+  mutate(used = "not used")
+
+## removing unused sources
+source_list_used <- left_join(sources_shortlist, delete_sources, by = "source.code") %>% 
+  mutate(
+    used = if_else(
+      is.na(used), "used", used
+    )
+  ) %>% 
+  filter(
+    used == "used"
+  ) %>% 
+  select(-used)
+  
+write.csv(source_list_used, )
+
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  
+
+
+
+
+
+
+
+
+
 
 
 
