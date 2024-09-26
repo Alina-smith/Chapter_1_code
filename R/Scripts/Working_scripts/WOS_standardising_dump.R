@@ -11,8 +11,30 @@ library(here)
 library(data.table)
 
 #### Data ---- 
-wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data", guess_max = 40000)
+wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize", guess_max = 40000)
 sources_shortlist <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
+
+check <- wos_raw_body %>% 
+  filter(source.code == "473")
+
+check2 <- wos_raw_body %>% 
+  filter(original.source.code.1 == "473")
+
+check3 <- wos_raw_body %>% 
+  filter(original.source.code.2 == "473")
+
+check4 <- wos_raw_body %>% 
+  filter(original.source.code.3 == "473")
+
+check5 <- wos_raw_body %>% 
+  filter(original.source.code.4 == "473")
+
+check6 <- wos_raw_body %>% 
+  filter(original.source.code.5 == "473")
+
+check7 <- wos_raw_body %>% 
+  filter(original.source.code.6 == "473")
+
 
 #### Standardising ----
 wos_data <- wos_raw_body %>%
