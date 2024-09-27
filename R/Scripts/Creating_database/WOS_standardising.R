@@ -11,8 +11,8 @@ library(here)
 library(data.table)
 
 #### Data ---- 
-wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize_data", guess_max = 40000)
-sources_shortlist <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
+wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize", guess_max = 40000)
+source_list <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
 
 #### Standardising ----
 wos_data <- wos_raw_body %>%
