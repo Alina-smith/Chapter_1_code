@@ -14,28 +14,6 @@ library(data.table)
 wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize", guess_max = 40000)
 sources_shortlist <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "sources_shortlist")
 
-check <- wos_raw_body %>% 
-  filter(source.code == "473")
-
-check2 <- wos_raw_body %>% 
-  filter(original.source.code.1 == "473")
-
-check3 <- wos_raw_body %>% 
-  filter(original.source.code.2 == "473")
-
-check4 <- wos_raw_body %>% 
-  filter(original.source.code.3 == "473")
-
-check5 <- wos_raw_body %>% 
-  filter(original.source.code.4 == "473")
-
-check6 <- wos_raw_body %>% 
-  filter(original.source.code.5 == "473")
-
-check7 <- wos_raw_body %>% 
-  filter(original.source.code.6 == "473")
-
-
 #### Standardising ----
 wos_data <- wos_raw_body %>%
   mutate(
@@ -64,6 +42,7 @@ wos_data <- wos_raw_body %>%
       TRUE ~ body.size
       )
     ) %>% 
+  
   # remove NAs and 0 in source 71
   filter(
     !is.na(body.size) & body.size != "0"
@@ -72,6 +51,7 @@ wos_data <- wos_raw_body %>%
     -total.bs,
     -abundance
   ) %>% 
+  
   mutate(
     ## body size measurments
     # seperate out the body size measurement method into the method and then a column with additional notes on the method like what is measured etc
@@ -103,9 +83,7 @@ wos_data <- wos_raw_body %>%
       units == "cm" ~ "mm",
       units == "nm" ~ "μm",
       TRUE ~ units
-      )
-    )
-,
+      ),
     
     ## life stage
     # sort out captals
@@ -113,20 +91,110 @@ wos_data <- wos_raw_body %>%
     
     # change to either adult or juvenile
     life.stage = case_when(
-      stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile") ~ "juvenile",
+      # adults
       stri_detect_fixed(life.stage, "adult") ~ "adult",
-      source.code == "263" & stri_detect_regex(life.stage, "Instar") ~ "juvenile",
-      source.code == "263" & stri_detect_regex(life.stage, "Instar|C|N") ~ "juvenile",
+      source.code %in% c("61", "263") & stri_detect_regex(life.stage, "C") ~ "adult",
+      life.stage == "7 days" ~ "adult",
+      is.na(life.stage) ~ "adult", # assume they are adults unless specified otherwise
+      # juvenile
+      stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile|metamorphasis") ~ "juvenile",
+      source.code %in% c("61", "263") & stri_detect_regex(life.stage, "N|Instar") ~ "juvenile",
+      source.code == "5" & life.stage != "adult" ~ "juvenile",
+      source.code == "66" ~ "juvenile",
+      
       TRUE ~ life.stage
-    )
-    )
+      ),
 
-    
     ## format dates
     # make the same type
+    ## american format = 8, 
     sample.start.year = as.character(sample.start.year),
     sample.end.year = as.character(sample.end.year),
-    sample.end.date.full = as.character(sample.end.date.full),
+    #sample.end.date.full = as.Date(sample.end.date.full),
+    #sample.start.date.full = as.Date(sample.start.date.full),
+    
+    # Year
+    sample.start.year = case_when(
+      !is.na(sample.start.date.full) ~ stri_extract_first_regex(sample.start.date.full, "\\d{4}"),
+      TRUE ~ sample.start.year
+      ),
+    
+    sample.end.year = case_when(
+      !is.na(sample.end.date.full) ~ stri_extract_first_regex(sample.end.date.full, "\\d{4}"),
+      TRUE ~ sample.end.year
+      ),
+    
+    # month
+    sample.start.month = case_when(
+      # american style date
+      !is.na(sample.start.date.full) & source.code == "8" ~ stri_extract_first_regex(sample.start.date.full, "(?<!\\/)\\d+(?=\\/)"), # take the two digits that don't have a / infront but have on following it - dd/
+      
+      # non-american style dates
+      stri_detect_regex(sample.start.date.full, "\\/") & source.code != "8" ~ stri_extract_first_regex(sample.start.date.full, "(?<=\\/)\\d+(?=\\/)"), # take the two digits inbetween an / - /dd/
+      stri_detect_regex(sample.start.date.full, "\\.") & source.code != "8" ~ stri_extract_first_regex(sample.start.date.full, "(?<=\\.)\\d+(?=\\.)"), # take the two digits inbetween an . - .dd.
+      TRUE ~ sample.start.month
+      ),
+    
+    sample.end.month = case_when(
+      # american style date
+      !is.na(sample.end.date.full) & source.code == "8" ~ stri_extract_first_regex(sample.end.date.full, "(?<!\\/)\\d+(?=\\/)"), # take the two digits that don't have a / infront but have on following it - dd/
+      
+      # non-american style dates
+      stri_detect_regex(sample.end.date.full, "\\/") & source.code != "8" ~ stri_extract_first_regex(sample.end.date.full, "(?<=\\/)\\d+(?=\\/)"), # take the two digits inbetween an / - /dd/
+      stri_detect_regex(sample.end.date.full, "\\.") & source.code != "8" ~ stri_extract_first_regex(sample.end.date.full, "(?<=\\.)\\d+(?=\\.)"), # take the two digits inbetween an . - .dd.
+      TRUE ~ sample.end.month
+      ),
+    
+    # make it into ranges in one column
+    # year
+    sample.year = case_when(
+      is.na(sample.end.year) ~ sample.start.year, # when there is only one sample year use that one
+      sample.start.year == sample.end.year ~ sample.start.year, # when the start and end year are the same just keep one
+      sample.start.year != sample.end.year ~ paste(sample.start.year, sample.end.year, sep = "-"), # when it is over multiple years make a range
+      TRUE ~ NA),
+    
+    # month
+    sample.month = case_when(
+      is.na(sample.end.month) ~ sample.start.month, # when there is only one sample year use that one
+      sample.start.month == sample.end.month ~ sample.start.month, # when the start and end year are the same just keep one
+      sample.start.month != sample.end.month ~ paste(sample.start.month, sample.end.month, sep = "-"), # when it is over multiple years make a range
+      TRUE ~ NA),
+    ) %>% 
+  # remove full date columns
+  select(
+    -sample.start.date.full,
+    -sample.end.date.full,
+    -sample.start.month,
+    -sample.start.year,
+    -sample.end.month,
+    -sample.end.year
+  )
+
+, # when it is just one year select that one,
+      sample.start.year == sample.end.year ~ sample.start.year,
+      sample.start.year != sample.end.year ~ paste(sample.start.year, sample.end.year, sep = "-")
+    )
+    
+    ) %>% 
+  # remove full date columns
+  select(
+    -sample.start.date.full,
+    -sample.end.date.full
+  )
+
+
+five <- wos_data %>% 
+  filter(
+    source.code == "1312"
+  )
+
+distinct_dates <- wos_data %>% 
+  filter(
+    !is.na(sample.start.date.full)
+  ) 
+%>% 
+  distinct(source.code)
+,
     
     # take year and month from sample.start.date.full
     sample.start.year = case_when(
@@ -149,7 +217,11 @@ wos_data <- wos_raw_body %>%
       !is.na(sample.end.date.full) ~ stri_extract_first_regex(sample.end.date.full, "(?<=\\d{4}-)\\d{2}"),
       TRUE ~ sample.end.year
     ),
-  ) %>% 
+  ) 
+
+
+
+%>% 
   select(-sample.end.date.full, -sample.start.date.full) %>% 
   mutate(
     ## life stage

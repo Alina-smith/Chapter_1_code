@@ -19,38 +19,19 @@ library(here)
 
 ########################################## data ====
 #set relative file paths
-database_path <- here("Raw_data", "Master biovolume_30 Oct 23.xlsx")
+master_db_path <- here("Raw_data", "Master_db_traits.xlsx")
 
 
-rimet <- read_xlsx(database_path, sheet = "Rimmet")
-kremer <- read_xlsx(database_path, sheet = "Kremer")
-odume <- read_xlsx(database_path, sheet = "Odume")
-hebert <- read_xlsx(database_path, sheet = "Hebert")
-Gavrilko <- read_xlsx(database_path, sheet = "Gavrilko")
-LT <- read_xlsx(database_path, sheet = "Laplace-Treyture")
-NO <- read_xlsx(database_path, sheet = "Neury-Ormanni")
-rimet2012 <- read_xlsx(database_path, sheet = "Rimet 2012")
-original_sources_raw <- read_xlsx(database_path, sheet = "original_source")
-sources <- read_xlsx(database_path, sheet = "source")
-location <- read_xlsx(database_path, sheet = "location")
-
-##### Original source dataframe ----
-# rimmet has been put first to make it easier with the ref.code numbering
-original_source <- original_sources_raw %>% 
-  rename(
-    authors = Authors,
-    year = Year,
-    title = Title,
-    publisher = Journal.Book,
-    pub.type = Pub.type,
-    ref.code = Ref.code
-  ) %>% 
-  mutate(
-    original.source.code = row_number()
-  ) %>% 
-  relocate(original.source.code, ref.code, database, authors, year, title, publisher, pub.type)
-
-saveRDS(original_source, file = "R/Data_outputs/Standardised_data/original_source.rds")
+rimet <- read_xlsx(master_db_path, sheet = "Rimmet")
+kremer <- read_xlsx(master_db_path, sheet = "Kremer")
+odume <- read_xlsx(master_db_path, sheet = "Odume")
+hebert <- read_xlsx(master_db_path, sheet = "Hebert")
+Gavrilko <- read_xlsx(master_db_path, sheet = "Gavrilko")
+LT <- read_xlsx(master_db_path, sheet = "Laplace-Treyture")
+NO <- read_xlsx(master_db_path, sheet = "Neury-Ormanni")
+rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
+db_source_list_raw <- read_xlsx(master_db_path, sheet = "source_list")
+db_location <- read_xlsx(master_db_path, sheet = "location")
 
 ############################################################### Rimmet ====
 # Reorganise and mutate
@@ -85,8 +66,35 @@ rimmet_subset <- rimet %>%
       TRUE ~ "adult"),
     
     ### Extracting info from biovol.notes
-    ## Year (make all into in 0000 format)
-    sample.start.year = case_when(
+    ## Year
+    sample.year = case_when(
+      # 1) get all dates in 0000 format
+      stri_detect_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})") ~ stri_extract_first_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})"),
+      stri_detect_regex(biovol.notes, "\\d{4}-\\d{4}") ~ stri_extract_first_regex(biovol.notes, "\\d{4}-\\d{4}"),
+      
+      # 2) weird ones
+      biovol.notes %in% c("Moyenne Annecy GL - 23/09/09", "Aiguebelette 28-09-09") ~ "2009",
+      biovol.notes == "Moyenne sur Annecy 20087" ~ "2008",
+      biovol.notes == "Mesures effectuées sur Annecy GL le 9/5/7, pas de correspondance taxo, forme crée pour la circonstance" ~ "2007",
+      TRUE ~ NA),
+    
+    ## Month - do seperately because theres not many of them and they're all different
+    sample.month = case_when(
+      biovol.notes == "Mesures sur Bayssou - 06-2008" ~ "06",
+      biovol.notes == "1 individu sur Annecy n 3-2007, de longeur 40 um" ~ "03",
+      
+      TRUE ~ NA
+    )) 
+
+      
+
+
+exp_rimmet <- rimmet_subset %>% 
+  filter(
+    biovol.notes != "Averages from literature"
+  )
+      
+      case_when(
       stri_detect_regex(biovol.notes, "\\b\\d{4}[-\u2013]\\d{4}\\b|\\b\\d{4}\\b") ~ stri_extract_first_regex(biovol.notes, "\\b\\d{4}"),
       stri_detect_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b") ~ paste0("20",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b"), start = -2)),
       stri_detect_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b") ~ paste0("200",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b"), start = -1)),
@@ -99,6 +107,13 @@ rimmet_subset <- rimet %>%
       TRUE ~ NA
     ),
     
+    # make into one column
+    sample.year = case_when(
+      
+    )
+
+    
+    ## Month
     ## Season:
     sample.season = case_when(
       stri_detect_regex(biovol.notes, "(?i)hiver") ~ "winter",
@@ -777,7 +792,7 @@ saveRDS(rimet2012_subset, file = "R/Data_outputs/Standardised_data/rimet2012_sub
 
 ############################################# Combine together ====
 # combine all into one big database and then can separate out into types etc later
-standardised_raw <- bind_rows(kremer_subset, rimmet_subset, hebert_subset, odume_subset, gavrilko_subset, lt_subset, no_subset, rimet2012_subset) %>% 
+standardised_databases <- bind_rows(kremer_subset, rimmet_subset, hebert_subset, odume_subset, gavrilko_subset, lt_subset, no_subset, rimet2012_subset) %>% 
   # add in raw.uid
   mutate(
     raw.uid = row_number()
