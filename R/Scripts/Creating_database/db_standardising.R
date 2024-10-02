@@ -8,6 +8,22 @@
 # Rimmet - average biovolume from literature, functional group classifications
 # Kremer - raw biovolume measurements, no functional group classifications
 
+## descriptions of columns
+  # individual.uid = a uid for each individual so if there are mor than one measurment for an individual it will have the same individual.uid
+  # source.code = the source I got the data from
+  # original.source = the originalsource that th emeasurment was taken from - if measurments were taken by the authors of the database then it will be the same as the source code otherwise it will be different
+  # original.taxa.name = taxa name as described in databse
+  # life.stage = for zooplankton will either be adult or juvenile and for phyto will either be active or dormant
+  # sample.year = the year the sample was taken, this will either be an exact year or range
+  # sample month = the month the sample was taken, this will either be an exact month or range
+  # join.location = a code to identify a location that is present in the location sheet, this will be used to left join location data once it has been merged with the WOS data
+  # min/max/body.size = size measurement (separate column for min, max and body.size)
+  # form = the form of body.size measurment indiidual/colony/filament/multi-celluar
+  # no.individuals = no of individuals that have been measured - will be 1 for individuals
+  # bodysize.measurement = what the body measurement is e.g length/biovolume
+  # units = units for measurment
+  # measurement.tpe = if it is an average /raw/range etc
+
 # Packages
 library(tidyr)
 library(tidyverse)
@@ -17,7 +33,7 @@ library(taxize)
 library(ggplot2)
 library(here)
 
-########################################## data ====
+# data ----
 #set relative file paths
 master_db_path <- here("Raw_data", "Master_db_traits.xlsx")
 
@@ -30,42 +46,33 @@ Gavrilko <- read_xlsx(master_db_path, sheet = "Gavrilko")
 LT <- read_xlsx(master_db_path, sheet = "Laplace-Treyture")
 NO <- read_xlsx(master_db_path, sheet = "Neury-Ormanni")
 rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
-db_source_list_raw <- read_xlsx(master_db_path, sheet = "source_list")
+db_source_list <- read_xlsx(master_db_path, sheet = "source_list")
 db_location <- read_xlsx(master_db_path, sheet = "location")
 
-############################################################### Rimmet ====
-# Reorganise and mutate
-rimmet_subset <- rimet %>% 
+# Rimmet ----
+### Separate it into two dataframes for individual measurements and nu measurments so that I can then join them back together and have have separate indivudal.uids for individual and colonial measurements
+
+## Individual measurments ----
+rimet_ind <- rimet %>% 
   # Select columns I need and rename
   select(
     `Genus + species name`,
     `Cell biovolume µm3`,
-    `Notes on biovolumes`,
-    `Cumulated biovolume of cells in a colony µm3`,
-    `Colony biovolume µm3 (without mucilage)`,
-    `Number of cells per colony`,
+    `Notes on biovolumes`
   ) %>% 
   rename(
     original.taxa.name = `Genus + species name`,
-    cell.biovol = `Cell biovolume µm3`,
-    biovol.notes = `Notes on biovolumes`,
-    nu.biovol = `Cumulated biovolume of cells in a colony µm3`,
-    nu.biovol.mucilage = `Colony biovolume µm3 (without mucilage)`,
-    cells.per.nu = `Number of cells per colony`
-  ) %>%
+    body.size = `Cell biovolume µm3`,
+    biovol.notes = `Notes on biovolumes`
+  ) %>% 
   
   mutate(
-    ## Make a life stage column
+    ## Life stage
     # set TRUE to adult for now and then can change this to active for phyto when taxonomy info is added
     life.stage = case_when(
-      stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(original.taxa.name, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
+      stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "dormant",
       TRUE ~ "adult"),
     
-    ### Extracting info from biovol.notes
     ## Year
     sample.year = case_when(
       # 1) get all dates in 0000 format
@@ -82,82 +89,316 @@ rimmet_subset <- rimet %>%
     sample.month = case_when(
       biovol.notes == "Mesures sur Bayssou - 06-2008" ~ "06",
       biovol.notes == "1 individu sur Annecy n 3-2007, de longeur 40 um" ~ "03",
-      
+      biovol.notes == "Moyenne Annecy GL - 23/09/09" ~ "09",
+      biovol.notes == "Aiguebelette 15-10-2012" ~ "10",
+      biovol.notes == "Aiguebelette 28-09-09" ~ "09",
+      biovol.notes == "valeurs moyennes selon KLB 2/3 1991" ~ "03",
+      biovol.notes == "Annecy GL - cloche 0-18 - 17/01/2007" ~ "01",
+      biovol.notes == "Mesures effectuées sur Annecy GL le 9/5/7, pas de correspondance taxo, forme crée pour la circonstance" ~ "05",
+      biovol.notes == "Mesure Aiguebelette 20-12-2011" ~ "12",
       TRUE ~ NA
-    )) 
-
-      
-
-
-exp_rimmet <- rimmet_subset %>% 
-  filter(
-    biovol.notes != "Averages from literature"
-  )
-      
-      case_when(
-      stri_detect_regex(biovol.notes, "\\b\\d{4}[-\u2013]\\d{4}\\b|\\b\\d{4}\\b") ~ stri_extract_first_regex(biovol.notes, "\\b\\d{4}"),
-      stri_detect_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b") ~ paste0("20",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b"), start = -2)),
-      stri_detect_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b") ~ paste0("200",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b"), start = -1)),
-      TRUE ~ NA
-    ),
-    sample.end.year = case_when(
-      stri_detect_regex(biovol.notes, "\\b\\d{4}[-\u2013]\\d{4}\\b|\\b\\d{4}\\b") ~ stri_extract_last_regex(biovol.notes, "\\d{4}\\b"),
-      stri_detect_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b") ~ paste0("20",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{2}/\\d{2}/\\d{2}\\b|\\b\\d{2}-\\d{2}-\\d{2}\\b"), start = -2)),
-      stri_detect_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b") ~ paste0("200",str_sub(stri_extract_all_regex(biovol.notes, "\\b\\d{1}/\\d{1}/\\d{1}\\b|\\b\\d{1}-\\d{1}-\\d{1}\\b"), start = -1)),
-      TRUE ~ NA
-    ),
-    
-    # make into one column
-    sample.year = case_when(
-      
-    )
-
-    
-    ## Month
-    ## Season:
-    sample.season = case_when(
-      stri_detect_regex(biovol.notes, "(?i)hiver") ~ "winter",
-      stri_detect_regex(biovol.notes, "(?i)été") ~ "summer"
     ),
     
     ## Location:
-    # make location code column to use with left join by extract any location names that match the ones listed in the location.code column in location
-    location.code = sapply(stri_extract_all_regex(biovol.notes, regex(paste0(location$location.code, collapse = "|"))), paste0, collapse = " "),
-    location.code = str_remove_all(location.code, " SHL2"), # remove ones with the lake and monitoring program (" " before to keep the ones with just the monitoring program)
-    location.code = na_if(location.code, "NA"),
-    location.code = case_when(location.code == "Bourget Léman" ~ "Auvergne-Rhône-Alpes", TRUE ~ location.code) #when both lakes are put then change to the region
-  ) %>%
-  
-  # left_join the location info in location for each location name in location.code
-  left_join(., location, by = "location.code") %>% 
-  mutate(longitude = as.character(longitude),
-         latitude = as.character(latitude)
+    # Make join.location column which will be used to left join location info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
+    join.location.1 = sapply(
+      stri_extract_all_regex(
+        biovol.notes, regex(
+          paste0("(?i)", paste0(filter(db_location, db.code == "1")$join.location, collapse = "|")) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+        )
+      ),
+      paste0, collapse = " "),
+    
+    # When two lakes are stated split into two columns
+    join.location.2 = case_when(
+      join.location.1 == "Bourget Léman" ~ "Léman",
+      TRUE ~ NA
+    ),
+    
+    join.location.1 = case_when(
+      join.location.1 == "Bourget Léman" ~ "Bourget",
+      TRUE ~ join.location.1
+    ),
+    
+    # When its the lake monitoring program and the lake listed remove the lake monitoring program to just leave the lake
+    join.location.1 = str_remove_all(join.location.1, " SHL2"),
+    # set "NA" in location.code.1 to NA
+    join.location.1 = na_if(join.location.1, "NA")
   ) %>% 
-  select(- database) %>% 
   
-  # Add in biovol.ref info - match any of the location codes with the ref.code in original source
-  left_join(select(original_source, original.source.code, ref.code), by = c("location.code" = "ref.code")) %>% 
-  rename(biovol.ref = original.source.code) %>% 
-  mutate(biovol.ref = as.character(biovol.ref)) %>% 
+  ## Sources
+  # Add in source.code column for any measurements that have a source in the biovol.notes
+  mutate(
+    # make join.source column to left join source codes to
+    join.source = sapply(
+      stri_extract_all_regex(
+        biovol.notes, regex(
+          paste0("(?i)", paste0(filter(db_source_list, db.code == "1")$join.source, collapse = "|")) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+        )
+      ),
+      paste0, collapse = " "),
+    
+    # Make "NA" to NA
+    join.source = case_when(
+      join.source %in% c("NA", "na") ~ NA,
+      TRUE ~ join.source
+    )
+  ) %>% 
   
-  # remove redundant columns
-  select(-location.code, - biovol.notes) %>% 
+  left_join(select(db_source_list, join.source, source.code), by = "join.source") %>% 
+  rename(
+    original.source.code = source.code
+  ) %>% 
   
-  # Add in extra info and reorder
+  ## Add in extra info and reorder
   mutate(
     source.code = '1',
-    sample.month = NA_character_,
+    bodysize.measurement = "biovolume",
+    units = "µm^3",
+    min.body.size = NA,
+    max.body.size = NA,
+    measurement.type = "average",
+    form = "individual",
+    no.individuals = 1,
+    
+    # make uid
+    uid.db = "RI", #stands for rimet individual
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>%
-  relocate(source.code, original.taxa.name, life.stage, cell.biovol, cells.per.nu, nu.biovol, nu.biovol.mucilage, biovol.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude)
-
-saveRDS(rimmet_subset, file = "R/Data_outputs/Standardised_data/rimmet_subset.rds")
-
-################################################################################### Kremer ====
-# organize kremer raw data
-# Reorganize and mutate
-kremer_subset <- kremer %>% 
   
+  ## remove redundant columns
+  select(
+    - biovol.notes,
+    - join.source,
+    - uid.db,
+    - uid.no
+  ) %>% 
+  
+  # reorder
+  relocate(individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, join.location.2, min.body.size, max.body.size, body.size, form, no.individuals, bodysize.measurement, units, measurement.type)
+  
+## nu measurments ----
+rimet_nu <- rimet %>% 
   # Select columns I need and rename
+  select(
+    `Genus + species name`,
+    `Cell biovolume µm3`,
+    `Notes on biovolumes`,
+    `Cumulated biovolume of cells in a colony µm3`,
+    `Number of cells per colony`,
+    `Colonial`,
+    `Filament`
+  ) %>% 
+  rename(
+    original.taxa.name = `Genus + species name`,
+    ind.bodysize = `Cell biovolume µm3`,
+    biovol.notes = `Notes on biovolumes`,
+    nu.bodysize = `Cumulated biovolume of cells in a colony µm3`,
+    no.individuals = `Number of cells per colony`
+  ) %>%
+  
+  ## Filter out ones that a cellular measurements
+  filter(
+    !(nu.bodysize == ind.bodysize)
+  ) %>% 
+  
+  ## Rename nu.bodysize and remove ind.bodysize
+  rename(
+    body.size = nu.bodysize
+  ) %>% 
+  select(
+    -ind.bodysize
+  ) %>% 
+  
+  mutate(
+    # Form
+    # make form column using the colonial and filament columns
+    form = case_when(
+      Colonial == "1" & Filament == "1" ~ "multi-cell",
+      Colonial == "1" ~ "colony",
+      Filament == "1" ~ "filament"
+    ),
+    ## Life stage
+    # set TRUE to adult for now and then can change this to active for phyto when taxonomy info is added
+    life.stage = case_when(
+      stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "dormant",
+      TRUE ~ "adult"),
+    
+    ## Year
+    sample.year = case_when(
+      # 1) get all dates in 0000 format
+      stri_detect_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})") ~ stri_extract_first_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})"),
+      stri_detect_regex(biovol.notes, "\\d{4}-\\d{4}") ~ stri_extract_first_regex(biovol.notes, "\\d{4}-\\d{4}"),
+      
+      # 2) weird ones
+      biovol.notes %in% c("Moyenne Annecy GL - 23/09/09", "Aiguebelette 28-09-09") ~ "2009",
+      TRUE ~ NA),
+    
+    ## Month - do seperately because theres not many of them and they're all different
+    sample.month = case_when(
+      biovol.notes == "Mesures sur Bayssou - 06-2008" ~ "06",
+      biovol.notes == "1 individu sur Annecy n 3-2007, de longeur 40 um" ~ "03",
+      biovol.notes == "Moyenne Annecy GL - 23/09/09" ~ "09",
+      biovol.notes == "Aiguebelette 15-10-2012" ~ "10",
+      biovol.notes == "Aiguebelette 28-09-09" ~ "09",
+      TRUE ~ NA
+    ),
+    
+    ## Location:
+    # Make join.location column which will be used to left join location info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
+    join.location.1 = sapply(
+      stri_extract_all_regex(
+        biovol.notes, regex(
+          paste0("(?i)", paste0(filter(db_location, db.code == "1")$join.location, collapse = "|")) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+        )
+      ),
+      paste0, collapse = " "),
+    
+    # When its the lake monitoring program and the lake listed remove the lake monitoring program to just leave the lake
+    join.location.1 = str_remove_all(join.location.1, " SHL2"),
+    # set "NA" in location.code.1 to NA
+    join.location.1 = na_if(join.location.1, "NA")
+  ) %>% 
+  
+  ## Sources
+  # Add in source.code column for any measurements that have a source in the biovol.notes
+  mutate(
+    # make join.source column to left join source codes to
+    join.source = sapply(
+      stri_extract_all_regex(
+        biovol.notes, regex(
+          paste0("(?i)", paste0(filter(db_source_list, db.code == "1")$join.source, collapse = "|")) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+          )
+        ),
+      paste0, collapse = " "),
+    
+    # Make "NA" to NA
+    join.source = case_when(
+      join.source %in% c("NA", "na") ~ NA,
+      TRUE ~ join.source
+      )
+  ) %>% 
+  
+  left_join(select(db_source_list, join.source, source.code), by = "join.source") %>% 
+  rename(
+    original.source.code = source.code
+  ) %>% 
+  
+  ## Add in extra info and reorder
+  mutate(
+    source.code = '1',
+    bodysize.measurement = "biovolume",
+    units = "µm^3",
+    min.body.size = NA,
+    max.body.size = NA,
+    measurement.type = "average",
+    
+    # make uid
+    uid.db = "Rnu", # stands for rimet NU
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
+  ) %>%
+  
+  ## remove redundant columns
+  select(
+    - biovol.notes,
+    - join.source,
+    - Colonial,
+    - Filament,
+    - uid.db,
+    - uid.no
+  ) %>% 
+  
+  # reorder
+  relocate(individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.body.size, max.body.size, body.size, form, no.individuals, bodysize.measurement, units, measurement.type)
+
+## join together ----
+rimet_formatted <- bind_rows(rimet_ind, rimet_nu)
+
+## Save
+saveRDS(rimet_formatted, file = "R/Data_outputs/databases/rimet_formatted.rds")
+
+#Kremer ----
+### Separate it into two dataframes for individual measurements and nu measurments so that I can then join them back together and have have separate indivudal.uids for individual and colonial measurements
+
+## Individual measurments ----
+kremer_ind <- kremer %>% 
+  
+  ## Select columns I need and rename
+  select(
+    location,
+    original.taxa.name,
+    cell.biovol,
+    data.source,
+    sample.date
+    ) %>% 
+  rename(
+    join.location.1 = location,
+    join.source = data.source,
+    body.size = cell.biovol
+  ) %>% 
+  
+  ## Remove any with no taxa.name or body.size measurement
+  filter(
+    !is.na(original.taxa.name) & !is.na(body.size)
+    ) %>% 
+  
+  mutate(
+    ## Bodysize
+    # reverse transform bodysize from log10
+    body.size = body.size^10,
+    
+    ## Sample Dates
+    sample.year = case_when(
+      stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"),
+      stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b")
+    ),
+    
+    sample.month = stri_extract_first_regex(sample.date, "(?<=-)\\d{2}(?=-)"),
+    
+    # remove dates from the original.source column
+    join.source = stri_replace_all_regex(join.source, "\\b.\\d{4}-\\d{4}\\b", "")
+  ) %>% 
+  
+  # Add in biovol.ref info
+  left_join(select(db_source_list, source.code, join.source), by = "join.source") %>% 
+  rename(
+    original.source.code = source.code
+  ) %>% 
+  
+  ## Add in extra info
+  mutate(
+    source.code = '2',
+    life.stage = "active",
+    bodysize.measurement = "biovolume",
+    units = "µm^3",
+    min.body.size = NA,
+    max.body.size = NA,
+    measurement.type = "average",
+    no.individuals = 1,
+    form = "individual",
+    
+    # make uid
+    uid.db = "Kind",
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
+  ) %>% 
+  ## Remove redundant columns
+  select(
+    - sample.date,
+    - join.source,
+    - uid.db,
+    - uid.no
+  )%>% 
+  
+  # reorder
+  relocate(individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.body.size, max.body.size, body.size, form, no.individuals, bodysize.measurement, units, measurement.type)
+  
+## nu measurments ----
+kremer_nu <- kremer %>% 
+  
+  ## Select columns I need and rename
   select(location,
          original.taxa.name,
          nu,
@@ -166,105 +407,104 @@ kremer_subset <- kremer %>%
          sample.date,
          cells.per.nu,
          nu.biovol) %>% 
-  rename(location.code = location,
-         original.source = data.source) %>%
+  rename(join.location.1 = location,
+         join.source = data.source,
+         ind.bodysize = cell.biovol,
+         no.individuals = cells.per.nu,
+         nu.bodysize = nu.biovol) %>%
   
-  # replace "NA" with NA
-  mutate(
-    nu = na_if(nu, "NA")) %>% 
-  
-  # remove any with no taxa.name
-  filter(!is.na(original.taxa.name)) %>% 
-  
-  mutate(
-    # make life.stage column
-    life.stage = case_when(
-      stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(original.taxa.name, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
-      stri_detect_regex(nu, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(nu, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(nu,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(nu,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(nu,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
-      TRUE ~ "adult"),
-    
-    # reverse transfrom biovolume from log10
-    cell.biovol = cell.biovol^10,
-    nu.biovol = nu.biovol^10,
-    
-    # # sort out the missing cell.biovol from ansp, set as same as nu.biovol and it is assumed that is what it is
-    cell.biovol = case_when(
-      original.source == "ANSP" ~ nu.biovol,
-      TRUE ~ cell.biovol
-    ),
-    
-    # change cells.per.nu from NA to 1 when nu.biovol is the same as cell.biovol
-    cells.per.nu = case_when(
-      is.na(cells.per.nu) ~ ifelse(cell.biovol == nu.biovol, 1, NA),
-      TRUE ~ cells.per.nu
-    )
+  ## filter to get only multi cell measurments 
+  filter(
+    !(ind.bodysize == nu.bodysize)
   ) %>% 
   
-  # remove data points with no cell biovol or with nu.biovol but no information about cells.per.nu
-  filter(!is.na(cells.per.nu)) %>% 
+  ## remove ind.bodysize and rename nu.bodysize
+  rename(
+    body.size = nu.bodysize
+  ) %>% 
+  select(
+    -ind.bodysize
+  ) %>% 
   
-  # Add in location info and remove location.code
-  # rename the ANSP names to make more manageable!!!!!!!!!!!!!!!!!!!!!!!
-  left_join(., location, by = "location.code") %>%
-  select(- location.code, - database) %>%
+  ## replace "NA" with NA
   mutate(
-    latitude = as.character(latitude),
-    longitude = as.character(longitude))%>% 
+    nu = na_if(nu, "NA")
+    ) %>% 
   
-  # Extract sample dates from the original.source and add that to the column with sample date
   mutate(
-    # make a column for year and month taken from sample.date and the dates in the original.source
-    sample.start.year = case_when(stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b"),
-                                  stri_detect_regex(original.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(original.source, "\\b\\d{4}\\b"),
-                                  TRUE ~ NA),
-    sample.end.year = case_when(stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b"),
-                                stri_detect_regex(original.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_last_regex(original.source, "\\b\\d{4}\\b"),
-                                TRUE ~ NA),
-    sample.month = case_when(stri_detect_regex(sample.date, "\\b\\d{4}-\\d{2}-\\d{2}\\b") ~ stri_extract_first_regex(sample.date, "-\\d{2}-"),
-                             TRUE ~ NA),
-    sample.month = stri_replace_all_regex(sample.month, "-", ""),
+    ## Bodysize
+    # reverse transform bodysize from log10
+    body.size = body.size^10,
+    
+    ## Form
+    # Set form to either colony or filament
+    form = case_when(
+      stri_detect_regex(nu, "Colonial|palmeloid") ~ "colony",
+      stri_detect_regex(nu, "Filament") ~ "filament",
+      TRUE ~ "multi-cellular"
+      ),
+    
+    ## Sample Dates
+    sample.year = case_when(
+      stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"),
+      stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b")
+      ),
+    
+    sample.month = stri_extract_first_regex(sample.date, "(?<=-)\\d{2}(?=-)"),
+    
     # remove dates from the original.source column
-    original.source = case_when(
-      stri_detect_regex(original.source, "\\b.\\d{4}-\\d{4}\\b") ~ stri_replace_all_regex(original.source, "\\b.\\d{4}-\\d{4}\\b", ""),
-      TRUE ~ original.source
-    )
+    join.source = stri_replace_all_regex(join.source, "\\b.\\d{4}-\\d{4}\\b", "")
   ) %>% 
-  # remove redundant columns
-  select(- sample.date, -nu) %>% 
   
   # Add in biovol.ref info
-  left_join(select(original_source, original.source.code, ref.code), by = c("original.source" = "ref.code")) %>% 
-  select(- original.source) %>% 
-  rename(biovol.ref = original.source.code) %>% 
-  mutate(biovol.ref = as.character(biovol.ref)) %>% 
+  left_join(select(db_source_list, source.code, join.source), by = "join.source") %>% 
+  rename(
+    original.source.code = source.code
+  ) %>% 
   
-  # Add in extra info
+  ## Add in extra info
   mutate(
-    source.code = '2'
-  ) %>%
+    source.code = '2',
+    life.stage = "active",
+    bodysize.measurement = "biovolume",
+    units = "µm^3",
+    min.body.size = NA,
+    max.body.size = NA,
+    measurement.type = "average",
+    
+    # make uid
+    uid.db = "Knu",
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
+  ) %>% 
+  ## Remove redundant columns
+  select(
+    - sample.date,
+    - join.source,
+    - uid.db,
+    - uid.no,
+    - nu
+    ) %>% 
   
-  # Reorder
-  relocate(source.code, original.taxa.name, life.stage, cell.biovol, nu.biovol, cells.per.nu, biovol.ref, sample.start.year, sample.end.year, sample.month, location, country, continent, latitude, longitude)
+  # reorder
+  relocate(individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.body.size, max.body.size, body.size, form, no.individuals, bodysize.measurement, units, measurement.type)
 
-saveRDS(kremer_subset, file = "R/Data_outputs/Standardised_data/kremer_subset.rds")
+## Kremer - join together
+kremer_formatted <- bind_rows(kremer_ind, kremer_nu)
 
-############################################################### Odume ====
+## Save
+saveRDS(kremer_formatted, file = "R/Data_outputs/databases/kremer_formatted.rds")
 
-# Reorganise and mutate all
-odume_subset_raw <- odume %>% 
+# Odume ----
+
+## Reorganise and mutate all ----
+odume_formatted_raw <- odume %>% 
   
   # Select columns I need and rename
-  select(`Taxon`,
-         `Measured body size (mm)`,
-         `Maximum body size (mm) - comment`
+  select(
+    `Taxon`,
+    `Measured body size (mm)`,
+    `Maximum body size (mm) - comment`
   )%>% 
   rename(
     original.taxa.name = Taxon,
@@ -273,106 +513,140 @@ odume_subset_raw <- odume %>%
   ) %>%
   
   # Remove the first rows with extra column headers
-  slice(-(1:11)) %>% 
+  slice(
+    -(1:11)
+    ) %>% 
   
-  mutate(  
-    # change the cm to mm so it's the same as all the others
-    body.size = stri_replace_all_fixed(body.size, "7.0 cm", "70.0 mm"),
+  mutate( 
+    ## Give temporary uids to make the extra formatted needed in this database easier
+    odume.uid = row_number(),
     
+    ## Chnages to body.size column change the one cm to mm so it's the same as all the others
+    body.size = case_when(
+      odume.uid == "1989" ~ stri_replace_all_regex(body.size, "7.0 cm", "70.0 mm"), # replace cm with mm
+      is.na(body.size) & stri_detect_regex(body.size.comment, "\\bmm\\b") ~ body.size.comment, # When theres size info in body.size.coment but not body.size paste body.size.comment into bodysize
+      TRUE ~ body.size
+    ), 
+    
+    ## Life.stage
     life.stage = case_when(
-      stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(original.taxa.name, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(original.taxa.name,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
-      
-      stri_detect_regex(body.size, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(body.size, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(body.size,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(body.size,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(body.size,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
-      
-      stri_detect_regex(body.size.comment, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "stomatocyst",
-      stri_detect_regex(body.size.comment, "\\b(?i)palmeloid\\b") ~ "palmeloid",
-      stri_detect_regex(body.size.comment,  "\\b(?i)nauplii\\b") ~ "nauplii",
-      stri_detect_regex(body.size.comment,  "\\b(?i)Larvae\\b") ~ "larvae",
-      stri_detect_regex(body.size.comment,  "\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "nymph",
+      stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b|\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "juvenile",
+      stri_detect_regex(body.size,  "\\b(?i)Larvae\\b|\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "juvenile",
+      stri_detect_regex(body.size.comment,  "\\b(?i)Larvae\\b|\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "juvenile",
       TRUE ~ "adult")
   ) %>%
   
-  # add in original.source infor for all the measurements
-  mutate(ref.code = "odume et al") %>% 
-  left_join(select(original_source, ref.code, original.source.code), by = "ref.code") %>% 
+  ## Add in extra info
   mutate(
-    length.ref = as.character(original.source.code),
-    width.ref = as.character(original.source.code),
-    height.ref = as.character(original.source.code)
+    source.code = "3",
+    original.source.code = "3",
+    sample.year = NA,
+    sample.month = NA,
+    join.location.1 = "southern Africa",
+    nu.bodysize = NA,
+    min.nu.bodysize = NA,
+    max.nu.bodysize = NA,
+    individuals.per.nu = NA,
+    nu = NA,
+    units = "mm"
   ) %>% 
-  select(-original.source.code, -ref.code) %>% 
   
-  # Add extra info and reorder
-  mutate(
-    location = "Southern Africa",
-    country = "NA",
-    continent = "Africa",
-    latitude = "-24.175147",
-    longitude = "19.227253",
-    source.code = '3',
-    sample.start.year = NA_character_,
-    sample.end.year = NA_character_,
-    sample.month = NA_character_
-  )
+  ## filter out ones with no body.size measurement
+  filter(
+    !is.na(body.size)
+  ) %>% 
+  
+  ## Reorder
+  relocate(odume.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.nu.bodysize, max.nu.bodysize, nu.bodysize, individuals.per.nu, nu, units, body.size, body.size.comment)
 
-# Extact measurments
-odume_exact <- odume_subset_raw %>% 
+## Exact measurements ----
+odume_exact <- odume_formatted_raw %>% 
+  ## Get only extact measuements 
   filter(
     !is.na(body.size) &
-      !(stri_detect_regex(body.size, "(?i)length|(?i)height|(?i)width|(?i)\\bor\\b|(?i)height|longer|(?i)Approximately|(?i)Approx|-|\u2013")) &
-      body.size != "Suhling et al. 2014"
+      !(stri_detect_regex(body.size, "(?i)\\bor\\b|(?i)Approximately|about|-|\u2013|(?i)up to|(?i)Less than |and|<|>|width")) &
+      !(odume.uid %in% c("1657","2098", "2690", "97", "146", "1529", "2175", "2176", "2181", "2182", "1883")) # random odd ones
   ) %>% 
   mutate(
-    body.size = stri_replace_all_regex(body.size, "(Wiederholm 1983)", ""),
-    body.size = ifelse(
-      body.size == "Varies; one species 6.4 mm and the other 4.0 (de Moor et al. 2003).", 
-      (6.4+4)/2,
-      body.size
+    ## Extract body sizes
+    body.size = stri_replace_all_regex(body.size, "\\b\\d{4}\\)", ""), # remove date to make it easier to extract measurement numbers
+    ind.bodysize = as.numeric(stri_extract_all_regex(body.size, "\\d+(\\.\\d)*"))
+    ) %>% 
+  
+  ## add in extra info
+  mutate(
+    bodysize.measurement = "body length",
+    measurement.type = "average",
+    min.ind.bodysize = NA,
+    max.ind.bodysize = NA,
+    
+    # make individual.uid
+    uid.db = "OE", # stands for odume extact
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
+  ) %>% 
+  
+  ## Remove redundent columns
+  select(
+    - body.size,
+    - body.size.comment,
+    - uid.db,
+    - uid.no
+  ) %>% 
+  
+  # Reorder
+  relocate(odume.uid, individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.ind.bodysize, max.ind.bodysize, ind.bodysize, min.nu.bodysize, max.nu.bodysize, nu.bodysize, individuals.per.nu, nu, bodysize.measurement, units, measurement.type)
+
+
+## Ranges ----
+odume_ranges <- odume_formatted_raw %>% 
+  ## Get ranges
+  filter(
+    stri_detect_regex(body.size, "-|\u2013")
+    ) %>% 
+  mutate(
+    ## Format ranges into min, max and average
+    # edit two odd ones to make extraxting easier
+    body.size = case_when(
+      odume.uid == "1440" ~ "11-14",
+      odume.uid == "1989" ~ "20–70",
+      TRUE ~ body.size
     ),
-    avg.length = as.numeric(stri_extract_all_regex(body.size, "\\d+\\.?\\d*")),
-    data.method = "exact", #this is what the data was at the start e.g. ranges, approx etc
-  ) %>% 
-  filter(!is.na(avg.length)) 
-
-
-# Ranges
-odume_ranges <- odume_subset_raw %>% 
-  # get ranges
-  filter(stri_detect_regex(body.size, "-|\u2013") |
-           stri_detect_regex(body.size.comment, "-|\u2013") 
+    
+    # Extract just measurements
+    body.size.range = stri_extract_first_regex(body.size, "\\d+(\\.\\d)*[-\u2013]\\d+(\\.\\d)*"), # can use first as there are not multiple ranges in any of the ones i want to extract
+    
+    # Separate into min and max
+    min.ind.bodysize = as.numeric(stri_extract_first_regex(body.size.range, "\\d+(\\.\\d)*(?=[-\u2013])")),
+    max.ind.bodysize = as.numeric(stri_extract_first_regex(body.size.range, "(?<=[-\u2013])\\d+(\\.\\d)*")),
+    
+    ## Make ind.bodysize column
+    ind.bodysize = (min.ind.bodysize+max.ind.bodysize)/2,
+  
+    ## Add in extra info
+    measurement.type = "range",
+    bodysize.measurement = "body length",
+    
+    # make individual.uid
+    uid.db = "OR", # stands for odume range
+    uid.no = row_number(),
+    individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  # format ranges into min, max and average
-  # extract just the ranges and remove all the other words and letters, there are some that have ranges in the comments but not the size column so extract those as well
-  mutate(
-    body.size = as.character(case_when(
-      !is.na(body.size) ~ stri_extract_all_regex(body.size,"\\d+\\.?\\d*[-\u2013]\\d+\\.?\\d*|
-                                                 \\d+\\.?\\d* [-\u2013] \\d+\\.?\\d*"),
-      is.na(body.size) ~ ifelse(stri_detect_regex(body.size.comment, "mm"), stri_extract_all_regex(body.size.comment,"\\d+\\.?\\d*[-\u2013]\\d+\\.?\\d*|\\d+\\.?\\d*\\ [-\u2013] \\d+\\.?\\d*"), NA_character_),
-      TRUE ~ NA
-    )
-    )
+  ## remove redundant columns
+  select(
+    - body.size,
+    - body.size.range,
+    - body.size.comment,
+    - uid.db,
+    - uid.no
   ) %>% 
-  # seperate them into min and max
-  separate(body.size, into = c("min.length", "max.length"), sep = "-|-|\u2013", convert = TRUE) %>% 
-  # create average column
-  mutate(avg.length = ((min.length+max.length)/2)) %>% 
   
-  # Add in extra info and reorder
-  mutate(
-    data.method = "Range", #this is what the data was at the start e.g. ranges, approx etc
-  )
+  # Reorder
+  relocate(odume.uid, individual.uid, source.code, original.source.code, original.taxa.name, life.stage, sample.year, sample.month, join.location.1, min.ind.bodysize, max.ind.bodysize, ind.bodysize, min.nu.bodysize, max.nu.bodysize, nu.bodysize, individuals.per.nu, nu, bodysize.measurement, units, measurement.type)
 
 
-# Approx
+## Approx ----
 odume_approx <- odume_subset_raw %>% 
   # select approx and remove any ranges that have been done in previous step
   filter(
@@ -389,7 +663,7 @@ odume_approx <- odume_subset_raw %>%
   ) %>% 
   select(-body.size)
 
-# Or
+## Or ----
 odume_or <- odume_subset_raw %>% 
   # Select or values and remove any that say or longer
   filter(
@@ -406,7 +680,7 @@ odume_or <- odume_subset_raw %>%
     data.method = "Or"
   )
 
-# Longer
+## Longer ----
 odume_longer <- odume_subset_raw %>% 
   # Select or values and remove any that say or longer
   filter(
@@ -422,7 +696,7 @@ odume_longer <- odume_subset_raw %>%
   # remove the Bl column
   select(- body.size)
 
-# Length, width and height
+## Length, width and height ----
 odume_lwh <- odume_subset_raw %>% 
   # get just the values with any combination of length, width and height but without the ranges or <> values
   filter(
@@ -477,7 +751,9 @@ odume_lwh <- odume_subset_raw %>%
   # remove the Bl column
   select(- body.size)
 
-# Combine them all 
+## Combine them all ----
+odume_formatted <- bind_rows(odume_exact, odume_ranges)
+
 odume_subset <- bind_rows(odume_exact,odume_approx, odume_lwh, odume_or, odume_ranges, odume_longer) %>% 
   select(-body.size.comment) %>% 
   mutate(
@@ -802,3 +1078,14 @@ standardised_databases <- bind_rows(kremer_subset, rimmet_subset, hebert_subset,
   relocate(raw.uid, source.code, original.taxa.name, life.stage, cell.biovol, nu.biovol, nu.biovol.mucilage, cells.per.nu, biovol.ref, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, min.biomass, max.biomass, avg.biomass, biomass.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude, data.method)
 
 saveRDS(standardised_raw, file = "R/Data_outputs/Standardised_data/standardised_raw.rds")
+
+
+
+db_formatted <- bind_rows(rimet_formatted, kremer_formatted)
+
+
+
+
+
+
+
