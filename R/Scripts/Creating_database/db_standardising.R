@@ -51,7 +51,7 @@ db_location <- read_xlsx(master_db_path, sheet = "location")
 
 # Rimmet ----
 rimet_formatted <- rimet %>% 
-  ### Select columns ----
+  ## Select columns ----
   select(
     `Genus + species name`,
     `Cell biovolume µm3`,
@@ -64,28 +64,29 @@ rimet_formatted <- rimet %>%
   
   rename(
     original.taxa.name = `Genus + species name`,
-    `cell biovolume` = `Cell biovolume µm3`,
+    cell.bs = `Cell biovolume µm3`,
     biovol.notes = `Notes on biovolumes`,
-    `form biovolume` = `Cumulated biovolume of cells in a colony µm3`,
+    nu.bs = `Cumulated biovolume of cells in a colony µm3`,
     form.no = `Number of cells per colony`
   ) %>% 
   
   mutate(
-    ### Filter NA form biovol (1) ----
-    # set form biovolume to NA when it is the same as cell biovolume to filter out later on
-    `form biovolume` = if_else(
-      `form biovolume` == `cell biovolume`,
+    ## Filter ----
+    # set nu.bs to NA when it is the same as cell.bs to filter out later on
+    nu.bs = if_else(
+      nu.bs == cell.bs,
       NA,
-      `form biovolume`
+      nu.bs
     ),
     
-    ### Life stage ----
+    ## Life stage ----
     # set TRUE to adult for now and then can change this to active for phyto when taxonomy info is added
     life.stage = case_when(
       stri_detect_regex(original.taxa.name, "\\b(?i)Stomatocyst\\b|\\b(?i)Cyst\\b|\\b(?i)Cysts\\b") ~ "dormant",
       TRUE ~ "adult"),
     
-    ### Year ----
+    ## Sample dates ----
+    # Year
     sample.year = case_when(
       # 1) get all dates in 0000 format
       stri_detect_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})") ~ stri_extract_first_regex(biovol.notes, "(?<!\\d{4}-)\\b\\d{4}\\b(?!-\\d{4})"),
@@ -97,8 +98,7 @@ rimet_formatted <- rimet %>%
       biovol.notes == "Mesures effectuées sur Annecy GL le 9/5/7, pas de correspondance taxo, forme crée pour la circonstance" ~ "2007",
       TRUE ~ NA),
     
-    ### Month ----
-    # do seperately because theres not many of them and they're all different
+    # Month - do seperately because theres not many of them and they're all different
     sample.month = case_when(
       biovol.notes == "Mesures sur Bayssou - 06-2008" ~ "06",
       biovol.notes == "1 individu sur Annecy n 3-2007, de longeur 40 um" ~ "03",
@@ -112,7 +112,7 @@ rimet_formatted <- rimet %>%
       TRUE ~ NA
     ),
     
-    ### Location ----
+    ## Location ----
     # Make join.location column which will be used to left join location info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
     join.location.1 = sapply(
       stri_extract_all_regex(
@@ -122,7 +122,7 @@ rimet_formatted <- rimet %>%
               filter(
                 db_location, db.code == "1")$join.location, collapse = "|"
             )
-          ) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+          ) # take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
         )
       ),
       paste0, collapse = " "
@@ -144,7 +144,7 @@ rimet_formatted <- rimet %>%
     # set "NA" in location.code.1 to NA
     join.location.1 = na_if(join.location.1, "NA"),
     
-    ### Sources ----
+    ## Sources ----
     # Add in source.code column for any measurements that have a source in the biovol.notes
     # make join.source column to left join source codes to
     join.source = sapply(
@@ -182,29 +182,36 @@ rimet_formatted <- rimet %>%
     original.source.code.1 = as.character(original.source.code.1) # make numerica for merging with other dataframes later on
   ) %>% 
   
-  ### Pivot ----
+  ## Pivot ----
   # put nu and cell biovolumes on seperate rows - don't need the same individual uid because they are different individuals
   pivot_longer(
-    cols = c(`cell biovolume`, `form biovolume`), names_to = "cell.nu", values_to = "body.size"
+    cols = c(cell.bs, nu.bs), names_to = "cell.nu", values_to = "body.size"
   ) %>% 
   
-  ### Filter NA form biovol (2) ----
-  # Remove NA body.size
+  # Remove NA body.size using column made in previous filter step
   filter(
     !is.na(body.size)
   ) %>% 
   
   mutate(
-    ### Form
+    ## Form ----
     form = case_when(
-      cell.nu == "cell biovolume" ~ "individual",
-      cell.nu == "form biovolume"& Colonial == "1" & Filament == "1" ~ "multi-cell",
-      cell.nu == "form biovolume"& Colonial == "0" & Filament == "0" ~ "multi-cell",
-      cell.nu == "form biovolume" & Colonial == "1" ~ "colony",
-      cell.nu == "form biovolume" & Filament == "1" ~ "filament"
+      cell.nu == "cell.bs" ~ "individual",
+      cell.nu == "nu.bs"& Colonial == "1" & Filament == "1" ~ "multi-cell",
+      cell.nu == "nu.bs"& Colonial == "0" & Filament == "0" ~ "multi-cell",
+      cell.nu == "nu.bs" & Colonial == "1" ~ "colony",
+      cell.nu == "nu.bs" & Filament == "1" ~ "filament"
     ),
     
-    ### Extra info ----
+    ## Form.no ----
+    # Change form.no to 1 for indivduals
+    form.no = if_else(
+      form == "individual",
+      1,
+      form.no
+    ),
+    
+    ## Extra info ----
     source.code = '1',
     bodysize.measurement = "biovolume",
     units = "µm^3",
@@ -218,13 +225,14 @@ rimet_formatted <- rimet %>%
     sex = NA,
     experiemntal.design = "ex-situ",
       
-    ### Individual.uid ----
+    ## Individual.uid ----
     uid.db = "rimetF", # stands for rimet formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ### Remove redundant columns ----
+  ## Order columns ----
+  # Remove redundant columns
   select(
     - biovol.notes,
     - Colonial,
@@ -235,7 +243,7 @@ rimet_formatted <- rimet %>%
     - join.source
   ) %>% 
   
-  ### Reorder ----
+  # Reorder
   relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1, join.location.2,
             individual.uid, original.taxa.name, life.stage, sex, form, form.no,
             min.body.size, max.body.size, body.size,
@@ -244,50 +252,39 @@ rimet_formatted <- rimet %>%
 ## Save ----
 saveRDS(rimet_formatted, file = "R/Data_outputs/databases/rimet_formatted.rds")
 
-#Kremer ----
-kremer_formatted <- kremer
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Individual measurments ----
-kremer_ind <- kremer %>% 
+# Kremer ----
+kremer_formatted <- kremer %>% 
+  ## Select columns ----
+  select(location,
+         original.taxa.name,
+         nu,
+         cell.biovol,
+         data.source,
+         sample.date,
+         cells.per.nu,
+         nu.biovol) %>% 
   
-  ## Select columns I need and rename
-  select(
-    location,
-    original.taxa.name,
-    cell.biovol,
-    data.source,
-    sample.date
-    ) %>% 
-  rename(
-    join.location.1 = location,
-    join.source = data.source,
-    body.size = cell.biovol
-  ) %>% 
+  rename(join.location.1 = location,
+         join.source = data.source,
+         cell.bs = cell.biovol,
+         form.no = cells.per.nu,
+         nu.bs = nu.biovol) %>%
   
-  ## Remove any with no taxa.name or body.size measurement
+  ## Filter ----
+  # Remove any with no taxa.name
   filter(
-    !is.na(original.taxa.name) & !is.na(body.size)
+    !is.na(original.taxa.name)
     ) %>% 
   
+  # Set nu.bs to NA when it is the same as cell.bs to filter out later on
   mutate(
-    ## Bodysize
-    # reverse transform bodysize from log10
-    body.size = body.size^10,
+    nu.bs = if_else(
+      nu.bs == cell.bs,
+      NA,
+      nu.bs
+    ),
     
-    ## Sample Dates
+    ## Sample Dates ----
     sample.year = case_when(
       stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"),
       stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b")
@@ -299,140 +296,56 @@ kremer_ind <- kremer %>%
     join.source = stri_replace_all_regex(join.source, "\\b.\\d{4}-\\d{4}\\b", "")
   ) %>% 
   
-  # Sources
+  ## Sources ----
   left_join(
     select(
       filter(
         db_source_list, db.code == "2"
-        ), source.code, join.source
-      ), by = "join.source"
-    ) %>% 
+      ), source.code, join.source
+    ), by = "join.source"
+  ) %>% 
   
   rename(
     original.source.code.1 = source.code
   ) %>% 
   
   mutate(
-    original.source.code.1 = as.character(original.source.code.1) # make numerica for merging with other dataframes later on
+    original.source.code.1 = as.character(original.source.code.1) # make character for merging with other dataframes later on
   ) %>% 
   
-  ## Add in extra info
-  mutate(
-    source.code = '2',
-    life.stage = "active",
-    bodysize.measurement = "biovolume",
-    units = "µm^3",
-    min.body.size = NA,
-    max.body.size = NA,
-    measurement.type = "average",
-    form.no = 1,
-    form = "individual",
-    sample.size = "unknown",
-    reps = "unknown",
-    error = NA,
-    error.type = NA,
-    sex = NA,
-    experiemntal.design = "in-situ",
-    
-    # make uid
-    uid.db = "kremerI", # stands for kremer individual
-    uid.no = row_number(),
-    individual.uid = paste(uid.db, uid.no, sep = "")
+  ## Pivot ----
+  # put nu and cell biovolumes on seperate rows - don't need the same individual uid because they are different individuals
+  pivot_longer(
+    cols = c(cell.bs, nu.bs), names_to = "cell.nu", values_to = "body.size"
   ) %>% 
-  ## Remove redundant columns
-  select(
-    - sample.date,
-    - join.source,
-    - uid.db,
-    - uid.no
-  )%>% 
   
-  # reorder
-  relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
-
-## nu measurments ----
-kremer_nu <- kremer %>% 
-  
-  ## Select columns I need and rename
-  select(location,
-         original.taxa.name,
-         nu,
-         cell.biovol,
-         data.source,
-         sample.date,
-         cells.per.nu,
-         nu.biovol) %>% 
-  rename(join.location.1 = location,
-         join.source = data.source,
-         ind.bodysize = cell.biovol,
-         form.no = cells.per.nu,
-         nu.bodysize = nu.biovol) %>%
-  
-  ## filter to get only multi cell measurments 
+  # remove NA body.size using column made in previous filter step
   filter(
-    !(ind.bodysize == nu.bodysize)
+    !is.na(body.size)
   ) %>% 
-  
-  ## remove ind.bodysize and rename nu.bodysize
-  rename(
-    body.size = nu.bodysize
-  ) %>% 
-  select(
-    -ind.bodysize
-  ) %>% 
-  
-  ## replace "NA" with NA
-  mutate(
-    nu = na_if(nu, "NA")
-    ) %>% 
   
   mutate(
-    ## Bodysize
-    # reverse transform bodysize from log10
+    ## body.size ----
+    # reverse transform body.size measurments from log10
     body.size = body.size^10,
     
-    ## Form
-    # Set form to either colony or filament
+    ## Form ----
     form = case_when(
-      stri_detect_regex(nu, "Colonial|palmeloid") ~ "colony",
-      stri_detect_regex(nu, "Filament") ~ "filament",
+      cell.nu == "cell.bs" ~ "individual",
+      cell.nu == "nu.bs" & stri_detect_regex(nu, "Colonial|palmeloid") ~ "colony",
+      cell.nu == "nu.bs" & stri_detect_regex(nu, "Filament") ~ "filament",
       TRUE ~ "multi-cellular"
+    ),
+    
+    ## Form.no ----
+    # change form.no to 1 for individual measurements
+    form.no = if_else(
+      form == "individual",
+      1,
+      form.no
       ),
     
-    ## Sample Dates
-    sample.year = case_when(
-      stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"),
-      stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b")
-      ),
-    
-    sample.month = stri_extract_first_regex(sample.date, "(?<=-)\\d{2}(?=-)"),
-    
-    # remove dates from the original.source column
-    join.source = stri_replace_all_regex(join.source, "\\b.\\d{4}-\\d{4}\\b", "")
-  ) %>% 
-  
-  # Sources
-  left_join(
-    select(
-      filter(
-        db_source_list, db.code == "2"
-        ), source.code, join.source
-      ), by = "join.source"
-    ) %>% 
-  
-  rename(
-    original.source.code.1 = source.code
-  ) %>% 
-  
-  mutate(
-    original.source.code.1 = as.character(original.source.code.1) # make numerica for merging with other dataframes later on
-  ) %>% 
-  
-  ## Add in extra info
-  mutate(
+    ## Extra info ----
     source.code = '2',
     life.stage = "active",
     bodysize.measurement = "biovolume",
@@ -446,39 +359,37 @@ kremer_nu <- kremer %>%
     error.type = NA,
     sex = NA,
     experiemntal.design = "in-situ",
-    
-    # make uid
-    uid.db = "kremerNU", # stands for kremer natural units
+      
+    ## Individual uid ----
+    uid.db = "kremerF", # stands for kremer formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
-  ## Remove redundant columns
-  select(
-    - sample.date,
-    - join.source,
-    - uid.db,
-    - uid.no,
-    - nu
-    ) %>% 
   
-  # reorder
-  relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
-
-## join together ----
-kremer_formatted <- bind_rows(kremer_ind, kremer_nu)
+  ## Order columns ----
+  # Remove redundant columns
+    select(
+      - sample.date,
+      - join.source,
+      - uid.db,
+      - uid.no,
+      - cell.nu,
+      - nu
+    ) %>% 
+      
+    # Reorder
+    relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
+              individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+              min.body.size, max.body.size, body.size,
+              bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save ----
 saveRDS(kremer_formatted, file = "R/Data_outputs/databases/kremer_formatted.rds")
 
-# Odume ----
-
-## Reorganise and mutate all ----
+# Odume - Reorganise and mutate all ----
 odume_formatted_raw <- odume %>% 
   
-  # Select columns I need and rename
+  ## Select columns ----
   select(
     `Taxon`,
     `Measured body size (mm)`,
@@ -490,23 +401,33 @@ odume_formatted_raw <- odume %>%
     body.size.comment = `Maximum body size (mm) - comment`
   ) %>%
   
+  ## Filter ----
   # Remove the first rows with extra column headers
   slice(
     -(1:11)
     ) %>% 
   
   mutate( 
-    ## Give temporary uids to make the extra formatted needed in this database easier
+    ## Temp uid ----
+    # Give temporary uids to make the extra formatted needed in this database easier
     odume.uid = row_number(),
     
-    ## Chnages to body.size column change the one cm to mm so it's the same as all the others
+    ## Body.size ----
+    # Chnages to body.size column change the one cm to mm so it's the same as all the others
     original.body.size = case_when(
       odume.uid == "1989" ~ stri_replace_all_regex(original.body.size, "7.0 cm", "70.0 mm"), # replace cm with mm
       is.na(original.body.size) & stri_detect_regex(body.size.comment, "\\bmm\\b") ~ body.size.comment, # When theres size info in body.size.coment but not body.size paste body.size.comment into bodysize
       TRUE ~ original.body.size
-    ), 
-    
-    ## Life.stage
+    )
+  ) %>% 
+  
+  # filter out ones with no body.size measurement
+  filter(
+    !is.na(original.body.size)
+  ) %>% 
+  
+  mutate(  
+    ## Life.stage ----
     life.stage = case_when(
       stri_detect_regex(original.taxa.name,  "\\b(?i)Larvae\\b|\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "juvenile",
       stri_detect_regex(original.body.size,  "\\b(?i)Larvae\\b|\\b(?i)Nymph\\b|\\b(?i)Nymphs\\b") ~ "juvenile",
@@ -514,7 +435,7 @@ odume_formatted_raw <- odume %>%
       TRUE ~ "adult")
   ) %>%
   
-  ## Add in extra info
+  ## Extra info ----
   mutate(
     source.code = "3",
     original.source.code.1 = "3",
@@ -532,46 +453,48 @@ odume_formatted_raw <- odume %>%
     experiemntal.design = "in-situ",
   ) %>% 
   
-  ## filter out ones with no body.size measurement
-  filter(
-    !is.na(original.body.size)
-  ) %>% 
-  
-  # reorder
+  ## Order columns
   relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
            original.taxa.name, life.stage, sex, form, form.no,
            original.body.size, units, sample.size, reps, error, error.type)
 
-## Exact measurements ----
+# Odume - Exact measurements ----
 odume_exact <- odume_formatted_raw %>% 
-  ## Get only extact measuements 
+  
+  ## Filter ----
+  # Get only extact measuements 
   filter(
       !(stri_detect_regex(original.body.size, "(?i)\\bor\\b|(?i)Approximately|about|-|\u2013|(?i)up to|(?i)Less than |and|<|>|width")) &
       !(odume.uid %in% c("1657","2098", "2690", "97", "146", "1529", "2175", "2176", "2181", "2182", "1883", "2255")) # random odd ones
   ) %>% 
+  
   mutate(
-    ## Extract body sizes
+    ## Body sizes ----
+    # Extract measurments
     original.body.size = stri_replace_all_regex(original.body.size, "\\b\\d{4}\\)", ""), # remove date to make it easier to extract measurement numbers
     body.size = as.numeric(stri_extract_all_regex(original.body.size, "\\d+(\\.\\d+)*"))
     ) %>% 
   
-  ## add in extra info
+  ## bodysize.measurement ----
   mutate(
     bodysize.measurement = case_when(
       stri_detect_regex(original.body.size, "(?i)high|(?i)height") ~ "body height",
       TRUE ~ "body length"
     ),
+    
+    ## Extra info ----
     measurement.type = "average",
     min.body.size = NA,
     max.body.size = NA,
     
-    # make individual.uid
+    ## Individual.uid ----
     uid.db = "odumeE", # stands for odume extact
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## Remove redundent columns
+  ## Order columns ----
+  # Remove redundent columns
   select(
     - original.body.size,
     - body.size.comment,
@@ -585,19 +508,26 @@ odume_exact <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## Ranges ----
+# Odume - Ranges ----
 odume_ranges <- odume_formatted_raw %>% 
-  ## Get ranges
+  
+  ## Filter ----
+  # Get ranges
   filter(
     stri_detect_regex(original.body.size, "-|\u2013|\\bor\\b") | odume.uid %in% c("1864", "1529"),
+    
     # remove any that will be used in later steps
     !(stri_detect_regex(original.body.size, "longer")),
     !(stri_detect_regex(original.body.size, "diameter"))
     ) %>% 
+  
   mutate(
-    ## Format ranges into min, max and average
+    ## Body.size ----
+    # Format ranges into min, max and average
+    
+    # edit original.body.size to make extractng easier
     original.body.size = case_when(
-      # edit odd ones to make extracting easier
+      # edit odd ones
       odume.uid == "1440" ~ "11-14",
       odume.uid == "1989" ~ "20–70",
       odume.uid == "1529" ~ "1-10",
@@ -617,20 +547,21 @@ odume_ranges <- odume_formatted_raw %>%
     min.body.size = as.numeric(stri_extract_first_regex(body.size.range, "\\d+(\\.\\d+)*(?=[-\u2013])")),
     max.body.size = as.numeric(stri_extract_first_regex(body.size.range, "(?<=[-\u2013])\\d+(\\.\\d+)*")),
     
-    ## Make ind.bodysize column
+    # calculate average body size from min and max
     body.size = (min.body.size+max.body.size)/2,
   
-    ## Add in extra info
+    ## Extra info ----
     measurement.type = "range",
     bodysize.measurement = "body length", # all are length so don't need to do a word search
     
-    # make individual.uid
+    ## Individual.uid
     uid.db = "odumeR", # stands for odume range
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## remove redundant columns
+  ## Order columns ----
+  # remove redundant columns
   select(
     - original.body.size,
     - body.size.range,
@@ -645,9 +576,11 @@ odume_ranges <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## Approx ----
+# Odume - Approx ----
 odume_approx <- odume_formatted_raw %>% 
-  ## select approx and remove any ranges that have been done in previous step or ones with max that will be used in next steps
+  
+  ## Filter ----
+  # select approx and remove any ranges that have been done in previous step or ones with max that will be used in next steps
   filter(
     stri_detect_regex(original.body.size, "(?i)Approximately|(?i)about"),
     !(stri_detect_regex(original.body.size, "[-\u2013]")),
@@ -655,22 +588,24 @@ odume_approx <- odume_formatted_raw %>%
   ) %>% 
   
   mutate(
-    ## Extract size
+    ## Body.size ----
+    # extract measurments from origiona.body.size column
     body.size = as.numeric(stri_extract_all_regex(original.body.size, "\\d+(\\.\\d+)*(?= mm)")),
     
-    ## Add in extra info
+    ## Extra info ----
     min.body.size = NA,
     max.body.size = NA,
     measurement.type = "approximately",
     bodysize.measurement = "body length", # all are length so don't need to do a word search
     
-    # make individual.uid
+    ## Individual.uid ----
     uid.db = "odumeA", # stands for odume approx
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## remove redundant columns
+  ## Order columns ----
+  # remove redundant columns
   select(
     - original.body.size,
     - body.size.comment,
@@ -684,32 +619,34 @@ odume_approx <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## Min ----
+# Odume - Min ----
 odume_min <- odume_formatted_raw %>% 
   
-  ## select ones I want
+  ## Filter ----
   filter(
     stri_detect_regex(original.body.size, "(?i)\\blonger\\b|>|(?i)\\bover\\b|(?i)greater than"),
     !(odume.uid == "1529")
   ) %>% 
   
   mutate(
-    ## Extract sizes
+    ## Body.size ----
+    # Extract measurements from original.body.size
     min.body.size = as.numeric(stri_extract_all_regex(original.body.size, "\\d+(\\.\\d+)*(?= mm)")),
     
-    ## Add in extra info
+    ## Extra info ----
     body.size = NA,
     max.body.size = NA,
     measurement.type = "min",
     bodysize.measurement = "body length", # all are length so don't need to do a word search
     
-    # make individual.uid
+    ## Individual.uid ----
     uid.db = "odumeMIN", # stands for odume min
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## remove redundant columns
+  ## Order columns ----
+  # remove redundant columns
   select(
     - original.body.size,
     - body.size.comment,
@@ -723,10 +660,10 @@ odume_min <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## max ----
+# Odume - max ----
 odume_max <- odume_formatted_raw %>% 
   
-  ## select ones I want
+  ## Filter ----
   filter(
     stri_detect_regex(original.body.size, "(?i)up to|(?i)less than|<|(?i)\\brarely\\b|(?i)\\bmax\\b|(?i)grow up\\b"),
     !(stri_detect_regex(original.body.size, "(?i)\\bwidth\\b")),
@@ -734,13 +671,11 @@ odume_max <- odume_formatted_raw %>%
   ) %>% 
   
   mutate(
-    ## Extract sizes
+    ## body.size ----
+    # extract measurements from original.body.size
     max.body.size = as.numeric(stri_extract_first_regex(original.body.size, "\\d+(\\.\\d+)*(?= mm)")),
     
-    ## add in extra info
-    body.size = NA,
-    min.body.size = NA,
-    measurement.type = "max",
+    ## bodysize.measurement ----
     bodysize.measurement = case_when(
       stri_detect_regex(original.body.size, "(?i)length|(?i)long") ~ "body length",
       stri_detect_regex(original.body.size, "(?i)height|(?i)hight|(?i)high") ~ "body height",
@@ -748,13 +683,19 @@ odume_max <- odume_formatted_raw %>%
       TRUE ~ "body length"
     ),
     
-    # make individual.uid
+    ## Extra info ----
+    body.size = NA,
+    min.body.size = NA,
+    measurement.type = "max",
+    
+    ## Individual.uid ----
     uid.db = "odumeMAX", # stands for odume min
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## remove redundant columns
+  ## Order columns ----
+  # remove redundant columns
   select(
     - original.body.size,
     - body.size.comment,
@@ -768,7 +709,7 @@ odume_max <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## duplication check ----
+# Odume - duplication check ----
 # check if any of the ones in the above odume formatting have been used twice by checking the odume.uid
 odume_check <- bind_rows(odume_approx, odume_exact, odume_max, odume_min, odume_ranges) %>% 
   select(
@@ -784,56 +725,61 @@ duplicate_check <- data.frame(table(odume_check$odume.uid)) %>%
     Freq > 1
   )
 
-## Length, width and height ----
+# Odume - Length, width and height ----
 odume_lwh <- odume_formatted_raw %>% 
-  # select ones I want
+  
+  ## Filter ----
   filter(
     stri_detect_regex(original.body.size, "(?i)\\bwidth\\b|(?i)\\bheight\\b|(?i)\\bhight\\b|(?i)\\bhigh\\b|(?i)\\bheigh\\b|(?i)\\blong\\b")
   ) %>% 
   
-  ## Check if any from the filter I have already used in the previous steps
+  # Check if any from the filter I have already used in the previous steps
   left_join(
     ., odume_check, by = "odume.uid"
     ) %>% 
-  
+
   filter(
     is.na(duplicated) # remove duplicates
   ) %>% 
   
   mutate(
-    # edit weird one - assume same format as the others of height length
+    ## body.size
+    # edit weird one to make extracting easier - assume same format as the others of height length
     original.body.size = if_else(
       odume.uid == "169",
       "49 height 33 length 23 width",
       original.body.size
     ),
     
-    # extract sizes
+    # extract measurements from original.body.size
     `body height` = as.numeric(stri_extract_first_regex(original.body.size, "\\d+(\\.\\d+)*(?= (?i)height| (?i)heigh)|\\d+(\\.\\d+)*(?= mm (?i)height| mm (?i)\\(height\\)| mm  (?i)height| mm  (?i)hight|mm (?i)height| mm (?i)heigh)")), #  can use first instead of all beacause theres only one value per row
     `body width` = as.numeric(stri_extract_first_regex(original.body.size, "\\b\\d+(\\.\\d+)*(?= (?i)width|(?i)width)|\\b\\d+(\\.\\d+)*(?= mm (?i)width| mm (?i)\\(width\\)|mm (?i)width)")),
     `body length` = as.numeric(stri_extract_first_regex(original.body.size, "\\b\\d+(\\.\\d+)*(?= mm (?i)length|mm (?i)length)|\\b\\d+(\\.\\d+)*(?= (?i)length)")),
     
-    ## Add extra info
+    ## Extra info ----
     min.body.size = NA,
     max.body.size = NA,
     measurement.type = "average",
-    # make individual.uid
+    
+    ## Individual.uid
     uid.db = "odumeLWH", # stands for odume min
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
-  ## put length, width and height onto separate rows but with the same individual.uid
+  ## Pivot ----
+  # put length, width and height onto separate rows but with the same individual.uid as they are measurements of the same individual
   pivot_longer(
     ., cols = `body height`:`body length`, values_to = "body.size", names_to = "bodysize.measurement"
     ) %>% 
   
-  ## remove NA values in body.size
+  # remove NA values in body.size
   filter(
     !is.na(body.size) 
   ) %>% 
   
-  ## remove redundant columns
+  ## Order columns ----
+  # remove redundant columns
   select(
     - original.body.size,
     - body.size.comment,
@@ -848,7 +794,7 @@ odume_lwh <- odume_formatted_raw %>%
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## Combine them all ----
+# Odume - Combine them all ----
 odume_formatted <- bind_rows(odume_exact, odume_ranges, odume_lwh, odume_approx, odume_max, odume_min) %>% 
   # remove odume.uid now I don't need
   select(
@@ -866,40 +812,43 @@ saveRDS(odume_formatted, file = "R/Data_outputs/databases/odume_formatted.rds")
 # Hebert ----
 hebert_formatted <- hebert %>%
   
-  ## Select columns I need
+  ## Select columns ----
   select(Column1, Column2, Column5, Column8, Column9, Column10, Column11, Column12, Column13, Column14, Column15) %>% 
   rename(
     genus = Column1,
     species = Column2,
     habitat = Column5,
-    `body length` = Column8,
+    `body length` = Column8, # have it with a sapce as then can just assign that column as the bodysize.measurement and don't need to change anything
     min.bl = Column9,
     max.bl = Column10,
     bl.original.source.code = Column11,
-    `dry mass` = Column12,
+    `dry mass` = Column12, # have it with a sapce as then can just assign that column as the bodysize.measurement and don't need to change anything
     min.dm = Column13,
     max.dm = Column14,
     dm.original.source.code = Column15
   ) %>%
   
-  ## Filtering
+  ## Filter ----
   # Remove the first line with extra headings
   slice(-1) %>% 
   
-  # select freshwater sepcies
+  # select freshwater species
   filter(
     habitat == "Freshwater"
   ) %>% 
+  
    # remove habitat column
   select(
     - habitat
   ) %>% 
   
-  ## General changes
+  ## General changes ----
   # Combine genus and species column to get a full taxa name and remove extra columns
   mutate(
     original.taxa.name = stri_c(genus, species, sep = " ")
   ) %>% 
+  
+  # remove redundant columns
   select(
     -genus, -species
   ) %>% 
@@ -919,14 +868,14 @@ hebert_formatted <- hebert %>%
     max.dm = as.numeric(stri_replace_all_regex(max.dm, ",", "."))
   ) %>% 
   
-  ## Pivot
-  # Make it so dry mass and body length are n seperate lines - don't need same individual.uid as they are from differen references
+  ## Pivot ----
+  # Make it so dry mass and body length are n seperate lines - don't need same individual.uid as they are from different references
   pivot_longer(
     cols = c(`body length`, `dry mass`), names_to = "bodysize.measurement", values_to = "body.size"
   ) %>% 
   
   mutate(
-    # assign correct min, max and references for each one
+    # assign correct min, max and references for each one as they will have been duplicated on multiple rows from the pivot
     min.body.size = case_when(
       bodysize.measurement == "body length" ~ min.bl,
       bodysize.measurement == "dry mass" ~ min.dm,
@@ -957,20 +906,20 @@ hebert_formatted <- hebert %>%
   ) %>% 
   
   mutate(
-    ## Measurement.type
+    ## Measurement.type ----
     measurement.type = if_else(
       is.na(body.size),
       "range",
       "average"
     ),
-    ## Units
+    ## Units ----
     units = if_else(
       bodysize.measurement == "body length",
       "mm",
       "mg"
     ),
     
-    ## body.size
+    ## body.size ----
     # calculate average body size when only range is given
     body.size = if_else(
       is.na(body.size),
@@ -979,18 +928,18 @@ hebert_formatted <- hebert %>%
     )
   ) %>% 
   
-  # filter only ones that have a body size measurement
+  # filter only ones that have a body size measurement using column made in previous step
   filter(
     !is.na(body.size)
   ) %>% 
   
-  ## Original.source.code
+  ## Original.source.code ----
   # separate original sources into separate columns
   separate(
     original.source.code, into = c("original.source.code.1", "original.source.code.2", "original.source.code.3", "original.source.code.4"), sep = ","
   ) %>% 
   
-  ## Add in extra info
+  ## Extra info ----
   mutate(
     source.code = '4',
     life.stage = "adult",
@@ -1006,19 +955,20 @@ hebert_formatted <- hebert %>%
     sex = NA,
     experiemntal.design = "ex-situ",
     
-    # make uid
+    ## Indivudal.uid ----
     uid.db = "hebertF", # stands for hebert formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
+  ## Order columns ----
   # Remove redundant columns
   select(
     - uid.db,
     - uid.no
   ) %>% 
   
-  ## Reorder
+  # Reorder
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, experiemntal.design, sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
            min.body.size, max.body.size, body.size,
@@ -1030,28 +980,31 @@ saveRDS(hebert_formatted, file = "R/Data_outputs/databases/hebert_formatted.rds"
 
 # Gavrilko ----
 gavrilko_formatted <- Gavrilko %>% 
-  ## Select columns I want
+  
+  ## Select columns ----
   select(
     species,
     max.body.size
   ) %>% 
-  # rename to match other dataframes
+  
   rename(
     original.taxa.name = species,
     body.size = max.body.size
   ) %>% 
+  
+  ## General changes ----
   # change "," to "." in avg.length
   mutate(
     body.size = as.numeric(stri_replace_all_regex(body.size, ",", "."))
   ) %>% 
   
   mutate(
-    # make life stage column
+    ## Life.stage ----
     life.stage = case_when(
       stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b") ~ "juvenile",
       TRUE ~ "adult"),
     
-    ## Add in extra info
+    ## Extra info ----
     source.code = '5',
     original.source.code.1 = "216",
     original.source.code.2 = "217",
@@ -1089,17 +1042,20 @@ gavrilko_formatted <- Gavrilko %>%
     sex = NA,
     experiemntal.design = "ex-situ",
       
-    # make uid
-    uid.db = "Gav", # stands for gavrilko
+    ## Individual.uid ----
+    uid.db = "gavrilkoF", # stands for gavrilko formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
-    ## Remove redundant columns
-    select(
-      - uid.db,
-      - uid.no
-    ) %>% 
-  # reorder
+  
+  ## Order columns ----
+  # Remove redundant columns
+  select(
+    - uid.db,
+    - uid.no
+  ) %>% 
+  
+  # Reorder
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18, original.source.code.19,
            experiemntal.design, sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
@@ -1110,62 +1066,9 @@ gavrilko_formatted <- Gavrilko %>%
 saveRDS(gavrilko_formatted, file = "R/Data_outputs/databases/gavrilko_formatted.rds")
 
 #  Laplace-Treyture ----
-## individual measurments ----
-lt_ind <- LT %>% 
-  # Select columns I want and rename
-  select(
-    Taxa_Name,
-    Cell_Biovolume
-  ) %>% 
-  
-  rename(
-    original.taxa.name = Taxa_Name,
-    body.size = Cell_Biovolume
-  ) %>% 
-  
-  ## add in extra info
-  mutate(
-    sample.size = "30",
-    source.code = '6',
-    original.source.code.1 = "6",
-    bodysize.measurement = "biovolume",
-    units = "µm^3",
-    sample.month = NA,
-    sample.year = NA,
-    form = "individual",
-    form.no = 1,
-    join.location.1 = NA,
-    max.body.size = NA,
-    min.body.size = NA,
-    measurement.type = "average",
-    life.stage = "adult",
-    reps = "unknown",
-    error = NA,
-    error.type = NA,
-    sex = NA,
-    experiemntal.design = "in-situ",
-    
-    # make uid
-    uid.db = "LTind", # stands for LT individual
-    uid.no = row_number(),
-    individual.uid = paste(uid.db, uid.no, sep = "")
-  ) %>% 
-  
-  ## Remove redundant columns
-  select(
-    - uid.db,
-    - uid.no
-    ) %>% 
-  
-  # reorder
-  relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
-## Multi-cellular measurements ----
-lt_multi <- LT %>% 
-  # Select columns I want
+lt_formatted <- LT %>% 
+  ## Select columns ----
   select(
     Taxa_Name,
     Cell_Biovolume,
@@ -1173,37 +1076,47 @@ lt_multi <- LT %>%
     Life_Form
   ) %>% 
   
-  ## Remove ones that have the same ind_biovolume and cell_biovolume
-  filter(
-    Ind_Biovolume != Cell_Biovolume,
-    Taxa_Name != "Chlorella minutissima"
-  ) %>% 
-  
-  select(
-    - Cell_Biovolume
-  ) %>% 
-  
-  # rename to fit other databases
   rename(
     original.taxa.name = Taxa_Name,
-    body.size = Ind_Biovolume,
+    cell.bs = Cell_Biovolume,
+    nu.bs = Ind_Biovolume,
     form = Life_Form
   ) %>% 
   
-  
   mutate(
-    ## Body.size
-    # change "#NA" to NA
-    body.size = as.numeric(na_if(body.size, "#NA")),
-    
-    ## Form
-    form = case_when(
-      form == "Col." ~ "colony",
-      form == "Fil." ~ "filament",
-      TRUE ~ NA
+    ## Filter ----
+    # set form.bs to NA when it is the same as cell.bs to filter out later on
+    nu.bs = if_else(
+      nu.bs == cell.bs,
+      NA,
+      nu.bs
     ),
     
-    ## Add in extra info
+    ## Body.size ----
+    # change "#NA" to NA
+    nu.bs = as.numeric(na_if(nu.bs, "#NA"))
+  ) %>% 
+  
+  ## Pivot ----
+  # put nu and cell biovolumes on seperate rows - don't need the same individual uid because they are different individuals
+  pivot_longer(
+    cols = cell.bs:nu.bs, values_to = "body.size", names_to = "cell.nu"
+  ) %>% 
+  
+  # remove NA body.sizes using column from filter step
+  filter(
+    !is.na(body.size)
+  ) %>% 
+  
+  mutate(
+    ## Form ----
+    form = case_when(
+      cell.nu == "cell.bs" ~ "individual",
+      cell.nu == "nu.bs" & form == "Col." ~ "colony",
+      cell.nu == "nu.bs" & form == "Fil." ~ "filament",
+    ),
+    
+    ## Extra info ----
     sample.size = "30",
     source.code = '6',
     original.source.code.1 = "6",
@@ -1223,27 +1136,22 @@ lt_multi <- LT %>%
     sex = NA,
     experiemntal.design = "in-situ",
     
-    # make uid
-    uid.db = "LTmulti", # stands for LT multi
+    ## Individual.uid ----
+    uid.db = "ltF", # stands for LT formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
     
   ) %>% 
-  ## Remove redundant columns
+  
+  ## Order columns ----
+  # Remove redundant columns
   select(
     - uid.db,
-    - uid.no
+    - uid.no,
+    - cell.nu
   ) %>% 
   
-  # reorder
-  relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
-
-## Join together ----
-lt_formatted <- bind_rows(lt_ind, lt_multi) %>% 
-  # reorder
+  # Reorder
   relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
            min.body.size, max.body.size, body.size,
@@ -1254,37 +1162,38 @@ saveRDS(lt_formatted, file = "R/Data_outputs/databases/lt_formatted.rds")
 
 #  Neury-Ormanni ----
 no_formatted <- NO %>% 
-  # select columns i want and rename
+  
+  ## Select columns ----
   select(
     Species,
     LengthMax,
-    #References...10,
+    References...10,
     LengthMin,
-    #References...12,
+    References...12,
     WidthMax,
-    #References...14,
+    References...14,
     WidthMin,
-    #References...16
+    References...16
   ) %>% 
   
   rename(
     original.taxa.name = Species,
     min.length = LengthMin,
-    #minl.ref = References...10,
+    minl.ref = References...10,
     max.length = LengthMax,
-    #maxl.ref = References...12,
+    maxl.ref = References...12,
     min.width = WidthMin,
-    #minw.ref = References...14,
+    minw.ref = References...14,
     max.width = WidthMax,
-    #maxw.ref = References...16
+    maxw.ref = References...16
   ) %>% 
   
   mutate(
-    ## taxa name
+    ## taxa name ----
     # replace _ to " " in original.taxa.name
     original.taxa.name = stri_replace_all_regex(original.taxa.name, "_", " "),
     
-    ## body.size
+    ## body.size ----
     # make numeric
     min.length = as.numeric(min.length),
     max.length = as.numeric(max.length),
@@ -1295,18 +1204,35 @@ no_formatted <- NO %>%
     `body length` = (min.length+max.length)/2,
     `body width` = (min.width+max.width)/2,
     
-    ## Individual.uid
-    uid.db = "NOfor", # stands for neury-ormanni formatted
+    ## Original.source ----
+    # merge min and max references into one column, all were the same for min and max so didn'e need to do anythng else
+    original.source.length = if_else(
+      minl.ref == maxl.ref,
+      minl.ref,
+      stri_c(minl.ref, maxl.ref, sep = ", ")
+    ),
+    
+    original.source.width = if_else(
+      minw.ref == maxw.ref,
+      minw.ref,
+      stri_c(minw.ref, maxw.ref, sep = ", ")
+    ),
+    
+    ## Individual.uid ----
+    # needs to be done before pivot so that the length and width measurements on seperate lines have the same uid
+    uid.db = "noF", # stands for neury-ormanni formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
+  # remove redundant columns
   select(
     - uid.db,
     - uid.no
   ) %>% 
   
-  # pivot to make separate lines for length and width
+  ## Pivot ----
+  # make separate lines for length and width
   pivot_longer(
     cols = `body length`:`body width`, names_to = "bodysize.measurement", values_to = "body.size"
   ) %>% 
@@ -1324,7 +1250,14 @@ no_formatted <- NO %>%
       TRUE ~ NA
     ),
     
-    ## Filter
+    # assign the correct ref as duplicated have been made for each row now
+    original.source.code.1 = if_else(
+      bodysize.measurement == "body length",
+      original.source.length,
+      original.source.width
+    ),
+    
+    ## Filter ----
     # remove ones with all NA in size columns but keep any if they have at least one value in it
     remove = if_else(
       is.na(body.size) & is.na(min.body.size) & is.na(max.body.size),
@@ -1337,26 +1270,17 @@ no_formatted <- NO %>%
     remove == "keep"
   ) %>% 
   
-  select(
-    - remove,
-    - min.length,
-    - max.length,
-    - min.width,
-    - max.width
-  ) %>% 
-  
   mutate(
-    ## Measurement.type
+    ## Measurement.type ----
     measurement.type = case_when(
       !is.na(body.size) ~ "range",
       is.na(body.size) & !is.na(min.body.size) ~ "min",
       is.na(body.size) & !is.na(max.body.size) ~ "max"
     ),
     
-    ## Extra info
+    ## Extra info ----
     sample.size = "30",
     source.code = '7',
-    original.source.code.1 = "7",
     units = "µm^3",
     sample.month = NA,
     sample.year = NA,
@@ -1371,6 +1295,22 @@ no_formatted <- NO %>%
     experiemntal.design = "ex-situ",
   ) %>% 
   
+  ## Order columns
+  # remove redundant columns 
+  select(
+    - remove,
+    - min.length,
+    - max.length,
+    - min.width,
+    - max.width,
+    - original.source.length,
+    - original.source.width,
+    - minl.ref,
+    - maxl.ref,
+    - minw.ref,
+    - maxw.ref
+  ) %>% 
+  
   # reorder
   relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
@@ -1380,24 +1320,28 @@ no_formatted <- NO %>%
 ## save ----
 saveRDS(no_formatted, file = "R/Data_outputs/databases/no_formatted.rds")
 
-#  Rimet 2012 ----   
+#  Rimet 2012 ----  
 rimet2012_formatted <- rimet2012 %>% 
+  
+  ## Select columns ----
   select(
     `genus + species + var`,
     `Biovolume (µm3)`,
     `length (µm)`,
     `width (µm)`
   ) %>% 
+  
   rename(
     original.taxa.name = `genus + species + var`,
     biovolume = `Biovolume (µm3)`,
-    `cell length` = `length (µm)`,
-    `cell width` = `width (µm)`
+    `cell length` = `length (µm)`, # have as two words so when it is pivotted then names column can be changed to bodysize.measurement and nothing needs to edited
+    `cell width` = `width (µm)` # have as two words so when it is pivotted then names column can be changed to bodysize.measurement and nothing needs to edited
   ) %>% 
   
   mutate(
-    ## Individual.uid
-    uid.db = "R12for", # stands for rimet 2012 formatted
+    ## Individual.uid ----
+    # needs to be done before pivot so that the length and width measurements have the same individual uid 
+    uid.db = "r12F", # stands for rimet 2012 formatted
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
@@ -1407,18 +1351,18 @@ rimet2012_formatted <- rimet2012 %>%
     - uid.no
   ) %>% 
   
-  ## pivot longer
+  ## Pivot ----
   # make each length, width and biovol measurement it's own line with the same uid
   pivot_longer(cols = biovolume:`cell width`, names_to = "bodysize.measurement", values_to = "body.size") %>% 
   
   mutate(
-    ## Units
+    ## Units ----
     units = case_when(
       bodysize.measurement %in% c("cell length", "cell width") ~ "µm",
       bodysize.measurement == "biovolume" ~ "µm^3"
     ),
     
-    ## Extra info
+    ## Extra info ----
     min.body.size = NA,
     max.body.size = NA,
     sample.size = NA,
@@ -1437,6 +1381,8 @@ rimet2012_formatted <- rimet2012 %>%
     experiemntal.design = "ex-situ",
     measurement.type = "average"
   ) %>% 
+  
+  ## Order columns ----
   # reorder
   relocate(source.code, original.source.code.1, experiemntal.design, sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
@@ -1447,26 +1393,12 @@ rimet2012_formatted <- rimet2012 %>%
 saveRDS(rimet2012_formatted, file = "R/Data_outputs/databases/rimet2012_formatted.rds")
 
 
-############################################# Combine together ====
-# combine all into one big database and then can separate out into types etc later
-standardised_databases <- bind_rows(kremer_subset, rimmet_subset, hebert_subset, odume_subset, gavrilko_subset, lt_subset, no_subset, rimet2012_subset) %>% 
-  # add in raw.uid
-  mutate(
-    raw.uid = row_number()
-  )%>% 
-  # remove data with a 0 cell.biovol (for some reason can't filter this so have to maunally removed based on uid)
-  filter(!(raw.uid %in% c("3046", "14402", "36324", "43875", "117691", "120016", "124937", "132283", "133473", "203570"))) %>% 
-  relocate(raw.uid, source.code, original.taxa.name, life.stage, cell.biovol, nu.biovol, nu.biovol.mucilage, cells.per.nu, biovol.ref, min.length, max.length, avg.length, length.ref, min.width, max.width, avg.width, width.ref, min.height, max.height, avg.height, height.ref, min.biomass, max.biomass, avg.biomass, biomass.ref, sample.start.year, sample.end.year, sample.month, sample.season, location, country, continent, latitude, longitude, data.method)
-
-saveRDS(standardised_raw, file = "R/Data_outputs/Standardised_data/standardised_raw.rds")
-
-
-
+# Combine together ----
 db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, hebert_formatted, gavrilko_formatted, lt_formatted, no_formatted, rimet2012_formatted) %>% 
   # remove data with a 0 cell.biovol (for some reason can't filter this so have to maunally removed based on uid)
   filter(
-    !(individual.uid %in% c("Kind3046"))
-  )
+    !(individual.uid %in% c("kremerF4326", "kremerF19189", "kremerF41111", "kremerF47749", "kremerF48939", "kremerF119036"))
+  ) %>% 
   # reorder
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18, original.source.code.19,
            experiemntal.design, sample.year, sample.month, join.location.1, join.location.2,
