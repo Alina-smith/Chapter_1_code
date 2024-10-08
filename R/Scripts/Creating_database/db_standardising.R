@@ -24,7 +24,7 @@
   # units = units for measurment
   # measurement.tpe = if it is an average /raw/range etc
 
-# Packages
+# Packages ----
 library(tidyr)
 library(tidyverse)
 library(readxl)
@@ -48,6 +48,7 @@ NO <- read_xlsx(master_db_path, sheet = "Neury-Ormanni")
 rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
 db_source_list <- read_xlsx(master_db_path, sheet = "source_list")
 db_location <- read_xlsx(master_db_path, sheet = "location")
+db_extra <- read_xlsx(master_db_path, sheet = "extra_info")
 
 # Rimmet ----
 rimet_formatted <- rimet %>% 
@@ -939,21 +940,30 @@ hebert_formatted <- hebert %>%
     original.source.code, into = c("original.source.code.1", "original.source.code.2", "original.source.code.3", "original.source.code.4"), sep = ","
   ) %>% 
   
+  ## sample.dates, sample.size, sex, experiemntal.design ----
+  # left join info in the location sheet
+  left_join(
+    filter(db_extra, db.code == "4"),
+  by = c("original.source.code.1" = "join.extra")
+  ) %>% 
+  
   ## Extra info ----
   mutate(
+    ## join.location
+    # the join location if the same as the source code in db_location except for some specific sepcies
+    join.location.1 = original.source.code.1, 
+    join.location.2 = original.source.code.2, 
+    join.location.3 = original.source.code.3, 
+    join.location.4 = original.source.code.4, 
     source.code = '4',
     life.stage = "adult",
-    sample.month = NA,
-    sample.year = NA,
     form = "individual",
     form.no = 1,
-    join.location.1 = NA,
     sample.size = "unknown",
     reps = "unknown",
     error = NA,
     error.type = NA,
     sex = NA,
-    experiemntal.design = "ex-situ",
     
     ## Indivudal.uid ----
     uid.db = "hebertF", # stands for hebert formatted
@@ -965,18 +975,18 @@ hebert_formatted <- hebert %>%
   # Remove redundant columns
   select(
     - uid.db,
-    - uid.no
+    - uid.no,
+    - db.code
   ) %>% 
   
   # Reorder
-  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, experiemntal.design, sample.year, sample.month, join.location.1,
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, experimental.design, sample.year, sample.month, join.location.1, join.location.2, join.location.3, join.location.4,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save ----
 saveRDS(hebert_formatted, file = "R/Data_outputs/databases/hebert_formatted.rds")
-
 
 # Gavrilko ----
 gavrilko_formatted <- Gavrilko %>% 
@@ -1031,7 +1041,7 @@ gavrilko_formatted <- Gavrilko %>%
     sample.year = NA,
     form = "individual",
     form.no = 1,
-    join.location.1 = NA,
+    join.location.1 = "Gavrilko et al., 2021",
     max.body.size = NA,
     min.body.size = NA,
     measurement.type = "average",
@@ -1123,9 +1133,9 @@ lt_formatted <- LT %>%
     bodysize.measurement = "biovolume",
     units = "µm^3",
     sample.month = NA,
-    sample.year = NA,
+    sample.year = "2005-2016",
     form.no = NA,
-    join.location.1 = NA,
+    join.location.1 = "Laplace-Treyture et al., 2021",
     max.body.size = NA,
     min.body.size = NA,
     measurement.type = "average",
@@ -1408,7 +1418,40 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
 
 
 
+## hebert source list
+h_source <- hebert_formatted %>% 
+  select(
+    original.source.code.1,
+    original.source.code.2,
+    original.source.code.3,
+    original.source.code.4
+  ) %>% 
+  pivot_longer(
+    cols = original.source.code.1:original.source.code.4, values_to = "original.source.code"
+  ) %>% 
+  mutate(
+  original.source.code = stri_replace_all_regex(original.source.code, " ", "")
+  ) %>% 
+  filter(
+    !is.na(original.source.code)
+  ) %>% 
+  select(
+    original.source.code
+  ) %>% 
+  distinct(
+    original.source.code
+  )
 
+## no source list
+n_source <- no_formatted %>% 
+  distinct(
+    original.source.code.1
+  )
 
+## rimet2012 sources
+r2_source <- rimet2012 %>% 
+  distinct(
+    `Reference for sizes`
+  )
 
-
+write.csv(r2_source, "rimet2012_source.csv")
