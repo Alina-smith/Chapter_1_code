@@ -15,7 +15,7 @@ wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "body
 wos_source_list <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
 
 #### Standardising ----
-wos_standardised <- wos_raw_body %>%
+wos_formatted <- wos_raw_body %>%
   mutate(
     ## body.size 
     # replacing , with .
@@ -168,9 +168,21 @@ wos_standardised <- wos_raw_body %>%
     -sample.start.year,
     -sample.end.month,
     -sample.end.year
+  ) %>% 
+  
+  # make source.code a character to merge with db
+  mutate(
+    source.code = as.character(source.code),
+    original.source.code.1 = as.character(original.source.code.1),
+    original.source.code.2 = as.character(original.source.code.2),
+    original.source.code.3 = as.character(original.source.code.3),
+    original.source.code.4 = as.character(original.source.code.4),
+    original.source.code.5 = as.character(original.source.code.5),
+    original.source.code.6 = as.character(original.source.code.6)
   )
 
-
+# Save
+saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
 
 
 
