@@ -126,7 +126,7 @@ rimet_formatted <- rimet %>%
           paste0(
             "(?i)", paste0(
               filter(
-                db_location, db.code == "1")$join.location, collapse = "|"
+                db_location, db.code == "db-1")$join.location, collapse = "|"
             )
           ) # take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
         )
@@ -166,7 +166,7 @@ rimet_formatted <- rimet %>%
           paste0(
             "(?i)", paste0(
               filter(
-                db_source_list, db.code == "1")$join.source, collapse = "|"
+                db_source_list, db.code == "db-1")$join.source, collapse = "|"
             )
           ) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
         )
@@ -182,7 +182,7 @@ rimet_formatted <- rimet %>%
   # left join original.source.code
   left_join(
     select(
-      filter(db_source_list, db.code == "1"),
+      filter(db_source_list, db.code == "db-1"),
       join.source, source.code
     ), by = "join.source"
   ) %>% 
@@ -325,7 +325,7 @@ kremer_formatted <- kremer %>%
   left_join(
     select(
       filter(
-        db_source_list, db.code == "2"
+        db_source_list, db.code == "db-2"
       ), source.code, join.source
     ), by = "join.source"
   ) %>% 
@@ -1015,28 +1015,28 @@ hebert_formatted <- hebert %>%
   # original.source.code.1
   left_join(., select(
     filter(
-      db_source_list, db.code == "4"), # filter for just the references in hebert (db 4)
+      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
     source.code, join.source), # select just source.code and join.source columns
             by = c("join.all.1" = "join.source")) %>% 
   
   # original.source.code.2
   left_join(., select(
     filter(
-      db_source_list, db.code == "4"), # filter for just the references in hebert (db 4)
+      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
     source.code, join.source), # select just source.code and join.source columns
     by = c("join.all.2" = "join.source")) %>% 
   
   # original.source.code.3
   left_join(., select(
     filter(
-      db_source_list, db.code == "4"), # filter for just the references in hebert (db 4)
+      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
     source.code, join.source), # select just source.code and join.source columns
     by = c("join.all.3" = "join.source")) %>% 
   
   # original.source.code.4
   left_join(., select(
     filter(
-      db_source_list, db.code == "4"), # filter for just the references in hebert (db 4)
+      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
     source.code, join.source), # select just source.code and join.source columns
     by = c("join.all.4" = "join.source")) %>% 
   
@@ -1052,28 +1052,28 @@ hebert_formatted <- hebert %>%
   # left join info in the extra.info sheet - will need to do it for each source code and then merge all into one column for each
   left_join(
     filter(
-      db_extra, db.code == "4"
+      db_extra, db.code == "db-4"
       ),
     by = c("join.all.1" = "join.extra") # source.code.1
     ) %>% 
   
   left_join(
     filter(
-      db_extra, db.code == "4"
+      db_extra, db.code == "db-4"
     ),
     by = c("join.all.2" = "join.extra") # source.code.2
   ) %>% 
   
   left_join(
     filter(
-      db_extra, db.code == "4"
+      db_extra, db.code == "db-4"
     ),
     by = c("join.all.3" = "join.extra") # source.code.3
   ) %>% 
   
   left_join(
     filter(
-      db_extra, db.code == "4"
+      db_extra, db.code == "db-4"
     ),
     by = c("join.all.4" = "join.extra") # source.code.4
   ) %>% 
@@ -1528,7 +1528,7 @@ no_formatted <- NO %>%
   left_join(
     select(
       filter(
-        db_source_list, db.code == "7"
+        db_source_list, db.code == "db-7"
       ), source.code, join.source
     ), by = "join.source"
   ) %>% 
