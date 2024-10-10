@@ -53,6 +53,7 @@ rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
 db_source_list <- read_xlsx(master_db_path, sheet = "source_list")
 db_location <- read_xlsx(master_db_path, sheet = "location")
 db_extra <- read_xlsx(master_db_path, sheet = "extra_info")
+rimet_2012_sources <- read_xlsx(master_db_path, sheet = "Rimet_2012_sources")
 
 # Rimmet ----
 # All phyto
@@ -1262,25 +1263,24 @@ gavrilko_formatted <- Gavrilko %>%
     
     ## Extra info ----
     source.code = 'db-5',
-    original.source.code.1 = "db-216",
-    original.source.code.2 = "db-217",
-    original.source.code.3 = "db-218",
-    original.source.code.4 = "db-219",
-    original.source.code.5 = "db-220",
-    original.source.code.6 = "db-221",
-    original.source.code.7 = "db-222",
-    original.source.code.8 = "db-223",
-    original.source.code.9 = "db-224",
-    original.source.code.10 = "db-225",
-    original.source.code.11 = "db-226",
-    original.source.code.12 = "db-227",
-    original.source.code.13 = "db-228",
-    original.source.code.14 = "db-229",
-    original.source.code.15 = "db-230",
-    original.source.code.16 = "db-231",
-    original.source.code.17 = "db-232",
-    original.source.code.18 = "db-233",
-    original.source.code.19 = "db-234",
+    original.source.code.1 = "db-66",
+    original.source.code.2 = "db-67",
+    original.source.code.3 = "db-68",
+    original.source.code.4 = "db-70",
+    original.source.code.5 = "db-71",
+    original.source.code.6 = "db-72",
+    original.source.code.7 = "db-73",
+    original.source.code.8 = "db-74",
+    original.source.code.9 = "db-75",
+    original.source.code.10 = "db-76",
+    original.source.code.11 = "db-77",
+    original.source.code.12 = "db-78",
+    original.source.code.13 = "db-79",
+    original.source.code.14 = "db-80",
+    original.source.code.15 = "db-81",
+    original.source.code.16 = "db-82",
+    original.source.code.17 = "db-83",
+    original.source.code.18 = "db-84",
     bodysize.measurement = "body length",
     units = "mm",
     sample.month = NA, # cannot acces orginal papers so set to NA
@@ -1310,7 +1310,7 @@ gavrilko_formatted <- Gavrilko %>%
   ) %>% 
   
   ## Reorder columns ----
-  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18, original.source.code.19,
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
            sample.year, sample.month, join.location.1,
            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
            min.body.size, max.body.size, body.size,
@@ -1614,14 +1614,16 @@ rimet2012_formatted <- rimet2012 %>%
     `genus + species + var`,
     `Biovolume (µm3)`,
     `length (µm)`,
-    `width (µm)`
+    `width (µm)`,
+    `Reference for sizes`
   ) %>% 
   
   rename(
     original.taxa.name = `genus + species + var`,
     biovolume = `Biovolume (µm3)`,
     `cell length` = `length (µm)`, # have as two words so when it is pivotted then names column can be changed to bodysize.measurement and nothing needs to edited
-    `cell width` = `width (µm)` # have as two words so when it is pivotted then names column can be changed to bodysize.measurement and nothing needs to edited
+    `cell width` = `width (µm)`, # have as two words so when it is pivotted then names column can be changed to bodysize.measurement and nothing needs to edited
+    join.source = `Reference for sizes`
   ) %>% 
   
   mutate(
@@ -1636,6 +1638,25 @@ rimet2012_formatted <- rimet2012 %>%
   select(
     - uid.db,
     - uid.no
+  )%>% 
+  
+  ## Original source ----
+  mutate(
+    # Remove invisible characters - have already removed all invisible characters in the rimet_2012_sources so just making it match that
+    join.source = stri_replace_all_regex(join.source, "[^\\x20-\\x7E]", "")
+  ) %>% 
+  
+  # left join original.source.codes from rimet_2012_sources
+  left_join(select(rimet_2012_sources, source.code, join.source), by = "join.source") %>% 
+  
+  # rename
+  rename(
+    original.source.code.1 = source.code
+  ) %>% 
+  
+  # remove redundant columns
+  select(
+    - join.source
   ) %>% 
   
   ## Pivot ----
@@ -1652,16 +1673,15 @@ rimet2012_formatted <- rimet2012 %>%
     ## Extra info ----
     min.body.size = NA,
     max.body.size = NA,
-    sample.size = NA, ### NEED TO GET FROM ORIGINAL SOURCES
+    sample.size = NA, ### CHECK ORIGINAL SOURCES ###
     source.code = 'db-8',
-    original.source.code.1 = NA, ### NEED TO GET FROM ORIGINAL SOURCES
-    sample.month = NA, ### NEED TO GET FROM ORIGINAL SOURCES
-    sample.year = NA, ### NEED TO GET FROM ORIGINAL SOURCES
-    form = "individual", # meta data says cells werw mesureed so assumed not colonies or filaments
+    sample.month = NA, ### CHECK ORIGINAL SOURCES ###
+    sample.year = NA, ### CHECK ORIGINAL SOURCES ###
+    form = "individual", # meta data says cells were mesureed so assumed not colonies or filaments
     form.no = 1,
-    join.location.1 = NA, ### NEED TO GET FROM ORIGINAL SOURCES
+    join.location.1 = "Rimet et al., 2012", # says all sources are from european sits in meta data so don't need to go through original sources
     life.stage = "active", # checked for dormant names but non so set as active as all phyto
-    reps = "unknown", ### NEED TO GET FROM ORIGINAL SOURCES
+    reps = "unknown", ### CHECK ORIGINAL SOURCES ###
     error = NA,
     error.type = NA,
     sex = NA, # all phyto so no sex needed
@@ -1694,3 +1714,15 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
 
 # Save
 saveRDS(db_formatted, file = "R/Data_outputs/databases/db_formatted.rds")
+
+
+
+
+
+x <- rimet_2012_sources %>% 
+  mutate(
+    join.source = stri_replace_all_regex(join.source, "[^\\x20-\\x7E]", "")
+    #join.source = stri_escape_unicode(join.source)
+  )
+
+write_csv(x, "x.csv")
