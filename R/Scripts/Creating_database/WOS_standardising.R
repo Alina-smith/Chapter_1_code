@@ -10,16 +10,49 @@ library(ggplot2)
 library(here)
 library(data.table)
 
-#### Data ---- 
+# Data ---- 
 wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize", guess_max = 40000)
 wos_source_list <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
 
-#### Standardising ----
+# Standardising ----
 wos_formatted <- wos_raw_body %>%
+  ## Filter ----
+  filter(
+    !(original.taxa.name == "unknown"), # remove "unknown" taxa names
+  ) %>% 
+  
+  ## Select columns ----
+  select(
+    - experimental.design,
+    - treatment.1.name,
+    - treatment.1.value,
+    - treatment.2.name,
+    - treatment.2.value,
+  ) %>% 
+  
   mutate(
-    ## body.size 
-    # replacing , with .
-    body.size = stri_replace_all_regex(body.size, ",", "."),
+    ## Body.size ----
+    # body.size
+    body.size = stri_replace_all_regex(body.size, ",", "."), # replace , with .
+    body.size = case_when(
+      body.size %in% c("NA", "na", "-", "0") ~ NA, # make NA
+      individual.uid == "10.1002/etc.5034-2" & body.size == "0.000.16" ~ "0.00016", # change one with two decimal places to one
+      TRUE ~ body.size
+    ),
+    
+    # min.body.size
+    min.body.size = if_else(
+      min.body.size == "NA",
+      NA, # make NA
+      min.body.size
+    ),
+    
+    # max.body.size
+    max.body.size = if_else(
+      max.body.size == "NA",
+      NA, # make NA
+      max.body.size
+    ),
     
     # calculating values when average isn't given
     # make the same type
@@ -43,27 +76,45 @@ wos_formatted <- wos_raw_body %>%
     )
   ) %>% 
   
-  # remove NAs and 0 in source 71
-  filter(
-    !is.na(body.size) & body.size != "0"
+  # filter out body sizes with NA only for all min,max and body.size
+  mutate(
+    keep = if_else(
+      is.na(body.size) & is.na(min.body.size) & is.na(max.body.size),
+      "NA",
+      "keep"
+    )
   ) %>% 
-  
-  # remove redundent columns
+  # keep onlt ones with "keep"
+  filter(
+    keep == "keep"
+  ) %>% 
+  # remove redundant columns
   select(
-    -total.bs,
-    -abundance
+    - keep,
+    - total.bs,
+    - abundance
   ) %>% 
   
   mutate(
-    ## body size measurments
+    ## body size measurements ----
     # seperate out the body size measurement method into the method and then a column with additional notes on the method like what is measured etc
-    body.size.method.notes = stri_extract_first_regex(body.size.method, "(?<=\\- ).*"),
-    body.size.method = stri_replace_all_regex(body.size.method, " \\- .*", ""),
+    bodysize.measurement.notes = stri_extract_first_regex(bodysize.measurement, "(?<=\\- ).*"),
+    bodysize.measurement = stri_replace_all_regex(bodysize.measurement, " \\- .*", ""),
     
     # fix spelling mistakes
-    body.size.method = stri_replace_all_regex(body.size.method, "B", "b",),
+    bodysize.measurement = stri_replace_all_regex(bodysize.measurement, "B", "b",),
     
-    ## units
+    # make into the same
+    bodysize.measurement = case_when(
+      stri_detect_regex(bodysize.measurement, "length") ~ "length",
+      stri_detect_regex(bodysize.measurement, "width") ~ "width",
+      stri_detect_regex(bodysize.measurement, "diameter") ~ "diameter",
+      stri_detect_regex(bodysize.measurement, "depth") ~ "depth",
+      stri_detect_regex(bodysize.measurement, "height") ~ "height",
+      TRUE ~ bodysize.measurement
+    ),
+    
+    ## units ----
     # change any mistakes or synonyms to the same
     units = case_when(
       units == "μg ind^-1" ~ "μg",
@@ -87,7 +138,7 @@ wos_formatted <- wos_raw_body %>%
       TRUE ~ units
     ),
     
-    ## life stage
+    ## life stage ----
     # sort out captals
     life.stage = stri_replace_all_regex(life.stage, "A", "a"),
     
@@ -107,9 +158,8 @@ wos_formatted <- wos_raw_body %>%
       TRUE ~ life.stage
     ),
     
-    ## format dates
+    ## Sample dates ----
     # make the same type
-    ## american format = 8, 
     sample.start.year = as.character(sample.start.year),
     sample.end.year = as.character(sample.end.year),
     
@@ -124,7 +174,7 @@ wos_formatted <- wos_raw_body %>%
       TRUE ~ sample.end.year
     ),
     
-    # month
+    # Month
     sample.start.month = case_when(
       # american style date
       !is.na(sample.start.date.full) & source.code == "8" ~ stri_extract_first_regex(sample.start.date.full, "(?<!\\/)\\d+(?=\\/)"), # take the two digits that don't have a / infront but have on following it - dd/
@@ -145,7 +195,7 @@ wos_formatted <- wos_raw_body %>%
       TRUE ~ sample.end.month
     ),
     
-    # make it into ranges in one column
+    # Make it into ranges in one column
     # year
     sample.year = case_when(
       is.na(sample.end.year) ~ sample.start.year, # when there is only one sample year use that one
@@ -160,7 +210,8 @@ wos_formatted <- wos_raw_body %>%
       sample.start.month != sample.end.month ~ paste(sample.start.month, sample.end.month, sep = "-"), # when it is over multiple years make a range
       TRUE ~ NA),
   ) %>% 
-  # remove full date columns
+  
+  # remove redundant columns
   select(
     -sample.start.date.full,
     -sample.end.date.full,
@@ -170,8 +221,36 @@ wos_formatted <- wos_raw_body %>%
     -sample.end.year
   ) %>% 
   
-  # make source.code a character to merge with db
   mutate(
+    ## Form ----
+    form = if_else(
+      form == "coenobium",
+      "colony",
+      form
+    ),
+    
+    ## Form no ----
+    form.no = if_else(
+      form == "individual",
+      1,
+      NA
+    ),
+    
+    ## Unknown
+    # change unknown to NA is reps and sample.size
+    sample.size = if_else(
+      sample.size == "unknown",
+      NA,
+      sample.size
+    ),
+    
+    reps = if_else(
+      reps == "unknown",
+      NA,
+      reps
+  ), 
+  
+  # change types to merge with db
     source.code = as.character(source.code),
     original.source.code.1 = as.character(original.source.code.1),
     original.source.code.2 = as.character(original.source.code.2),
@@ -179,109 +258,15 @@ wos_formatted <- wos_raw_body %>%
     original.source.code.4 = as.character(original.source.code.4),
     original.source.code.5 = as.character(original.source.code.5),
     original.source.code.6 = as.character(original.source.code.6)
-  )
+  ) %>% 
+  # reorder
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6,
+           sample.year, sample.month,
+           join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
+           join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           min.body.size, max.body.size, body.size,
+           bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
 saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
-
-
-
-
-
-
-
-
-
-#### cross referencing -----
-## get a list of the source codes in the sources.shortlist sheet
-sources_shortlist_codes <- sources_shortlist %>% 
-  select(source.code)
-
-## Get a list of source codes using in body.size sheet
-# Source codes of primary data
-primary_source_codes <- wos_data %>% 
-  select(
-    source.code) %>% 
-  distinct(source.code) %>% 
-  mutate(
-    source.code = as.character(source.code),
-    # make a column to say it is primary for later use
-    source.type = "primary"
-  )
-
-# Source codes from secondary data
-# when it is a primary source then it will have the primary source as the original source as well and I want to remove these to make a list of just original sources cited in secondary source list
-secondary_source_codes <- wos_data %>%
-  
-  # Select original.source.code columns
-  select(
-    original.source.code.1,
-    original.source.code.2,
-    original.source.code.3,
-    original.source.code.4,
-    original.source.code.5,
-    original.source.code.6
-  ) %>% 
-  
-  # make all the same type
-  mutate(
-    original.source.code.1 = as.character(original.source.code.1),
-    original.source.code.2 = as.character(original.source.code.2),
-    original.source.code.3 = as.character(original.source.code.3),
-    original.source.code.4 = as.character(original.source.code.4),
-    original.source.code.5 = as.character(original.source.code.5),
-    original.source.code.6 = as.character(original.source.code.6)
-  ) %>% 
-  
-  # put all sources codes into one column
-  pivot_longer(
-    cols = 1:6,
-    values_to = "source.code"
-  ) %>% 
-  
-  # remove duplicates
-  distinct(source.code) %>% 
-  
-  # remove NAs 
-  filter(!is.na(source.code)) %>% 
-  
-  ## Remove primary sources from original sources
-  left_join(., primary_source_codes, by = "source.code") %>% 
-  
-  # add in secondary to source.type column
-  mutate(
-    source.type = if_else(
-      is.na(source.type),"secondary", source.type
-    )
-  ) %>% 
-  
-  # select just secondary sources
-  filter(
-    source.type == "secondary"
-  )
-
-# combine secondary and primary source code
-used_source_codes <- bind_rows(primary_source_codes, secondary_source_codes)
-
-### Formatting the full source list
-## Checking for sources I didn't end up using
-delete_sources <- anti_join(sources_shortlist_codes, used_source_codes, by = "source.code") %>% 
-  mutate(used = "not used")
-
-## removing unused sources
-source_list_used <- left_join(sources_shortlist, delete_sources, by = "source.code") %>% 
-  mutate(
-    used = if_else(
-      is.na(used), "used", used
-    )
-  ) %>% 
-  filter(
-    used == "used"
-  ) %>% 
-  select(- used,- in.text.citation, - paper.code, - list.name)
-
-write_csv(source_list_used, "R/Data_outputs/WOS/source_list_used.csv")
-
-
-exp <- wos_raw_body %>% 
-  filter(original.taxa.name == "Chlorella vulgaris")

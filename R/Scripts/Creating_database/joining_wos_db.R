@@ -24,9 +24,17 @@ db_sources_raw <- read_xlsx(here("Raw_data","master_db_traits.xlsx"), sheet = "s
 wos_sources_raw <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
 
 # Join data
-all_raw <- bind_rows(db_raw, wos_raw)
+all_raw <- bind_rows(db_raw, wos_raw)%>% 
+  # reorder
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
+           join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
+           join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           min.body.size, max.body.size, body.size,
+           bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
-# Sources - Finding duplicates ----
+# Finding duplicates - within sources ----
+# Want to check if any of the original sources have been used multiple times within the same source first
 ## Join sources together ----
 
 # Format so they are the same to join:
@@ -77,33 +85,89 @@ db_sources <- db_sources_raw %>%
   
 # join together
 all_source_raw <- bind_rows(db_sources, wos_sources) %>% 
-  filter(
-    !is.na(title) ### JUST FOR NOW WHILE DON'T HAVE RIMET_2013 SOURCES
-  )
+  # set NA to na
+  mutate_all(
+    ~ na_if(., "NA")
+    )
 
-## DOI duplicates ----
-# first check for duplicates among ones with dois 
-
-# Make a dataframe of sources with dois
-doi <- all_source_raw %>% 
+## DOI: ----
+within_dupe_doi <- all_source_raw %>% 
   # select ones with doi
   filter(
     !is.na(doi)
+  ) %>%
+  group_by(citing.source, doi) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
+  filter(
+    count > 1
+  ) %>% 
+  # rename doi for merging later
+  rename(
+    dupe.type = doi
   )
 
-# make frequency table
-doi_freq <- data.frame(table(doi$doi)) %>% 
+## ISBN ----
+within_dupe_isbn <- all_source_raw %>% 
+  # select ones with isbn
   filter(
-    Freq >1 # filter any that appear more than once
+    !is.na(ISBN)
+  ) %>%
+  group_by(citing.source, ISBN) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
+  filter(
+    count > 1
+  ) %>%   # rename doi for merging later
+  rename(
+    dupe.type = ISBN
+  )
+  
+## title ----
+within_dupe_title <- all_source_raw %>% 
+  # select ones with no doi or isbn
+  filter(
+    is.na(doi) & is.na(ISBN)
+  ) %>%
+  # make all lower case incase some are caps
+  mutate(
+    title = tolower(title)
+  ) %>% 
+  group_by(citing.source, title) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
+  filter(
+    count > 1
+  ) %>% 
+  # rename doi for merging later
+  rename(
+    dupe.type = title
   )
 
-# find the sources with multiple doi's in the all_source_raw dataframe
-doi_dupes <- all_source_raw %>% 
+## Merge all together ----
+within_dupes <- bind_rows(within_dupe_doi, within_dupe_isbn, within_dupe_title)
+# gave two duplicates but one is the title of the same lake monitoring program but different years and the other had different join.codes for joining the original.source
+# code onto the db data but has the same original.source code so when the final source list is made by getting all the unique source codes this will be fine
+
+# Finding duplicates - between sources ----
+# want to find if there are any sources that have used the same original data and if so then remove them if they are also for the same species
+
+## DOI ----
+between_dupe_doi_freq <- all_source_raw %>% 
+  # select ones with doi
   filter(
-    doi %in% doi_freq$Var1 # select any that match the doi's in the doi_freq dataframe
+    !is.na(doi)
+  ) %>%
+  group_by(doi) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
+  filter(
+    count > 1
+  )
+
+# make list of duplicate sources with their source code
+between_dupe_doi <- all_source_raw %>% 
+  filter(
+    doi %in% between_dupe_doi_freq$doi # select any that match the doi's in the doi_freq dataframe
   ) %>% 
   
-  # make individual columns for each source.code for each duplicate doi
+  # make individual columns for each source.code for each duplicate title
   group_by(doi) %>% 
   summarise(source.codes = paste(source.code, collapse = ",")) %>% 
   separate(source.codes, into = c("source.code.1", "source.code.2", "source.code.3"), sep = ",") %>% 
@@ -115,35 +179,31 @@ doi_dupes <- all_source_raw %>%
   
   # add in type so knows what was used to find the duplicates
   mutate(
-    duplcate.type = "doi"
+    duplicate.type = "doi"
   )
 
-## isbn duplicates ----
-### DECIDE WHAT TO DO WITH ONES WITH ISBN AND DOIS ###
-# check for duplicate isbn for ones without dois
-
-# select ones with isbns
-isbn <- all_source_raw %>%
+## ISBN ----
+between_dupe_isbn_freq <- all_source_raw %>% 
+  # select ones with doi
   filter(
     !is.na(ISBN)
+  ) %>%
+  group_by(ISBN) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
+  filter(
+    count > 1
   )
 
-# make frequency table
-isbn_freq <- data.frame(table(isbn$ISBN)) %>% 
+# make list of duplicate sources with their source code
+between_dupe_isbn <- all_source_raw %>% 
   filter(
-    Freq > 1 # filter any that appear more than once
-  )
-  
-# find the sources with multiple doi's in the all_source_raw dataframe
-isbn_dupes <- all_source_raw %>% 
-  filter(
-    ISBN %in% isbn_freq$Var1 # select any that match the doi's in the doi_freq dataframe
+    ISBN %in% between_dupe_isbn_freq$ISBN # select any that match the doi's in the doi_freq dataframe
   ) %>% 
   
-  # make individual columns for each source.code for each duplicate doi
+  # make individual columns for each source.code for each duplicate title
   group_by(ISBN) %>% 
   summarise(source.codes = paste(source.code, collapse = ",")) %>% 
-  separate(source.codes, into = c("source.code.1", "source.code.2", "source.code.3"), sep = ",") %>% 
+  separate(source.codes, into = c("source.code.1", "source.code.2"), sep = ",") %>% 
   
   # rename so can merge with others later
   rename(
@@ -152,34 +212,39 @@ isbn_dupes <- all_source_raw %>%
   
   # add in type so knows what was used to find the duplicates
   mutate(
-    duplcate.type = "isbn"
+    duplicate.type = "isbn"
   )
 
-## Title duplicates ----
-# for any that don't have isbn or doi check for duplicate titles
-
-# select ones without isbn or doi
-title <- all_source_raw %>% 
+## title ----
+between_dupe_title_freq <- all_source_raw %>% 
+  # select ones with doi
   filter(
-    is.na(ISBN) & is.na(doi)
-  )
-
-# make frequency table
-title_freq <- data.frame(table(title$title)) %>% 
+    !is.na(title)
+  ) %>%
+  # make all lower case incase some are caps
+  mutate(
+    title = tolower(title)
+  ) %>% 
+  group_by(title) %>%
+  summarise(count = n(), .groups = 'drop') %>% 
   filter(
-    Freq > 1
-  )
+    count > 1
+  ) 
 
-# find sources with those titles in the all all_source_raw dataframe
-title_dupes <- all_source_raw %>% 
+# make list of duplicate sources with their source code
+between_dupe_title <- all_source_raw %>% 
+  # make lower case to match between_dupe_title
+  mutate(
+    title = tolower(title)
+  ) %>% 
   filter(
-    title %in% title_freq$Var1 # select any that match the doi's in the doi_freq dataframe
+    title %in% between_dupe_title_freq$title # select any that match the doi's in the doi_freq dataframe
   ) %>% 
   
-  # make individual columns for each source.code for each duplicate doi
+  # make individual columns for each source.code for each duplicate title
   group_by(title) %>% 
   summarise(source.codes = paste(source.code, collapse = ",")) %>% 
-  separate(source.codes, into = c("source.code.1", "source.code.2"), sep = ",") %>% 
+  separate(source.codes, into = c("source.code.1", "source.code.2", "source.code.3", "source.code.4"), sep = ",") %>% 
   
   # rename so can merge with others later
   rename(
@@ -188,23 +253,15 @@ title_dupes <- all_source_raw %>%
   
   # add in type so knows what was used to find the duplicates
   mutate(
-    duplcate.type = "title"
+    duplicate.type = "title"
   )
 
-## Combine all ----
-all_dupes <-  bind_rows(doi_dupes, isbn_dupes, title_dupes)
+## Merge all together ----
+between_dupes <- bind_rows(between_dupe_doi, between_dupe_isbn, between_dupe_title) %>% 
+  relocate(source.info, source.code.1, source.code.2, source.code.3, source.code.4, duplicate.type)
 
-# Source - removing duplicates ----
-# remove any duplicated data from the raw data
-
-
-
-
-
-
-
-
-
-
-
-
+x <- all_raw %>% 
+  filter(
+    bodysize.measurement == "biovolume"
+  )%>% 
+  distinct(original.taxa.name)
