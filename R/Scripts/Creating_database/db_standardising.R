@@ -1617,17 +1617,33 @@ no_formatted <- NO %>%
       is.na(body.size) & !is.na(max.body.size) ~ "max"
     ),
     
+    ## Locations ----
+    # there are multiple locations for the same source so need to make two columns
+    join.location.1 = case_when(
+      join.all == "1" ~ "1a",
+      join.all == "13" ~ "13a",
+      TRUE ~ join.all
+    ),
+    
+    join.location.2 = case_when(
+      join.all == "1" ~ "1b",
+      join.all == "13" ~ "13b",
+      TRUE ~ join.all
+    )
+  ) %>% 
+  
+  # remove redundant columns
+  select(
+    - join.all
+  ) %>% 
+  
+  mutate(
     ## Extra info ----
     source.code = 'db-7',
     units = "µm",
     form = "individual",
     form.no = 1,
     life.stage = "active", # change from extra info to this as checked for any dormant names but none so set to active as all are phyto
-  ) %>% 
-  
-  # rename
-  rename(
-    join.location.1 = join.all
   ) %>% 
   
   ## Reorder columns ----

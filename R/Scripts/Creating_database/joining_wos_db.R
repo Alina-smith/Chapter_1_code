@@ -22,18 +22,9 @@ wos_raw <- readRDS("R/Data_outputs/databases/wos_formatted.rds")
 db_raw <- readRDS("R/Data_outputs/databases/db_formatted.rds")
 db_sources_raw <- read_xlsx(here("Raw_data","master_db_traits.xlsx"), sheet = "source_list")
 wos_sources_raw <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
+locations_raw <- read_xlsx(here("Raw_data","location_data_for_wos_db.xlsx"), sheet = "location_raw")
 
-# Join data
-all_raw <- bind_rows(db_raw, wos_raw)%>% 
-  # reorder
-  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
-           join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
-           join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
-
-# Finding duplicates - within sources ----
+# Sources - wthin source duplicates ----
 # Want to check if any of the original sources have been used multiple times within the same source first
 ## Join sources together ----
 
@@ -146,7 +137,7 @@ within_dupes <- bind_rows(within_dupe_doi, within_dupe_isbn, within_dupe_title)
 # gave two duplicates but one is the title of the same lake monitoring program but different years and the other had different join.codes for joining the original.source
 # code onto the db data but has the same original.source code so when the final source list is made by getting all the unique source codes this will be fine
 
-# Finding duplicates - between sources ----
+# Sources - between source duplicates ----
 # want to find if there are any sources that have used the same original data and if so then remove them if they are also for the same species
 
 ## DOI ----
@@ -265,3 +256,214 @@ x <- all_raw %>%
     bodysize.measurement == "biovolume"
   )%>% 
   distinct(original.taxa.name)
+
+# Joining data ----
+all_raw <- bind_rows(db_raw, wos_raw)%>% 
+  # reorder
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
+           join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
+           join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           min.body.size, max.body.size, body.size,
+           bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
+
+# Locations ----
+
+## Edit location list ----
+# need to add source.code o join.location to make it easier to left join as there are duplicate join.locations between sources
+locations_join <- locations_raw %>% 
+  mutate(
+    join.location = paste(source.code, join.location, sep = "")
+  )
+
+
+
+## Add in location.code ----
+all_raw_locations <- all_raw %>% 
+  mutate(
+    join.location.1 = paste(source.code, join.location.1, sep = ""),
+    join.location.2 = paste(source.code, join.location.2, sep = ""),
+    join.location.3 = paste(source.code, join.location.3, sep = ""),
+    join.location.4 = paste(source.code, join.location.4, sep = ""),
+    join.location.5 = paste(source.code, join.location.5, sep = ""),
+    join.location.6 = paste(source.code, join.location.6, sep = ""),
+    join.location.7 = paste(source.code, join.location.7, sep = ""),
+    join.location.8 = paste(source.code, join.location.8, sep = ""),
+    join.location.9 = paste(source.code, join.location.9, sep = ""),
+    join.location.10 = paste(source.code, join.location.10, sep = ""),
+    join.location.11 = paste(source.code, join.location.11, sep = ""),
+    join.location.12 = paste(source.code, join.location.12, sep = ""),
+    join.location.13 = paste(source.code, join.location.13, sep = ""),
+    join.location.14 = paste(source.code, join.location.14, sep = ""),
+    join.location.15 = paste(source.code, join.location.15, sep = ""),
+    join.location.16 = paste(source.code, join.location.16, sep = ""),
+    join.location.17 = paste(source.code, join.location.17, sep = "")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.1" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.2" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.3" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.4" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.5" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.6" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.7" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.8" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.9" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.10" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.11" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.12" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.13" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.13" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.14" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.15" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.16" = "join.location")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.17" = "join.location")
+  ) %>% 
+  
+  mutate(
+    location.code = paste(location.code.x, location.code.x.x, location.code.x.x.x, location.code.x.x.x.x, location.code.x.x.x.x.x, location.code.x.x.x.x.x.x, location.code.x.x.x.x.x.x.x, location.code.x.x.x.x.x.x.x.x, location.code.x.x.x.x.x.x.x.x.x,
+                          location.code.y, location.code.y.y, location.code.y.y.y, location.code.y.y.y.y, location.code.y.y.y.y.y, location.code.y.y.y.y.y.y, location.code.y.y.y.y.y.y.y, location.code.y.y.y.y.y.y.y.y, location.code.y.y.y.y.y.y.y.y.y,
+                          sep = ","),
+    location.code = stri_replace_all_regex(location.code, ",NA|NA,|NA", ""),
+    location.code = na_if(location.code, "") 
+    )%>% 
+
+  select(
+    location.code,
+    source.code
+  ) %>% 
+  filter(
+    is.na(location.code)
+  ) %>% 
+  distinct(source.code)
+
+x <- all_raw %>% 
+  filter(
+    is.na(join.location.1)
+  ) %>% 
+  distinct(
+    source.code
+  )
+
+
+
+x_locations <- all_raw %>% 
+  mutate(
+    join.location.1 = paste(source.code, join.location.1, sep = ""),
+    join.location.2 = paste(source.code, join.location.2, sep = ""),
+    join.location.3 = paste(source.code, join.location.3, sep = ""),
+    join.location.4 = paste(source.code, join.location.4, sep = ""),
+    join.location.5 = paste(source.code, join.location.5, sep = ""),
+    join.location.6 = paste(source.code, join.location.6, sep = ""),
+    join.location.7 = paste(source.code, join.location.7, sep = ""),
+    join.location.8 = paste(source.code, join.location.8, sep = ""),
+    join.location.9 = paste(source.code, join.location.9, sep = ""),
+    join.location.10 = paste(source.code, join.location.10, sep = ""),
+    join.location.11 = paste(source.code, join.location.11, sep = ""),
+    join.location.12 = paste(source.code, join.location.12, sep = ""),
+    join.location.13 = paste(source.code, join.location.13, sep = ""),
+    join.location.14 = paste(source.code, join.location.14, sep = ""),
+    join.location.15 = paste(source.code, join.location.15, sep = ""),
+    join.location.16 = paste(source.code, join.location.16, sep = ""),
+    join.location.17 = paste(source.code, join.location.17, sep = "")
+  ) %>% 
+  
+  left_join(
+    select(
+      locations_join, join.location, location.code
+    ), by = c("join.location.1" = "join.location")
+  ) %>% 
+  filter(
+    is.na(location.code)
+  ) %>% 
+  distinct(join.location.1)
+
+  
