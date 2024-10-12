@@ -120,9 +120,9 @@ rimet_formatted <- rimet %>%
     ),
     
     ## Location ----
-    # Make join.location column which will be used to left join location info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
+    # Make join.all column which will be used to left join location info and source info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
     # extract matching strings
-    join.location.list = sapply(
+    join.all.list = sapply(
       biovol.notes, function(x) {
         
         # make regex pattern by taking all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
@@ -139,8 +139,8 @@ rimet_formatted <- rimet %>%
     ),
     
     # unlist the join.location.list column and format
-    join.location.unlist = sapply(
-      join.location.list, function(x){
+    join.all.unlist = sapply(
+      join.all.list, function(x){
         # unlist
         unlist <- paste0(x, collapse = " ")
         
@@ -148,61 +148,50 @@ rimet_formatted <- rimet %>%
         lower_case <- tolower(unlist)
         
         # set "na" to NA
-        no_na <- na_if(lower_case, "na")
-        
-        str_replace_all(no_na, "léman shl2", "léman") # When its the lake monitoring program and the lake listed remove the lake monitoring program to just leave the lake
+        na_if(lower_case, "na")
       }
     ),
     
-    # When two lakes are stated split into two columns
+    # make join.location columns from join.all
     join.location.1 = case_when(
-      join.location.unlist == "bourget léman" ~ "bourget",
-      join.location.unlist == "na" ~ "unknown",
-      TRUE ~ join.location.unlist
+      # when the lake monitoring program and lake is mentioned then keep just the lake
+      join.all.unlist == "léman shl2" ~ "léman",
+      
+      # When two lakes are stated split into two columns
+      join.all.unlist == "bourget léman" ~ "bourget",
+      
+      # set NA to unknown - only need for this column as don't need unknown for all location columns
+      is.na(join.all.unlist) ~ "unknown",
+      TRUE ~ join.all.unlist
     ),
     
     join.location.2 = case_when(
-      join.location.unlist == "bourget léman" ~ "léman",
+      # when the lake monitoring program and lake is mentioned then keep just the lake
+      join.all.unlist == "léman shl2" ~ "léman",
+      # When two lakes are stated split into two columns
+      join.all.unlist == "bourget léman" ~ "léman",
       TRUE ~ NA
     )
   ) %>% 
   
-  # remove redundant columns
+  # remove redundant columns - join.all.unlisy will be used for sources so keep that
   select(
-    - join.location.list,
-    - join.location.unlist
+    - join.all.list,
+    - biovol.notes
   ) %>% 
   
-  mutate(
+  #mutate(
     ## Sources ----
     # Add in original.source.code column for any measurements that have a source in the biovol.notes
-    # make join.source column to left join source codes to
-    join.source = sapply(
-      stri_extract_all_regex(
-        biovol.notes, regex(
-          paste0(
-            "(?i)", paste0(
-              filter(
-                db_source_list, db.code == "db-1")$join.source, collapse = "|"
-            )
-          ) #take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
-        )
-      ),
-      paste0, collapse = " "
-    ),
+    # use join.all.unlist in above step for this
     
-    # make lower case
-    join.source = tolower(join.source) %>% 
-      na_if(., "na") # Make "NA" to NA
+    # left join original.source.code
+    left_join(
+      select(
+        filter(db_source_list, db.code == "db-1"),
+        join.source, source.code
+      ), by = c("join.all.unlist" = "join.source")
     ) %>% 
-  
-  # left join original.source.code
-  left_join(
-    select(
-      filter(db_source_list, db.code == "db-1"),
-      join.source, source.code
-    ), by = "join.source"
-  ) %>% 
   
   # rename
   rename(
@@ -211,8 +200,7 @@ rimet_formatted <- rimet %>%
   
   # remove redundant columns
   select(
-    - join.source,
-    - biovol.notes
+    - join.all.unlist
   ) %>% 
   
   ## Pivot ----
@@ -320,7 +308,7 @@ kremer_formatted <- kremer %>%
       TRUE ~ nu.bs
     ),
     
-    ## Location -- 
+    ## Location ----
     # change join.location to match db_location_sheet for ANSP as too many codes to go through each one and find location
     join.location.1 = if_else(
       join.source == "ANSP",
@@ -329,15 +317,16 @@ kremer_formatted <- kremer %>%
     ),
 
     ## Sample Dates ----
+    # split the sample dates into year and month
     sample.year = case_when(
-      stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"),
-      stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b"),
-      join.source == "ANSP" ~ "1994-2013"
+      stri_detect_regex(join.source, "\\b\\d{4}-\\d{4}\\b") ~ stri_extract_first_regex(join.source, "\\b\\d{4}-\\d{4}\\b"), # take years from the sample.date column
+      stri_detect_regex(sample.date, "\\b\\d{4}\\b") ~ stri_extract_first_regex(sample.date, "\\b\\d{4}\\b"), # when the date is in the source and not the date column take it from source column
+      join.source == "ANSP" ~ "1994-2013" # use the meta data for ANSP
     ),
     
-    sample.month = stri_extract_first_regex(sample.date, "(?<=-)\\d{2}(?=-)"),
+    sample.month = stri_extract_first_regex(sample.date, "(?<=-)\\d{2}(?=-)"), # take months from the sample.date column
     
-    # remove dates from the original.source column
+    # remove dates from the join.source column now they are in the date columns
     join.source = stri_replace_all_regex(join.source, "\\b.\\d{4}-\\d{4}\\b", "")
   ) %>% 
   
@@ -351,8 +340,8 @@ kremer_formatted <- kremer %>%
   left_join(
     select(
       filter(
-        db_source_list, db.code == "db-2"
-      ), source.code, join.source
+        db_source_list, db.code == "db-2" # select ones in the db_source_list that are just for this database
+      ), source.code, join.source # select just source.code and join.source columns from db_source_list
     ), by = "join.source"
   ) %>% 
   
@@ -532,6 +521,7 @@ odume_exact <- odume_formatted_raw %>%
     ) %>% 
   
   ## bodysize.measurement ----
+  # set bodysize.measurement to height or length
   mutate(
     bodysize.measurement = case_when(
       stri_detect_regex(original.body.size, "(?i)high|(?i)height") ~ "height",
@@ -751,7 +741,8 @@ odume_max <- odume_formatted_raw %>%
     # extract measurements from original.body.size
     max.body.size = as.numeric(stri_extract_first_regex(original.body.size, "\\d+(\\.\\d+)*(?= mm)")),
     
-    ## bodysize.measurement ----
+    ## Bodysize.measurement ----
+    # set measurment to length, width or height
     bodysize.measurement = case_when(
       stri_detect_regex(original.body.size, "(?i)length|(?i)long") ~ "length",
       stri_detect_regex(original.body.size, "(?i)height|(?i)hight|(?i)high") ~ "height",
@@ -1041,32 +1032,41 @@ hebert_formatted <- hebert %>%
   
   # left_join db_source_list info
   # original.source.code.1
-  left_join(., select(
-    filter(
-      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
-    source.code, join.source), # select just source.code and join.source columns
-            by = c("join.all.1" = "join.source")) %>% 
+  left_join(
+    select(
+      filter(
+        db_source_list, db.code == "db-4" # filter for just the references in hebert (db 4)
+        ), source.code, join.source), # select just source.code and join.source columns
+            by = c("join.all.1" = "join.source")
+    ) %>% 
   
   # original.source.code.2
-  left_join(., select(
-    filter(
-      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
-    source.code, join.source), # select just source.code and join.source columns
-    by = c("join.all.2" = "join.source")) %>% 
+  left_join(
+    select(
+      filter(
+        db_source_list, db.code == "db-4" # filter for just the references in hebert (db 4)
+        ), source.code, join.source # select just source.code and join.source columns
+      ), by = c("join.all.2" = "join.source")
+    ) %>% 
   
   # original.source.code.3
-  left_join(., select(
-    filter(
-      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
-    source.code, join.source), # select just source.code and join.source columns
+  left_join(
+    select(
+      filter(
+        db_source_list, db.code == "db-4" # filter for just the references in hebert (db 4)
+        ), 
+      source.code, join.source # select just source.code and join.source columns
+      ),
     by = c("join.all.3" = "join.source")) %>% 
   
   # original.source.code.4
-  left_join(., select(
-    filter(
-      db_source_list, db.code == "db-4"), # filter for just the references in hebert (db 4)
-    source.code, join.source), # select just source.code and join.source columns
-    by = c("join.all.4" = "join.source")) %>% 
+  left_join(
+    select(
+      filter(
+        db_source_list, db.code == "db-4" # filter for just the references in hebert (db 4)
+        ), source.code, join.source # select just source.code and join.source columns
+      ), by = c("join.all.4" = "join.source")
+    ) %>% 
   
   # rename
   rename(
@@ -1230,11 +1230,15 @@ hebert_formatted <- hebert %>%
   # Remove necessary unknowns
   mutate(
     join.full = stri_extract_all_regex(join.full, "\\d+(\\w)?|unknown"), # turn the join.full column into a list to use sapply
-    join.full = sapply(join.full, function(x){
-      unique_values <- unique(x) # get unique values to remove duplicates
-      paste_values <- paste(unique_values, collapse = ",") # concatenate list into a string
-      stri_replace_all_regex(paste_values, ",unknown|unknown,|unknown", "") # remove unknown so that when they are sepearted out into columns if the first column is empty know that is unknown and can do that with a if_else
-      #stri_replace_all_regex(unknown, ",,|,,,|,,,,|(?<!\\d)\\,", "")
+    
+    join.full = sapply(
+      join.full, function(x){
+        # get unique values to remove duplicates
+        unique_values <- unique(x)
+        # concatenate list into a string
+        paste_values <- paste(unique_values, collapse = ",")
+        # remove unknowns
+        stri_replace_all_regex(paste_values, ",unknown|unknown,|unknown", "") # so that when they are sepearted out into columns if the first column is empty know that is unknown and can do that with a if_else
       })
   ) %>% 
   
@@ -1586,6 +1590,7 @@ no_formatted <- NO %>%
       join.all.length,
       join.all.width
       ),
+    
     # change OBS to db-7 as this is code for it came from this paper
     join.all = if_else(
       join.all == "OBS",
