@@ -51,7 +51,7 @@ LT <- read_xlsx(master_db_path, sheet = "Laplace-Treyture")
 NO <- read_xlsx(master_db_path, sheet = "Neury-Ormanni")
 rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
 db_source_list <- read_xlsx(master_db_path, sheet = "source_list")
-db_location <- read_xlsx(master_db_path, sheet = "location")
+db_location <- read_xlsx(master_db_path, sheet = "location_join") # this is different to th full location list this is just for left joining join.location stuff to so that the location.codes can be joined from the full list later on
 db_extra <- read_xlsx(master_db_path, sheet = "extra_info")
 rimet_2012_sources <- read_xlsx(master_db_path, sheet = "Rimet_2012_sources")
 
@@ -121,40 +121,56 @@ rimet_formatted <- rimet %>%
     
     ## Location ----
     # Make join.location column which will be used to left join location info later on - extract any location info from the biovol.notes that match the locations in the join.location column in db_location
-    join.location = sapply(
-      stri_extract_all_regex(
-        biovol.notes, regex(
-          paste0(
-            "(?i)", paste0(
-              filter(
-                db_location, db.code == "db-1")$join.location, collapse = "|"
+    # extract matching strings
+    join.location.list = sapply(
+      biovol.notes, function(x) {
+        
+        # make regex pattern by taking all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
+        regex_pattern <- paste0(
+          "(?i)", paste0(
+            filter(
+              db_location, db.code == "db-1")$join.location, collapse = "|"
             )
-          ) # take all the the values in the db_source_list$join.source column that are from the rimmet db (1) and make them into a string seperated by | to turn it into a regex of place names seperated by the OR (|) operator
-        )
-      ),
-      paste0, collapse = " "
+          )
+        
+        # extract any strings that match the regex
+        extracted_locations <- stri_extract_all_regex(x, regex_pattern)
+      }
     ),
     
-    # set "NA" in location.code to NA
-    join.location = na_if(join.location, "NA") %>% 
-      tolower(.) %>% # make all lower case
-      str_replace_all(., "léman shl2", "léman"), # When its the lake monitoring program and the lake listed remove the lake monitoring program to just leave the lake
+    # unlist the join.location.list column and format
+    join.location.unlist = sapply(
+      join.location.list, function(x){
+        # unlist
+        unlist <- paste0(x, collapse = " ")
+        
+        # set to lower case
+        lower_case <- tolower(unlist)
+        
+        # set "na" to NA
+        no_na <- na_if(lower_case, "na")
+        
+        str_replace_all(no_na, "léman shl2", "léman") # When its the lake monitoring program and the lake listed remove the lake monitoring program to just leave the lake
+      }
+    ),
     
     # When two lakes are stated split into two columns
     join.location.1 = case_when(
-      join.location == "bourget léman" ~ "bourget",
-      TRUE ~ join.location
+      join.location.unlist == "bourget léman" ~ "bourget",
+      join.location.unlist == "na" ~ "unknown",
+      TRUE ~ join.location.unlist
     ),
     
     join.location.2 = case_when(
-      join.location == "bourget léman" ~ "léman",
+      join.location.unlist == "bourget léman" ~ "léman",
       TRUE ~ NA
     )
   ) %>% 
   
   # remove redundant columns
   select(
-    - join.location
+    - join.location.list,
+    - join.location.unlist
   ) %>% 
   
   mutate(
@@ -1147,11 +1163,12 @@ hebert_formatted <- hebert %>%
       join.all.1 == "10" & original.taxa.name == "Simocephalus acutifrons" ~ "10m",
       join.all.1 == "10" & original.taxa.name == "Scapholeberis aurita" ~ "10n",
       join.all.1 == "10" & original.taxa.name == "Eurycercus glacialis" ~ "10o",
-      join.all.1 == "10" & original.taxa.name == "Bythotrephes longimanus" ~ "13a",
-      join.all.1 == "10" & original.taxa.name == "Leptodora kindtii" ~ "13b",
-      join.all.1 == "10" ~ "18a",
-      join.all.1 == "10" ~ "23a",
-      join.all.1 == "10" ~ "26a",
+      join.all.1 == "13" & stri_detect_regex(original.taxa.name,"Bythotrephes longimanus") ~ "13a",
+      join.all.1 == "13" & original.taxa.name == "Leptodora kindtii" ~ "13b",
+      join.all.1 == "18" ~ "18a",
+      join.all.1 == "23" ~ "23a",
+      join.all.1 == "26" ~ "26a",
+      join.all.1 %in% c("2", "3", "5", "6", "8", "9", "20", "22", "25", "30", "32", "34", "37", "41", "45", "46", "49", "64", "65", "67") ~ "unknown",
       TRUE ~ join.all.1
     ),
     
@@ -1162,47 +1179,63 @@ hebert_formatted <- hebert %>%
       join.all.1 == "10" & original.taxa.name == "Ceriodaphnia pulchella" ~ "10h",
       join.all.1 == "10" & original.taxa.name == "Simocephalus exspinosus" ~ "10l",
       join.all.1 == "10" & original.taxa.name == "Eurycercus glacialis" ~ "10p",
-      join.all.1 == "10" ~ "18b",
-      join.all.1 == "10" ~ "23b",
-      join.all.1 == "10" ~ "26b",
-      TRUE ~ NA
+      join.all.1 == "18" ~ "18b",
+      join.all.1 == "23" ~ "23b",
+      join.all.1 == "26" ~ "26b",
+      TRUE ~ "unknown"
     ),
     
     # join.all.2:
     join.location.3 = case_when(
+      join.all.2 == "10" & original.taxa.name == "Eurycercus glacialis" ~ "10o",
       join.all.2 == "18" ~ "18a",
       join.all.2 == "23" ~ "23a",
       join.all.2 == "26" ~ "26a",
+      join.all.2 %in% c("2", "3", "5", "6", "8", "9", "20", "22", "25", "30", "32", "34", "37", "41", "45", "46", "49", "64", "65", "67") ~ "unknown",
       TRUE ~ join.all.2
     ),
     
     join.location.4 = case_when(
+      join.all.2 == "10" & original.taxa.name == "Eurycercus glacialis" ~ "10p",
       join.all.2 == "18" ~ "18b",
       join.all.2 == "23" ~ "23b",
       join.all.2 == "26" ~ "26b",
-      TRUE ~ NA
+      TRUE ~ "unknown"
       ),
     
     # join.all.3 - no ones with more than one location code
-    join.location.5 = join.all.3,
-    
-    # ojoin.all.4 - only one which is 18
-    join.location.6 = if_else(
-      join.all.4 == "18",
-      "18a",
-      NA
+    join.location.5 = case_when(
+      join.all.3 %in% c("2", "3", "5", "6", "8", "9", "20", "22", "25", "30", "32", "34", "37", "41", "45", "46", "49", "64", "65", "67") ~ "unknown",
+      TRUE ~ join.all.3
     ),
     
-    join.location.7 = if_else(
-      join.all.4 == "18",
-      "18b",
-      NA
+    # join.all.4 - only one which is 18
+    join.location.6 = case_when(
+      join.all.4 %in% c("2", "3", "5", "6", "8", "9", "20", "22", "25", "30", "32", "34", "37", "41", "45", "46", "49", "64", "65", "67") ~ "unknown",
+      join.all.4 == "18" ~ "18a",
+      TRUE ~ join.all.4
+    ),
+    
+    join.location.7 = case_when(
+      join.all.4 == "18" ~ "18b",
+      TRUE ~ join.all.4
     ),
     
     # Neaten up
     # join them all into one column and then separate out again to remove unecessary NAs
     join.full = paste(join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, sep = ",") %>% # have to use paste instead iof stri_c because of NA values
       stri_replace_all_regex(., ",NA", "")
+  ) %>%
+  
+  # Remove necessary unknowns
+  mutate(
+    join.full = stri_extract_all_regex(join.full, "\\d+(\\w)?|unknown"), # turn the join.full column into a list to use sapply
+    join.full = sapply(join.full, function(x){
+      unique_values <- unique(x) # get unique values to remove duplicates
+      paste_values <- paste(unique_values, collapse = ",") # concatenate list into a string
+      stri_replace_all_regex(paste_values, ",unknown|unknown,|unknown", "") # remove unknown so that when they are sepearted out into columns if the first column is empty know that is unknown and can do that with a if_else
+      #stri_replace_all_regex(unknown, ",,|,,,|,,,,|(?<!\\d)\\,", "")
+      })
   ) %>% 
   
   # remove columns so don't get mixes up when separating back out again
@@ -1223,6 +1256,15 @@ hebert_formatted <- hebert %>%
   separate(
     join.full, into = c("join.location.1", "join.location.2", "join.location.3", "join.location.4", "join.location.5"), sep = ","
     ) %>% 
+  
+  # assign empty in join.location.1 to unknown
+  mutate(
+    join.location.1 = if_else(
+      join.location.1 == "",
+      "unknown",
+      join.location.1
+    )
+  ) %>% 
   
   ## Extra info ----
   mutate(
@@ -1622,13 +1664,14 @@ no_formatted <- NO %>%
     join.location.1 = case_when(
       join.all == "1" ~ "1a",
       join.all == "13" ~ "13a",
+      !(join.all %in% c("1", "13", "14", "21", "31", "43", "70", "76", "77", "db-7")) ~ "unknown",
       TRUE ~ join.all
     ),
     
     join.location.2 = case_when(
       join.all == "1" ~ "1b",
       join.all == "13" ~ "13b",
-      TRUE ~ join.all
+      TRUE ~ NA
     )
   ) %>% 
   

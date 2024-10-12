@@ -466,4 +466,5 @@ x_locations <- all_raw %>%
   ) %>% 
   distinct(join.location.1)
 
-  
+# need to go through each join.location to see if they are the right ones in the location sheet
+# do what iv've done above for each one
