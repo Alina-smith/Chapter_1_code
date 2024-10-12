@@ -270,3 +270,4 @@ wos_formatted <- wos_raw_body %>%
 
 # Save
 saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
+
