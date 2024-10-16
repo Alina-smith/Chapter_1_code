@@ -1,6 +1,10 @@
 # Adding taxonomy data to the species list 
 # data ran through taxize on 21/5/2024
 
+# Aim of script
+# 1) resolved_gnr - Run the names through the gnr_resolve first to get rid of any spelling mistakes 
+# 2) Manually resolve any names that weren't picked up by resolver and also change ones that are form or variety back as they resolver gets rid of the var. f. and I want to keep them
+
 # packages
 library(tidyr)
 library(dplyr)
@@ -8,24 +12,23 @@ library(taxize)
 library(stringi)
 library(purrr)
 library(tibble)
-library(taxadb)
 
 # Import data
-all_raw <- readRDS("Data/data_processing/all_raw.rds")
+bodysize_joined <- readRDS("R/Data_outputs/databases/bodysize_joined.rds")
 
 ##### Resolve names ----
 
 ## 1) Initial run through gnr_resolve to fix any spelling mistakes
-resolved_gnr_raw <- select(all_raw, original.taxa.name) %>% 
+resolved_gnr <- select(bodysize_joined, original.taxa.name) %>% 
   # Select all distinct original.taxa.names from all_raw
-  distinct(original.taxa.name, .keep_all = TRUE)%>% 
+  distinct(original.taxa.name, .keep_all = TRUE) %>% 
   rowwise() %>% 
   mutate(
     # Run through resolver
     resolved = list(gnr_resolve(sci = original.taxa.name, http = "post", canonical = TRUE, best_match_only = TRUE)),
     
     # extract information
-    taxa.name = ifelse(
+    gnr.taxa.name = ifelse(
       "matched_name2" %in% colnames(resolved),
       resolved$matched_name2,
       NA
@@ -39,7 +42,31 @@ resolved_gnr_raw <- select(all_raw, original.taxa.name) %>%
   # remove excess info
   select(-resolved)
 # Save
-saveRDS(resolved_gnr_raw, file = "Data/taxize/resolved_gnr_raw.rds")
+saveRDS(resolved_gnr, file = "R/Data_outputs/taxonomy/resolved_gnr.rds")
+
+
+
+x <- resolved_gnr %>% 
+  filter(
+    is.na(gnr.taxa.name)
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 2) Manually resolve any names that didn't get picked up on first run through or were resolved wrong
 resolved_gnr_manual <- resolved_gnr_raw %>% 
@@ -162,17 +189,18 @@ saveRDS(resolved_gnr_manual, file = "Data/taxize/resolved_gnr_manual.rds")
 
 
 
-
-
 ### Resolve using gnr reolver
 ## 1) Create list of distinct original.taxa.names and run through gnr_resolve
-resolved_all_sources <- resolved_gnr_manual %>% 
+resolved_all_sources <- bodysize_joined %>% 
   # Select all distinct original.taxa.names from all_raw
-  distinct(taxa.name.gnr) %>% 
+  distinct(original.taxa.name) %>% 
+  
+  head(10) %>% 
+  
   rowwise() %>% 
   mutate(
     # Run through resolver
-    resolved = list(gnr_resolve(sci = taxa.name.gnr, http = "post", canonical = TRUE, fields = "all"))
+    resolved = list(gnr_resolve(sci = original.taxa.name, http = "post", canonical = TRUE, fields = "all"))
   )
 # Save
 saveRDS(resolved_all_sources, file = "Data/taxize/gnr_resolve/resolved_all_sources.rds")

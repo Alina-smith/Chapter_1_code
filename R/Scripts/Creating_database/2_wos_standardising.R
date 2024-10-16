@@ -272,8 +272,3 @@ wos_formatted <- wos_raw_body %>%
 
 # Save
 saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
-
-x <- wos_formatted %>% 
-  filter(
-    source.code == "58"
-  )
