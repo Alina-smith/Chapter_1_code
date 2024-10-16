@@ -16,10 +16,12 @@ library(tibble)
 # Import data
 bodysize_joined <- readRDS("R/Data_outputs/databases/bodysize_joined.rds")
 
-##### Resolve names ----
+# Resolve names ----
+# Need to run the names through the resolver to fix any spelling mistakes 
 
-## 1) Initial run through gnr_resolve to fix any spelling mistakes
+## 1) gnr_resolve ----
 resolved_gnr <- select(bodysize_joined, original.taxa.name) %>% 
+  
   # Select all distinct original.taxa.names from all_raw
   distinct(original.taxa.name, .keep_all = TRUE) %>% 
   rowwise() %>% 
@@ -28,7 +30,7 @@ resolved_gnr <- select(bodysize_joined, original.taxa.name) %>%
     resolved = list(gnr_resolve(sci = original.taxa.name, http = "post", canonical = TRUE, best_match_only = TRUE)),
     
     # extract information
-    gnr.taxa.name = ifelse(
+    resolved.taxa.name = ifelse(
       "matched_name2" %in% colnames(resolved),
       resolved$matched_name2,
       NA
@@ -41,32 +43,79 @@ resolved_gnr <- select(bodysize_joined, original.taxa.name) %>%
   ) %>% 
   # remove excess info
   select(-resolved)
+
+resolved_gnr <- resolved_gnr %>% 
+  rename(
+    resolved.taxa.name = gnr.taxa.name
+  )
+
 # Save
 saveRDS(resolved_gnr, file = "R/Data_outputs/taxonomy/resolved_gnr.rds")
 
+## Manual resolve ----
+# Manually resolve any names that weren't picked up by the resolver in the first run through or were wrong
+# when a taxa has a species name with the wrong genus the species is chosen
+resolved_manual <- resolved_gnr %>% 
+  
+  # left join all the manually resolved ones from manual_resolve spreadsheet
+  left_join(
+    manual_resolve, by = "original.taxa.name"
+  ) %>% 
+  
+  mutate(
+    
+    # editing ones the are easier to do with stri_detect than from the spreadsheet
+    resolved.taxa.name = case_when(
+      # Contain centric
+      stri_detect_regex(resolved.taxa.name, "\\(?i)centric\\b") ~ "Bacillariophyceae"
+      
+      # Ones that contain juvenile forms as the name
+      stri_detect_regex(original.taxa.name, '(?i)\\bNauplii\\b|(?i)\\bNauplius\\b|(?i)\\bcopepodite(?i)\\b') ~ "Copepoda",
+      stri_detect_regex(original.taxa.name, '(?i)\\bStomatocyst\\b') ~ "Chrysophyceae",
+      stri_detect_regex(original.taxa.name, '(?i)\\bCyst\\b|(?i)\\bCysts\\b') & stri_detect_regex(original.taxa.name, '(?i)Dinobryon|(?i)péridinien') ~ "Dinophyceae",
+      stri_detect_regex(original.taxa.name, '(?i)\\bCyst\\b|(?i)\\bCysts\\b') & stri_detect_regex(original.taxa.name, '(?i)Chrysophyceae|(?i)Chrysophycee') ~ "Chrysophyceae",
+      stri_detect_regex(original.taxa.name, '(?i)\\bCyst\\b|(?i)\\bCysts\\b') & stri_detect_regex(original.taxa.name, '(?i)Ceratium hirundinella') ~ "Ceratium hirundinella",
+      
+      stri_detect_regex(original.taxa.name, "(?i)Volvocale|(?i)Volvocal") ~ "Chlamydomonadales",
+      
+      # Ones that are a variety or form because the resolver removed the var. and f. and need that for the taxonomy stuff
+      stri_detect_regex(original.taxa.name, "\\bvar\\.|\\bf\\.") ~ original.taxa.name,
+      
+      TRUE ~ resolved.taxa.name
+      ),
+    
+    # remove any double spaces as resolver haven't picked these up
+    resolved.taxa.name = stri_replace_all_regex(resolved.taxa.name, "  ", " ")
+    )
+  
 
+x <- resolved_gnr %>% 
+  mutate(
+    down = case_when(
+      stri_detect_regex(original.taxa.name, " ") & !stri_detect_regex(resolved.taxa.name, " ") ~ "down",
+      TRUE ~ "same"
+    ),
+    sp = case_when(
+      stri_detect_regex(original.taxa.name, "sp\\.|spp\\.|\\bspp\\b|\\bsp\\b") ~ "sp",
+      TRUE ~ "not"
+    )
+  ) %>% 
+  filter(
+    down == "down",
+    sp == "not"
+  )
 
 x <- resolved_gnr %>% 
   filter(
-    is.na(gnr.taxa.name)
+    stri_detect_regex(original.taxa.name, "\\bCyst\\b")
   )
 
+y <- resolved_gnr %>% 
+  filter(
+    stri_detect_regex(original.taxa.name, "Cyst")
+  )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+|\\bf\\.
 
 ## 2) Manually resolve any names that didn't get picked up on first run through or were resolved wrong
 resolved_gnr_manual <- resolved_gnr_raw %>% 
