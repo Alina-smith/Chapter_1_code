@@ -230,10 +230,10 @@ wos_formatted <- wos_raw_body %>%
     ),
     
     ## Form no ----
-    form.no = if_else(
-      form == "individual",
-      1,
-      NA
+    form.no = case_when(
+      !is.na(form.no) ~ form.no,
+      form == "individual" ~ 1,
+      TRUE ~ NA
     ),
     
     ## Unknown

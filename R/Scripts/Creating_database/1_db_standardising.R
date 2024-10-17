@@ -1323,7 +1323,7 @@ gavrilko_formatted <- Gavrilko %>%
   mutate(
     ## Life.stage ----
     life.stage = case_when(
-      stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b") ~ "juvenile",
+      stri_detect_regex(original.taxa.name,  "\\b(?i)nauplii\\b|\\b(?i)Copepodit\\b") ~ "juvenile", # assuming Copepodit means Copepodite
       TRUE ~ "adult"),
     
     ## Extra info ----

@@ -1,124 +1,280 @@
-db.code,source.code,join.source,authors,year,title,publication,volume,issue,start.page,end.page,doi,ISSN,eISSN,ISBN,book.doi,join.source.1
-db-8,db-113,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergnzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14. 1991. 437 pages.,"Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 4: Achnanthaceae, Kritische Ergänzungen zu Achnanthes s.l., Navicula s.str., Gomphonema, Gesamtliteraturverzeichnis",Spektrum,4,NA,NA,NA,NA,NA,NA,9783827408389,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergänzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14. 1991. 437 pages.
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages.,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages.
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages.","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages."
-db-8,db-116,"Bibliotheca Diatomologica 46, 2002, Van de Vijver.","Van de Vijver, B; Frenot, Y; Beyens, L",2002,"Bibliotheca Diatomologica, Volume 46: Freshwater Diatoms from Ile de la Possession (Crozet Archipelago, Subantarctica)",Gebrüder Borntraeger Verlag,46,NA,NA,NA,NA,NA,NA,9783443570378,NA,"Bibliotheca Diatomologica 46, 2002, Van de Vijver."
-db-8,db-117,"M. Potapova and K. C. Ponader. Two common North American diatoms, Achnanthidium rivulare sp. nov. and A. deflexum (Reimer) Kingston: morphology, ecology and comparison with related species. Diatom Research 19 (1):33-57, 2004.","Potapova, M; Ponader, KC",2004,"Two common North American diatoms, Achnanthidium rivulare Sp. nov. and A. deflexum (Reimer) Kingston: Morphology, ecology and comparison with related species",Diatom Research,19,NA,33,57,10.1080/0269249X.2004.9705606,NA,NA,NA,NA,"M. Potapova and K. C. Ponader. Two common North American diatoms, Achnanthidium rivulare sp. nov. and A. deflexum (Reimer) Kingston: morphology, ecology and comparison with related species. Diatom Research 19 (1):33-57, 2004."
-db-8,db-118,Biovolume of ADMI,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume of ADMI
-db-8,db-119,"O. Monnier, H. Lange-Bertalot, F. Rimet, L. Hoffmann, and L. Ector. Achnanthidium atomoides sp. nov., a new diatom from the Grand-Duchy of Luxembourg. Vie Milieu 54:127-136, 2004.","Monnier, O; Lange-Bertalot, H; Rimet, R; Hoffmann, L; Ector, L",2004,"Achnanthidium atomoides sp. nov., a new diatom from the Grand-Duchy of Luxembourg",Vie et Milieu,54,NA,127,136,NA,NA,NA,NA,NA,"O. Monnier, H. Lange-Bertalot, F. Rimet, L. Hoffmann, and L. Ector. Achnanthidium atomoides sp. nov., a new diatom from the Grand-Duchy of Luxembourg. Vie Milieu 54:127-136, 2004."
-db-8,db-113,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergnzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14.  1991. 437 pages.,"Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 4: Achnanthaceae, Kritische Ergänzungen zu Achnanthes s.l., Navicula s.str., Gomphonema, Gesamtliteraturverzeichnis",Spektrum,4,NA,NA,NA,NA,NA,NA,9783827408389,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergänzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14.  1991. 437 pages.
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume ADLS,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume ADLS
-db-8,db-123,Bibliotheca Diatomologica Band 18,"Lange-Bertalot, H; Krammer, K",1989,"Bibliotheca Diatomologica, Volume 18: Achnanthes Eine Monographie der Gattung",Gebrüder Borntraeger Verlag,18,NA,NA,NA,NA,NA,NA,9783443570095,NA,Bibliotheca Diatomologica Band 18
-db-8,db-123,Bibliotheca Diatomologica 18,"Lange-Bertalot, H; Krammer, K",1989,"Bibliotheca Diatomologica, Volume 18: Achnanthes Eine Monographie der Gattung",Gebrüder Borntraeger Verlag,18,NA,NA,NA,NA,NA,NA,9783443570095,NA,Bibliotheca Diatomologica 18
-db-8,db-125,Bibliotheca Diatomologica Band 29 and Band 27,NA,NA,Bibliotheca Diatomologica,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Bibliotheca Diatomologica Band 29 and Band 27
-db-8,db-126,"Simonsen 1987, plate 221","Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,"Simonsen 1987, plate 221"
-db-8,db-126,"Simonsen 1987, plate 505","Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,"Simonsen 1987, plate 505"
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de ACOP,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de ACOP
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume Amphipleura pellucida,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume Amphipleura pellucida
-db-8,db-130,"Diatom of Europe, vol 2.","Lange-Bertalot, H",2001,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 2",Koeltz,2,NA,NA,NA,NA,NA,NA,978-3-904144-78-0,NA,"Diatom of Europe, vol 2."
-db-8,db-130,Diatom of Europe 2,"Lange-Bertalot, H",2001,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 2",Koeltz,2,NA,NA,NA,NA,NA,NA,978-3-904144-78-0,NA,Diatom of Europe 2
-db-8,db-133,Iconographia diatomologica 13,"Lange-Bertalot, H",2004,"Iconographia Diatomologica, Volume 13: Annotated Diatom Micrographs. Diatoms in Springs from Central Europe and elsewhere under the influence of hydrogeology and anthropogenic impacts",A.R.G. Gantner,13,NA,NA,NA,NA,NA,NA,9783906166148,NA,Iconographia diatomologica 13
-db-8,db-126,"Simonsen, plate 506","Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,"Simonsen, plate 506"
-db-8,db-135,"Van Heurck, H. 1896. A Treatise on the Diatomaceae. Translated by W.E. Baxter. William Wesley & Son, London. 558 pp., 35 pls.","Van Heurck, H",1896,A Treatise on the Diatomaceae,Kessinger Publishing,NA,NA,NA,NA,NA,NA,NA,978-1437470673,NA,"Van Heurck, H. 1896. A Treatise on the Diatomaceae. Translated by W.E. Baxter. William Wesley & Son, London. 558 pp., 35 pls."
-db-8,db-136,Iconographia Diatomologica 18,"Metzeltin, D; Lange-Bertalot, H",2007,"Iconographia Diatomologica, Volume 18: Tropical Diatoms of South America , II",A.R.G. Gantner,18,NA,NA,NA,NA,NA,NA,9783906166575,NA,Iconographia Diatomologica 18
-db-8,db-137,"Iconographia diatomologica, volume 2, 1996","Lange-Bertalot, H; Metzeltin, D",1996,"Iconographia Diatomologica, Volume 2: Indicators of Oligotrophy",Koeltz Botanical Books,2,NA,NA,NA,NA,NA,NA,9783874293860,NA,"Iconographia diatomologica, volume 2, 1996"
-db-8,db-138,"H. Lange-Bertalot and G. Moser. Brachysira. Monographie der Gattung. Bibliotheca Diatomologica 29:1-212, 1994.","Lange-Bertalot, H; Moser, G",1994,"Bibliotheca Diatomologica, Volume 29: Brachysira",Schweizerbart Science Publishers,29,NA,NA,NA,NA,NA,NA,9783443570200,NA,"H. Lange-Bertalot and G. Moser. Brachysira. Monographie der Gattung. Bibliotheca Diatomologica 29:1-212, 1994."
-db-8,db-133,Iconogrphia Diatomologica 13,"Lange-Bertalot, H",2004,"Iconographia Diatomologica, Volume 13: Annotated Diatom Micrographs. Diatoms in Springs from Central Europe and elsewhere under the influence of hydrogeology and anthropogenic impacts",A.R.G. Gantner,13,NA,NA,NA,NA,NA,NA,9783906166148,NA,Iconogrphia Diatomologica 13
-db-8,db-140,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages.","Krammer, K; Lange-Bertalot, H",1988,"Bacillariophyceae, Teil 2: Bacillariaceae, Epithemiaceae, Surirellaceae",Spektrum,2,NA,NA,NA,NA,NA,NA,9783827419125,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages."
-db-8,db-142,Diatom of Europe 3,"Krammer, K",2002,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 3",Koeltz,3,NA,NA,NA,NA,NA,NA,978-3-904144-84-1,NA,Diatom of Europe 3
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de CBAC,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de CBAC
-db-8,db-144,ADIAC website,ADIAC: Automatic Diatom Identification And Classification,NA,ADIAC: Automatic Diatom Identification And Classification,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,ADIAC website
-db-8,db-145,"F. E. Round, R. M. Crawford, and D. G. Mann. The diatoms. Biology, morphology of the genera., 1990. 747 pages. + personnal observations on cultures + F. Rimet, L. Ector, H. M. Cauchie, and L. Hoffmann. Changes in diatom-dominated biofilms during simulated improvements in water quality: implications for diatom-based monitoring in rivers. Eur.J.Phycol. 44:567-577, 2009.","Round, FE; Crawford, RM; Mann, DG",1990,Diatoms: Biology and Morphology of the Genera,Cambridge University Press,NA,NA,NA,NA,NA,NA,NA,9780521363181,NA,"F. E. Round, R. M. Crawford, and D. G. Mann. The diatoms. Biology, morphology of the genera., 1990. 747 pages. + personnal observations on cultures + F. Rimet, L. Ector, H. M. Cauchie, and L. Hoffmann. Changes in diatom-dominated biofilms during simulated improvements in water quality: implications for diatom-based monitoring in rivers. Eur.J.Phycol. 44:567-577, 2009."
-db-8,db-146,Diatom of Europe 4,"Krammer, K",2003,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 4",Koeltz,4,NA,NA,NA,NA,NA,NA,978-3-904144-99-5,NA,Diatom of Europe 4
-db-8,db-146,Diatoms of Europe 4.,"Krammer, K",2003,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 4",Koeltz,4,NA,NA,NA,NA,NA,NA,978-3-904144-99-5,NA,Diatoms of Europe 4.
-db-8,db-146,Diatoms of Europe 4. idem biovol CBAN,"Krammer, K",2003,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 4",Koeltz,4,NA,NA,NA,NA,NA,NA,978-3-904144-99-5,NA,Diatoms of Europe 4. idem biovol CBAN
-db-8,db-149,"DRUART, J.C. et STRAUB, F., 1988. - Description de deux nouvelles cyclotelles (Bacillariophyceae) de milieux alcalins et eutrophes : Cyclotella costei nov. sp. et Cyclotella wuethrichiana nov. sp. Schweiz. Z. Hydrol. 50 : 182-188.","Druart, JC; Straub, F",1988,Description de deux nouvelles Cyclotelles (Bacillariophyceae) de milieux alcalins et eutrophes:Cyclotella costei nov. sp. etCyclotella wuethrichiana nov. sp.,Swiss journal of hydrology,50,2,182,188,10.1007/BF02538985,1420-9055,NA,NA,NA,"DRUART, J.C. et STRAUB, F., 1988. - Description de deux nouvelles cyclotelles (Bacillariophyceae) de milieux alcalins et eutrophes : Cyclotella costei nov. sp. et Cyclotella wuethrichiana nov. sp. Schweiz. Z. Hydrol. 50 : 182-188."
-db-8,db-142,"K. Krammer. Cymbella, Ruggell, Germany:Gantner Verlag, 2002. 584 pages.","Krammer, K",2002,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 3",Koeltz,3,NA,NA,NA,NA,NA,NA,978-3-904144-84-1,NA,"K. Krammer. Cymbella, Ruggell, Germany:Gantner Verlag, 2002. 584 pages."
-db-8,db-151,Iconographia Diatomologica 17,"Antoniades, D; Hamilton, PB; Douglas, MSV; Smol, JP",2008,"Iconographia Diatomologica, Volume 17: Diatoms of North America: Freshwater Floras of Prince Patrick, Ellef Ringnes and northern",Gantner Verlag,17,NA,NA,NA,NA,NA,NA,9783906166506,NA,Iconographia Diatomologica 17
-db-8,db-137,Iconographia Diatomologica 2,"Lange-Bertalot, H; Metzeltin, D",1996,"Iconographia Diatomologica, Volume 2: Indicators of Oligotrophy",Koeltz Botanical Books,2,NA,NA,NA,NA,NA,NA,9783874293860,NA,Iconographia Diatomologica 2
-db-8,db-137,Iconogrphia Diatomologica 2,"Lange-Bertalot, H; Metzeltin, D",1996,"Iconographia Diatomologica, Volume 2: Indicators of Oligotrophy",Koeltz Botanical Books,2,NA,NA,NA,NA,NA,NA,9783874293860,NA,Iconogrphia Diatomologica 2
-db-8,db-154,"Diatom Research 17, 1, 2002. Hakansson,","Hakansson, H",2002,"A Compilation and Evaluation of Species in the General Stephanodiscus, Cyclostephanos and Cyclo℡la with a New Genus in the Family Stephanodiscaceae",Diatom Research,17,1,NA,NA,10.1080/0269249X.2002.9705534,NA,NA,NA,NA,"Diatom Research 17, 1, 2002. Hakansson,"
-db-8,db-155,Iconographia Diatomologica 8,"Reichardt, E",1999,"Iconographia Diatomologica, Volume 8: Taxonomy: Zur Revision der Gattung Gomphonema",Gantner Verlag,8,NA,NA,NA,NA,NA,NA,9783904144155,NA,Iconographia Diatomologica 8
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de CSBM,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume de CSBM
-db-8,db-158,Iconographia Diatomologica 14,"Siver, PA; Hamilton PB; Stachura-Suchoples K; Kociolek JP",2005,"Iconographia Diatomologica, Volume 14: Diatoms of North America",Koeltz Botanical Books,14,NA,NA,NA,NA,NA,NA,9783906166179,NA,Iconographia Diatomologica 14
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. - Biovolume de CMEN","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. - Biovolume de CMEN"
-db-8,db-160,Bibliotheca Diatomologica 27,"Lange-Berthalot, H",1993,"Bibliotheca Diatomologica, Volume 27: 85 Neue Taxa und über 100 Weitere Neu Definierte Taxa Ergänzend zur Süßwasserflora von Mitteleuropa",Gebrüder Borntraeger Verlag,27,NA,NA,NA,NA,NA,NA,9783443570187,NA,Bibliotheca Diatomologica 27
-db-8,db-142,Diatom of Europe 3. Biovolume de Cymbella excisa,"Krammer, K",2002,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 3",Koeltz,3,NA,NA,NA,NA,NA,NA,978-3-904144-84-1,NA,Diatom of Europe 3. Biovolume de Cymbella excisa
-db-8,db-113,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4.,"Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 4: Achnanthaceae, Kritische Ergänzungen zu Achnanthes s.l., Navicula s.str., Gomphonema, Gesamtliteraturverzeichnis",Spektrum,4,NA,NA,NA,NA,NA,NA,9783827408389,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4.
-db-8,db-163,Iconographia Diatomologica 9,"Lange-Bertalot, H",2000,"Iconographia Diatomologica, Volume 9: Diatoms of the Andes",Koeltz Botanical Books,9,NA,NA,NA,NA,NA,NA,9783904144209,NA,Iconographia Diatomologica 9
-db-8,db-146,"Krammer, K. 2003. Cymbopleura, Delicata, Navicymbula, Gomphocymbellopsis, Afrocymbella. In: H. Lange-Bertalot (ed.), Diatoms of Europe, Diatoms of the European Inland waters and comparable habitats. A.R.G. Gantner Verlag K.G., 4:529 pp.","Krammer, K",2003,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 4",Koeltz,4,NA,NA,NA,NA,NA,NA,978-3-904144-99-5,NA,"Krammer, K. 2003. Cymbopleura, Delicata, Navicymbula, Gomphocymbellopsis, Afrocymbella. In: H. Lange-Bertalot (ed.), Diatoms of Europe, Diatoms of the European Inland waters and comparable habitats. A.R.G. Gantner Verlag K.G., 4:529 pp."
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume DCOT,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume DCOT
-db-8,db-113,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Biovolume de DVUL,"Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 4: Achnanthaceae, Kritische Ergänzungen zu Achnanthes s.l., Navicula s.str., Gomphonema, Gesamtliteraturverzeichnis",Spektrum,4,NA,NA,NA,NA,NA,NA,9783827408389,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Biovolume de DVUL
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume DPET,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume DPET
-db-8,db-168,"Houk, V. and Klee, R. 2004. The stelligeroid taxa of the genus Cyclotella (Ktzing) Brbisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov. Diatom Research 19(2):203-228. Biovolume de Discotella stelligera","Houk, V; Klee, R",2004,The stelligeroid taxa of the genus Cyclotella (Kutzing) Brebisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov.,NA,19,NA,203,228,10.1080/0269249X.2004.9705871,NA,NA,NA,NA,"Houk, V. and Klee, R. 2004. The stelligeroid taxa of the genus Cyclotella (Kützing) Brébisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov. Diatom Research 19(2):203-228. Biovolume de Discotella stelligera"
-db-8,db-168,"Houk, V. and Klee, R. 2004. The stelligeroid taxa of the genus Cyclotella (Ktzing) Brbisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov. Diatom Research 19(2):203-228.","Houk, V; Klee, R",2004,The stelligeroid taxa of the genus Cyclotella (Kutzing) Brebisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov.,NA,19,NA,203,228,10.1080/0269249X.2004.9705871,NA,NA,NA,NA,"Houk, V. and Klee, R. 2004. The stelligeroid taxa of the genus Cyclotella (Kützing) Brébisson (Bacillariophyceae) and their transfer into the new genus Discostella gen. nov. Diatom Research 19(2):203-228."
-db-8,db-171,Bibliotheca Diatomologica 36,"Krammer, K",1997,"Bibliotheca Diatomologica, Volume 36: Die cymbelloiden Diatomeen - Eine Monographie der weltweit bekannten Taxa. Teil 1. Allgemeines und Encyonema",J. Cramer,36,NA,NA,NA,NA,NA,NA,NA,NA,Bibliotheca Diatomologica 36
-db-8,db-172,Bibliotheca Diatomologica 37,"Krammer,K",1997,"Bibliotheca Diatomologica, Volume 37: Die cymbelloiden Diatomeen, Teil 2: Encyonema part., Encyonopsis and Cymbellopsis",J. Cramer Verlag,37,NA,NA,NA,NA,NA,NA,9783443570286,NA,Bibliotheca Diatomologica 37
-db-8,db-140,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume EPAL","Krammer, K; Lange-Bertalot, H",1988,"Bacillariophyceae, Teil 2: Bacillariaceae, Epithemiaceae, Surirellaceae",Spektrum,2,NA,NA,NA,NA,NA,NA,9783827419125,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume EPAL"
-db-8,db-174,"M. Coste and L. Ector. Diatomes invasives exotiques ou rares en France: principales observation effectues au cours des dernires dcennies. Systematic and Geography of Plants 70:373-400, 2000.","Coste, m; Ector, L",2000,Diatomées invasives exotiques ou rares en France: Principales Observations effectuées au cours des dernières décennies,Systematics and Geography of Plants,70,NA,373,400,10.2307/3668651,NA,NA,NA,NA,"M. Coste and L. Ector. Diatomées invasives exotiques ou rares en France: principales observation effectuées au cours des dernières décennies. Systematic and Geography of Plants 70:373-400, 2000."
-db-8,db-117,Biovolume EOMI,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume EOMI
-db-8,db-176,Bibliotheca Diatomologica 38,"Moser, G; Lange-Bertalot, H; Metzeltin, D; Witkowski, A",1998,"Bibliotheca Diatomologica, Volume 38: Insel der Endemiten: Geobotanisches Phänomen Neukaledonien",Gebrüder Borntraeger Verlag,38,NA,NA,NA,NA,NA,NA,9783443570293,NA,Bibliotheca Diatomologica 38
-db-8,db-177,Iconographia Diatomologica 7,"Lange-Bertalot, H",2000,"Iconographia Diatomologica, Volume 7",Koeltz Botanical Books,7,NA,NA,NA,NA,NA,NA,9783904144100,NA,Iconographia Diatomologica 7
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume de ESUB","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume de ESUB"
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NDIF,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NDIF
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume FVUL,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume FVUL
-db-8,db-181,Iconographia Diatomologica 11,"Lange-Bertalot, H; Metzeltin, D",2002,"Iconographia Diatomologica, Volume 11: Diatoms from the 'Island Continent' Madagascar",Koeltz Botanical Books,11,NA,NA,NA,NA,NA,NA,9783904144940,NA,Iconographia Diatomologica 11
-db-8,db-182,"Reichardt 1997, Nova Hedwigia 65.","Reichardt, E",1997,Taxonomische Revision des Artenkomplexes um Gomphonema pumilum (Bacillariophyceae),Nova Hedwigia,NA,NA,99,129,10.1127/nova.hedwigia/65/1997/99,NA,NA,NA,NA,"Reichardt 1997, Nova Hedwigia 65."
-db-8,db-117,Reichardt 2001,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Reichardt 2001
-db-8,db-184,Iconographia Diatomologica 6,"Lange-Bertalot, H; Genkal SI",1999,"Iconographia Diatomologica, Volume 6: Phytogeography, Diversity, Taxonomy",Gantner Verlag,6,NA,NA,NA,NA,NA,NA,9783904144124,NA,Iconographia Diatomologica 6
-db-8,db-117,2006 Atlas Jap. Diat vol.1,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,2006 Atlas Jap. Diat vol.1
-db-8,db-117,Biovolume GDEC,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume GDEC
-db-8,db-188,"Kociolek, J.P. and Stoermer, E.F. 1988 [ref. 006059]. Taxonomy, ultrastructure and distribution of Gomphoneis herculeana, G. eriense and closely related species (Naviculales: Gomphonemataceae). Proceedings of the Academy of Natural Sciences of Philadelphia 140(2):24-97.","Kociolek, JP; Stoermer, EF",1988,"Taxonomy, Ultrastructure and Distribution of Gomphoneis herculeana, G. eriense and Closely Related Species (Naviculales: Gomphonemataceae)",Proceedings of the Academy of Natural Sciences of Philadelphia,140,2,24,97,NA,NA,NA,NA,NA,"Kociolek, J.P. and Stoermer, E.F. 1988 [ref. 006059]. Taxonomy, ultrastructure and distribution of Gomphoneis herculeana, G. eriense and closely related species (Naviculales: Gomphonemataceae). Proceedings of the Academy of Natural Sciences of Philadelphia 140(2):24-97."
-db-8,db-189,Lange-Bertalot-Festschrift - 65th Birthday,"Jahn, R; Kociolek, JP; Witkowski, A; Compère, P",2001,Studies on Diatoms. Dedicated to Prof. Dr. Dr. h. c. Horst Lange - Bertalot on the Occasion of his 65th Birthday,NA,NA,NA,NA,NA,NA,NA,NA,978-3-904144-26-1,NA,Lange-Bertalot-Festschrift - 65th Birthday
-db-8,db-117,taille moyenne,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,taille moyenne
-db-8,db-117,Biovolume HHUN,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume HHUN
-db-8,db-114,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergnzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14.  1991. 437 pages.K. Krammer. Cymbella, Ruggell, Germany:Gantner Verlag, 2002. 584 pages.K. Krammer. Cymbopleura, Delicata, Navicymbula, Gomphocymbellopsis, Afrocymbella, Ruggell, Germany:Gantner Verlag, 2003. 530 pages.K. Krammer. Morphologic investigations of the valve and girdle of the diatom genus Cymbella, 1981. 146 pages.","Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages.K. Krammer and H. Lange-Bertalot. Bacillariophyceae 4. Teil: Achnanthaceae. Kritische Ergänzungen zu Navicula (Lineolatae) und Gomphonema. Gesamtliteraturverzeichnis Teil 14.  1991. 437 pages.K. Krammer. Cymbella, Ruggell, Germany:Gantner Verlag, 2002. 584 pages.K. Krammer. Cymbopleura, Delicata, Navicymbula, Gomphocymbellopsis, Afrocymbella, Ruggell, Germany:Gantner Verlag, 2003. 530 pages.K. Krammer. Morphologic investigations of the valve and girdle of the diatom genus Cymbella, 1981. 146 pages."
-db-8,db-117,Coste 2000,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Coste 2000
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume LGOE,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume LGOE
-db-8,db-117,Biovolume LGOE,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume LGOE
-db-8,db-197,Iconographia diatomologica 12,"Lange-Bertalot, H; Cavacini P; Tagliaventi N; Alfinito S",2003,"Iconographia Diatomologica, Volume 12: Diatoms of Sardinia",Koeltz Botanical Books,12,NA,NA,NA,NA,NA,NA,9783906166018,NA,Iconographia diatomologica 12
-db-8,db-117,Biovolume MVAR,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume MVAR
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NVDS,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NVDS
-db-8,db-200,Bibliotheca Diatomologica 15,"Lange-Bertalot, H; Krammer, K",1987,"Bibliotheca Diatomologica, Volume 15: Bacillariaceae, Epithemiaceae, Surirellaceae",Gebrüder Borntraeger Verlag,15,NA,NA,NA,NA,NA,NA,9783443570064,NA,Bibliotheca Diatomologica 15
-db-8,db-126,Simonsen 1987,"Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,Simonsen 1987
-db-8,db-126,Simonsen,"Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,Simonsen
-db-8,db-140,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume NPAL, car pas retrouv Chlonoky 1963","Krammer, K; Lange-Bertalot, H",1988,"Bacillariophyceae, Teil 2: Bacillariaceae, Epithemiaceae, Surirellaceae",Spektrum,2,NA,NA,NA,NA,NA,NA,9783827419125,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume NPAL, car pas retrouvé Chlonoky 1963"
-db-8,db-130,Diatom of Europe 2. Biovolume NCAR,"Lange-Bertalot, H",2001,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 2",Koeltz,2,NA,NA,NA,NA,NA,NA,978-3-904144-78-0,NA,Diatom of Europe 2. Biovolume NCAR
-db-8,db-138,Bibliotheca Diatomologica 29,"Lange-Bertalot, H; Moser, G",1994,"Bibliotheca Diatomologica, Volume 29: Brachysira",Schweizerbart Science Publishers,29,NA,NA,NA,NA,NA,NA,9783443570200,NA,Bibliotheca Diatomologica 29
-db-8,db-114,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NEAM,"Krammer, K; Lange-Bertalot, H",1986,"Bacillariophyceae, 1. Teil: Naviculaceae",Spektrum,1,NA,NA,NA,NA,NA,NA,9783827426154,NA,K. Krammer and H. Lange-Bertalot. Bacillariophyceae 1. Teil: Naviculaceae.  1986. 876 pages. Biovolume NEAM
-db-8,db-117,Biovolume NGRE,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume NGRE
-db-8,db-177,Iconographia Diatomlogica 7,"Lange-Bertalot, H",2000,"Iconographia Diatomologica, Volume 7",Koeltz Botanical Books,7,NA,NA,NA,NA,NA,NA,9783904144100,NA,Iconographia Diatomlogica 7
-db-8,db-117,Biovolume NMEN,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume NMEN
-db-8,db-210,"Hohn, M.H. and Hellerman, J. 1963. The taxonomy and structure of diatom populations from three Eastern North American rivers using three sampling methods. Transactions of the American Microscopical Society 82(3):250-329.  Biovolume NLAN","Hohn, MH; Hellerman, J",1963,The Taxonomy and Structure of Diatom Populations from Three Eastern North American Rivers Using Three Sampling Methods,Transactions of the American Microscopical Society,82,3,250,329,10.2307/3223932,0003-0023,NA,NA,NA,"Hohn, M.H. and Hellerman, J. 1963. The taxonomy and structure of diatom populations from three Eastern North American rivers using three sampling methods. Transactions of the American Microscopical Society 82(3):250-329.  Biovolume NLAN"
-db-8,db-117,Biovolume NVDS,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume NVDS
-db-8,db-138,Bilbiotheca Diatomlogica 29,"Lange-Bertalot, H; Moser, G",1994,"Bibliotheca Diatomologica, Volume 29: Brachysira",Schweizerbart Science Publishers,29,NA,NA,NA,NA,NA,NA,9783443570200,NA,Bilbiotheca Diatomlogica 29
-db-8,db-138,Bilbiotheca Diatomlogica 29. Biovol de NUWE,"Lange-Bertalot, H; Moser, G",1994,"Bibliotheca Diatomologica, Volume 29: Brachysira",Schweizerbart Science Publishers,29,NA,NA,NA,NA,NA,NA,9783443570200,NA,Bilbiotheca Diatomlogica 29. Biovol de NUWE
-db-8,db-163,Iconographia Ditomologica 9,"Lange-Bertalot, H",2000,"Iconographia Diatomologica, Volume 9: Diatoms of the Andes",Koeltz Botanical Books,9,NA,NA,NA,NA,NA,NA,9783904144209,NA,Iconographia Ditomologica 9
-db-8,db-215,"Diatom research, 23, 2008,Tudesque, Rimet Ector.","Tudesque, L; Rimet, F; Ector, L",2008,"A New Taxon of the Section Nitzschiae Lanceolatae Grunow: Nitzschia Costei Sp. Nov. Compared to N. Fonticola Grunow, N. Macedonica Hustedt, N. Tropica Hustedt and Related Species",Diatom Research,23,2,483,501,10.1080/0269249X.2008.9705771,0269-249X,NA,NA,NA,"Diatom research, 23, 2008,Tudesque, Rimet Ector."
-db-8,db-117,NA,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,NA
-db-8,db-142,"K. Krammer. The genus Pinnularia, Ruggell, Germany:Gantner Verlag, 2000. 703 pages.","Krammer, K",2002,"Diatoms of the European Inland Waters and Comparable Habitats, Volume 3",Koeltz,3,NA,NA,NA,NA,NA,NA,978-3-904144-84-1,NA,"K. Krammer. The genus Pinnularia, Ruggell, Germany:Gantner Verlag, 2000. 703 pages."
-db-8,db-154,"Diatom Research 17, 1, 2002. Hakansson","Hakansson, H",2002,"A Compilation and Evaluation of Species in the General Stephanodiscus, Cyclostephanos and Cyclo℡la with a New Genus in the Family Stephanodiscaceae",Diatom Research,17,1,NA,NA,10.1080/0269249X.2002.9705534,NA,NA,NA,NA,"Diatom Research 17, 1, 2002. Hakansson"
-db-8,db-117,"Diatom n 18, 2002.",Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,"Diatom n 18, 2002."
-db-8,db-117,Biovolume PBOR,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Biovolume PBOR
-db-8,db-126,"Simonsen 1987, figure 315","Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,"Simonsen 1987, figure 315"
-db-8,db-123,Bibiotheca Diatomologica Band 18,"Lange-Bertalot, H; Krammer, K",1989,"Bibliotheca Diatomologica, Volume 18: Achnanthes Eine Monographie der Gattung",Gebrüder Borntraeger Verlag,18,NA,NA,NA,NA,NA,NA,9783443570095,NA,Bibiotheca Diatomologica Band 18
-db-8,db-223,"Diatom research 21, 2006, Morales","Morales, EA; Manoylov, KM",2006,Morphological Studies on Selected Taxa in the Genus Staurosirella Williams Et Round (bacillariophyceae) from Rivers in North America,Diatom Research,21,2,343,364,10.1080/0269249X.2006.9705674,0269-249X,NA,NA,NA,"Diatom research 21, 2006, Morales"
-db-8,db-184,Iconographia diatomologica 6.,"Lange-Bertalot, H; Genkal SI",1999,"Iconographia Diatomologica, Volume 6: Phytogeography, Diversity, Taxonomy",Gantner Verlag,6,NA,NA,NA,NA,NA,NA,9783904144124,NA,Iconographia diatomologica 6.
-db-8,db-117,"Diatom Research 2, 1987",Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,"Diatom Research 2, 1987"
-db-8,db-226,"Sims, P.A. 2001. The genus Praetriceratium gen. nov.: a survey of eupodiscoid genera with a sipho marginalis. Diatom Research 16(2):399-416.","Sims, PA",2001,The Genus Praetriceratium Gen. Nov.: A Survey of Eupodiscoid Genera with a Sipho Marginalis,Diatom Research,16,2,399,416,10.1080/0269249X.2001.9705527,0269-249X,NA,NA,NA,"Sims, P.A. 2001. The genus Praetriceratium gen. nov.: a survey of eupodiscoid genera with a sipho marginalis. Diatom Research 16(2):399-416."
-db-8,db-184,"Iconographia diatomologica 6, final stage of A. rossi, j'ai pris la taille mini de A. rossi","Lange-Bertalot, H; Genkal SI",1999,"Iconographia Diatomologica, Volume 6: Phytogeography, Diversity, Taxonomy",Gantner Verlag,6,NA,NA,NA,NA,NA,NA,9783904144124,NA,"Iconographia diatomologica 6, final stage of A. rossi, j'ai pris la taille mini de A. rossi"
-db-8,db-117,"Phycological Research, 2005.",Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,"Phycological Research, 2005."
-db-8,db-223,Diatom Research 21. E. Morales 2006.,"Morales, EA; Manoylov, KM",2006,Morphological Studies on Selected Taxa in the Genus Staurosirella Williams Et Round (bacillariophyceae) from Rivers in North America,Diatom Research,21,2,343,364,10.1080/0269249X.2006.9705674,0269-249X,NA,NA,NA,Diatom Research 21. E. Morales 2006.
-db-8,db-117,ID13,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,Unkown,ID13
-db-8,db-158,Iconographia Diatomologica 14. Biovolume STAN,"Siver, PA; Hamilton PB; Stachura-Suchoples K; Kociolek JP",2005,"Iconographia Diatomologica, Volume 14: Diatoms of North America",Koeltz Botanical Books,14,NA,NA,NA,NA,NA,NA,9783906166179,NA,Iconographia Diatomologica 14. Biovolume STAN
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume SHAN","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume SHAN"
-db-8,db-140,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume SUMI","Krammer, K; Lange-Bertalot, H",1988,"Bacillariophyceae, Teil 2: Bacillariaceae, Epithemiaceae, Surirellaceae",Spektrum,2,NA,NA,NA,NA,NA,NA,9783827419125,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 2. Teil: Bacillariaceae, Epithemiaceae, Surirellaceae.  1988. 596 pages. Biovolume SUMI"
-db-8,db-154,"Diatom Research, 17, 1. Hakasson","Hakansson, H",2002,"A Compilation and Evaluation of Species in the General Stephanodiscus, Cyclostephanos and Cyclo℡la with a New Genus in the Family Stephanodiscaceae",Diatom Research,17,1,NA,NA,10.1080/0269249X.2002.9705534,NA,NA,NA,NA,"Diatom Research, 17, 1. Hakasson"
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume de TPSN","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Biovolume de TPSN"
-db-8,db-126,"Simonsen 1987, Plates 647-648,","Simonsen, R",1987,Atlas and catalogue of the diatom types of Friedrich Hustedt,NA,NA,NA,NA,NA,NA,NA,NA,978-3-443-50007-8,NA,"Simonsen 1987, Plates 647-648,"
-db-8,db-115,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Pas trouv, mis le mme biovolume que THLA","Krammer, K; Lange-Bertalot, H",1991,"Bacillariophyceae, Teil 3: Centrales, Fragilariaceae, Eunotiaceae",Spektrum,3,NA,NA,NA,NA,NA,NA,9783827408273,NA,"K. Krammer and H. Lange-Bertalot. Bacillariophyceae 3. Teil: Centrales, Fragilariaceae, Eunotiaceae., 1991. 576  pages. Pas trouvé, mis le même biovolume que THLA"
-db-8,db-189,Lange-Bertalot-Festschrift,"Jahn, R; Kociolek, JP; Witkowski, A; Compère, P",2001,Studies on Diatoms. Dedicated to Prof. Dr. Dr. h. c. Horst Lange - Bertalot on the Occasion of his 65th Birthday,NA,NA,NA,NA,NA,NA,NA,NA,978-3-904144-26-1,NA,Lange-Bertalot-Festschrift
-db-8,db-190,Iconographia Diatomologica 13,"Lange-Bertalot, H",2004,"Iconographia Diatomologica, Volume 13: Annotated Diatom Micrographs. Diatoms in Springs from Central Europe and elsewhere under the influence of hydrogeology and anthropogenic impacts",A.R.G. Gantner,13,NA,NA,NA,NA,NA,NA,9783906166148,NA,Iconographia Diatomologica 13
-db-8,db-191,Iconographia Diatomologica 12,"Lange-Bertalot, H; Cavacini P; Tagliaventi N; Alfinito S",2003,"Iconographia Diatomologica, Volume 12: Diatoms of Sardinia",Koeltz Botanical Books,12,NA,NA,NA,NA,NA,NA,9783906166018,NA,Iconographia Diatomologica 12
-db-8,db-192,Iconographia diatomologica 9,"Lange-Bertalot, H",2000,"Iconographia Diatomologica, Volume 9: Diatoms of the Andes",Koeltz Botanical Books,9,NA,NA,NA,NA,NA,NA,9783904144209,NA,Iconographia diatomologica 9
-db-8,db-193,Iconographia diatomologica 14,"Siver, PA; Hamilton PB; Stachura-Suchoples K; Kociolek JP",2005,"Iconographia Diatomologica, Volume 14: Diatoms of North America",Koeltz Botanical Books,14,NA,NA,NA,NA,NA,NA,9783906166179,NA,Iconographia diatomologica 14
+original.taxa.name,resolved.taxa.name,resolved.source
+chlorelloidea sp.,Myxococcoides chlorelloidea,manually
+anabaena flos-aquae f. lemmermannii,Dolichospermum lemmermannii,manually
+anabaena flos-aquae var. treleasii,Dolichospermum flosaquae,manually
+cf mantellum sp.,Mantellum,manually
+stomatocyst 130,NA,NA
+anabaena bergii var. limneticum,Anabaena bergii var. limnetica,manually
+stomatocyst 114,NA,NA
+cell of dinobryon,Dinobryon,manually
+scenedesmus lefevrii var. manguinii,Scenedesmus lefevrei var. manguinii,manually
+cf. katodinium fongiforme,Katodinium fungiforme,manually
+stomatocyst fr1,NA,NA
+stomatocyst sp.,NA,NA
+volvocale 4 flagella,NA,NA
+palmeacea sp.,Palmellaceae,manually
+cosmarium novae-semliae var. sibericum,Cosmarium novae-semliae var. sibiricum,manually
+stomatocyst 153,NA,NA
+stomatocyst 2 spines,NA,NA
+cysts of chrysophyceae (14µ),NA,NA
+stomatocyst 219,NA,NA
+stomatocyst 5 spines,NA,NA
+ulothricophyceae sp.,Chlorophyceae,manually
+stomatocyst 3 spines,NA,NA
+stomatocyst 62,NA,NA
+stomatocyst 4 spines,NA,NA
+stomatocyst 6 spines,NA,NA
+staurastrum johnsoni var. triradiatum,Staurastrum johnsonii var. triradiatum,manually
+staurastrum messikomerii f. planctonicum,Staurastrum messikommeri,manually
+cysts of chrysophyceae (30µ),NA,NA
+staurastrum sebaldii var. ornatum,Staurastrum sebaldi var. ornatum,manually
+staurastrum sebaldii var. ornatum f quadriradiata,Staurastrum manfeldtii,manually
+bulbochaeta,Bulbochaete,manually
+paralauterboniella,Paralauterborniella,manually
+stichtochironomus,Chironomus,manually
+nadinatella,Nadinatella,manually
+afroneurus ethiopicus,Heptageniidae,manually
+adenophleboides,Adenophlebiodes,manually
+gomphidia quarreli confinii,Gomphidia quarrei,manually
+thaumeliidae,Thaumaleidae,manually
+bosminids spp.,Bosminidae,manually
+ceriopdaphnia sp.,Ceriodaphnia,manually
+daphniids spp.,Daphniidae,manually
+diaptomiids spp.,Diaptomus,manually
+harpacticoids spp.,Harpacticoida,manually
+copepodit calanoida,Calanoida,manually
+copepodit cyclopoida,Cyclopoida,manually
+nauplii copepoda,NA,NA
+scenedesmus quadricauda var. longispinus,Scenedesmus quadricauda var. longispina,manually
+achnanthidium minutissima var. affinis,chnanthidium affine,manually
+caloneis schumanniana var. biconstricta f.  minor,Caloneis schumanniana var. biconstricta,manually
+encyonema silesiacum var. latestriata,Encyonema silesiacum,manually
+nitzschia liebetruthii var. liebetruthii,Nitzschia liebethruthii,manually
+pinnularia acrospheria var. acrospheria,Pinnularia acrosphaeria,manually
+cyclopoid copepod,Cyclopoida,manually
+harpacticoid sp.,Harpacticoida,manually
+calanoid,Calanoida,manually
+cyclopoid,Cyclopoida,manually
+nauplii,NA,NA
+stonefly,Plecoptera,manually
+mayfly,Ephemeroptera,manually
+anabena,Anabaena,manually
+bdelodea,Bdelloidea,manually
+synechoccus,Synechococcus,manually
+non identified ciliate,Ciliophora,manually
+tintinidium sp.,Tintinnidium,manually
+copepodite,NA,NA
+ciclopoida,Cyclopoida,manually
+chlorococcoum sp.,Chlorococcum,manually
+euglenofita,Euglenophyta,manually
+peridinial,Peridiniales,manually
+fitoflagelado,NA,manually
+volvocal sp.2,NA,NA
+volvocal sp.1,NA,NA
+dinoflagelado desnudo,Dinoflagellata,manually
+raphydophyta,Raphidophyceae,manually
+pseudocuadrigula sp,NA,manually
+polynucleobacterwuianus,Polynucleobacter wuianus,manually
+polynucleobacterasymbioticus,Polynucleobacter asymbioticus,NA
+polynucleobacterduraquae,Polynucleobacter duraquae,manually
+polynucleobactersinensis,Polynucleobacter sinensis,manually
+polynucleobacteryangtzensis,Polynucleobacter yangtzensis,manually
+bothriococcus,Botryococcus,manually
+fragillaria,Fragilaria,manually
+gloeomonas�kupfferi,Gloeomonas kupfferi,manually
+monoraphidium�arcuatum,Monoraphidium arcuatum,manually
+kijanebalola devestiva,Kijanebalola devestiva,manually
+chrysomonad,Chrysomonadales,manually
+coconeis sp.,Cocconeis,manually
+macrochetus sp.,Macrochaetus,manually
+nauplii cyclopoida,NA,NA
+nauplii calanoida,NA,NA
+nauplii harpacticoida,NA,NA
+diacyclops bicuspifatus thomas,Diacyclops bicuspidatus thomasi,manually
+artrospira ssp,Arthrospira,manually
+cosmarium laeve var. pseudoctangulare,Cosmarium laeve var. pseudo-octangulare,manually
+leiblenia ssp,Leibleinia,manually
+porphyrosihon ssp,Porphyrosiphon,manually
+tetrademus ssp,Tetradesmus,manually
+a sterionella formosa,Asterionella formosa,manually
+gymnodiniurn sp .,Gymnodinium,manually
+borgheillia dodgei,Borghiella dodgei,manually
+tetrastrumelegans playfair,Tetrastrum elegans,manually
+calanoid copepodid,Calanoida,manually
+cyclopoid copepodid,Cyclopoida,manually
+harpacticoid,Harpacticoida,manually
+ostracod,Ostracod,manually
+actinotaenium silvae-nigrae var. paralellum,Actinotaenium silvae-nigrae var. parallelum,manually
+cosmarium botrytis var. medioleave,Cosmarium botrytis var. mediolaeve,manually
+cosmarium contractum var. minimum,Cosmarium contractum var. minutum,manually
+cosmarium moniliferum var. panduriforme,Cosmarium moniliforme var. panduriforme,manually
+cosmarium quadratulum var. boldii,Cosmarium quadratulum var. boldtii,manually
+euastrum luetkemulleri var. carnicolicum,Euastrum luetkemuelleri var. carniolicum,manually
+staurastrum polymorphum var. pigmaeum,Staurastrum punctulatum var. pygmaeum,manually
+tetmemorus leavis var. minutus,Tetmemorus laevis var. minutus,manually
+xanthidium antilopaeum var. leave,Xanthidium antilopaeum var. laeve,manually
+calanoid nauplii,NA,NA
+copepd nauplii,NA,NA
+cyclopoid copepodites,NA,NA
+ankistrodesmus sp.,Ankistrodesmus,manually
+oocystis sp.,Oocystis,manually
+chroomonas sp.,Chroomonas,manually
+cryptomonas sp.,Cryptomonas,manually
+rhodomonas sp.,Rhodomonas,manually
+nitzschia sp.,Nitzschia,manually
+mixed ciliates,Ciliophora,manually
+staurophyra spp.,Ciliophora,manually
+brachionusquadridentatus,Brachionus Quadridentatus,manually
+macrothris sp,Macrothrix,manually
+coccoid oval,Coccoid,manually
+coccoid sphere,Coccoid,manually
+tintionnopsis,Tintinnopsis,manually
+cyclopoids,Cyclopoida,manually
+chlorophyceae small colony,NA,NA
+chlorella + choricysits,Chloraphyta,manually
+coelosphaerium kutzingii,NA,NA
+ulothrix barrel cell somtimes surounded by mucous,NA,NA
+chlorophyceae indetermined big,NA,NA
+cylindrospermum bourget03,NA,NA
+ulothrix short cell and broken filament,NA,NA
+centric (cyclotella + stephanodiscus),Stephanodiscaceae,manually
+centric <10µm,NA,NA
+ankyra flagellated zoospore,NA,NA
+kirchneriella dichotomococcoides,Kirchneriella,manually
+chlorophyceae indetermined small,NA,NA
+cyst 1 of chrysophyceae,NA,NA
+oedogonium large cell bourget03,NA,NA
+ulothrix long cell,NA,NA
+cyst chrysophycee n°1,NA,NA
+fotterella tetrachlorella,Fotterella tetrachlorella,manually
+dinobryon anneciense,Dinobryon anneciense,manually
+centric >10µm,NA,NA
+cyst 2 of chrysophyceae,NA,NA
+cyst of dinobryon,NA,NA
+micro chlorophyceae,Chlorophyceae,manually
+pseudostaurastrum alternans,Staurastrum alternans,manually
+peridiniopsis umbonatum,Peridinium umbonatum,manually
+"cyst of chrysophyceaes n°2 (diam. 17,5µm)",NA,NA
+cyst of ceratium hirundinella,NA,NA
+cyst of péridinien,NA,NA
+kephyrion gracilis,Kephyriopsis gracilis,manually
+gomphosphaeria pallidum,Coelosphaerium pallidum,manually
+navicula utermhii,Navicula utermhii,manually
+merismopedia tenuis,Merismopedia tenuissima,manually
+ictinogomphus ruwenzorica,Ictinogomphus,manually
+ictinogomphus selysi,Ictinogomphus,manually
+ictinogomphus soror,Ictinogomphus,manually
+allocnemis singularis,Allocnemis,manually
+chaoborus (sayomyia),NA,NA
+bosmina liederi/longirostris,NA,NA
+bosmina longispina-maritima,Bosmina (Eubosmina) coregoni,manually
+bythotrephes longimanus-(total),Bythotrephes longimanus,manually
+bythotrephes longimanus-(core),Bythotrephes longimanus,manually
+bythotrephes longimanus-(spine),NA,NA
+chydorus bicuspidatus,Cyclops bicuspidatus,manually
+cyclops bicuspidatus-thomasi,Diacyclops thomasi,manually
+cyclops leuckarti-(m),Mesocyclops leuckarti,manually
+daphnia cucullataxgaleata,NA,NA
+daphnia galeata-mendotae,NA,NA
+diacyclops bicuspidatus-thomasi,Diacyclops thomasi,manually
+diacyclops bicuspifatus-thomas,Diacyclops thomasi,manually
+diaptomus graciloides-(m),Eudiaptomus graciloides,manually
+tropocyclops prasinus-mexicanus,Tropocyclops prasinus mexicanus,manually
+cyclotella distinguenda-unipunctata,Cyclotella distinguenda var. unipunctata,manually
+fallacia difficillimoides,Fallacia difficillimoides,manually
+gomphonema ba var. icum,Gomphonema bavaricum,manually
+luticola af f mutica,Luticola mutica,manually
+nitzschia observé-drien-proche-nifr,NA,NA
+limnocalanus macrurus,Limnocalanus macrurus,manually
+unknown rotifer,Rotifera,manually
+golden flagellates,Chrysophyceae,manually
+euglena small,NA,NA
+small scuticociliata,Scuticociliate,manually
+copepod nauplii,NA,NA
+polyarthra aff. vulgaris,Polyarthra vulgaris,manually
+trichocerca dixon nuttali,Trichocerca dixonnuttalli,manually
+cyclopoida nauplii,NA,NA
+cyclopoida copepodid,NA,NA
+small greens,NA,manually
+small chrysophytes,Chrysophyceae,manually
+carteria compressa,Carteria compressa,manually
+planctonema lacustris,Planctonema,manually
+small flagelates,NA,manually
+chlamydocapsa cingulata,Chlamydocapsa,manually
+colpoda stanu,Colpoda,manually
+dolichospermum variabilis,NA,NA
+heterolepadella ehrenbergi,Lepadella ehrenbergi,manually
+cyclopoida copepodite,NA,NA
+bicosoeca lauterbornii,Bicosoeca lauterbornei,manually
+centritractus pseudobrunneus,Centritractus brunneus,manually
+chrysococcus ovoides,Chrysococcocystis ovoides,manually
+coccomyxa lunaris,Coccomyxa,manually
+coenocystis diplococca,Coenocystis,manually
+cryptomonas bütschlii,Cryptomonas,manually
+desmarella sphaeroidea,NA,NA
+gloeococcus planctogloea,Gloeococcus planctogloea,manually
+nephroselmis pelagica,Nephroselmis,manually
+prismatella parvulus,Prismatella hexagona,manually
+scenedesmus tortuosus,Scenedesmus acuminatus f. tortuosus,manually
+tetrablepharis obovalis,Tetrablepharis obovalis,manually
+tetraselmis elegans,Tetraselmis,manually
+synedra acusvar,Synedra acus var. acus,manually
+desmodesmus obliquus,Scenedesmus obliquus,manually
+haplotaenium trabecula,Pleurotaenium trabecula var. rectum,manually
+sphaerozosma umbertianum,Sphaerozosma aubertianum,manually
+chlamydomonas moewusii,Chlamydomonas moewusii,manually
+cryptomonas erosa,Cryptomonas erosa,manually
+ceratium furcoides,Ceratium furcoides,manually
+alona affinis leydig,NA,NA
+eubosmina corregoni baird,Bosmina (Eubosmina) coregoni,manually
+bosmina longispina leydig,NA,NA
+bosmina longirostris müller,Bosmina longirostris,manually
+ceriodaphnia dubia richard,Ceriodaphnia dubia,manually
+ceriodaphnia reticulata jurine,Ceriodaphnia reticulata,manually
+chydorus sphaericus müller,NA,NA
+chydorus brevilabris frey,Chydorus brevilabris,manually
+daphnia ambigua scourfield,Daphnia ambigua,manually
+daphnia catawba coker,Daphnia catawba,manually
+daphnia longispina müller,NA,NA
+daphnia magna straus,Daphnia magna,manually
+daphnia pulex leydig,Daphnia pulex,manually
+daphnia pulicaria forbes,Daphnia pulicaria,manually
+daphnia rosea sars,Daphnia rosea,manually
+diaphanosoma brachyurum liéven,Diaphanosoma brachyurum,manually
+holopedium gibberum zaddach,Holopedium gibberum,manually
+sida crystallina müller,Sida crystallina,manually
+polyphemus pediculus linnee,Polyphemus pediculus,manually
+acanthocyclops robustus sars,Acanthocyclops robustus,manually
+acanthocyclops vernalis fischer,Acanthocyclops vernalis,manually
+cyclops scutifer sars,Cyclops scutifer,manually
+cyclops vicinus ulianine,Cyclops vicinus,manually
+eucyclops speratus lilljeborg,NA,NA
+mesocyclops edax forbes,Mesocyclops edax,manually
+tropocyclops prasinus fischer,Tropocyclops prasinus,manually
+thermocyclops crassus fischer,Thermocyclops crassus,manually
+diaptomus minutus lilljeborg,Leptodiaptomus minutus,manually
+diaptomus oregonensis lilljeborg,NA,NA
+epischura lacustris forbes,Epischura lacustris,manually
+leptodiaptomus minutus lilljeborg,Leptodiaptomus minutus,manually
+leptodiaptomus sicilis forbes,Leptodiaptomus sicilis,manually
+onychodiaptomus birgei marsh,Onychodiaptomus birgei,manually
+skistodiaptomus oregonensis lilljeborg,Skistodiaptomus oregonensis,manually
+skistodiaptomus reighardi marsh,Skistodiaptomus reighardi,manually
+daphnia coregoni,Bosmina coregoni,manually
+calanus jinrnarchicus,Calanus finmarchicus,manually
+pseudencentrum cf. diglandula,Encentrum diglandula,manually
+pseudencentrum cf. sutor,Encentrum sutor,manually
+strobilidium acutum,Strombidium acutum,manually
+small mixed ciliates,Ciliophora,manually
+monommata ventralis,Monommata,manually
+unidentified chrysophyte flagellate,Chrysophyceae,manually
+unidentified chrysophyte ovoid,Chrysophyceae,manually
+unidentified coccoid cyanophyta,Cyanophyceae,manually
+unidentified coccoid spherical,NA,NA
+unidentified colonial greens,NA,manually
+unidentified flagellate,NA,manually
+unidentified flagellate ovoid,NA,manually
+unidentified flagellates fusiform,NA,manually
+unidentified pennales,Bacillariophyceae,manually
+unidentified centrales,Bacillariophyceae,manually
+nauplius,NA,NA

@@ -22,7 +22,13 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
   mutate(
     ## Make uid column ----
     # to give each data.point a uid aswell as each individual a uid
-    uid = row_number()
+    uid = row_number(),
+    
+    # set original.taxa.name to lower case to make later steps with taxonomy easier
+    original.taxa.name = tolower(original.taxa.name),
+    
+    # Remove any invisible chacters from the original.taxa.name - replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
+    original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*")
   ) %>% 
   
   ## reorder - make easier for mutating across
