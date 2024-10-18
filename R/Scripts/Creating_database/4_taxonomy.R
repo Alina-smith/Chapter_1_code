@@ -155,9 +155,9 @@ saveRDS(resolved_taxa_list, file = "R/Data_outputs/taxonomy/resolved_taxa_list.r
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 
-# Taxonomy ----
-
 # Taxonomy - gnr ----
+
+# Taxonomy - gnr_resolve ----
 # get the taxonony from the gnr_resolve as this allows access to algae base which is the best for harmonising names for the phytoplankton and can gte a list of all other databases so don't need to run through multiple times
 
 taxonomy_gnr_raw <- resolved_taxa_list %>% 
@@ -175,7 +175,7 @@ taxonomy_gnr_raw <- resolved_taxa_list %>%
 # Save
 saveRDS(taxonomy_gnr_raw, file = "R/Data_outputs/taxonomy/taxonomy_gnr_raw.rds")
 
-# Taxonomy - taxonomy list ----
+# Taxonomy gnr - taxonomy list ----
 # format the information from taxonomy_gnr_raw
 
 taxonomy_gnr_extracted <- taxonomy_gnr_raw %>% 
@@ -302,22 +302,66 @@ taxonomy_gnr_extracted <- taxonomy_gnr_raw %>%
   )
     
 # Save
-saveRDS(taxonomy_gnr, file = "R/Data_outputs/taxonomy/taxonomy_gnr_extracted.rds")
+saveRDS(taxonomy_gnr_extracted, file = "R/Data_outputs/taxonomy/taxonomy_gnr_extracted.rds")
 
-y <- classification("Kirchneriella microscopica", db = "gbif")
 
-x <- taxonomy_gnr %>% 
+# Taxonomy - classification ----
+# gbif chosen because recognised the most and hadled sysnonyms well
+
+# run through with rows = 1 on as would take too long to manually select all
+taxonomy_class_raw <- resolved_taxa_list %>% 
+  
+  # Get list of distinct resolved.taxa.names to speed it up
+  distinct(
+    resolved.taxa.name
+  ) %>% 
+
   mutate(
-    species = ifelse("species" %in% tax.ab$rank, tax.ab$name[tax.ab$rank == "species"], NA_character_)
+    # run through classification
+    taxonomy.gbif = list(classification(resolved.taxa.name, db = "gbif", return_id = TRUE, rows = 1)[[1]])
   ) %>% 
   
-  filter(
-    resolved.taxa.name != species
+  # make tax.uid to help with later steps
+  # make a data.frame to remove rowwise from when it was saved as rds from the resolving stage
+  as.data.frame(taxonomy_class_raw) %>% 
+  
+  mutate(
+    # make tax.uid to help with later steps
+    tax.uid = paste("tax", row_number(), sep = "-")
   )
 
-  ifelse("rank" %in% colnames(taxonomy.algaebase),as.character(taxonomy.algaebase$rank[nrow(taxonomy.algaebase)]),NA_character_),
-  species.algaebase = ifelse("species" %in% taxonomy.algaebase$rank, taxonomy.algaebase$name[taxonomy.algaebase$rank == "species"], NA_character_),
+# Save
+saveRDS(taxonomy_class_raw, file = "R/Data_outputs/taxonomy/taxonomy_class_raw.rds")
+  
+  
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 ### Resolve using gnr reolver
 ## 1) Create list of distinct original.taxa.names and run through gnr_resolve
 resolved_all_sources <- bodysize_joined %>% 
