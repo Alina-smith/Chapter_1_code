@@ -152,21 +152,171 @@ resolved_taxa_list <- resolved_gnr %>%
   
 # Save
 saveRDS(resolved_taxa_list, file = "R/Data_outputs/taxonomy/resolved_taxa_list.rds")
+# Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 
+# Taxonomy ----
 
+# Taxonomy - gnr ----
+# get the taxonony from the gnr_resolve as this allows access to algae base which is the best for harmonising names for the phytoplankton and can gte a list of all other databases so don't need to run through multiple times
 
+taxonomy_gnr_raw <- resolved_taxa_list %>% 
+  # Get list of distinct resolved.taxa.names to speed it up
+  distinct(
+    resolved.taxa.name
+    ) %>% 
+  
+  # Run through gnr_resolve
+  mutate(
+    # set to all fields to get taxonomy from all the APIs that is avaiable
+    taxonomy = list(gnr_resolve(sci = resolved.taxa.name, http = "post", canonical = TRUE, fields = "all"))
+  )
+  
+# Save
+saveRDS(taxonomy_gnr_raw, file = "R/Data_outputs/taxonomy/taxonomy_gnr_raw.rds")
 
+# Taxonomy - taxonomy list ----
+# format the information from taxonomy_gnr_raw
 
+taxonomy_gnr_extracted <- taxonomy_gnr_raw %>% 
+  # rename taxonomy column for ease of understanding
+  rename(
+    tax.raw = taxonomy
+  ) %>% 
+  
+  mutate(
+    ## Separate out sources ----
+    
+    # assign the information for each source to their own columns
+    ab.raw = ifelse("AlgaeBase" %in% tax.raw$data_source_title,
+                    list( # make it a list so that it will return that line of information
+                      filter( 
+                        tax.raw, tax.raw$data_source_title == "AlgaeBase") %>% # select ones from algaebase
+                        slice(1) # some have more than one entry for the same database so select just the first one
+                      ),
+                    list(data.frame(user_supplied_name = NA))),  # need to make a new dataframe with user_supplied_name and assign it NA so that in later steps there is a common column between all rows
+    
+    tol.raw = ifelse("Open Tree of Life Reference Taxonomy" %in% tax.raw$data_source_title,
+                    list( # make it a list so that it will return that line of information
+                      filter( 
+                        tax.raw, tax.raw$data_source_title == "Open Tree of Life Reference Taxonomy") %>% # select ones from algaebase
+                        slice(1) # some have more than one entry for the same database so select just the first one
+                    ),
+                    list(data.frame(user_supplied_name = NA))),  # need to make a new dataframe with user_supplied_name and assign it NA so that in later steps there is a common column between all rows
+    
+    itis.raw = ifelse("Integrated Taxonomic Information SystemITIS" %in% tax.raw$data_source_title,
+                     list( # make it a list so that it will return that line of information
+                       filter( 
+                         tax.raw, tax.raw$data_source_title == "Integrated Taxonomic Information SystemITIS") %>% # select ones from algaebase
+                         slice(1) # some have more than one entry for the same database so select just the first one
+                     ),
+                     list(data.frame(user_supplied_name = NA))),  # need to make a new dataframe with user_supplied_name and assign it NA so that in later steps there is a common column between all rows
+    
+    gbif.raw = ifelse("GBIF Backbone Taxonomy" %in% tax.raw$data_source_title,
+                      list( # make it a list so that it will return that line of information
+                        filter( 
+                          tax.raw, tax.raw$data_source_title == "GBIF Backbone Taxonomy") %>% # select ones from algaebase
+                          slice(1) # some have more than one entry for the same database so select just the first one
+                      ),
+                      list(data.frame(user_supplied_name = NA))),  # need to make a new dataframe with user_supplied_name and assign it NA so that in later steps there is a common column between all rows
+    
+    ## Extract information from sources ----
+    # Algaebase
+    tax.ab = if_else(
+      is.na(ab.raw$user_supplied_name),
+      # if there is no taxonomy info then make a dataframe of NAs
+      list(
+        data.frame(
+          names = NA,
+          ranks = NA
+          )
+        ),
+      # if there is taxonomy info then make a taxonomy dataframe by taking the information in classification_path for the names and classification_path_ranks for the corresponding rank
+      list(
+        data.frame(
+          names = unlist(stri_split_fixed(ab.raw$classification_path, "|")),
+          ranks = unlist(stri_split_fixed(ab.raw$classification_path_ranks, "|"))
+          )
+        )
+      ),
+    
+    # Tree of life
+    tax.tol = if_else(
+      is.na(tol.raw$user_supplied_name),
+      # if there is no taxonomy info then make a dataframe of NAs
+      list(
+        data.frame(
+          names = NA,
+          ranks = NA
+        )
+      ),
+      # if there is taxonomy info then make a taxonomy dataframe by taking the information in classification_path for the names and classification_path_ranks for the corresponding rank
+      list(
+        data.frame(
+          names = unlist(stri_split_fixed(tol.raw$classification_path, "|")),
+          ranks = unlist(stri_split_fixed(tol.raw$classification_path_ranks, "|"))
+        )
+      )
+    ),
+    
+    # ITIS
+    tax.itis = if_else(
+      is.na(itis.raw$user_supplied_name),
+      # if there is no taxonomy info then make a dataframe of NAs
+      list(
+        data.frame(
+          names = NA,
+          ranks = NA
+        )
+      ),
+      # if there is taxonomy info then make a taxonomy dataframe by taking the information in classification_path for the names and classification_path_ranks for the corresponding rank
+      list(
+        data.frame(
+          names = unlist(stri_split_fixed(itis.raw$classification_path, "|")),
+          ranks = unlist(stri_split_fixed(itis.raw$classification_path_ranks, "|"))
+        )
+      )
+    ),
+    
+    # GBIF
+    tax.gbif = if_else(
+      is.na(gbif.raw$user_supplied_name),
+      # if there is no taxonomy info then make a dataframe of NAs
+      list(
+        data.frame(
+          names = NA,
+          ranks = NA
+        )
+      ),
+      # if there is taxonomy info then make a taxonomy dataframe by taking the information in classification_path for the names and classification_path_ranks for the corresponding rank
+      list(
+        data.frame(
+          names = unlist(stri_split_fixed(gbif.raw$classification_path, "|")),
+          ranks = unlist(stri_split_fixed(gbif.raw$classification_path_ranks, "|"))
+        )
+      )
+    )
+  ) %>% 
+  select(
+    -ab.raw:-gbif.raw
+  )
+    
+# Save
+saveRDS(taxonomy_gnr, file = "R/Data_outputs/taxonomy/taxonomy_gnr_extracted.rds")
 
+y <- classification("Kirchneriella microscopica", db = "gbif")
 
+x <- taxonomy_gnr %>% 
+  mutate(
+    species = ifelse("species" %in% tax.ab$rank, tax.ab$name[tax.ab$rank == "species"], NA_character_)
+  ) %>% 
+  
+  filter(
+    resolved.taxa.name != species
+  )
 
-
-
-
-
-
-
+  ifelse("rank" %in% colnames(taxonomy.algaebase),as.character(taxonomy.algaebase$rank[nrow(taxonomy.algaebase)]),NA_character_),
+  species.algaebase = ifelse("species" %in% taxonomy.algaebase$rank, taxonomy.algaebase$name[taxonomy.algaebase$rank == "species"], NA_character_),
 
 ### Resolve using gnr reolver
 ## 1) Create list of distinct original.taxa.names and run through gnr_resolve
