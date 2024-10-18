@@ -28,14 +28,6 @@
   # units = units for measurment
   # measurement.type = if it is an average /raw/range etc
 
-# Packages ----
-library(tidyr)
-library(tidyverse)
-library(readxl)
-library(stringi)
-library(taxize)
-library(ggplot2)
-library(here)
 
 # data ----
 #set relative file paths

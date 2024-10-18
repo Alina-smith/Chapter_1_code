@@ -6,15 +6,10 @@
 # 1) resolved_gnr - Run the names through the gnr_resolve first to get rid of any spelling mistakes 
 # 2) Manually resolve any names that weren't picked up by resolver and also change ones that are form or variety back as they resolver gets rid of the var. f. and I want to keep them
 
-# packages
-library(tidyr)
-library(dplyr)
-library(taxize)
-library(stringi)
-library(purrr)
-library(tibble)
+# Import data ----
+# set file path:
+master_db_path <- here("Raw_data", "Master_db_traits.xlsx")
 
-# Import data
 bodysize_joined <- readRDS("R/Data_outputs/databases/bodysize_joined.rds")
 
 # Resolve names ----
@@ -50,27 +45,30 @@ resolved_gnr <- select(bodysize_joined, original.taxa.name) %>%
 saveRDS(resolved_gnr, file = "R/Data_outputs/taxonomy/resolved_gnr.rds")
 
 # Resolve - manual resolve ----
-# Manually resolve any names that weren't picked up by the resolver in the first run through or were wrong
-# Changes that were made:
-  # Found all that were bumped up a taxonomic rank by the resolver and if the species is valid keep that otherwise keep the higher rank
-  # Ones that were the name for the juvenile form were changed to the taxa.name that juvenile form refers to
-  # Manually search for the taxa names for ones that weren't picked up by the resolver- NA 
-  # Select any that had the *SpecChar* regex and manually resolve
+# Find all the taxa.names that needed to be resolved manually from the gnr_resolve dataframe and manually resolved them in a separate excel sheet
+# How taxa.names were chosen for manual resolving:
+  # Ones that were bumped up a taxonomic rank by the resolver - if the species is valid keep that otherwise keep the higher rank
+  # Ones where the resolved.taxa.name was set to the name of the juvenile form or a common name instead of the taxa.name (e.g. nauplii or cyclops instead of copepoda)
+  # Ones that weren't picked up by the resolver at all - gave NA for the resolved.taxa.name
+  # Ones with the *SpecChar* regex put in to replcae special characters when joining the data together just to check that the regex didn't cause the resolver to resolve it weirdly
 
-  # when a taxa has a species name with the wrong genus the species is chosen
+# How manual resolving was carried out:
+  # When the species name could be found then use that
+  # When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
   # when the species can't be found then the next highest rank is chosen
   # When two species are stated then the closet common higher group is used
 
-## List of ones that need to be changed ----
-# Find ones to manually resolve:
+## To manually resolve list ----
+# Finding all the taxa.names from resolved_gnr to manually resolve based on the criteria above
 
-# NAs - ones that weren't picked up by the resolver
+# Weren't resolved:
 NAs <- resolved_gnr %>% 
   filter(
     is.na(resolved.taxa.name)
   )
 
-# Ones that were bumped up from a species level to higher:
+# Bumped up a taxonomic level:
+## Find all that has a space in the original.taxa.name and not in the resolved.taxa.name as this will indicate that it was two names (species) and now one name (higher rank)
 bumped_up <- resolved_gnr %>% 
   mutate(
     bumped = case_when(
@@ -88,7 +86,7 @@ bumped_up <- resolved_gnr %>%
     sp == "not",
   )
 
-# Ones where the resolved taxa.name was wrong and wouldn't of been picked up in previous steps:
+# Resolved.taxa.name is juvenile form or common name:
 resolved_wrong <- resolved_gnr %>% 
   mutate(
     wrong = case_when(
@@ -100,163 +98,60 @@ resolved_wrong <- resolved_gnr %>%
     wrong == "yes"
   )
 
-# Join together
-to_manually_resolve <- bind_rows(NAs, bumped_up, resolved_wrong) %>% 
+# Special charaters:
+spec_char <- resolved_gnr %>% 
+  filter(
+    stri_detect_regex(original.taxa.name, "\\*SpecChar\\*")
+  )
+
+# Join together - list of names to resolve manually
+to_resolve_manually <- bind_rows(NAs, bumped_up, resolved_wrong, spec_char) %>% 
   # get distinct original.taxa.names in case some got picked up more than once
   distinct(
     original.taxa.name
   )
 
 # Save
-write_csv(to_manually_resolve, "R/Data_outputs/Taxonomy/to_manually_resolve.csv")
+write_csv(to_resolve_manually, "R/Data_outputs/Taxonomy/to_resolve_manually.csv")
 
-## Join in manualy resolved ones ----
+## Join in manually resolved ones ----
+# replace the resolved.taxa.name of the ones in resolved_gnr to the manually resolved ones when a manually resolved name is present
 
-# Import the edited manually resolved data
-x <- read_xlsx(here("Raw_data","manual_resolve.xlsx"), sheet = "manual_resolve")
-y <- read_xlsx(here("Raw_data","manual_resolve.xlsx"), sheet = "new")
+# Import the to_resolve_manual list with the now manually resolved names
+manually_resolved <- read_xlsx(here("Raw_data","manually_resolved.xlsx"), sheet = "manually_resolved")
 
-z <- left_join(y, x, by = "original.taxa.name")
-
-write_csv(z, "z.csv")
-
-
-
-# Join the manually resolved names from the manual_resolve_sheet
-resolved_manual <- resolved_gnr %>% 
+# Join the manually resolved names from the manually_resolved
+resolved_taxa_list <- resolved_gnr %>% 
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
-    manual_resolve_sheet,
+    manually_resolved,
     by = "original.taxa.name",
     suffix = c(".gnr", ".manual")
   ) %>% 
   
   # select the ones left joined in
   mutate(
-    resolved.taxa.name = if_else(
-      !is.na(resolved.taxa.name.manual),
-      resolved.taxa.name.manual,
-      resolved.taxa.name.gnr
+    resolved.taxa.name = case_when(
+      resolved.taxa.name.manual == "couldn't resolve" ~ NA, # change the ones that couldn't be resolved to NA
+      !is.na(resolved.taxa.name.manual) ~ resolved.taxa.name.manual,
+      TRUE ~ resolved.taxa.name.gnr
     ),
     
-    resolved.source = if_else(
-      !is.na(resolved.source.manual),
-      resolved.source.manual,
-      resolved.source.gnr
+    resolved.source = case_when(
+      resolved.taxa.name.manual == "couldn't resolve" ~ NA,
+      !is.na(resolved.source.manual) ~ resolved.source.manual,
+      TRUE ~ resolved.source.gnr
     )
-  )
-%>% 
-  
+  ) %>% 
+
   select(
     original.taxa.name,
     resolved.taxa.name,
     resolved.source
   )
   
-
-
-
-## 2) Manually resolve any names that didn't get picked up on first run through or were resolved wrong
-resolved_gnr_manual <- resolved_gnr_raw %>% 
-  mutate(
-    resolved.source.gnr = ifelse(
-      is.na(taxa.name)|
-        stri_detect_regex(original.taxa.name, '\\b(?i)var.|\\b(?i)f.|(?i)\\bNauplii\\b|(?i)\\bCyst\\b|(?i)\\bCysts\\b|Bythotrephes longimanus|\\b(?i)centric\\b')|
-        original.taxa.name %in% c("Dinobryon anneciense", "Chydorus bicuspidatus", "Kirchneriella dichotomococcoides", "Fallacia difficillimoides", "Kephyrion gracilis", "Coelosphaerium kutzingii",
-                                  "Gomphosphaeria pallidum", "Ictinogomphus ruwenzorica", "Ictinogomphus selysi", "Allocnemis singularis", "Ictinogomphus soror", "Peridiniopsis umbonatum",
-                                  "Pseudostaurastrum alternans", "Cyclops bicuspidatus-thomasi", "Diacyclops bicuspidatus-thomasi", "Diacyclops bicuspifatus-thomas", "Cyclotella distinguenda-unipunctata",
-                                  "Diaptomus graciloides-(M)", "Cyclops leuckarti-(M)", "Bosmina longispina-maritima", "Navicula utermhii", "Fotterella tetrachlorella", "micro Chlorophyceae", "Gomphonema ba var. icum",
-                                  "Cyclops sp.", "Polypedilum subgenus Polypedilum", "Polypedilum subgenus Pentapedium")
-      ,
-      "Manually",
-      resolved.source),
-    taxa.name.gnr = case_when(
-      # weird ones
-      original.taxa.name == "micro Chlorophyceae" ~ "Chlorophyceae",
-      original.taxa.name == "Gomphonema ba var. icum" ~ "Gomphonema bavaricum",
-      stri_detect_regex(original.taxa.name, "\\b(?i)centric\\b") ~ "Bacillariophyceae",
-      original.taxa.name == "Gomphonema ba var. icum" ~ "Gomphonema bavaricum",
-      original.taxa.name == "Polypedilum subgenus Pentapedium" ~ "Polypedilum",
-      original.taxa.name == "Polypedilum subgenus Polypedilum" ~ "Polypedilum",
-      original.taxa.name == "Cyclops sp." ~ "Copepoda",
-      original.taxa.name == 'Cyst of Ceratium hirundinella' ~ 'Ceratium hirundinella',
-      original.taxa.name == "Daphnia hyalinaxgaleata" ~ "Daphnia",
-      
-      # Any that have a variety or form keep the same as the resolver can't handle them
-      stri_detect_regex(original.taxa.name, '\\b(?i)var\\.|\\b(?i)f\\.') ~ original.taxa.name,
-      
-      # manually resolve any that were not picked up (NA)
-      original.taxa.name == 'Bulbochaeta' ~ "Bulbochaete",
-      original.taxa.name == 'Chlorelloidea sp.' ~ 'Myxococcoides chlorelloidea',
-      original.taxa.name == 'cf Mantellum sp.' ~ 'Mantellum',
-      original.taxa.name == 'Cell of Dinobryon' ~ "Dinobryon",
-      original.taxa.name == 'cf. Katodinium fongiforme' ~ 'Katodinium fungiforme',
-      original.taxa.name == 'Volvocale 4 flagella' ~ 'Chlamydomonadales',
-      original.taxa.name == 'Palmeacea sp.' ~ 'Palmellaceae',
-      original.taxa.name == 'Ulothricophyceae sp.' ~ "Chlorophyceae",
-      original.taxa.name == 'Bosminids spp.' ~ "Bosminidae",
-      original.taxa.name == 'Ceriopdaphnia sp.' ~ "Ceriodaphnia",
-      original.taxa.name == 'Daphniids spp.' ~ "Daphniidae",
-      original.taxa.name == 'Diaptomiids spp.' ~ "Diaptomus",
-      original.taxa.name == 'Harpacticoids spp.' ~ "Harpacticoida",
-      original.taxa.name == 'Thaumeliidae' ~ "Thaumaleidae",
-      original.taxa.name == 'Adenophleboides' ~"Adenophlebiodes",
-      original.taxa.name == 'Gomphidia quarreli confinii' ~ "Gomphidia quarrei",
-      original.taxa.name == 'Copepodit Calanoida' ~ "Calanoida",
-      original.taxa.name == 'Copepodit Cyclopoida' ~ "Cyclopoida",
-      original.taxa.name == 'Anabaena flos-aquae f. lemmermannii' ~ "Dolichospermum lemmermannii",
-      original.taxa.name == 'Anabaena flos-aquae var. treleasii' ~ "Dolichospermum flosaquae",
-      original.taxa.name == 'Staurastrum sebaldii var. ornatum f quadriradiata' ~ "Staurastrum manfeldtii",
-      original.taxa.name == 'Achnanthidium minutissima var. affinis' ~ "Achnanthidium affine",
-      original.taxa.name == 'Stichtochironomus' ~ 'Chironomus',
-      original.taxa.name == 'Paralauterboniella' ~ 'Paralauterborniella',
-      # keep any that were not picked up but cannot be manually resolved the same as original.taxa.name
-      original.taxa.name %in% c('Afroneurus ethiopicus', "Nadinatella") ~ original.taxa.name,
-      
-      # change any that contain cyst/nauplii/stomatocyst
-      stri_detect_regex(original.taxa.name, '(?i)\\bNauplii\\b') ~ "Copepoda",
-      stri_detect_regex(original.taxa.name, '(?i)\\bStomatocyst\\b') ~ "Chrysophyceae",
-      stri_detect_regex(original.taxa.name, '(?i)\\bCyst\\b|(?i)\\bCysts\\b') & stri_detect_regex(original.taxa.name, '(?i)Dinobryon|(?i)péridinien') ~ "Dinophyceae",
-      stri_detect_regex(original.taxa.name, '(?i)\\bCyst\\b|(?i)\\bCysts\\b') & stri_detect_regex(original.taxa.name, '(?i)Chrysophyceae|(?i)Chrysophycee') ~ "Chrysophyceae",
-      
-      # # Change any that were originally species but bumped to genus level 
-      original.taxa.name == "Pseudostaurastrum alternans" ~ "Staurastrum alternans",
-      original.taxa.name %in% c("Cyclops bicuspidatus-thomasi", "Diacyclops bicuspidatus-thomasi", "Diacyclops bicuspifatus-thomas")  ~ "Diacyclops thomasi",
-      original.taxa.name == "Cyclotella distinguenda-unipunctata" ~ "Cyclotella distinguenda var. unipunctata",
-      original.taxa.name == "Diaptomus graciloides-(M)" ~ "Eudiaptomus graciloides",
-      original.taxa.name == "Cyclops leuckarti-(M)" ~ "Mesocyclops leuckarti",
-      stri_detect_regex(original.taxa.name, "Bythotrephes longimanus") ~ "Bythotrephes longimanus",
-      original.taxa.name == "Bosmina longispina-maritima" ~ "Bosmina (Eubosmina) coregoni",
-      original.taxa.name == "Navicula utermhii" ~ "Navicula utermoehlii",
-      original.taxa.name == "Fotterella tetrachlorella" ~ "Fotterella tetrachlorelloides",
-      original.taxa.name == 'Anabaena flos-aquae' ~ "Dolichospermum flosaquae",
-      original.taxa.name == 'Merismopedia tenuis' ~ "Merismopedia tenuissima",
-      
-      # keep the rest of the ones bumped to genus the same as original.taxa.name
-      original.taxa.name %in% c("Dinobryon anneciense", "Chydorus bicuspidatus", "Kirchneriella dichotomococcoides", "Fallacia difficillimoides", "Kephyrion gracilis", "Coelosphaerium kutzingii",
-                                "Gomphosphaeria pallidum", "Ictinogomphus ruwenzorica", "Ictinogomphus selysi", "Allocnemis singularis", "Ictinogomphus soror", "Peridiniopsis umbonatum") ~ original.taxa.name,
-      
-      # Keep the rest the same
-      TRUE ~ taxa.name
-    ),
-    
-    # remove any double spaces as resolver haven't picked these up
-    taxa.name.gnr = stri_replace_all_regex(taxa.name.gnr, "  ", " ")
-  ) %>% 
-  select(-taxa.name, -resolved.source)
 # Save
-saveRDS(resolved_gnr_manual, file = "Data/taxize/resolved_gnr_manual.rds")
-
-
-# making a chgange to add to github
-
-
-
-
-
-
-
-
+saveRDS(resolved_taxa_list, file = "R/Data_outputs/taxonomy/resolved_taxa_list.rds")
 
 
 

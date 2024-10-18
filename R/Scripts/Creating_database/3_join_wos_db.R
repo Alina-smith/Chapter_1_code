@@ -1,14 +1,5 @@
 ## Join the DB and WOS data together and format anything to make the same
 
-# Packages ----
-library(tidyr)
-library(tidyverse)
-library(readxl)
-library(stringi)
-library(taxize)
-library(ggplot2)
-library(here)
-
 # Data ----
 wos_raw <- readRDS("R/Data_outputs/databases/wos_formatted.rds")
 db_raw <- readRDS("R/Data_outputs/databases/db_formatted.rds")
