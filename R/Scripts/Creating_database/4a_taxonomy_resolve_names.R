@@ -118,7 +118,7 @@ write_csv(to_resolve_manually, "R/Data_outputs/Taxonomy/to_resolve_manually.csv"
 # replace the resolved.taxa.name of the ones in resolved_gnr to the manually resolved ones when a manually resolved name is present
 
 # Import the to_resolve_manual list with the now manually resolved names
-manually_resolved <- read_xlsx(here("Raw_data","manually_resolved.xlsx"), sheet = "manually_resolved")
+manually_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "resolve")
 
 # Join the manually resolved names from the manually_resolved
 resolved_spellings <- resolved_spellings_gnr %>% 
