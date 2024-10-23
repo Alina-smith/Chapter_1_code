@@ -221,6 +221,7 @@ Desmodesmus bicaudatus,tax-282,NA,NA,Desmodesmus bicaudatus,Desmodesmus,Scenedes
 Delicatophycus delicatulus,tax-284,NA,NA,Delicatophycus delicatulus,Delicatophycus,Cymbellaceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Actinastrum gracillimum,tax-285,NA,NA,Actinastrum gracillimum,Actinastrum,Chlorellaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Kephyrion littorale,tax-286,NA,NA,Kephyrion littorale,Kephyrion,Dinobryaceae,Chromulinales,Chrysophyceae,Ochrophyta,NA,species,AlgaeBase,check
+Scenedesmus acutus acutus,tax-289,NA,NA,Tetradesmus obliquus,Tetradesmus,Scenedesmaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,Plantae,subspecies,gbif,check
 Comasiella arcuata,tax-290,NA,NA,Comasiella arcuata,Comasiella,Scenedesmaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Chroomonas coerulea,tax-291,NA,NA,Chroomonas coerulea,Chroomonas,Hemiselmidaceae,Cryptomonadales,Cryptophyceae,Cryptophyta,NA,species,AlgaeBase,check
 Encyonema minutum,tax-292,NA,NA,Encyonema minutum,Encyonema,Gomphonemataceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
@@ -2457,6 +2458,7 @@ Segmentorbis,tax-3252,NA,NA,NA,Segmentorbis,Planorbidae,NA,Gastropoda,Mollusca,A
 Assiminidae,tax-3254,NA,NA,NA,NA,Assimineidae,Littorinimorpha,Gastropoda,Mollusca,Animalia,family,gbif,check
 Ampullaridae,tax-3260,NA,NA,NA,NA,Ampullariidae,Architaenioglossa,Gastropoda,Mollusca,Animalia,family,gbif,check
 Daphnia hyalinaxgaleata,tax-3346,NA,NA,NA,Daphnia,Daphniidae,Diplostraca,Branchiopoda,Arthropoda,Animalia,genus,gbif,check
+Tropocyclops prasinus mexicanus,tax-3462,NA,NA,Tropocyclops prasinus,Tropocyclops,Cyclopidae,Cyclopoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
 Asplanchna henrietta,tax-3514,NA,NA,NA,Asplanchna,Asplanchnidae,Ploima,Eurotatoria,Rotifera,Animalia,genus,gbif,check
 Trichotria similis,tax-3620,NA,NA,NA,Trichotria,Trichotriidae,Ploima,Eurotatoria,Rotifera,Animalia,genus,gbif,check
 Platyias polyacanthus,tax-3624,NA,NA,NA,Platyias,Brachionidae,Ploima,Eurotatoria,Rotifera,Animalia,genus,gbif,check
@@ -2528,6 +2530,7 @@ Staurodesmus corniculatus,tax-3835,NA,NA,Staurodesmus corniculatus,Staurodesmus,
 Halamphora oligotraphenta,tax-3836,NA,NA,Halamphora oligotraphenta,Halamphora,Catenulaceae,Thalassiophysales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Aulacoseira ambigua japonica,tax-3837,NA,NA,NA,Aulacoseira,Aulacoseiraceae,Aulacoseirales,Coscinodiscophyceae,Bacillariophyta,NA,form,AlgaeBase,check
 Encyonema neogracile,tax-3839,NA,NA,Encyonema neogracile,Encyonema,Gomphonemataceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Fragilaria crotonensis lacus-vulcani,tax-3840,NA,NA,NA,Fragilaria,Fragilariaceae,Fragilariales,Bacillariophyceae,Bacillariophyta,NA,subspecies,AlgaeBase,check
 Fragilaria gracilis,tax-3841,NA,NA,Fragilaria gracilis,Fragilaria,Fragilariaceae,Fragilariales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Gymnodinium cnecoides,tax-3843,NA,NA,Gymnodinium cnecoides,Gymnodinium,Gymnodiniaceae,Gymnodiniales,Dinophyceae,Miozoa,NA,species,AlgaeBase,check
 Trachelomonas granulosa,tax-3845,NA,NA,Trachelomonas granulosa,Trachelomonas,Euglenidae,Euglenida,Euglenophyceae,Euglenozoa,NA,species,AlgaeBase,check
@@ -2548,6 +2551,7 @@ Achnanthes acares,tax-3894,NA,NA,Achnanthes acares,Achnanthes,Achnanthaceae,Mast
 Aulacoseira ambigua curvata,tax-3895,NA,NA,NA,Aulacoseira,Aulacoseiraceae,Aulacoseirales,Coscinodiscophyceae,Bacillariophyta,NA,form,AlgaeBase,check
 Achnanthes brevipes intermedia,tax-3896,NA,Achnanthes brevipes intermedia,NA,Achnanthes,Achnanthaceae,Mastogloiales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Achnanthes brevipes brevipes,tax-3897,NA,Achnanthes brevipes brevipes,NA,Achnanthes,Achnanthaceae,Mastogloiales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
+Amphora coffeaeformis acutiuscula,tax-3898,NA,NA,Amphora coffeaeformis,Amphora,Catenulaceae,Thalassiophysales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Achnanthidium atomoides,tax-3900,NA,NA,Achnanthidium atomoides,Achnanthidium,Achnanthidiaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Achnanthidium gracillimum,tax-3901,NA,NA,Achnanthidium gracillimum,Achnanthidium,Achnanthidiaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Achnanthidium kranzii,tax-3902,NA,NA,Achnanthidium kranzii,Achnanthidium,Achnanthidiaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
@@ -2578,8 +2582,10 @@ Bacillaria paxillifera paxillifera,tax-3930,NA,Bacillaria paxillifera paxillifer
 Berkeleya scopulorum,tax-3931,NA,NA,Berkeleya scopulorum,Berkeleya,Berkeleyaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Cymbella affiniformis,tax-3934,NA,NA,Cymbella affiniformis,Cymbella,Cymbellaceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Caloneis leptosoma,tax-3935,NA,NA,Caloneis leptosoma,Caloneis,Naviculaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Caloneis amphisbaena amphisbaena,tax-3936,NA,NA,Caloneis amphisbaena,Caloneis,Naviculaceae,Naviculales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Cavinula cocconeiformis elliptica,tax-3941,NA,NA,NA,Cavinula,Cavinulaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,form,AlgaeBase,check
 Cymbella affinis angusta,tax-3943,NA,Cymbella affinis angusta,NA,Cymbella,Cymbellaceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
+Cymatopleura elliptica elliptica,tax-3944,NA,NA,Cymatopleura elliptica,Cymatopleura,Surirellaceae,Surirellales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Cymbella excisiformis nonprotracta,tax-3945,NA,Cymbella excisiformis nonprotracta,NA,Cymbella,Cymbellaceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Cymbella affinis neoprocera,tax-3946,NA,Cymbella affinis neoprocera,NA,Cymbella,Cymbellaceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Cocconeis euglyptoides,tax-3947,NA,NA,Cocconeis euglyptoides,Cocconeis,Cocconeidaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
@@ -2628,6 +2634,7 @@ Eolimna comperei,tax-4017,NA,NA,Eolimna comperei,Eolimna,Sellaphoraceae,Navicula
 Sellaphora rhombelliptica,tax-4018,NA,NA,Sellaphora rhombelliptica,Sellaphora,Sellaphoraceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Entomoneis paludosa paludosa,tax-4019,NA,Entomoneis paludosa paludosa,NA,Entomoneis,Entomoneidaceae,Surirellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Amphiprora pseudoduplex,tax-4020,NA,NA,Amphiprora pseudoduplex,Amphiprora,Amphipleuraceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Eunotia pectinalis pectinalis,tax-4021,NA,NA,Eunotia pectinalis,Eunotia,Eunotiaceae,Eunotiales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Eunotia pectinalis recta,tax-4022,NA,Eunotia pectinalis recta,NA,Eunotia,Eunotiaceae,Eunotiales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Eunotia trinacria,tax-4024,NA,NA,Eunotia trinacria,Eunotia,Eunotiaceae,Eunotiales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Eunotia pectinalis undulata,tax-4025,NA,Eunotia pectinalis undulata,NA,Eunotia,Eunotiaceae,Eunotiales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
@@ -2720,6 +2727,7 @@ Naviculadicta angustata,tax-4135,NA,NA,Naviculadicta angustata,Naviculadicta,Nav
 Sellaphora cosmopolitana,tax-4136,NA,NA,Sellaphora cosmopolitana,Sellaphora,Sellaphoraceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Navicula dealpina,tax-4137,NA,NA,Navicula dealpina,Navicula,Naviculaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Nitzschia dianae,tax-4138,NA,NA,Nitzschia dianae,Nitzschia,Bacillariaceae,Bacillariales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Nitzschia dissipata dissipata,tax-4139,NA,NA,Nitzschia dissipata,Nitzschia,Bacillariaceae,Bacillariales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Nitzschia media,tax-4140,NA,NA,Nitzschia media,Nitzschia,Bacillariaceae,Bacillariales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Sellaphora elorantana,tax-4141,NA,NA,Sellaphora elorantana,Sellaphora,Sellaphoraceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Nitzschia filiformis conferta,tax-4143,NA,Nitzschia filiformis conferta,NA,Nitzschia,Bacillariaceae,Bacillariales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
@@ -2783,13 +2791,16 @@ Placoneis pseudoclementis,tax-4223,NA,NA,Placoneis pseudoclementis,Placoneis,Gom
 Planothidium pericavum,tax-4224,NA,NA,Planothidium pericavum,Planothidium,Achnanthidiaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Placoneis placentula rostrata,tax-4225,NA,Placoneis placentula rostrata,NA,Placoneis,Gomphonemataceae,Cymbellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Pseudostaurosira subconstricta,tax-4226,NA,NA,Pseudostaurosira subconstricta,Pseudostaurosira,Staurosiraceae,Fragilariales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Achnanthes lanceolata robusta,tax-4227,NA,NA,NA,Achnanthes,Achnanthaceae,Mastogloiales,Bacillariophyceae,Bacillariophyta,NA,subspecies,AlgaeBase,check
 Praetriceratium inconspicuum,tax-4228,NA,NA,Praetriceratium inconspicuum,Praetriceratium,Triceratiaceae,Triceratiales,Coscinodiscophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Pinnularia submicrostauron,tax-4231,NA,NA,Pinnularia submicrostauron,Pinnularia,Pinnulariaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Pinnularia subcapitata subcapitata,tax-4232,NA,NA,Pinnularia subcapitata,Pinnularia,Pinnulariaceae,Naviculales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Pinnularia subrupestris cruciata,tax-4233,NA,Pinnularia subrupestris cruciata,NA,Pinnularia,Pinnulariaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Pinnularia subcapitata elongata,tax-4234,NA,Pinnularia subcapitata elongata,NA,Pinnularia,Pinnulariaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
 Pinnularia sinistra,tax-4237,NA,NA,Pinnularia sinistra,Pinnularia,Pinnulariaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Planothidium ellipticum,tax-4240,NA,NA,Planothidium ellipticum,Planothidium,Achnanthidiaceae,Cocconeidales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Pulchellophycus obsitus,tax-4242,NA,NA,Pulchellophycus obsitus,Pulchellophycus,Naviculaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
+Rhopalodia gibba gibba,tax-4245,NA,NA,Rhopalodia gibba,Rhopalodia,Rhopalodiaceae,Rhopalodiales,Bacillariophyceae,Ochrophyta,Chromista,subspecies,gbif,check
 Stauroneis acidoclinata,tax-4246,NA,NA,Stauroneis acidoclinata,Stauroneis,Stauroneidaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Surirella birostrata,tax-4247,NA,NA,Surirella birostrata,Surirella,Surirellaceae,Surirellales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Surirella brebissonii kuetzingii,tax-4248,NA,Surirella brebissonii kuetzingii,NA,Surirella,Surirellaceae,Surirellales,Bacillariophyceae,Bacillariophyta,NA,variety,AlgaeBase,check
@@ -2827,6 +2838,7 @@ Phaeodactylum tricornutum,tax-4303,NA,NA,Phaeodactylum tricornutum,Phaeodactylum
 Tetraselmis suecica,tax-4304,NA,NA,Tetraselmis suecica,Tetraselmis,Chlorodendraceae,Chlorodendrales,Chlorodendrophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Pennate,tax-4308,NA,NA,NA,Pennate,NA,NA,NA,NA,Chromista,genus,gbif,check
 Komvophoron jovis,tax-4309,NA,NA,Komvophoron jovis,Komvophoron,Gomontiellaceae,Oscillatoriales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check
+Microcyclops anceps anceps,tax-4348,NA,NA,Microcyclops anceps,Microcyclops,Cyclopidae,Cyclopoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
 Euglena granulata,tax-4353,NA,NA,Euglena granulata,Euglena,Euglenidae,Euglenida,Euglenophyceae,Euglenozoa,NA,species,AlgaeBase,check
 Scuticociliate,tax-4361,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gbif,check
 NA,tax-4390,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gbif,check
@@ -2862,6 +2874,10 @@ Gloeomonas kupfferi,tax-4450,NA,NA,Gloeomonas kupfferi,Gloeomonas,Chlamydomonada
 Radiococcus polycoccus,tax-4451,NA,NA,Radiococcus polycoccus,Radiococcus,Radiococcaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Volvox tertius,tax-4452,NA,NA,Volvox tertius,Volvox,Volvocaceae,Chlamydomonadales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Golenkinia brevispicula,tax-4453,NA,NA,Golenkinia brevispicula,Golenkinia,Neochloridaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
+Mesocyclops aequatorialis similis,tax-4458,NA,NA,Mesocyclops aequatorialis,Mesocyclops,Cyclopidae,Cyclopoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
+Megacyclops viridis viridis,tax-4459,NA,NA,Megacyclops viridis,Megacyclops,Cyclopidae,Cyclopoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
+Thermodiaptomus galebi lacustris,tax-4460,NA,NA,Thermodiaptomus galebi,Thermodiaptomus,Diaptomidae,Calanoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
+Tropodiaptomus processifer friedae,tax-4461,NA,NA,Tropodiaptomus processifer,Tropodiaptomus,Diaptomidae,Calanoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
 Trichodina diaptomi,tax-4468,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gbif,check
 Lobochlamys segnis,tax-4472,NA,NA,Lobochlamys segnis,Lobochlamys,Chlamydomonadaceae,Chlamydomonadales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Auxenochlorella pyrenoidosa,tax-4473,NA,NA,Auxenochlorella pyrenoidosa,Auxenochlorella,Chlorellaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
@@ -2873,7 +2889,10 @@ Neogossea acanthocolla,tax-4492,NA,NA,Neogossea acanthocolla,Neogossea,Neogossei
 Microcystis panniformis,tax-4499,NA,NA,Microcystis panniformis,Microcystis,Microcystaceae,Chroococcales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check
 Chrysomonadales,tax-4505,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gbif,check
 Cyclidium glaucoma,tax-4508,NA,NA,Cyclidium glaucoma,Cyclidium,Cyclidiidae,Pleuronematida,Oligohymenophorea,Ciliophora,NA,species,AlgaeBase,check
+Keratella cochlearis tecta,tax-4510,NA,NA,Keratella tecta,Keratella,Brachionidae,Ploima,Eurotatoria,Rotifera,Animalia,subspecies,gbif,check
+Keratella cochlearis hispida,tax-4511,NA,NA,Keratella cochlearis,Keratella,Brachionidae,Ploima,Eurotatoria,Rotifera,Animalia,subspecies,gbif,check
 Vorticella aquadulcis,tax-4518,NA,NA,NA,Vorticella,Vorticellidae,Peritrichida,Oligohymenophorea,Ciliophora,Chromista,genus,gbif,check
+Daphnia galeata mendotae,tax-4524,NA,NA,Daphnia galeata,Daphnia,Daphniidae,Diplostraca,Branchiopoda,Arthropoda,Animalia,subspecies,gbif,check
 Navicula radiata,tax-4527,NA,NA,Navicula radiata,Navicula,Naviculaceae,Naviculales,Bacillariophyceae,Bacillariophyta,NA,species,AlgaeBase,check
 Hariotina polychorda,tax-4528,NA,NA,Hariotina polychorda,Hariotina,Scenedesmaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Oocystis apicurvata,tax-4529,NA,NA,Oocystis apicurvata,Oocystis,Oocystaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
@@ -2918,6 +2937,7 @@ Scenedesmus bijugus,tax-4591,NA,NA,Scenedesmus bijugus,Scenedesmus,Scenedesmacea
 Stichogloea globosa,tax-4592,NA,NA,Stichogloea globosa,Stichogloea,Phaeothamniaceae,Phaeothamniales,Phaeothamniophyceae,Ochrophyta,NA,species,AlgaeBase,check
 Trachelomonas dybowskii,tax-4593,NA,NA,Trachelomonas dybowskii,Trachelomonas,Euglenidae,Euglenida,Euglenophyceae,Euglenozoa,NA,species,AlgaeBase,check
 Biecheleria ordinata,tax-4594,NA,NA,Biecheleria ordinata,Biecheleria,Suessiaceae,Suessiales,Dinophyceae,Miozoa,NA,species,AlgaeBase,check
+Diacyclops bicuspidatus thomasi,tax-4625,NA,NA,Diacyclops thomasi,Diacyclops,Cyclopidae,Cyclopoida,Copepoda,Arthropoda,Animalia,subspecies,gbif,check
 Acanthosphaera zachariasii,tax-4626,NA,NA,Acanthosphaera zachariasii,Acanthosphaera,Chlorellaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Actidesmium hookeri,tax-4628,NA,NA,Actidesmium hookeri,Actidesmium,Characiaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Actinastrum rhaphidioides,tax-4629,NA,NA,Actinastrum rhaphidioides,Actinastrum,Chlorellaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
@@ -3274,6 +3294,7 @@ Cosmarium abbreviatum germanicum,tax-5047,NA,Cosmarium abbreviatum germanicum,NA
 Cosmarium abbreviatum minus,tax-5048,NA,Cosmarium abbreviatum minus,NA,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,variety,AlgaeBase,check
 Cosmarium abbreviatum planctonicum,tax-5049,NA,Cosmarium abbreviatum planctonicum,NA,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,variety,AlgaeBase,check
 Cosmarium auriculatum,tax-5050,NA,NA,Cosmarium auriculatum,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,species,AlgaeBase,check
+Cosmarium biretum trigibberum,tax-5051,NA,NA,NA,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,subspecies,AlgaeBase,check
 Cosmarium botrytis subtumidum,tax-5052,NA,Cosmarium botrytis subtumidum,NA,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,variety,AlgaeBase,check
 Cosmarium caelatum,tax-5053,NA,NA,Cosmarium caelatum,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,species,AlgaeBase,check
 Cosmarium contractum ellipsoideum,tax-5054,NA,Cosmarium contractum ellipsoideum,NA,Cosmarium,Desmidiaceae,Desmidiales,Zygnematophyceae,Charophyta,NA,variety,AlgaeBase,check
@@ -3790,6 +3811,7 @@ Pascherina tetras,tax-5695,NA,NA,Pascherina tetras,Pascherina,Spondylomoraceae,C
 Pectinodesmus pectinatus,tax-5697,NA,NA,Pectinodesmus pectinatus,Pectinodesmus,Scenedesmaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Pectinodesmus regularis,tax-5698,NA,NA,Pectinodesmus regularis,Pectinodesmus,Scenedesmaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,species,AlgaeBase,check
 Pediastrum tetras apiculatum,tax-5701,NA,Pediastrum tetras apiculatum,NA,Pediastrum,Hydrodictyaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,NA,variety,AlgaeBase,check
+Pediastrum tetras excisum,tax-5702,NA,NA,Stauridium tetras,Stauridium,Hydrodictyaceae,Sphaeropleales,Chlorophyceae,Chlorophyta,Plantae,subspecies,gbif,check
 Peranema cuneatum,tax-5705,NA,NA,Peranema cuneatum,Peranema,Peranemidae,Peranemida,Peranemea,Euglenozoa,NA,species,AlgaeBase,check
 Peranema granuliferum,tax-5706,NA,NA,Peranema granuliferum,Peranema,Peranemidae,Peranemida,Peranemea,Euglenozoa,NA,species,AlgaeBase,check
 Pseudoperanema trichophorum,tax-5707,NA,NA,Pseudoperanema trichophorum,Pseudoperanema,Peranemataceae,Euglenida,Euglenophyceae,Euglenozoa,NA,species,AlgaeBase,check
@@ -4336,8 +4358,10 @@ Synechocystis bourrellyi,tax-6474,NA,NA,Synechocystis bourrellyi,Synechocystis,M
 Mougeotia thylespora,tax-6475,NA,NA,Mougeotia thylespora,Mougeotia,Zygnemataceae,Zygnematales,Zygnematophyceae,Charophyta,NA,species,AlgaeBase,check
 Mallomonas cratis,tax-6476,NA,NA,Mallomonas cratis,Mallomonas,Mallomonadaceae,Synurales,Chrysophyceae,Ochrophyta,NA,species,AlgaeBase,check
 Gloeotila subconstricta,tax-6478,NA,NA,Gloeotila subconstricta,Gloeotila,Chlorellaceae,Chlorellales,Trebouxiophyceae,Chlorophyta,NA,species,AlgaeBase,check
+daphnia galeata mendotae,tax-6479,NA,NA,Daphnia galeata,Daphnia,Daphniidae,Diplostraca,Branchiopoda,Arthropoda,Animalia,subspecies,gbif,check
 Diacronema lutheri,tax-6480,NA,NA,Diacronema lutheri,Diacronema,Pavlovaceae,Pavlovales,Pavlovophyceae,Haptophyta,NA,species,AlgaeBase,check
 Diplopora oregonensis,tax-6488,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gbif,check
+Ptygura melicerta ctenoida,tax-6571,NA,NA,Ptygura melicerta,Ptygura,Flosculariidae,Flosculariaceae,Eurotatoria,Rotifera,Animalia,subspecies,gbif,check
 Aphanizomenon flexuosum,tax-6583,NA,NA,Aphanizomenon flexuosum,Aphanizomenon,Aphanizomenonaceae,Nostocales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check
 Aphanizomenon klebahnii,tax-6584,NA,NA,Aphanizomenon klebahnii,Aphanizomenon,Aphanizomenonaceae,Nostocales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check
 Ceratium rhomvoides,tax-6585,NA,NA,Ceratium rhomvoides,Ceratium,Ceratiaceae,Gonyaulacales,Dinophyceae,Miozoa,NA,species,AlgaeBase,check
@@ -4400,6 +4424,7 @@ Diaphanosoma hamatum,tax-6822,NA,NA,NA,Diaphanosoma,Sididae,Diplostraca,Branchio
 Diaphanosoma kizakiensis,tax-6824,NA,NA,NA,Diaphanosoma,Sididae,Diplostraca,Branchiopoda,Arthropoda,Animalia,genus,gbif,check
 Diaphanosoma turkanae,tax-6834,NA,NA,Diaphanosoma turkanae,Diaphanosoma,NA,Diplostraca,Branchiopoda,Arthropoda,Animalia,species,gbif,check
 Moina siamensis,tax-6938,NA,NA,NA,Moina,Moinidae,Diplostraca,Branchiopoda,Arthropoda,Animalia,genus,gbif,check
+Daphnia galeata galeata,tax-6951,NA,NA,Daphnia galeata,Daphnia,Daphniidae,Diplostraca,Branchiopoda,Arthropoda,Animalia,subspecies,gbif,check
 Amoeba,tax-6952,NA,NA,NA,Amoeba,NA,NA,NA,NA,Animalia,genus,gbif,check
 Anabaena laxa,tax-6967,NA,NA,Anabaena laxa,Anabaena,Nostocaceae,Nostocales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check
 Anabaena oblonga,tax-6968,NA,NA,Anabaena oblonga,Anabaena,Nostocaceae,Nostocales,Cyanophyceae,Cyanobacteria,NA,species,AlgaeBase,check

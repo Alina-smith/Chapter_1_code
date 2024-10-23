@@ -8,3 +8,4 @@ load("/Users/bop22abs/Documents/PhD/Chapter_1_code/R/Data_outputs/databases/rime
 load("/Users/bop22abs/Documents/PhD/Chapter_1_code/R/Data_outputs/databases/rimet_formatted.rds")
 load("/Users/bop22abs/Documents/PhD/Chapter_1_code/R/Data_outputs/databases/raw_body_size.rds")
 load("/Users/bop22abs/Documents/PhD/Chapter_1_code/R/Data_outputs/databases/no_formatted.rds")
+load("/Users/bop22abs/Documents/PhD/Chapter_1_code/R/Data_outputs/databases/all_source_raw.rds")
