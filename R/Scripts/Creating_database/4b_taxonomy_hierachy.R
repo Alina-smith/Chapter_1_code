@@ -664,6 +664,9 @@ manual_taxonomy <- taxonomy_step_3 %>%
       # bumped from species to genus - ones that had a space in the original name indicating they were likely a species but have a rank of genus
       stri_detect_regex(resolved.taxa.name, " ") & rank == "genus" ~ "check",
       
+      # all the sub species were bumped
+      rank == "subspecies" ~ "check",
+      
       # NAs
       is.na(rank) ~ "check",
       rank == "" ~ "check",
@@ -712,67 +715,67 @@ taxonomy_step_4 <- taxonomy_step_3 %>%
   # replace missing info with manually updated info
   mutate(
     form = if_else(
-      !is.na(form.manual),
+      !is.na(manual.fix),
       form.manual,
       form.initial
     ),
     
     variety = if_else(
-      !is.na(variety.manual),
+      !is.na(manual.fix),
       variety.manual,
       variety.initial
     ),
     
     species = if_else(
-      !is.na(species.manual),
+      !is.na(manual.fix),
       species.manual,
       species.initial
     ),
     
     genus = if_else(
-      !is.na(genus.manual),
+      !is.na(manual.fix),
       genus.manual,
       genus.initial
     ),
     
     family = if_else(
-      !is.na(family.manual),
+      !is.na(manual.fix),
       family.manual,
       family.initial
     ),
     
     order = if_else(
-      !is.na(order.manual),
+      !is.na(manual.fix),
       order.manual,
       order.initial
     ),
     
     class = if_else(
-      !is.na(class.manual),
+      !is.na(manual.fix),
       class.manual,
       class.initial
     ),
     
     phylum = if_else(
-      !is.na(phylum.manual),
+      !is.na(manual.fix),
       phylum.manual,
       phylum.initial
     ),
     
     kingdom = if_else(
-      !is.na(kingdom.manual),
+      !is.na(manual.fix),
       kingdom.manual,
       kingdom.initial
     ),
     
     rank = if_else(
-      !is.na(rank.manual),
+      !is.na(manual.fix),
       rank.manual,
       rank.initial
     ),
     
     source = if_else(
-      !is.na(source.manual),
+      !is.na(manual.fix),
       source.manual,
       source.initial
       )
@@ -785,108 +788,31 @@ taxonomy_step_4 <- taxonomy_step_3 %>%
       form:source
     )
 
+# Save
+saveRDS(taxonomy_step_4, file = "R/Data_outputs/taxonomy/taxonomy_step_4.rds")
 
+# Step 5: fix final things with taxonomy ----
 
-
-
-
-
-
-
-old <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "taxonomy")
-new <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "new")
-
-
-x <- left_join(
-  new,
-  old,
-  by = "tax.uid",
-  suffix = c(".new", ".old")
-  ) %>% 
-  
-  # Rename resolve.taxa.name.intial as this is the full resolved.taxa.name list
-  rename(
-    resolved.taxa.name = resolved.taxa.name.initial
-  ) %>% 
-  
-  # replace missing info with manually updated info
+final_taxonomy <- taxonomy_step_4 %>% 
   mutate(
-    form = if_else(
-      !is.na(keep),
-      form.old,
-      form.new
-    ),
-    
-    variety = if_else(
-      !is.na(keep),
-      variety.old,
-      variety.new
-    ),
-    
-    species = if_else(
-      !is.na(keep),
-      species.old,
-      species.new
-    ),
-    
-    genus = if_else(
-      !is.na(keep),
-      genus.old,
-      genus.new
-    ),
-    
-    family = if_else(
-      !is.na(keep),
-      family.old,
-      family.new
-    ),
-    
-    order = if_else(
-      !is.na(keep),
-      order.old,
-      order.new
-    ),
-    
-    class = if_else(
-      !is.na(keep),
-      class.old,
-      class.new
-    ),
-    
-    phylum = if_else(
-      !is.na(keep),
-      phylum.old,
-      phylum.new
-    ),
-    
-    kingdom = if_else(
-      !is.na(keep),
-      kingdom.old,
-      kingdom.new
-    ),
-    
-    rank = if_else(
-      !is.na(keep),
-      rank.old,
-      rank.new
-    ),
-    
-    source = if_else(
-      !is.na(keep),
-      source.old,
-      source.new
+    phylum = case_when(
+      phylum =="Bacteroidota" ~ "Bacteroidetes",
+      phylum == "Cryptista" ~ "Cryptophyta",
+      phylum == "Euglenophyta" ~ "Discomitochondria",
+      phylum == "Mycetozoa" ~ "Amoebozoa",
+      phylum == "Heterokontophyta" ~ "Ochrophyta",
+      TRUE ~ phylum
     )
   ) %>% 
   
-  # select columns I want
+  filter(
+    rank %in% c("genus", "species", "variety", "form")
+  ) %>% 
+  
   select(
-    resolved.taxa.name,
-    tax.uid,
-    form:source
+    -variety,
+    -form
   )
 
-write_csv(x, "x.csv")
-
-
-
-  
+# Save
+saveRDS(final_taxonomy, file = "R/Data_outputs/taxonomy/final_taxonomy.rds")
