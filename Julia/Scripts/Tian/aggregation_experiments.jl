@@ -93,7 +93,7 @@ for i in 1:length(networks) # for each network in the network array
     LG = LogisticGrowth(A0, K = 2, a = (diag = 1.0, offdiag = 1.0)) # set producer competition so all proders have equal competition
 
     # functional response
-    fr = BioenergeticResponse(A0, h = 1)
+    fr = BioenergeticResponse(A0, h = 1.5)
 
     # set model parameters
     params = ModelParameters(A0, producer_growth = LG, functional_response = fr)

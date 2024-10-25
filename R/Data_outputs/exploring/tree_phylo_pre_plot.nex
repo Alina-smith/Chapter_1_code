@@ -1,0 +1,1587 @@
+#NEXUS
+[R-package APE, Fri Oct 25 10:07:39 2024]
+
+BEGIN TAXA;
+	DIMENSIONS NTAX = 787;
+	TAXLABELS
+		Brachynema_(genus_in_kingdom_Archaeplastida)_ott5920157
+		Kurzia_(genus_in_kingdom_Archaeplastida)_ott1006213
+		Pleurotaenium_ott8173
+		Hyalotheca_ott8176
+		Xanthidium_(genus_in_kingdom_Archaeplastida)_ott8180
+		Staurastrum_ott439260
+		Micrasterias_ott8185
+		Haplotaenium_ott17522
+		Cosmarium_ott755483
+		Desmidium_ott329226
+		Tetmemorus_ott259636
+		Staurodesmus_ott580919
+		Euastrum_ott580913
+		Actinotaenium_ott689126
+		Docidium_ott171693
+		Teilingia_ott1016609
+		Spondylosium_ott329221
+		Sphaerozosma_ott331823
+		Bambusina_ott986546
+		Oocardium_ott3854710
+		Penium_(genus_in_kingdom_Archaeplastida)_ott560271
+		Closterium_ott739602
+		Gonatozygon_ott138856
+		Netrium_ott916135
+		Spirogyra_ott799381
+		Zygnema_ott341242
+		Klebsormidium_ott799394
+		Interfilum_ott457927
+		Mougeotia_ott211370
+		Spirotaenia_ott916129
+		Ulvella_(genus_in_kingdom_Archaeplastida)_ott141378
+		Entocladia_ott195
+		Monostroma_ott13960
+		Ulothrix_ott1098238
+		Chlorhormidium_ott5153531
+		Cladophora_ott296540
+		Rhizoclonium_ott871592
+		Rhipilia_ott844136
+		Chloromonas_ott112019
+		Chlamydocapsa_ott342549
+		Asterococcus_(genus_in_kingdom_Archaeplastida)_ott486556
+		Sphaerocystis_ott530761
+		Sphaerellocystis_ott5153129
+		Pseudosphaerocystis_ott4735172
+		Palmellopsis_ott26876
+		Palmella_(genus_in_kingdom_Archaeplastida)_ott4735151
+		Hormotila_ott337387
+		Paulschulzia_ott1083587
+		Tetraspora_(genus_in_kingdom_Archaeplastida)_ott896521
+		Apiocystis_ott4735109
+		Stylosphaeridium_ott4734837
+		Chlorophysema_ott4735453
+		Cecidochloris_ott4735205
+		Chlorangiopsis_ott4735211
+		Chlorangiella_ott4735451
+		Chlamydomonadopsis_ott4735215
+		Planctococcus_ott4735149
+		Heleochloris_ott4735167
+		Gonium_ott361836
+		Colemanosphaera_ott5653921
+		Lobomonas_ott843187
+		Pandorina_ott1072226
+		Rusalka_ott736423
+		Haematococcus_(genus_in_kingdom_Archaeplastida)_ott79303
+		Chlorogonium_ott864772
+		Balticola_ott4734619
+		Hyalogonium_ott4734833
+		Chlorochytrium_ott180804
+		Pascherina_ott333309
+		Spondylomorum_ott4734643
+		Dysmorphococcus_ott727974
+		Phacotus_ott340091
+		Pteromonas_ott727978
+		Hemitoma_(genus_in_kingdom_Archaeplastida)_ott4734600
+		Coccomonas_ott4734608
+		Fortiella_ott4734756
+		Vitreochlamys_ott28980
+		Polytomella_ott347091
+		Spermatozopsis_ott56617
+		Dunaliella_ott347106
+		Papenfussiomonas_ott4734840
+		Quadrichloris_ott5152531
+		Brachiomonas_ott467400
+		Polytoma_ott695479
+		Gloeomonas_ott604376
+		Carteria_(genus_in_kingdom_Archaeplastida)_ott256105
+		Pseudocarteria_ott203544
+		Elakatothrix_ott632610
+		Fusola_ott5151892
+		Treubaria_ott869740
+		Desmatractum_ott5151918
+		Echinosphaerella_ott5153376
+		Trochiscia_ott889741
+		Chlainomonas_ott1062156
+		Provasoliella_ott4734775
+		Tetratoma_(genus_in_kingdom_Archaeplastida)_ott4734779
+		Pyramichlamys_ott4734806
+		Diplostauron_ott4734826
+		Selenochloris_ott4736158
+		Scotiella_(genus_in_kingdom_Archaeplastida)_ott5152036
+		Tetrablepharis_ott4734798
+		Gymnomonas_ott7042314
+		Dictyococcus_ott15351
+		Tetradesmus_ott386118
+		Selenastrum_ott187910
+		Monoraphidium_ott266805
+		Messastrum_ott6001167
+		Kirchneriella_(genus_in_kingdom_Archaeplastida)_ott410215
+		Chlorolobion_ott5151989
+		Ankistrodesmus_ott425620
+		Nephrochlamys_ott477166
+		Raphidocelis_ott16724
+		Quadrigula_ott938279
+		Pseudoquadrigula_ott5153269
+		Drepanochloris_ott5653965
+		Pseudoschroederia_ott362580
+		Schroederia_(genus_in_kingdom_Archaeplastida)_ott1076660
+		Mychonastes_ott244939
+		Dictyochloris_ott502663
+		Stigeoclonium_ott197188
+		Oedogonium_ott197177
+		Bulbochaete_ott720713
+		Chaetopeltis_ott322044
+		Scenedesmus_ott651333
+		Ecballocystis_ott26711
+		Willea_ott5152991
+		Oocystis_(genus_in_kingdom_Archaeplastida)_ott1027472
+		Lagerheimia_ott161654
+		Tetrachlorella_ott451057
+		Quadricoccus_ott301040
+		Oocystidium_ott385785
+		Echinocoleum_ott1069132
+		Amphikrikos_ott451055
+		Siderocystopsis_ott5151885
+		Granulocystopsis_ott5151931
+		Granulocystis_ott5151945
+		Franceia_ott5152024
+		Eremosphaera_ott942022
+		Neglectella_ott5153275
+		Excentrosphaera_ott5152022
+		Rayssiella_ott5151948
+		Glochiococcus_ott5151980
+		Juranyiella_ott5152020
+		Fotterella_ott5152034
+		Thelesphaera_ott5152079
+		Tetranephris_ott30549
+		Stichococcus_ott239560
+		Desmodesmus_ott565984
+		Mucidosphaerium_ott992537
+		Closteriopsis_ott107580
+		Dicloster_ott911279
+		Micractinium_ott395205
+		Didymogenes_ott593285
+		Hindakia_ott285517
+		Coronastrum_ott360754
+		Actinastrum_ott987089
+		Crucigenia_ott5153016
+		Gloeotila_ott322310
+		Pseudochlorella_ott983892
+		Marvania_ott149091
+		Auxenochlorella_ott258104
+		Nannochloris_ott629727
+		Muriella_ott1089881
+		Geminella_(genus_in_kingdom_Archaeplastida)_ott942015
+		Apatococcus_ott974465
+		Siderocelis_ott4734289
+		Keratococcus_ott727970
+		Dicellula_ott5153264
+		Podohedra_ott5153287
+		Golenkiniopsis_ott5153362
+		Pedinomonas_ott850435
+		Scourfieldia_ott85470
+		Koliella_ott582011
+		Raphidonema_(genus_in_kingdom_Archaeplastida)_ott361846
+		Scherffelia_ott629749
+		Tetraselmis_ott275991
+		Coccomyxa_(genus_in_kingdom_Archaeplastida)_ott450225
+		Botryococcus_ott769061
+		Pseudococcomyxa_ott683464
+		Trebouxia_ott510353
+		Dichotomococcus_ott5653958
+		Chloroidium_ott1009270
+		Pseudodidymocystis_ott285725
+		Neodesmus_(genus_in_kingdom_Archaeplastida)_ott605605
+		Enallax_ott386120
+		Pseudocharacium_ott851524
+		Comasiella_ott5153042
+		Coelastrum_ott987033
+		Westella_(genus_in_kingdom_Archaeplastida)_ott427936
+		Hariotina_ott283241
+		Dimorphococcus_ott664555
+		Verrucodesmus_ott5251404
+		Pectinodesmus_ott521962
+		Didymocystis_(genus_in_kingdom_Archaeplastida)_ott911286
+		Hydrianum_ott5152316
+		Scotinosphaera_ott5152568
+		Westellopsis_ott5152977
+		Komarekia_ott5152974
+		Scotiellopsis_ott5152986
+		Monomastix_ott327966
+		Pyramimonas_ott1012207
+		Cymbomonas_ott1012205
+		Chlorococcum_ott953351
+		Tetracystis_(genus_in_kingdom_Archaeplastida)_ott377198
+		Characium_ott129602
+		Spongiococcum_ott4735275
+		Borodinellopsis_ott1087067
+		Emergosphaera_ott5152308
+		Sphaerobotrys_ott5152330
+		Cystomonas_ott5152340
+		Nephroselmis_ott439264
+		Myochloris_ott4004324
+		Tetrabaena_ott256059
+		Characiopodium_ott316665
+		Neochloris_ott129608
+		Polyedriopsis_ott990318
+		Botryosphaerella_ott5152601
+		Chlorotetraedron_ott990317
+		Echinosphaeridium_ott5153372
+		Chlamydopodium_ott765673
+		Characiochloris_ott991640
+		Ankyra_ott869742
+		Monactinus_ott13004
+		Pseudopediastrum_ott13000
+		Stauridium_ott13002
+		Sorastrum_ott251731
+		Pediastrum_ott425625
+		Lacunastrum_ott5152685
+		Parapediastrum_ott814022
+		Euastropsis_ott5152693
+		Deasonia_ott4735221
+		Golenkinia_ott606904
+		Microspora_(genus_in_kingdom_Archaeplastida)_ott416270
+		Asteromonas_ott850433
+		Tetraedron_ott510075
+		Gloeocystis_ott947741
+		Radiococcus_ott66333
+		Follicularia_ott608281
+		Sphaeroneocystis_ott5153224
+		Thorakochloris_ott5152071
+		Hindakochloris_ott5153242
+		Coenococcus_ott5153225
+		Eutetramorus_ott5153261
+		Palmodictyon_ott5153348
+		Coenodispora_ott5153221
+		Schizochlamys_ott774856
+		Planktosphaeria_ott1014751
+		Picocystis_ott913620
+		Actidesmium_ott4734113
+		Korshikoviella_ott5152332
+		Deuterocharacium_ott4734123
+		Characiellopsis_ott4734127
+		Diplochloris_ott5153246
+		Dactylosphaerium_(genus_in_kingdom_Archaeplastida)_ott5153292
+		Hemiselmis_ott801159
+		Cryptomonas_ott1073344
+		Komma_ott187641
+		Chroomonas_ott497054
+		Rhodomonas_ott955642
+		Teleaulax_ott277748
+		Plagioselmis_ott435977
+		Storeatula_ott998899
+		Cyathomonas_ott4739086
+		Goniomonas_ott914449
+		Katablepharis_ott505748
+		Leucocryptos_ott111139
+		Telonema_ott4738974
+		Ceramium_ott762364
+		Bangia_ott864267
+		Gloeochaete_(genus_in_domain_Eukaryota)_ott142554
+		Glaucocystis_ott664975
+		Acanthoceras_(genus_in_subkingdom_SAR)_ott1081712
+		Tabellaria_ott79382
+		Asterionella_ott753597
+		Ctenophora_(genus_in_subkingdom_SAR)_ott103964
+		Licmophora_ott607318
+		Staurosira_ott412230
+		Eunotia_ott111916
+		Sellaphora_ott974005
+		Pinnularia_ott548616
+		Diploneis_ott625564
+		Neidium_ott593706
+		Craticula_(genus_in_subkingdom_SAR)_ott148818
+		Amphiprora_ott776172
+		Rhopalodia_ott322246
+		Stenopterobia_ott227391
+		Campylodiscus_ott397783
+		Cymatopleura_ott371138
+		Amphipleura_ott2816947
+		Berkeleya_ott579253
+		Cocconeis_ott498483
+		Placoneis_ott1061633
+		Navicula_ott942603
+		Gyrosigma_ott777291
+		Achnanthes_ott166706
+		Tryblionella_ott525508
+		Cylindrotheca_(genus_in_subkingdom_SAR)_ott1095881
+		Bacillaria_ott446448
+		Tabularia_ott409746
+		Pseudostaurosira_ott1013278
+		Opephora_ott407285
+		Hannaea_ott2819112
+		Meridion_ott2819099
+		Frankophila_ott2819129
+		Sarcophagodes_ott5288531
+		Stephanodiscus_ott422805
+		Cyclotella_ott422797
+		Attheya_ott878178
+		Coscinodiscus_ott790043
+		Actinocyclus_(genus_in_subkingdom_SAR)_ott1075852
+		Actinoptychus_ott182051
+		Leptocylindrus_ott572764
+		Melosira_ott1098671
+		Aulacoseira_ott963749
+		Skeletonema_ott569303
+		Discostella_ott420353
+		Rhizosolenia_(in_Bacillariophytina)_ott5251209
+		Puncticulata_ott4026084
+		Stephanocostis_ott4026107
+		Gomphonema_ott40476
+		Diatoma_ott621376
+		Pleurosigma_ott518857
+		Encyonema_ott974003
+		Reimeria_ott965974
+		Paralia_(genus_in_subkingdom_SAR)_ott285072
+		Pauliella_(genus_in_subkingdom_SAR)_ott427008
+		Anomoeoneis_ott548619
+		Achnanthidium_ott353342
+		Planothidium_ott705591
+		Frustulia_ott723345
+		Encyonopsis_ott301167
+		Diadesmis_ott947236
+		Eolimna_ott256026
+		Thalassiosira_(genus_in_class_Bacillariophyceae)_ott5251200
+		Lindavia_ott5987874
+		Actinella_(genus_in_subkingdom_SAR)_ott2812897
+		Peronia_(genus_in_subkingdom_SAR)_ott2812921
+		Eucocconeis_ott4025170
+		Psammothidium_ott4025127
+		Karayevia_ott4025108
+		Rossithidium_ott4025114
+		Platessa_ott5421233
+		Halamphora_ott2816938
+		Mastogloia_ott454686
+		Aneumastus_ott2818568
+		Catenula_(genus_in_subkingdom_SAR)_ott2814380
+		Cocconema_(genus_in_subkingdom_SAR)_ott4024642
+		Brachysira_ott4024967
+		Nupela_ott4024753
+		Gomphosphenia_ott2815342
+		Rhoicosphenia_ott2815340
+		Chamaepinnularia_ott4024851
+		Humidophila_ott5655525
+		Parlibellus_ott2818489
+		Geissleria_ott4024689
+		Muelleria_ott4024614
+		Kobayasiella_ott4024712
+		Naviculadicta_ott4025513
+		Dorofeyukea_ott7552529
+		Kolbesia_ott4025122
+		Arachnoidiscus_ott4026133
+		Amphicampa_ott2819109
+		Bumilleriopsis_ott151000
+		Tribonema_ott898587
+		Botrydium_(genus_in_subkingdom_SAR)_ott385775
+		Mischococcus_ott517342
+		Ophiocytium_ott25914
+		Botrydiopsis_ott385772
+		Perone_ott4027183
+		Chloridella_ott1007471
+		Ducellieria_ott5585508
+		Tetraedriella_ott4027126
+		Heterodesmus_(genus_in_subkingdom_SAR)_ott2821466
+		Botryochloris_ott1069672
+		Arachnochloris_ott4027074
+		Prismatella_ott4027086
+		Trachychloron_ott4027094
+		Isthmochloron_ott4027118
+		Nephrodiella_ott4027142
+		Chlorallantus_ott4027149
+		Chlorocloster_ott4027150
+		Polygoniochloris_ott4027163
+		Monallantus_ott4027166
+		Pseudopolyedriopsis_ott4027173
+		Diachros_ott4027177
+		Peroniella_ott4027198
+		Lutherella_ott4027241
+		Centritractus_ott4027245
+		Gloeobotrys_ott4027273
+		Acanthochloris_ott4027071
+		Gloeopodium_ott4027255
+		Chlorogibba_ott4027172
+		Polyedriella_ott4027099
+		Stipitococcus_ott4922097
+		Stichogloea_ott733088
+		Phaeoschizochlamys_ott269263
+		Tetrasporopsis_ott241773
+		Phaeobotrys_(genus_in_subkingdom_SAR)_ott4029345
+		Vacuolaria_ott536550
+		Gonyostomum_ott906064
+		Merotricha_ott936631
+		Goniochloris_ott344115
+		Monodus_ott385767
+		Pseudocharaciopsis_ott961982
+		Ellipsoidion_ott290824
+		Nannochloropsis_ott694370
+		Pseudotetraedriella_ott423009
+		Pseudostaurastrum_ott948667
+		Characiopsis_ott4027211
+		Chlorobotrys_ott4027260
+		Ochromonas_ott898589
+		Dinobryon_(in_Ochromonas_sup.)_ott5251191
+		Chrysoxys_ott786574
+		Phaeoplaca_ott315027
+		Epipyxis_ott474740
+		Paraphysomonas_ott783302
+		Synochromonas_ott4921763
+		Syncrypta_ott4921767
+		Spumella_ott690121
+		Uroglena_ott315025
+		Chrysosaccus_ott510006
+		Mallomonas_ott898584
+		Synura_ott373307
+		Conradiella_ott2810604
+		Microglena_(genus_in_subkingdom_SAR)_ott5988407
+		Heterogloea_ott57843
+		Gloeochloris_ott4921587
+		Characidiopsis_ott2810626
+		Kephyrion_ott139310
+		Chrysamoeba_(genus_in_subkingdom_SAR)_ott795638
+		Chromulina_ott373312
+		Chrysosphaerella_ott668601
+		Hydrurus_ott373310
+		Chrysocapsa_ott319868
+		Chromophyton_ott631707
+		Bitrichia_ott2811443
+		Derepyxis_ott2811450
+		Chrysopyxis_ott2811455
+		Cyclonexis_ott889546
+		Pseudokephyrion_ott4922371
+		Kephyriopsis_ott2811495
+		Chrysotilos_ott4029239
+		Chrysocapsella_ott4029251
+		Gloeochrysis_ott4029260
+		Chrysococcocystis_ott4029402
+		Calycomonas_ott4029404
+		Ollicola_ott4922366
+		Rhizochrysis_ott4029429
+		Phaeodermatium_ott4029437
+		Monochrysis_(genus_in_subkingdom_SAR)_ott5251195
+		Spiniferomonas_ott4921716
+		Synuropsis_ott4922516
+		Chrysidiastrum_ott4921792
+		Amphirhiza_ott4921796
+		Chrysostephanosphaera_ott4921800
+		Stokesiella_(genus_in_subkingdom_SAR)_ott4922311
+		Conradocystis_ott4922321
+		Chrysococcus_ott4922323
+		Stylochrysalis_ott4922336
+		Lepochromulina_ott4922351
+		Chrysolykos_ott4922361
+		Polylepidomonas_ott4922419
+		Chrysapsis_ott4922533
+		Amphichrysis_ott4922536
+		Chromophysomonas_ott6391714
+		Helicopedinella_ott511701
+		Pedinella_ott100082
+		Pseudopedinella_ott432900
+		Apedinella_ott432902
+		Actinomonas_ott4029411
+		Pseudochattonella_ott863263
+		Bicosoeca_ott938817
+		Bicoeca_ott4026213
+		Acanthosphaera_(genus_in_subkingdom_SAR)_ott4004663
+		Gyromitus_(genus_in_subkingdom_SAR)_ott696946
+		Pelagostrombidium_ott1027892
+		Limnostrombidium_ott2822100
+		Codonella_ott962053
+		Rimostrombidium_ott70731
+		Tintinnopsis_ott84209
+		Tintinnidium_(genus_in_subkingdom_SAR)_ott861397
+		Strobilidium_ott174117
+		Salpingella_ott1071200
+		Euplotes_ott231098
+		Halteria_ott129115
+		Meseres_(genus_in_subkingdom_SAR)_ott802626
+		Litonotus_ott125331
+		Didinium_ott1072825
+		Lagynophrya_ott477128
+		Lacrymaria_(genus_in_subkingdom_SAR)_ott960614
+		Monodinium_ott962058
+		Belonophrya_ott4805639
+		Mesodinium_ott182635
+		Askenasia_ott473776
+		Pelagovasicola_ott2824132
+		Stokesia_(genus_in_subkingdom_SAR)_ott49905
+		Vorticella_ott702848
+		Tetrahymena_(genus_in_subkingdom_SAR)_ott47284
+		Glaucomides_ott285539
+		Glaucoma_(genus_in_subkingdom_SAR)_ott568119
+		Histiobalantium_ott762297
+		Urocentrum_ott626418
+		Cinetochilum_ott490279
+		Colpoda_ott129112
+		Bromeliothrix_ott4030339
+		Cyrtolophosis_ott81750
+		Coleps_ott1063559
+		Urotricha_ott473781
+		Balanion_ott1027890
+		Woloszynskia_ott746954
+		Baldinia_ott4036332
+		Coolia_ott560912
+		Prorocentrum_ott797787
+		Mesoporos_ott2830830
+		Crypthecodinium_ott621392
+		Karlodinium_ott303396
+		Gyrodinium_ott820946
+		Pyrophacus_ott423796
+		Ceratium_ott172869
+		Tripos_ott2830224
+		Protoceratium_ott862594
+		Pyrocystis_ott223416
+		Thompsodinium_ott4035429
+		Chimonodinium_ott541780
+		Tyrannodinium_ott4924683
+		Peridiniopsis_ott97686
+		Peridinium_ott621394
+		Glenodiniopsis_ott363131
+		Durinskia_ott752514
+		Kryptoperidinium_ott627398
+		Sphaerodinium_ott653238
+		Glenodinium_ott1012139
+		Palatinus_ott5986894
+		Archaeperidinium_ott4036339
+		Oodinium_ott2831439
+		Stylodinium_ott2831470
+		Dinosphaera_ott4036370
+		Aduncodinium_ott5655318
+		Speroidium_ott8011459
+		Dinophysis_ott575949
+		Ornithocercus_ott824292
+		Phalacroma_(genus_in_subkingdom_SAR)_ott714113
+		Gymnodinium_ott274333
+		Lepidodinium_ott1037258
+		Warnowia_ott297117
+		Akashiwo_ott930231
+		Katodinium_ott971302
+		Tovellia_ott562150
+		Opisthoaulax_ott4925407
+		Amphidinium_ott746952
+		Dinococcus_ott2831477
+		Cystodinedria_ott2831486
+		Togula_ott821617
+		Ankistrodinium_ott5385767
+		Borghiella_ott4038279
+		Bernardinium_ott4038130
+		Desmomastix_ott4038364
+		Spatulodinium_ott672583
+		Kofoidinium_ott98343
+		Hymenomonas_ott252500
+		Pontosphaera_ott4014244
+		Chrysidalis_ott4023438
+		Prymnesium_ott804521
+		Phaeocystis_ott215712
+		Haptolina_ott1015365
+		Chrysochromulina_ott804512
+		Agamomonas_ott5157198
+		Bodo_ott222233
+		Strombomonas_ott109807
+		Colacium_ott1063272
+		Monomorphina_ott642759
+		Menoidium_ott915519
+		Euglenaria_ott705280
+		Euglenopsis_ott4744817
+		Discoplastis_ott1027512
+		Lepocinclis_ott312168
+		Entosiphon_ott598958
+		Eutreptiella_ott488590
+		Astasia_ott833446
+		Cyclidiopsis_ott915525
+		Khawkinea_ott454816
+		Petalomonas_ott1081861
+		Peranema_ott454797
+		Hexamita_ott1072053
+		Difflugia_ott50730
+		Synbranchus_ott989901
+		Crenobia_ott219245
+		Philodina_ott831316
+		Dissotrocha_ott621253
+		Trichotria_ott740411
+		Keratella_ott169316
+		Mytilina_ott937972
+		Notholca_ott492249
+		Euchlanis_(genus_in_Lophotrochozoa)_ott492240
+		Lophocharis_ott2942213
+		Notommata_ott171572
+		Cephalodella_ott492248
+		Monommata_ott563700
+		Resticula_ott2940785
+		Trichocerca_ott128969
+		Synchaeta_(genus_in_Opisthokonta)_ott743640
+		Polyarthra_ott412242
+		Asplanchna_ott251970
+		Lecane_ott236072
+		Dicranophorus_ott513196
+		Encentrum_ott1090173
+		Wierzejskiella_ott2941697
+		Wigrella_ott2941700
+		Lepadella_ott1018358
+		Colurella_ott2941475
+		Proales_ott412244
+		Proalinopsis_ott2941330
+		Ascomorpha_ott513185
+		Lindia_ott1090166
+		Gastropus_ott2942248
+		Testudinella_ott995263
+		Filinia_ott424467
+		Hexarthra_ott491882
+		Lima_ott124367
+		Chrysoesthia_ott620115
+		Chydorus_ott1022213
+		Pleuroxus_ott1075390
+		Picripleuroxus_ott47271
+		Alona_ott1075386
+		Pseudochydorus_ott166924
+		Paralona_ott194398
+		Leydigiopsis_ott256224
+		Oxyurella_ott256227
+		Alonella_ott1075392
+		Dunhevedia_ott1075388
+		Graptoleberis_ott600927
+		Acroperus_ott600929
+		Camptocercus_ott1075397
+		Anchistropus_ott205251
+		Leberis_ott287277
+		Leydigia_ott323794
+		Ephemeroporus_ott2960643
+		Notoalona_ott2960658
+		Disparalona_ott2960670
+		Monospilus_ott2960649
+		Parvalona_ott4679566
+		Peracantha_ott4679568
+		Euryalona_ott2960735
+		Indialona_ott4679571
+		Daphnia_ott59084
+		Ceriodaphnia_ott374387
+		Scapholeberis_ott424897
+		Simocephalus_(genus_in_Protostomia)_ott424899
+		Moinodaphnia_ott323796
+		Megafenestra_ott2960424
+		Lathonura_ott926497
+		Macrothrix_ott548975
+		Ilyocryptus_ott782549
+		Acantholeberis_ott1022219
+		Drepanothrix_ott548968
+		Ophryoxus_ott496248
+		Wlassicsia_ott830624
+		Streblocerus_ott58670
+		Grimaldina_ott2960728
+		Bunops_ott2960762
+		Bosmina_ott46781
+		Eubosmina_ott799133
+		Bosminopsis_ott642650
+		Eurycercus_(genus_in_Protostomia)_ott598048
+		Rynchotalona_ott351036
+		Karualona_ott4679575
+		Phreatalona_ott4679572
+		Moina_ott950553
+		Leptodora_ott25267
+		Holopedium_ott598044
+		Diaphanosoma_ott216555
+		Latonopsis_ott417842
+		Penilia_ott157302
+		Latona_ott2960576
+		Pseudosida_ott2960578
+		Limnosida_ott4679581
+		Pseudopenilia_ott4679690
+		Polyphemus_ott950555
+		Bythotrephes_ott1022217
+		Diaptomus_ott275588
+		Mongolodiaptomus_ott176296
+		Leptodiaptomus_ott1096954
+		Arctodiaptomus_ott341020
+		Aglaodiaptomus_ott244982
+		Skistodiaptomus_ott262139
+		Argyrodiaptomus_ott274463
+		Eudiaptomus_ott341022
+		Acanthodiaptomus_ott348516
+		Gigantodiaptomus_ott959858
+		Hesperodiaptomus_ott915854
+		Neodiaptomus_ott757821
+		Onychodiaptomus_ott915850
+		Notodiaptomus_ott274461
+		Mixodiaptomus_ott2955916
+		Thermodiaptomus_ott4676060
+		Tumeodiaptomus_ott4676125
+		Pseudodiaptomus_ott350917
+		Boeckella_ott31476
+		Guernella_ott2960730
+		Epischura_ott361020
+		Eurytemora_ott703986
+		Heterocope_ott326228
+		Calanus_ott580716
+		Senecella_ott2956857
+		Monacilla_ott2956700
+		Limnocalanus_ott1067667
+		Acartia_ott966237
+		Thermocyclops_ott939731
+		Mesocyclops_ott176566
+		Diacyclops_ott361023
+		Acanthocyclops_ott493477
+		Megacyclops_ott706129
+		Cyclops_ott850514
+		Tropocyclops_ott870189
+		Paracyclops_ott706142
+		Eucyclops_ott451826
+		Macrocyclops_ott1091049
+		Microcyclops_ott706134
+		Metacyclops_ott591864
+		Orthocyclops_ott2948161
+		Paracyclopina_ott182534
+		Mysis_ott373475
+		Neomysis_ott808039
+		Biton_ott3520286
+		Panagrolaimus_ott70804
+		Phymanthus_ott515916
+		Craspedacusta_ott997626
+		Sphaeroeca_ott1062872
+		Desmarella_ott309874
+		Salpingoeca_ott1026109
+		Stelexomonas_ott4806825
+		Bicosta_ott4925612
+		Codosiga_ott641132
+		Aulomonas_ott5157793
+		Limnohabitans_ott104892
+		Candidatus_Rhodoluna_ott792528
+		Gloeotrichia_ott76369
+		Cylindrospermum_ott582198
+		Planktothrix_ott290809
+		Arthrospira_ott231664
+		Pleurocapsa_ott486816
+		Xenococcus_(genus_in_domain_Bacteria)_ott1071384
+		Stanieria_ott584998
+		Xenotholos_ott4017160
+		Cyanobacterium_ott668147
+		Anagnostidinema_ott7013829
+		Gloeothece_ott878840
+		Woronichinia_ott973050
+		Cyanodictyon_ott683634
+		Achroonema_ott4774138
+		Gloeobacter_ott108694
+		Snowella_ott707599
+		Radiocystis_ott683630
+		Rhabdoderma_(genus_in_domain_Bacteria)_ott1056342
+		Gloeocapsa_ott668136
+		Komvophoron_ott460980
+		Chamaecalyx_ott4017167
+		Anathece_ott5163397
+		Chlorogloea_(genus_in_domain_Bacteria)_ott705166
+		Cyanostylon_ott4016981
+		Cyanodermatium_ott4017118
+		Lithocapsa_ott4017047
+		Siphononema_ott4017351
+		Eucapsis_ott4016879
+		Hormothece_ott4016888
+		Cyanosarcina_ott415656
+		Hydrococcus_(genus_in_domain_Bacteria)_ott4017317
+		Chroococcidium_ott4017385
+		Onkonema_ott4017392
+		Gomphosphaeria_ott4016884
+		Bacularia_ott4016987
+		Coelomoron_ott4016917
+		Microcrocis_ott4017003
+		Pseudocapsa_ott4017004
+		Chondrocystis_ott695787
+		Coelosphaerium_ott193722
+		Tubiella_ott4017082
+		Cyanotetras_ott4017116
+		Wolskyella_ott4017174
+		Cyanothamnos_ott4017100
+		Rhodostichus_ott4017376
+		Coccopedia_ott4017289
+		Cyanokybus_ott4017386
+		Tetrarcus_ott4017510
+		Pseudoncobyrsa_ott4017558
+		Paracapsa_ott4017577
+		Johansenia_(genus_in_domain_Bacteria)_ott5361157
+	;
+END;
+BEGIN TREES;
+	TRANSLATE
+		1	Brachynema_(genus_in_kingdom_Archaeplastida)_ott5920157,
+		2	Kurzia_(genus_in_kingdom_Archaeplastida)_ott1006213,
+		3	Pleurotaenium_ott8173,
+		4	Hyalotheca_ott8176,
+		5	Xanthidium_(genus_in_kingdom_Archaeplastida)_ott8180,
+		6	Staurastrum_ott439260,
+		7	Micrasterias_ott8185,
+		8	Haplotaenium_ott17522,
+		9	Cosmarium_ott755483,
+		10	Desmidium_ott329226,
+		11	Tetmemorus_ott259636,
+		12	Staurodesmus_ott580919,
+		13	Euastrum_ott580913,
+		14	Actinotaenium_ott689126,
+		15	Docidium_ott171693,
+		16	Teilingia_ott1016609,
+		17	Spondylosium_ott329221,
+		18	Sphaerozosma_ott331823,
+		19	Bambusina_ott986546,
+		20	Oocardium_ott3854710,
+		21	Penium_(genus_in_kingdom_Archaeplastida)_ott560271,
+		22	Closterium_ott739602,
+		23	Gonatozygon_ott138856,
+		24	Netrium_ott916135,
+		25	Spirogyra_ott799381,
+		26	Zygnema_ott341242,
+		27	Klebsormidium_ott799394,
+		28	Interfilum_ott457927,
+		29	Mougeotia_ott211370,
+		30	Spirotaenia_ott916129,
+		31	Ulvella_(genus_in_kingdom_Archaeplastida)_ott141378,
+		32	Entocladia_ott195,
+		33	Monostroma_ott13960,
+		34	Ulothrix_ott1098238,
+		35	Chlorhormidium_ott5153531,
+		36	Cladophora_ott296540,
+		37	Rhizoclonium_ott871592,
+		38	Rhipilia_ott844136,
+		39	Chloromonas_ott112019,
+		40	Chlamydocapsa_ott342549,
+		41	Asterococcus_(genus_in_kingdom_Archaeplastida)_ott486556,
+		42	Sphaerocystis_ott530761,
+		43	Sphaerellocystis_ott5153129,
+		44	Pseudosphaerocystis_ott4735172,
+		45	Palmellopsis_ott26876,
+		46	Palmella_(genus_in_kingdom_Archaeplastida)_ott4735151,
+		47	Hormotila_ott337387,
+		48	Paulschulzia_ott1083587,
+		49	Tetraspora_(genus_in_kingdom_Archaeplastida)_ott896521,
+		50	Apiocystis_ott4735109,
+		51	Stylosphaeridium_ott4734837,
+		52	Chlorophysema_ott4735453,
+		53	Cecidochloris_ott4735205,
+		54	Chlorangiopsis_ott4735211,
+		55	Chlorangiella_ott4735451,
+		56	Chlamydomonadopsis_ott4735215,
+		57	Planctococcus_ott4735149,
+		58	Heleochloris_ott4735167,
+		59	Gonium_ott361836,
+		60	Colemanosphaera_ott5653921,
+		61	Lobomonas_ott843187,
+		62	Pandorina_ott1072226,
+		63	Rusalka_ott736423,
+		64	Haematococcus_(genus_in_kingdom_Archaeplastida)_ott79303,
+		65	Chlorogonium_ott864772,
+		66	Balticola_ott4734619,
+		67	Hyalogonium_ott4734833,
+		68	Chlorochytrium_ott180804,
+		69	Pascherina_ott333309,
+		70	Spondylomorum_ott4734643,
+		71	Dysmorphococcus_ott727974,
+		72	Phacotus_ott340091,
+		73	Pteromonas_ott727978,
+		74	Hemitoma_(genus_in_kingdom_Archaeplastida)_ott4734600,
+		75	Coccomonas_ott4734608,
+		76	Fortiella_ott4734756,
+		77	Vitreochlamys_ott28980,
+		78	Polytomella_ott347091,
+		79	Spermatozopsis_ott56617,
+		80	Dunaliella_ott347106,
+		81	Papenfussiomonas_ott4734840,
+		82	Quadrichloris_ott5152531,
+		83	Brachiomonas_ott467400,
+		84	Polytoma_ott695479,
+		85	Gloeomonas_ott604376,
+		86	Carteria_(genus_in_kingdom_Archaeplastida)_ott256105,
+		87	Pseudocarteria_ott203544,
+		88	Elakatothrix_ott632610,
+		89	Fusola_ott5151892,
+		90	Treubaria_ott869740,
+		91	Desmatractum_ott5151918,
+		92	Echinosphaerella_ott5153376,
+		93	Trochiscia_ott889741,
+		94	Chlainomonas_ott1062156,
+		95	Provasoliella_ott4734775,
+		96	Tetratoma_(genus_in_kingdom_Archaeplastida)_ott4734779,
+		97	Pyramichlamys_ott4734806,
+		98	Diplostauron_ott4734826,
+		99	Selenochloris_ott4736158,
+		100	Scotiella_(genus_in_kingdom_Archaeplastida)_ott5152036,
+		101	Tetrablepharis_ott4734798,
+		102	Gymnomonas_ott7042314,
+		103	Dictyococcus_ott15351,
+		104	Tetradesmus_ott386118,
+		105	Selenastrum_ott187910,
+		106	Monoraphidium_ott266805,
+		107	Messastrum_ott6001167,
+		108	Kirchneriella_(genus_in_kingdom_Archaeplastida)_ott410215,
+		109	Chlorolobion_ott5151989,
+		110	Ankistrodesmus_ott425620,
+		111	Nephrochlamys_ott477166,
+		112	Raphidocelis_ott16724,
+		113	Quadrigula_ott938279,
+		114	Pseudoquadrigula_ott5153269,
+		115	Drepanochloris_ott5653965,
+		116	Pseudoschroederia_ott362580,
+		117	Schroederia_(genus_in_kingdom_Archaeplastida)_ott1076660,
+		118	Mychonastes_ott244939,
+		119	Dictyochloris_ott502663,
+		120	Stigeoclonium_ott197188,
+		121	Oedogonium_ott197177,
+		122	Bulbochaete_ott720713,
+		123	Chaetopeltis_ott322044,
+		124	Scenedesmus_ott651333,
+		125	Ecballocystis_ott26711,
+		126	Willea_ott5152991,
+		127	Oocystis_(genus_in_kingdom_Archaeplastida)_ott1027472,
+		128	Lagerheimia_ott161654,
+		129	Tetrachlorella_ott451057,
+		130	Quadricoccus_ott301040,
+		131	Oocystidium_ott385785,
+		132	Echinocoleum_ott1069132,
+		133	Amphikrikos_ott451055,
+		134	Siderocystopsis_ott5151885,
+		135	Granulocystopsis_ott5151931,
+		136	Granulocystis_ott5151945,
+		137	Franceia_ott5152024,
+		138	Eremosphaera_ott942022,
+		139	Neglectella_ott5153275,
+		140	Excentrosphaera_ott5152022,
+		141	Rayssiella_ott5151948,
+		142	Glochiococcus_ott5151980,
+		143	Juranyiella_ott5152020,
+		144	Fotterella_ott5152034,
+		145	Thelesphaera_ott5152079,
+		146	Tetranephris_ott30549,
+		147	Stichococcus_ott239560,
+		148	Desmodesmus_ott565984,
+		149	Mucidosphaerium_ott992537,
+		150	Closteriopsis_ott107580,
+		151	Dicloster_ott911279,
+		152	Micractinium_ott395205,
+		153	Didymogenes_ott593285,
+		154	Hindakia_ott285517,
+		155	Coronastrum_ott360754,
+		156	Actinastrum_ott987089,
+		157	Crucigenia_ott5153016,
+		158	Gloeotila_ott322310,
+		159	Pseudochlorella_ott983892,
+		160	Marvania_ott149091,
+		161	Auxenochlorella_ott258104,
+		162	Nannochloris_ott629727,
+		163	Muriella_ott1089881,
+		164	Geminella_(genus_in_kingdom_Archaeplastida)_ott942015,
+		165	Apatococcus_ott974465,
+		166	Siderocelis_ott4734289,
+		167	Keratococcus_ott727970,
+		168	Dicellula_ott5153264,
+		169	Podohedra_ott5153287,
+		170	Golenkiniopsis_ott5153362,
+		171	Pedinomonas_ott850435,
+		172	Scourfieldia_ott85470,
+		173	Koliella_ott582011,
+		174	Raphidonema_(genus_in_kingdom_Archaeplastida)_ott361846,
+		175	Scherffelia_ott629749,
+		176	Tetraselmis_ott275991,
+		177	Coccomyxa_(genus_in_kingdom_Archaeplastida)_ott450225,
+		178	Botryococcus_ott769061,
+		179	Pseudococcomyxa_ott683464,
+		180	Trebouxia_ott510353,
+		181	Dichotomococcus_ott5653958,
+		182	Chloroidium_ott1009270,
+		183	Pseudodidymocystis_ott285725,
+		184	Neodesmus_(genus_in_kingdom_Archaeplastida)_ott605605,
+		185	Enallax_ott386120,
+		186	Pseudocharacium_ott851524,
+		187	Comasiella_ott5153042,
+		188	Coelastrum_ott987033,
+		189	Westella_(genus_in_kingdom_Archaeplastida)_ott427936,
+		190	Hariotina_ott283241,
+		191	Dimorphococcus_ott664555,
+		192	Verrucodesmus_ott5251404,
+		193	Pectinodesmus_ott521962,
+		194	Didymocystis_(genus_in_kingdom_Archaeplastida)_ott911286,
+		195	Hydrianum_ott5152316,
+		196	Scotinosphaera_ott5152568,
+		197	Westellopsis_ott5152977,
+		198	Komarekia_ott5152974,
+		199	Scotiellopsis_ott5152986,
+		200	Monomastix_ott327966,
+		201	Pyramimonas_ott1012207,
+		202	Cymbomonas_ott1012205,
+		203	Chlorococcum_ott953351,
+		204	Tetracystis_(genus_in_kingdom_Archaeplastida)_ott377198,
+		205	Characium_ott129602,
+		206	Spongiococcum_ott4735275,
+		207	Borodinellopsis_ott1087067,
+		208	Emergosphaera_ott5152308,
+		209	Sphaerobotrys_ott5152330,
+		210	Cystomonas_ott5152340,
+		211	Nephroselmis_ott439264,
+		212	Myochloris_ott4004324,
+		213	Tetrabaena_ott256059,
+		214	Characiopodium_ott316665,
+		215	Neochloris_ott129608,
+		216	Polyedriopsis_ott990318,
+		217	Botryosphaerella_ott5152601,
+		218	Chlorotetraedron_ott990317,
+		219	Echinosphaeridium_ott5153372,
+		220	Chlamydopodium_ott765673,
+		221	Characiochloris_ott991640,
+		222	Ankyra_ott869742,
+		223	Monactinus_ott13004,
+		224	Pseudopediastrum_ott13000,
+		225	Stauridium_ott13002,
+		226	Sorastrum_ott251731,
+		227	Pediastrum_ott425625,
+		228	Lacunastrum_ott5152685,
+		229	Parapediastrum_ott814022,
+		230	Euastropsis_ott5152693,
+		231	Deasonia_ott4735221,
+		232	Golenkinia_ott606904,
+		233	Microspora_(genus_in_kingdom_Archaeplastida)_ott416270,
+		234	Asteromonas_ott850433,
+		235	Tetraedron_ott510075,
+		236	Gloeocystis_ott947741,
+		237	Radiococcus_ott66333,
+		238	Follicularia_ott608281,
+		239	Sphaeroneocystis_ott5153224,
+		240	Thorakochloris_ott5152071,
+		241	Hindakochloris_ott5153242,
+		242	Coenococcus_ott5153225,
+		243	Eutetramorus_ott5153261,
+		244	Palmodictyon_ott5153348,
+		245	Coenodispora_ott5153221,
+		246	Schizochlamys_ott774856,
+		247	Planktosphaeria_ott1014751,
+		248	Picocystis_ott913620,
+		249	Actidesmium_ott4734113,
+		250	Korshikoviella_ott5152332,
+		251	Deuterocharacium_ott4734123,
+		252	Characiellopsis_ott4734127,
+		253	Diplochloris_ott5153246,
+		254	Dactylosphaerium_(genus_in_kingdom_Archaeplastida)_ott5153292,
+		255	Hemiselmis_ott801159,
+		256	Cryptomonas_ott1073344,
+		257	Komma_ott187641,
+		258	Chroomonas_ott497054,
+		259	Rhodomonas_ott955642,
+		260	Teleaulax_ott277748,
+		261	Plagioselmis_ott435977,
+		262	Storeatula_ott998899,
+		263	Cyathomonas_ott4739086,
+		264	Goniomonas_ott914449,
+		265	Katablepharis_ott505748,
+		266	Leucocryptos_ott111139,
+		267	Telonema_ott4738974,
+		268	Ceramium_ott762364,
+		269	Bangia_ott864267,
+		270	Gloeochaete_(genus_in_domain_Eukaryota)_ott142554,
+		271	Glaucocystis_ott664975,
+		272	Acanthoceras_(genus_in_subkingdom_SAR)_ott1081712,
+		273	Tabellaria_ott79382,
+		274	Asterionella_ott753597,
+		275	Ctenophora_(genus_in_subkingdom_SAR)_ott103964,
+		276	Licmophora_ott607318,
+		277	Staurosira_ott412230,
+		278	Eunotia_ott111916,
+		279	Sellaphora_ott974005,
+		280	Pinnularia_ott548616,
+		281	Diploneis_ott625564,
+		282	Neidium_ott593706,
+		283	Craticula_(genus_in_subkingdom_SAR)_ott148818,
+		284	Amphiprora_ott776172,
+		285	Rhopalodia_ott322246,
+		286	Stenopterobia_ott227391,
+		287	Campylodiscus_ott397783,
+		288	Cymatopleura_ott371138,
+		289	Amphipleura_ott2816947,
+		290	Berkeleya_ott579253,
+		291	Cocconeis_ott498483,
+		292	Placoneis_ott1061633,
+		293	Navicula_ott942603,
+		294	Gyrosigma_ott777291,
+		295	Achnanthes_ott166706,
+		296	Tryblionella_ott525508,
+		297	Cylindrotheca_(genus_in_subkingdom_SAR)_ott1095881,
+		298	Bacillaria_ott446448,
+		299	Tabularia_ott409746,
+		300	Pseudostaurosira_ott1013278,
+		301	Opephora_ott407285,
+		302	Hannaea_ott2819112,
+		303	Meridion_ott2819099,
+		304	Frankophila_ott2819129,
+		305	Sarcophagodes_ott5288531,
+		306	Stephanodiscus_ott422805,
+		307	Cyclotella_ott422797,
+		308	Attheya_ott878178,
+		309	Coscinodiscus_ott790043,
+		310	Actinocyclus_(genus_in_subkingdom_SAR)_ott1075852,
+		311	Actinoptychus_ott182051,
+		312	Leptocylindrus_ott572764,
+		313	Melosira_ott1098671,
+		314	Aulacoseira_ott963749,
+		315	Skeletonema_ott569303,
+		316	Discostella_ott420353,
+		317	Rhizosolenia_(in_Bacillariophytina)_ott5251209,
+		318	Puncticulata_ott4026084,
+		319	Stephanocostis_ott4026107,
+		320	Gomphonema_ott40476,
+		321	Diatoma_ott621376,
+		322	Pleurosigma_ott518857,
+		323	Encyonema_ott974003,
+		324	Reimeria_ott965974,
+		325	Paralia_(genus_in_subkingdom_SAR)_ott285072,
+		326	Pauliella_(genus_in_subkingdom_SAR)_ott427008,
+		327	Anomoeoneis_ott548619,
+		328	Achnanthidium_ott353342,
+		329	Planothidium_ott705591,
+		330	Frustulia_ott723345,
+		331	Encyonopsis_ott301167,
+		332	Diadesmis_ott947236,
+		333	Eolimna_ott256026,
+		334	Thalassiosira_(genus_in_class_Bacillariophyceae)_ott5251200,
+		335	Lindavia_ott5987874,
+		336	Actinella_(genus_in_subkingdom_SAR)_ott2812897,
+		337	Peronia_(genus_in_subkingdom_SAR)_ott2812921,
+		338	Eucocconeis_ott4025170,
+		339	Psammothidium_ott4025127,
+		340	Karayevia_ott4025108,
+		341	Rossithidium_ott4025114,
+		342	Platessa_ott5421233,
+		343	Halamphora_ott2816938,
+		344	Mastogloia_ott454686,
+		345	Aneumastus_ott2818568,
+		346	Catenula_(genus_in_subkingdom_SAR)_ott2814380,
+		347	Cocconema_(genus_in_subkingdom_SAR)_ott4024642,
+		348	Brachysira_ott4024967,
+		349	Nupela_ott4024753,
+		350	Gomphosphenia_ott2815342,
+		351	Rhoicosphenia_ott2815340,
+		352	Chamaepinnularia_ott4024851,
+		353	Humidophila_ott5655525,
+		354	Parlibellus_ott2818489,
+		355	Geissleria_ott4024689,
+		356	Muelleria_ott4024614,
+		357	Kobayasiella_ott4024712,
+		358	Naviculadicta_ott4025513,
+		359	Dorofeyukea_ott7552529,
+		360	Kolbesia_ott4025122,
+		361	Arachnoidiscus_ott4026133,
+		362	Amphicampa_ott2819109,
+		363	Bumilleriopsis_ott151000,
+		364	Tribonema_ott898587,
+		365	Botrydium_(genus_in_subkingdom_SAR)_ott385775,
+		366	Mischococcus_ott517342,
+		367	Ophiocytium_ott25914,
+		368	Botrydiopsis_ott385772,
+		369	Perone_ott4027183,
+		370	Chloridella_ott1007471,
+		371	Ducellieria_ott5585508,
+		372	Tetraedriella_ott4027126,
+		373	Heterodesmus_(genus_in_subkingdom_SAR)_ott2821466,
+		374	Botryochloris_ott1069672,
+		375	Arachnochloris_ott4027074,
+		376	Prismatella_ott4027086,
+		377	Trachychloron_ott4027094,
+		378	Isthmochloron_ott4027118,
+		379	Nephrodiella_ott4027142,
+		380	Chlorallantus_ott4027149,
+		381	Chlorocloster_ott4027150,
+		382	Polygoniochloris_ott4027163,
+		383	Monallantus_ott4027166,
+		384	Pseudopolyedriopsis_ott4027173,
+		385	Diachros_ott4027177,
+		386	Peroniella_ott4027198,
+		387	Lutherella_ott4027241,
+		388	Centritractus_ott4027245,
+		389	Gloeobotrys_ott4027273,
+		390	Acanthochloris_ott4027071,
+		391	Gloeopodium_ott4027255,
+		392	Chlorogibba_ott4027172,
+		393	Polyedriella_ott4027099,
+		394	Stipitococcus_ott4922097,
+		395	Stichogloea_ott733088,
+		396	Phaeoschizochlamys_ott269263,
+		397	Tetrasporopsis_ott241773,
+		398	Phaeobotrys_(genus_in_subkingdom_SAR)_ott4029345,
+		399	Vacuolaria_ott536550,
+		400	Gonyostomum_ott906064,
+		401	Merotricha_ott936631,
+		402	Goniochloris_ott344115,
+		403	Monodus_ott385767,
+		404	Pseudocharaciopsis_ott961982,
+		405	Ellipsoidion_ott290824,
+		406	Nannochloropsis_ott694370,
+		407	Pseudotetraedriella_ott423009,
+		408	Pseudostaurastrum_ott948667,
+		409	Characiopsis_ott4027211,
+		410	Chlorobotrys_ott4027260,
+		411	Ochromonas_ott898589,
+		412	Dinobryon_(in_Ochromonas_sup.)_ott5251191,
+		413	Chrysoxys_ott786574,
+		414	Phaeoplaca_ott315027,
+		415	Epipyxis_ott474740,
+		416	Paraphysomonas_ott783302,
+		417	Synochromonas_ott4921763,
+		418	Syncrypta_ott4921767,
+		419	Spumella_ott690121,
+		420	Uroglena_ott315025,
+		421	Chrysosaccus_ott510006,
+		422	Mallomonas_ott898584,
+		423	Synura_ott373307,
+		424	Conradiella_ott2810604,
+		425	Microglena_(genus_in_subkingdom_SAR)_ott5988407,
+		426	Heterogloea_ott57843,
+		427	Gloeochloris_ott4921587,
+		428	Characidiopsis_ott2810626,
+		429	Kephyrion_ott139310,
+		430	Chrysamoeba_(genus_in_subkingdom_SAR)_ott795638,
+		431	Chromulina_ott373312,
+		432	Chrysosphaerella_ott668601,
+		433	Hydrurus_ott373310,
+		434	Chrysocapsa_ott319868,
+		435	Chromophyton_ott631707,
+		436	Bitrichia_ott2811443,
+		437	Derepyxis_ott2811450,
+		438	Chrysopyxis_ott2811455,
+		439	Cyclonexis_ott889546,
+		440	Pseudokephyrion_ott4922371,
+		441	Kephyriopsis_ott2811495,
+		442	Chrysotilos_ott4029239,
+		443	Chrysocapsella_ott4029251,
+		444	Gloeochrysis_ott4029260,
+		445	Chrysococcocystis_ott4029402,
+		446	Calycomonas_ott4029404,
+		447	Ollicola_ott4922366,
+		448	Rhizochrysis_ott4029429,
+		449	Phaeodermatium_ott4029437,
+		450	Monochrysis_(genus_in_subkingdom_SAR)_ott5251195,
+		451	Spiniferomonas_ott4921716,
+		452	Synuropsis_ott4922516,
+		453	Chrysidiastrum_ott4921792,
+		454	Amphirhiza_ott4921796,
+		455	Chrysostephanosphaera_ott4921800,
+		456	Stokesiella_(genus_in_subkingdom_SAR)_ott4922311,
+		457	Conradocystis_ott4922321,
+		458	Chrysococcus_ott4922323,
+		459	Stylochrysalis_ott4922336,
+		460	Lepochromulina_ott4922351,
+		461	Chrysolykos_ott4922361,
+		462	Polylepidomonas_ott4922419,
+		463	Chrysapsis_ott4922533,
+		464	Amphichrysis_ott4922536,
+		465	Chromophysomonas_ott6391714,
+		466	Helicopedinella_ott511701,
+		467	Pedinella_ott100082,
+		468	Pseudopedinella_ott432900,
+		469	Apedinella_ott432902,
+		470	Actinomonas_ott4029411,
+		471	Pseudochattonella_ott863263,
+		472	Bicosoeca_ott938817,
+		473	Bicoeca_ott4026213,
+		474	Acanthosphaera_(genus_in_subkingdom_SAR)_ott4004663,
+		475	Gyromitus_(genus_in_subkingdom_SAR)_ott696946,
+		476	Pelagostrombidium_ott1027892,
+		477	Limnostrombidium_ott2822100,
+		478	Codonella_ott962053,
+		479	Rimostrombidium_ott70731,
+		480	Tintinnopsis_ott84209,
+		481	Tintinnidium_(genus_in_subkingdom_SAR)_ott861397,
+		482	Strobilidium_ott174117,
+		483	Salpingella_ott1071200,
+		484	Euplotes_ott231098,
+		485	Halteria_ott129115,
+		486	Meseres_(genus_in_subkingdom_SAR)_ott802626,
+		487	Litonotus_ott125331,
+		488	Didinium_ott1072825,
+		489	Lagynophrya_ott477128,
+		490	Lacrymaria_(genus_in_subkingdom_SAR)_ott960614,
+		491	Monodinium_ott962058,
+		492	Belonophrya_ott4805639,
+		493	Mesodinium_ott182635,
+		494	Askenasia_ott473776,
+		495	Pelagovasicola_ott2824132,
+		496	Stokesia_(genus_in_subkingdom_SAR)_ott49905,
+		497	Vorticella_ott702848,
+		498	Tetrahymena_(genus_in_subkingdom_SAR)_ott47284,
+		499	Glaucomides_ott285539,
+		500	Glaucoma_(genus_in_subkingdom_SAR)_ott568119,
+		501	Histiobalantium_ott762297,
+		502	Urocentrum_ott626418,
+		503	Cinetochilum_ott490279,
+		504	Colpoda_ott129112,
+		505	Bromeliothrix_ott4030339,
+		506	Cyrtolophosis_ott81750,
+		507	Coleps_ott1063559,
+		508	Urotricha_ott473781,
+		509	Balanion_ott1027890,
+		510	Woloszynskia_ott746954,
+		511	Baldinia_ott4036332,
+		512	Coolia_ott560912,
+		513	Prorocentrum_ott797787,
+		514	Mesoporos_ott2830830,
+		515	Crypthecodinium_ott621392,
+		516	Karlodinium_ott303396,
+		517	Gyrodinium_ott820946,
+		518	Pyrophacus_ott423796,
+		519	Ceratium_ott172869,
+		520	Tripos_ott2830224,
+		521	Protoceratium_ott862594,
+		522	Pyrocystis_ott223416,
+		523	Thompsodinium_ott4035429,
+		524	Chimonodinium_ott541780,
+		525	Tyrannodinium_ott4924683,
+		526	Peridiniopsis_ott97686,
+		527	Peridinium_ott621394,
+		528	Glenodiniopsis_ott363131,
+		529	Durinskia_ott752514,
+		530	Kryptoperidinium_ott627398,
+		531	Sphaerodinium_ott653238,
+		532	Glenodinium_ott1012139,
+		533	Palatinus_ott5986894,
+		534	Archaeperidinium_ott4036339,
+		535	Oodinium_ott2831439,
+		536	Stylodinium_ott2831470,
+		537	Dinosphaera_ott4036370,
+		538	Aduncodinium_ott5655318,
+		539	Speroidium_ott8011459,
+		540	Dinophysis_ott575949,
+		541	Ornithocercus_ott824292,
+		542	Phalacroma_(genus_in_subkingdom_SAR)_ott714113,
+		543	Gymnodinium_ott274333,
+		544	Lepidodinium_ott1037258,
+		545	Warnowia_ott297117,
+		546	Akashiwo_ott930231,
+		547	Katodinium_ott971302,
+		548	Tovellia_ott562150,
+		549	Opisthoaulax_ott4925407,
+		550	Amphidinium_ott746952,
+		551	Dinococcus_ott2831477,
+		552	Cystodinedria_ott2831486,
+		553	Togula_ott821617,
+		554	Ankistrodinium_ott5385767,
+		555	Borghiella_ott4038279,
+		556	Bernardinium_ott4038130,
+		557	Desmomastix_ott4038364,
+		558	Spatulodinium_ott672583,
+		559	Kofoidinium_ott98343,
+		560	Hymenomonas_ott252500,
+		561	Pontosphaera_ott4014244,
+		562	Chrysidalis_ott4023438,
+		563	Prymnesium_ott804521,
+		564	Phaeocystis_ott215712,
+		565	Haptolina_ott1015365,
+		566	Chrysochromulina_ott804512,
+		567	Agamomonas_ott5157198,
+		568	Bodo_ott222233,
+		569	Strombomonas_ott109807,
+		570	Colacium_ott1063272,
+		571	Monomorphina_ott642759,
+		572	Menoidium_ott915519,
+		573	Euglenaria_ott705280,
+		574	Euglenopsis_ott4744817,
+		575	Discoplastis_ott1027512,
+		576	Lepocinclis_ott312168,
+		577	Entosiphon_ott598958,
+		578	Eutreptiella_ott488590,
+		579	Astasia_ott833446,
+		580	Cyclidiopsis_ott915525,
+		581	Khawkinea_ott454816,
+		582	Petalomonas_ott1081861,
+		583	Peranema_ott454797,
+		584	Hexamita_ott1072053,
+		585	Difflugia_ott50730,
+		586	Synbranchus_ott989901,
+		587	Crenobia_ott219245,
+		588	Philodina_ott831316,
+		589	Dissotrocha_ott621253,
+		590	Trichotria_ott740411,
+		591	Keratella_ott169316,
+		592	Mytilina_ott937972,
+		593	Notholca_ott492249,
+		594	Euchlanis_(genus_in_Lophotrochozoa)_ott492240,
+		595	Lophocharis_ott2942213,
+		596	Notommata_ott171572,
+		597	Cephalodella_ott492248,
+		598	Monommata_ott563700,
+		599	Resticula_ott2940785,
+		600	Trichocerca_ott128969,
+		601	Synchaeta_(genus_in_Opisthokonta)_ott743640,
+		602	Polyarthra_ott412242,
+		603	Asplanchna_ott251970,
+		604	Lecane_ott236072,
+		605	Dicranophorus_ott513196,
+		606	Encentrum_ott1090173,
+		607	Wierzejskiella_ott2941697,
+		608	Wigrella_ott2941700,
+		609	Lepadella_ott1018358,
+		610	Colurella_ott2941475,
+		611	Proales_ott412244,
+		612	Proalinopsis_ott2941330,
+		613	Ascomorpha_ott513185,
+		614	Lindia_ott1090166,
+		615	Gastropus_ott2942248,
+		616	Testudinella_ott995263,
+		617	Filinia_ott424467,
+		618	Hexarthra_ott491882,
+		619	Lima_ott124367,
+		620	Chrysoesthia_ott620115,
+		621	Chydorus_ott1022213,
+		622	Pleuroxus_ott1075390,
+		623	Picripleuroxus_ott47271,
+		624	Alona_ott1075386,
+		625	Pseudochydorus_ott166924,
+		626	Paralona_ott194398,
+		627	Leydigiopsis_ott256224,
+		628	Oxyurella_ott256227,
+		629	Alonella_ott1075392,
+		630	Dunhevedia_ott1075388,
+		631	Graptoleberis_ott600927,
+		632	Acroperus_ott600929,
+		633	Camptocercus_ott1075397,
+		634	Anchistropus_ott205251,
+		635	Leberis_ott287277,
+		636	Leydigia_ott323794,
+		637	Ephemeroporus_ott2960643,
+		638	Notoalona_ott2960658,
+		639	Disparalona_ott2960670,
+		640	Monospilus_ott2960649,
+		641	Parvalona_ott4679566,
+		642	Peracantha_ott4679568,
+		643	Euryalona_ott2960735,
+		644	Indialona_ott4679571,
+		645	Daphnia_ott59084,
+		646	Ceriodaphnia_ott374387,
+		647	Scapholeberis_ott424897,
+		648	Simocephalus_(genus_in_Protostomia)_ott424899,
+		649	Moinodaphnia_ott323796,
+		650	Megafenestra_ott2960424,
+		651	Lathonura_ott926497,
+		652	Macrothrix_ott548975,
+		653	Ilyocryptus_ott782549,
+		654	Acantholeberis_ott1022219,
+		655	Drepanothrix_ott548968,
+		656	Ophryoxus_ott496248,
+		657	Wlassicsia_ott830624,
+		658	Streblocerus_ott58670,
+		659	Grimaldina_ott2960728,
+		660	Bunops_ott2960762,
+		661	Bosmina_ott46781,
+		662	Eubosmina_ott799133,
+		663	Bosminopsis_ott642650,
+		664	Eurycercus_(genus_in_Protostomia)_ott598048,
+		665	Rynchotalona_ott351036,
+		666	Karualona_ott4679575,
+		667	Phreatalona_ott4679572,
+		668	Moina_ott950553,
+		669	Leptodora_ott25267,
+		670	Holopedium_ott598044,
+		671	Diaphanosoma_ott216555,
+		672	Latonopsis_ott417842,
+		673	Penilia_ott157302,
+		674	Latona_ott2960576,
+		675	Pseudosida_ott2960578,
+		676	Limnosida_ott4679581,
+		677	Pseudopenilia_ott4679690,
+		678	Polyphemus_ott950555,
+		679	Bythotrephes_ott1022217,
+		680	Diaptomus_ott275588,
+		681	Mongolodiaptomus_ott176296,
+		682	Leptodiaptomus_ott1096954,
+		683	Arctodiaptomus_ott341020,
+		684	Aglaodiaptomus_ott244982,
+		685	Skistodiaptomus_ott262139,
+		686	Argyrodiaptomus_ott274463,
+		687	Eudiaptomus_ott341022,
+		688	Acanthodiaptomus_ott348516,
+		689	Gigantodiaptomus_ott959858,
+		690	Hesperodiaptomus_ott915854,
+		691	Neodiaptomus_ott757821,
+		692	Onychodiaptomus_ott915850,
+		693	Notodiaptomus_ott274461,
+		694	Mixodiaptomus_ott2955916,
+		695	Thermodiaptomus_ott4676060,
+		696	Tumeodiaptomus_ott4676125,
+		697	Pseudodiaptomus_ott350917,
+		698	Boeckella_ott31476,
+		699	Guernella_ott2960730,
+		700	Epischura_ott361020,
+		701	Eurytemora_ott703986,
+		702	Heterocope_ott326228,
+		703	Calanus_ott580716,
+		704	Senecella_ott2956857,
+		705	Monacilla_ott2956700,
+		706	Limnocalanus_ott1067667,
+		707	Acartia_ott966237,
+		708	Thermocyclops_ott939731,
+		709	Mesocyclops_ott176566,
+		710	Diacyclops_ott361023,
+		711	Acanthocyclops_ott493477,
+		712	Megacyclops_ott706129,
+		713	Cyclops_ott850514,
+		714	Tropocyclops_ott870189,
+		715	Paracyclops_ott706142,
+		716	Eucyclops_ott451826,
+		717	Macrocyclops_ott1091049,
+		718	Microcyclops_ott706134,
+		719	Metacyclops_ott591864,
+		720	Orthocyclops_ott2948161,
+		721	Paracyclopina_ott182534,
+		722	Mysis_ott373475,
+		723	Neomysis_ott808039,
+		724	Biton_ott3520286,
+		725	Panagrolaimus_ott70804,
+		726	Phymanthus_ott515916,
+		727	Craspedacusta_ott997626,
+		728	Sphaeroeca_ott1062872,
+		729	Desmarella_ott309874,
+		730	Salpingoeca_ott1026109,
+		731	Stelexomonas_ott4806825,
+		732	Bicosta_ott4925612,
+		733	Codosiga_ott641132,
+		734	Aulomonas_ott5157793,
+		735	Limnohabitans_ott104892,
+		736	Candidatus_Rhodoluna_ott792528,
+		737	Gloeotrichia_ott76369,
+		738	Cylindrospermum_ott582198,
+		739	Planktothrix_ott290809,
+		740	Arthrospira_ott231664,
+		741	Pleurocapsa_ott486816,
+		742	Xenococcus_(genus_in_domain_Bacteria)_ott1071384,
+		743	Stanieria_ott584998,
+		744	Xenotholos_ott4017160,
+		745	Cyanobacterium_ott668147,
+		746	Anagnostidinema_ott7013829,
+		747	Gloeothece_ott878840,
+		748	Woronichinia_ott973050,
+		749	Cyanodictyon_ott683634,
+		750	Achroonema_ott4774138,
+		751	Gloeobacter_ott108694,
+		752	Snowella_ott707599,
+		753	Radiocystis_ott683630,
+		754	Rhabdoderma_(genus_in_domain_Bacteria)_ott1056342,
+		755	Gloeocapsa_ott668136,
+		756	Komvophoron_ott460980,
+		757	Chamaecalyx_ott4017167,
+		758	Anathece_ott5163397,
+		759	Chlorogloea_(genus_in_domain_Bacteria)_ott705166,
+		760	Cyanostylon_ott4016981,
+		761	Cyanodermatium_ott4017118,
+		762	Lithocapsa_ott4017047,
+		763	Siphononema_ott4017351,
+		764	Eucapsis_ott4016879,
+		765	Hormothece_ott4016888,
+		766	Cyanosarcina_ott415656,
+		767	Hydrococcus_(genus_in_domain_Bacteria)_ott4017317,
+		768	Chroococcidium_ott4017385,
+		769	Onkonema_ott4017392,
+		770	Gomphosphaeria_ott4016884,
+		771	Bacularia_ott4016987,
+		772	Coelomoron_ott4016917,
+		773	Microcrocis_ott4017003,
+		774	Pseudocapsa_ott4017004,
+		775	Chondrocystis_ott695787,
+		776	Coelosphaerium_ott193722,
+		777	Tubiella_ott4017082,
+		778	Cyanotetras_ott4017116,
+		779	Wolskyella_ott4017174,
+		780	Cyanothamnos_ott4017100,
+		781	Rhodostichus_ott4017376,
+		782	Coccopedia_ott4017289,
+		783	Cyanokybus_ott4017386,
+		784	Tetrarcus_ott4017510,
+		785	Pseudoncobyrsa_ott4017558,
+		786	Paracapsa_ott4017577,
+		787	Johansenia_(genus_in_domain_Bacteria)_ott5361157
+	;
+	TREE * UNTITLED = [&R] (((((((((((29,((1,2)Embryophyta_ott56610,(25,26,(24,((3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)Desmidiaceae_ott439259,21,22,23)Desmidiales_ott897405)mrcaott8171ott71259)mrcaott8171ott154619)mrcaott2ott8171,(27,28)Klebsormidiaceae_ott799388)mrcaott2ott50189,30)Streptophyta_ott916750,(222,235,249,250,251,252,253,254,((124,146,148,183,184,185,187,188,189,190,191,192,193,194,197,198,199,(((31,32)Ulvellaceae_ott1018102,33)Ulvales_ott951302,(34,35)Ulotrichaceae_ott603)OUU_clade_ott7043886,(((36,37)Cladophoraceae_ott1068370,38)TCBD_clade_ott7043991,(((77,78,83,84,85,86,87,94,95,96,97,98,99,100,101,102,39,((47,57,58,(40,41,42,43,44,45,46)Palmellaceae_ott967447,(48,49,50)Tetrasporaceae_ott391063,(51,52,53,54,55,56)Chlorangiellaceae_ott4735203)Tetrasporales_ott965073,(59,60,61,62)Volvocaceae_ott391142)mrcaott9389ott23557,(72,73,74,75,76,(71,(((63,64,65,66,67)Haematococcaceae_ott391062,68)mrcaott20288ott560348,(69,70)Spondylomoraceae_ott396302)mrcaott20288ott333307)mrcaott20288ott727976)mrcaott20288ott226071,(79,80,81,82)Dunaliellaceae_ott979509,(88,(89,(93,(90,91,92)Treubariaceae_ott224598)mrcaott816696ott889743)mrcaott786146ott816696)mrcaott502931ott786146)mrcaott1544ott9282,((((104,103)mrcaott15353ott127181,(105,106,107,108,109,110,111,112,113,114,115)Selenastraceae_ott441643)mrcaott15353ott30554,((116,117)Schroederiaceae_ott5602193,118)mrcaott132563ott431447)mrcaott15353ott132563,119)mrcaott15345ott277486)mrcaott1544ott15345,(120,((121,122)Oedogoniales_ott916752,123)mrcaott87908ott127500)OCC_clade_ott7042532)mrcaott1544ott8659)mrcaott1426ott1544,(141,142,143,144,145,(125,126)Makinoelloideae_ott7043422,(127,128,129,130,131,132,133,134,135,136,137)Oocystoideae_ott7043429,(138,139,140)Eremosphaeroideae_ott967444)Oocystaceae_ott339001,147,((158,159,160,161,162,163,164,165,166,167,168,169,170,((149,(151,150)mrcaott107578ott386113)mrcaott39418ott107578,(152,153,154,156,157,155)mrcaott159742ott161641)mrcaott39418ott157856)mrcaott39418ott84763,(171,172)Pedinophyceae_ott542091)mrcaott39418ott115621,(173,174)Koliellaceae_ott4734292,(175,176)Chlorodendraceae_ott542100,(177,178,179)Elliptochloris_clade_ott7043515,(180,181)Trebouxiales_ott5584545,182,186,195,196)mrcaott185ott1426,(200,(201,202)Pyramimonadales_ott379160)mrcaott42071ott129655)mrcaott185ott42071,(203,204,205,206,207,208,209,210)Chlorococcaceae_ott129601,(211,212)Nephroselmidophyceae_ott1038762,213,(214,215,216,217,218,219)Neochloridaceae_ott132568,(220,221)Characiochloridaceae_ott727035,(223,224,225,226,227,228,229,230)Hydrodictyaceae_ott425644,231,232,233,234,(236,237,238,239,240,241,242,243,244,245)Radiococcaceae_ott5153184,(246,247)Schizochlamydaceae_ott5602190,248)Chlorophyta_ott979501)Chloroplastida_ott361838,((264,(255,256,257,258,259,260,261,262,263)Cryptomonadales_ott7645937)mrcaott7623ott42421,(265,266)Kathablepharidae_ott269577,267)Cryptophyceae_ott491172)mrcaott2ott7623,(268,269)mrcaott1551ott10831)mrcaott2ott1551,(270,271)Glaucophyta_ott664970)mrcaott2ott142555,((((((320,321,322,323,324,326,327,328,329,330,331,332,333,334,335,336,338,339,340,341,342,343,346,347,352,353,354,355,356,357,358,359,360,362,(315,316,317,318,319,(((272,(299,300,301,302,303,304,305,((((274,273)mrcaott79379ott613419,(275,276)mrcaott103966ott178704)mrcaott79379ott103966,277)mrcaott1664ott27877,((278,(((((281,(279,280)mrcaott52677ott71664)mrcaott52677ott625562,282)mrcaott52677ott593705,283)mrcaott52677ott148810,(284,((285,(286,287)mrcaott227398ott397782)mrcaott193658ott227398,288)mrcaott193658ott321877)mrcaott60031ott115630,((290,289)mrcaott103950ott454681,(291,292)mrcaott148816ott519424)mrcaott103950ott148816)mrcaott24379ott40472,(293,294)mrcaott33945ott52681)mrcaott24379ott33945)mrcaott8617ott24379,(298,(295,(296,297)mrcaott525516ott671507)mrcaott303303ott525516)mrcaott303303ott326138)mrcaott8617ott303303)mrcaott1664ott8617)mrcaott1664ott13273)mrcaott148ott1664,((306,307)mrcaott17542ott90995,308)mrcaott712ott125309)mrcaott148ott712,((309,(310,311)mrcaott117436ott505201)Coscinodiscids_ott5248687,312)mrcaott103952ott272513)mrcaott148ott13272,(313,314)mrcaott28082ott187181)mrcaott148ott28082,325,337,(344,345)Mastogloiaceae_ott2818550,(348,349)Brachysiraceae_ott4024966,(350,351)Rhoicospheniaceae_ott2815338,361)Bacillariophyta_ott5342311,((((((363,364,365,366,367)Tribonematales_ott223412,(370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,388,390,392,393,(368,369)Botryidiopsidaceae_ott754467,(386,387)Characiopsidaceae_ott4027192,389,391)Mischococcales_ott1004458,394)Xanthophyceae_ott151001,((395,396,397)Phaeothamniaceae_ott420081,398)Phaeothamniophyceae_ott733090)mrcaott128669ott241774,(399,400,401)Raphidophyceae_ott587225)mrcaott2378ott15569,(402,403,404,405,408,409,410,406,407)Eustigmatales_ott423008)mrcaott2378ott58215,((429,439,440,441,442,443,444,447,448,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,((((417,418,((413,(411,412)Ochromonas_sup._ott5279515)mrcaott15572ott889547,(415,414)mrcaott18893ott474720)mrcaott15572ott18893,416)mrcaott15572ott88173,(419,420)mrcaott36309ott315031)mrcaott15572ott36309,421)mrcaott15572ott313330,(422,423,424,425)Mallomonadaceae_ott112623)mrcaott15572ott54776,((426,427)Heterogloeaceae_ott57841,428)Heterogloeales_ott57842,((432,(430,431)mrcaott264905ott313329)mrcaott264905ott4921699,((433,434)Chrysocapsales_ott4029447,(435,(436,437,438)Stylococcaceae_ott61049)Hibberdiales_ott215714)mrcaott373311ott446446)mrcaott264905ott373311,(445,446)Chrysococcaceae_ott4029392,449)mrcaott6033ott15572,((466,467,468,469,470)Pedinellales_ott432903,471)Dictyochophyceae_ott364294)mrcaott6033ott77606)mrcaott2378ott6033)mrcaott148ott2378,(472,473)Bicosoecidae_ott733747)mrcaott148ott24366,(474,475)mrcaott7555ott15830)mrcaott148ott7555,((((485,486,(478,479,480,481,482,483,(476,477)Oligotrichia_ott810565)mrcaott2981ott15392,484)Spirotrichea_ott899768,((487,488,489,490,491,492)Haptoria_ott215584,(493,494,495)Mesodiniidae_ott182636)Litostomatea_ott546633)mrcaott1546ott5092,(((496,497)mrcaott1671ott16129,((498,499,500)Hymenostomatia_ott5257367,(502,501)Scuticociliatia_ott310012)mrcaott11752ott13570,503)Oligohymenophorea_ott16119,((504,505)Colpodida_ott581758,506)mrcaott69135ott81749,(507,508,509)Prorodontida_ott1063562)Conthreep_ott5248773)mrcaott1546ott1671,((550,553,554,556,((528,529,530,532,533,534,537,538,539,(511,510)mrcaott4510ott4036333,((522,523,(517,518,((515,512,(513,514)Prorocentraceae_ott797788)mrcaott8394ott17643,516)mrcaott8394ott93910)mrcaott8394ott212229,((519,520)Ceratiaceae_ott476867,521)mrcaott67592ott862593)mrcaott5244ott8394,((526,(524,525)mrcaott32008ott32010)mrcaott32008ott97685,527)mrcaott32008ott45527)mrcaott5244ott32008,531,(535,536)Oodiniaceae_ott32503)mrcaott4510ott5244,(542,(540,541)mrcaott35058ott262270)Dinophysiaceae_ott174488,(546,(543,544,545)Gymnodinium_clade_ott5251327)mrcaott37325ott83477,(547,548,549)Tovelliaceae_ott1021776)mrcaott4510ott31132,(551,552)Phytodiniales_ott684954,555,557)mrcaott4510ott164806,(558,559)Kofoidiniaceae_ott98345)Dinoflagellata_ott5246809)Alveolata_ott266751)SAR_ott5246039,(565,566,(564,((562,(560,561)mrcaott13866ott230528)mrcaott13866ott15748,563)mrcaott13866ott116705)mrcaott13866ott19774)Prymnesiophyceae_ott6137287)mrcaott148ott902)mrcaott2ott148,(((567,568)Metakinetoplastina_ott5251344,((575,(572,573,574,569,(570,571)mrcaott4964ott38598)mrcaott4961ott4964,576,577)Euglenea_ott5257402,(578,579,580,581)Aphagea_ott5251340,582,583)Euglenida_ott5268016)Euglenozoa_ott1073331,584)Excavata_ott2927065)mrcaott2ott276,585)mrcaott2ott3973,(((586,(((587,((588,589)Philodinidae_ott831315,((590,(591,592,593,594,595)Brachionidae_ott471705,(596,597,598,599)Notommatidae_ott71917,600,(601,602)Synchaetidae_ott743641,603,604,(605,606,607,608)Dicranophoridae_ott513189,(609,610)Lepadellidae_ott1090176,(611,612)Proalidae_ott412246,613,614,615)Ploima_ott251966,(616,617,618)Flosculariaceae_ott107174)Monogononta_ott641254)Rotifera_ott471706)mrcaott49ott4101,619)Lophotrochozoa_ott155737,((((620,((((621,622,623,624,625,626,627,628,629,630,631,632,633,634,635,636,637,638,639,640,641,642,643,644)Chydoridae_ott598042,(645,646,647,648,649,650)Daphniidae_ott424894,(651,652,653,654,655,656,657,658,659,660)Macrotrichidae_ott496238,(661,662,663)Bosminidae_ott46783,(664,665,666,667)Eurycercidae_ott217720,668)Anomopoda_ott754180,669,(670,(671,672,673,674,675,676)Sididae_ott424906,677)Ctenopoda_ott754181,(678,679)Onychopoda_ott754183)Cladocera_ott59096,((((((680,681,682,683,684,685,686,687,688,690,691,692,693,694,695,696,689)Diaptomidae_ott262135,697)mrcaott4932ott35030,((698,699)Centropagidae_ott265972,(700,701,702)Temoridae_ott703995)mrcaott31475ott42605)mrcaott4932ott31475,(706,703,(704,705)mrcaott17168ott18542)mrcaott6062ott17168)mrcaott4932ott6062,707)Calanoida_ott461523,((719,720,(718,((714,((708,709)mrcaott18859ott116383,(710,(713,(711,712)mrcaott186803ott706130)mrcaott186803ott361028)mrcaott86573ott186803)mrcaott18859ott86573)mrcaott18859ott90544,(717,(715,716)mrcaott182625ott427626)mrcaott182625ott1091052)mrcaott18859ott182625)mrcaott18859ott706135)mrcaott18859ott131547,721)mrcaott12424ott92630)mrcaott4932ott12424)mrcaott705ott4932)mrcaott100ott705,(722,723)Mysinae_ott200172)Pancrustacea_ott985906,724)Arthropoda_ott632179,725)Ecdysozoa_ott611099)Protostomia_ott189832)mrcaott42ott49,(726,727)Cnidaria_ott641033)mrcaott42ott150,(733,734,(728,729)Codonosigidae_ott754991,(730,731,732)Salpingoecidae_ott1066307)Craspedida_ott5247661)mrcaott42ott34294)Eukaryota_ott304358,(735,(736,(751,752,753,754,755,756,757,758,764,765,766,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,(750,((((737,738)mrcaott8930ott89744,((739,740)mrcaott594ott6864,((741,(742,743,744)FamilyI_-in_SubsectionII-_ott5247951)mrcaott28936ott649069,745)mrcaott28936ott140218,746)mrcaott594ott13848)mrcaott355ott594,(747,748)mrcaott12204ott95891)mrcaott355ott3169,749)mrcaott355ott4646)mrcaott355ott6931,((759,760,761,762)Entophysalidoideae_ott5617097,763)Entophysalidaceae_ott4016877,(767,768,769)Hydrococcaceae_ott4016896,770)Cyanobacteria_ott225495)mrcaott73ott135)mrcaott50ott73)cellular_organisms_ott93302;
+END;

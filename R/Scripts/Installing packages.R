@@ -6,3 +6,11 @@ install.packages("stringi")
 install.packages("taxize")
 install.packages("ggplot2")
 install.packages("here")
+install.packages("rnaturalearth")
+
+install.packages("BiocManager")
+BiocManager::install("ggtree", force = TRUE)
+install.packages("treeplyr")
+install.packages("ggtreeExtra")
+install.packages("ggtree")
+

@@ -53,7 +53,7 @@ B0_fig8 = fill(0.05, S)
 LG_fig8=LogisticGrowth(fw_fig8, K = 2, a = (diag = 1.0, offdiag = 1.0))
 
 # set functional response
-fr_fig8 = BioenergeticResponse(fw_fig8, h = 1, c = 0.1)
+fr_fig8 = BioenergeticResponse(fw_fig8, h = 1.2, c = 0.1)
 
 # set model parameters
 params_fig8 = ModelParameters(fw_fig8, 
@@ -71,6 +71,7 @@ sim_fig8_RK4 = simulate(params_fig8, B0_fig8, alg = alg, extinction_threshold = 
 # 4) Plot
 # normal solver
 plot(sim_fig8, legend = false)
+
 # just phytoplankton
 biomasses = reduce(hcat, sim_fig8.u)'
 producers(fw_fig8)
