@@ -1,9 +1,16 @@
 ## Standadizing the WOS data
 
+# Packages 
+library(here)
+library(readxl)
+library(tidyr)
+library(tidyverse)
+library(stringi)
+library(data.table)
 
 # Data ---- 
-wos_raw_body <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "bodysize", guess_max = 40000)
-wos_source_list <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
+wos_raw_body <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 40000)
+wos_source_list <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "source_list")
 
 # Standardising ----
 wos_formatted <- wos_raw_body %>%

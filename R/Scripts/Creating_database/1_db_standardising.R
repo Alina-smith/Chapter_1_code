@@ -28,6 +28,13 @@
   # units = units for measurment
   # measurement.type = if it is an average /raw/range etc
 
+# Packages 
+library(here)
+library(readxl)
+library(tidyr)
+library(tidyverse)
+library(stringi)
+library(data.table)
 
 # data ----
 #set relative file paths

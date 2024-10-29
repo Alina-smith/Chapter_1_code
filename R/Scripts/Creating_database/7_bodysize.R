@@ -1,5 +1,13 @@
 ## Calculating the body size for ones I don't have it for
 
+# Packages 
+library(here)
+library(readxl)
+library(tidyr)
+library(tidyverse)
+library(stringi)
+library(data.table)
+
 # Data ----
 bodysize <- readRDS("R/Data_outputs/databases/bodysize_joined.rds")
 x <- bodysize %>% 
