@@ -16,8 +16,13 @@ library(ggplot2)
 library(here)
 
 # Data ----
-location_raw <- read_xlsx(here("Raw_data","location_data_for_wos_db.xlsx"), sheet = "location_raw")
+<<<<<<< HEAD:R/Scripts/Creating_database/4_location.R
+location_raw <- read_xlsx(here("Raw_data","location_data_full.xlsx"), sheet = "location_raw")
 bodysize_joined <- readRDS("R/Data_outputs/full_database/bodysize_joined.rds")
+=======
+location_raw <- read_xlsx(here("Raw_data","location_data_for_wos_db.xlsx"), sheet = "location_raw")
+bodysize_joined <- readRDS("R/Data_outputs/databases/bodysize_joined.rds") ## CHANGE WHRN SOURCE STUFF DONE
+>>>>>>> parent of e809cbe (Redoing taxonomy with tol, making changes to units in spreadsheet, removing duplicate sources and formtting original source columns):R/Scripts/Creating_database/6_location.R
 
 # Edit location list ----
 # need to add source.code to join.location to make it easier to left join as there are duplicate join.locations between sources
@@ -75,35 +80,48 @@ bodysize_location <- bodysize_joined %>%
     values_from = location.code
   ) %>% 
   
+  ## Merge columns together ----
+  mutate(
+    location.code = paste(join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9,
+                          join.location.10, join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+                          sep = ","),
+    location.code = stri_replace_all_regex(location.code, ",NA|NA,|NA", ""),
+    location.code = na_if(location.code, "") 
+  ) %>% 
+  
+  ## Redundant columns
+  select(
+    - join.location.1, - join.location.2, - join.location.3, - join.location.4, - join.location.5, - join.location.6, - join.location.7, - join.location.8, - join.location.9, - join.location.10,
+    - join.location.11, - join.location.12, - join.location.13, - join.location.14, - join.location.15, - join.location.16, - join.location.17
+  ) %>% 
+  
   ## Add back in the rest of the data ----
   left_join(
-    ., bodysize_joined, by = "uid",
-    suffix = c(".new", ".old")
-  ) %>% 
+    ., bodysize_joined, by = "uid"
+  )
   
-  # remove join location 
-  select(
-    -join.location.1.old:-join.location.17.old
-  ) %>% 
-  
-  rename_with(~ gsub("join.location", "location.code", .)) %>% 
-  rename_with(~ gsub(".new", "", .))
 
-# save
-saveRDS(bodysize_location, file = "R/Data_outputs/full_database/bodysize_location.rds")
+## save ----
+saveRDS(bodysize_location, file = "R/Data_outputs/databases/bodysize_location.rds")
 
 # Check for unused ----
 # check for any locations that are in the location_raw sheet but not used in the main data and if so remove them
 # no locations in the location sheet that aren't used in the data so don't need to remove any
-location_check <- bodysize_location_codes %>% 
+location_check <- bodysize_location %>% 
   
   # Select columns
   select(
-    location.code.1:location.code.17
+    location.code
+  ) %>% 
+  
+  # Separate out
+  separate(
+    ., location.code, into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"),
+    sep = ","
   ) %>% 
   
   # Pivot to get location.codes on seperate lines 
-  pivot_longer(., cols = 1:17, values_to = "location.code")%>% 
+  pivot_longer(., cols = 1:17, values_to = "location.code") %>% 
   
   filter(
     !is.na(location.code)
@@ -125,5 +143,5 @@ location_list <- location_raw %>%
   )
 
 # save - list of all distinct locations used in the data
-write_csv(location_list, file = "R/Data_outputs/full_database/location_list.csv")
+saveRDS(location_list, file = "R/Data_outputs/databases/location_list.rds")
 

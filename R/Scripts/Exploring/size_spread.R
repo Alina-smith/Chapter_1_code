@@ -1,19 +1,38 @@
 # body size spread
 
+# packages
+
+library(here)
+library(readxl)
+library(tidyr)
+library(tidyverse)
+library(stringi)
+library(data.table)
+library(ggplot2)
+
+genus_taxonomy <- taxonomy_list %>% 
+  distinct(genus, .keep_all = TRUE) %>% 
+  select(
+    -accepted.taxa.name,
+    -tax.uid,
+    -tol.id,
+    -species
+  ) %>% 
+  filter(
+    !is.na(genus)
+  )
+
 bodysize_spread <- bodysize_data %>% 
   # select ones with data
   filter(
     form == "individual",
     !is.na(mass),
     !is.na(genus),
-    life.stage %in% c("adult", "active"),
-    bodysize.measurement != "wet mass",
-    !(stri_detect_regex(individual.uid, "10.1111/geb.13575")),
-    !(stri_detect_regex(individual.uid, "10.1093/plankt/fbae017"))
+    life.stage %in% c("adult", "active")
   ) %>% 
   
   # get mean mass for each taxa
-  group_by(tax.uid) %>% 
+  group_by(genus) %>% 
   
   dplyr::summarise(
     mean.mass = mean(mass)
@@ -21,33 +40,23 @@ bodysize_spread <- bodysize_data %>%
   
   ungroup() %>% 
   
+  mutate(
+    log.mean.mass = log(mean.mass)
+  ) %>% 
+  
   # add in taxonomy info
   left_join(
     select(
-      bodysize_data, tax.uid, group
+      genus_taxonomy, genus, group
     ),
-    by = "tax.uid"
+    by = "genus"
   )
 
-x <- bodysize_data %>% 
-  filter(
-    group == "zooplankton",
-    !is.na(mass),
-    bodysize.measurement != "wet mass"
-  )
+ggplot(bodysize_spread, aes(x = log.mean.mass, fill = group)) +
+  geom_histogram(alpha = 0.7, binwidth = 1)+
+  facet_wrap(~group, ncol = 1, scales = "free_y")+
+  theme(strip.text.x = element_text(size=0))
 
 
-
-ggplot(bodysize_spread, aes(x = log(mean.mass), fill = group)) +
-geom_histogram(alpha = 0.7, binwidth = 1)+
-  facet_wrap(~group, ncol = 1, scales = "free_y")
-
-+
-  facet_wrap(~group)
-
-zoo <- ggplot(filter(phylogeny_plot,group == "zooplankton"), aes(x = log(mean.mass), fill = group)) +
-  geom_histogram()
-
-phyto+zoo
 
 

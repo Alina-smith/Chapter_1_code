@@ -1824,5 +1824,5 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(db_formatted, file = "R/Data_outputs/full_database/db_formatted.rds")
+saveRDS(db_formatted, file = "R/Data_outputs/databases/db_formatted.rds")
 

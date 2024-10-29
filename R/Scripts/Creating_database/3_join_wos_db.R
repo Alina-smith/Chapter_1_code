@@ -9,8 +9,8 @@ library(stringi)
 library(data.table)
 
 # Data ----
-wos_raw <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
-db_raw <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
+wos_raw <- readRDS("R/Data_outputs/databases/wos_formatted.rds")
+db_raw <- readRDS("R/Data_outputs/databases/db_formatted.rds")
 
 # Joining db and wos ----
 # Make a dataframe of all the db and wos data - will filter this for duplicate sources and then add location data to
@@ -68,6 +68,6 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
       )
   )
 
-saveRDS(bodysize_joined, file = "R/Data_outputs/full_database/bodysize_joined.rds")
+saveRDS(bodysize_joined, file = "R/Data_outputs/databases/bodysize_joined.rds")
 
 

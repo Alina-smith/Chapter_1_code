@@ -317,7 +317,7 @@ taxonomy_list <- taxonomy_tol_extracted %>%
     tax.uid, tol.id, accepted.taxa.name, species, genus, family, order, class, phylum, kingdom
   )
 
-write_csv(taxonomy_list, file = "R/Data_outputs/full_database/taxonomy_list.rds")
+write_csv(taxonomy_list, file = "R/Data_outputs/full_database/taxonomy_list.csv")
 
 ## add to main data ----
 bodysize_taxonomy <- bodysize_location %>% 

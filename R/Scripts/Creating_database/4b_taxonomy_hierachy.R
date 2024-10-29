@@ -802,80 +802,17 @@ final_taxonomy <- taxonomy_step_4 %>%
       phylum == "Mycetozoa" ~ "Amoebozoa",
       phylum == "Heterokontophyta" ~ "Ochrophyta",
       TRUE ~ phylum
-    ),
-    
-    rank = case_when(
-      rank %in% c("variety", "form") ~ "species",
-      TRUE ~ rank
-    ),
-    
-    accepted.taxa.name = case_when(
-      rank == "species" ~ species,
-      rank == "genus" ~ genus,
-      rank == "family" ~ family,
-      rank == "order" ~ order,
-      rank == "class" ~ class,
-      rank == "phylum" ~ phylum,
-      rank == "kingdom" ~ kingdom,
-      TRUE ~ NA
-    )
-  ) %>% 
-  select(
-    - form,
-    - variety
-  ) %>% 
-  
-  mutate(
-    # Add a group column for whether it is phyto plankton or zooplankton
-    group = case_when(
-      kingdom == "Animalia" ~ "zooplankton",
-      TRUE ~ "phytoplankton"
     )
   ) %>% 
   
   filter(
-    !is.na(accepted.taxa.name)
-  ) %>% 
-  
-  relocate(
-    tax.uid,
-    resolved.taxa.name,
-    accepted.taxa.name,
-    rank,
-    species,
-    genus,
-    family,
-    order,
-    class,
-    phylum,
-    kingdom,
-    group,
-    source
-  )
-# Save
-saveRDS(final_taxonomy, file = "R/Data_outputs/taxonomy/final_taxonomy.rds")
-
-# Add to all data ----
-
-bodysize_taxonomy <- bodysize_joined %>% 
-  
-  # left join the resolved taxa names to the 
-  left_join(
-    select(
-      resolved_taxa_list, original.taxa.name, resolved.taxa.name
-    ), by = "original.taxa.name"
-  ) %>% 
-  
-  # join the taxonomy data
-  left_join(
-    final_taxonomy,
-    by = "resolved.taxa.name"
+    rank %in% c("genus", "species", "variety", "form")
   ) %>% 
   
   select(
-    -resolved.taxa.name,
-    -original.taxa.name
+    -variety,
+    -form
   )
 
 # Save
-saveRDS(bodysize_taxonomy, file = "R/Data_outputs/databases/bodysize_taxonomy.rds")
+saveRDS(final_taxonomy, file = "R/Data_outputs/taxonomy/final_taxonomy.rds")

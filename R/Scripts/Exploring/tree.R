@@ -14,10 +14,24 @@ install.packages(c("ggtree","treeio"))
 BiocManager::install("ggtree")
 library(ggtree)
 library(ggtreeExtra)
+library(ggnewscale)
 
 
 # Data ----
-bodysize_data <- readRDS("R/Data_outputs/databases/bodysize_data.rds")
+bodysize_data <- readRDS("R/Data_outputs/full_database/bodysize_data.rds")
+taxonomy_list <- read.csv("R/Data_outputs/full_database/taxonomy_list.csv")
+
+genus_taxonomy <- taxonomy_list %>% 
+  distinct(genus, .keep_all = TRUE) %>% 
+  select(
+    -accepted.taxa.name,
+    -tax.uid,
+    -tol.id,
+    -species
+  ) %>% 
+  filter(
+    !is.na(genus)
+  )
 
 phylogeny_plot_data <- bodysize_data %>% 
   
@@ -27,7 +41,8 @@ phylogeny_plot_data <- bodysize_data %>%
     !is.na(mass),
     !is.na(genus),
     life.stage %in% c("adult", "active"),
-    bodysize.measurement != "wet mass"
+    kingdom != "Fungi",
+    !is.na(genus)
   ) %>% 
   
   # get mean mass for each taxa
@@ -37,13 +52,12 @@ phylogeny_plot_data <- bodysize_data %>%
     mean.mass = mean(mass)
   ) %>% 
   
-  ungroup() 
-%>% 
+  ungroup() %>% 
   
   # add in taxonomy info
   left_join(
     select(
-      final_taxonomy, genus, family, order, class, phylum, kingdom, group
+      genus_taxonomy, genus, family, order, class, phylum, kingdom, group
     ),
     by = "genus"
   ) 
@@ -52,7 +66,8 @@ phylogeny_plot_data <- bodysize_data %>%
 #have a quick look at the data
 glimpse(phylogeny_plot_data)
 
-phylogeny_plot_data_subset <- phylogeny_plot_data
+phylogeny_plot_data_subset <- phylogeny_plot_data %>% 
+  select(., mean.mass, group, genus)
 
 length(unique(phylogeny_plot_data_subset$genus)) #981 genera
 
@@ -93,7 +108,7 @@ plot(tr, show.tip.label = FALSE)
 tr$tip.label[1:5]
 
 #save tree out here before adapting it for plotting: 
-write.nexus(tr, file="Data/tree_phylo_pre_plot.nex")
+write.nexus(tr, file="R/Data_outputs/exploring/tree_phylo_pre_plot.nex")
 
 
 
@@ -129,7 +144,7 @@ df4 <- phylogeny_plot_data_subset[phylogeny_plot_data_subset$genus %in% tr$tip.l
 
 
 
-table(df4$kingdom)
+table(df4$group)
 
 #get df with unique name used in otl and kingdom or mass
 #make my Genus lower case to match a column from taxa search in rotl
@@ -143,7 +158,7 @@ names(taxa2)[names(taxa2) == "search_string"] <- "genus"
 #match them up 
 df5 <- left_join(df4, taxa2, by = "genus")
 df6 <- df5 %>% 
-  select(., c("genus", "unique_name", "mean.mass"))
+  select(., c("genus", "unique_name", "mean.mass", "group"))
 
 df6$tip.label <- df6$genus #using old names here to make figure
 
@@ -161,14 +176,14 @@ df7 <- df6 %>%
 
 q <- ggtree(tr, branch.length='none', layout='circular') 
 q
-q <-  q %<+% df7 + geom_tippoint(aes(color = kingdom), 
+q <-  q %<+% df7 + geom_tippoint(aes(color = group), 
                                  size=1, show.legend=TRUE) 
 q
 
 setdiff(df7$tip.label, tr$tip.label)
 
 
-ggsave("Results/Tree_phylo_kingdom_colour.pdf", width = 7, height = 5, limitsize = FALSE)
+ggsave("R/Data_outputs/exploring/Tree_phylo_kingdom_colour.pdf", width = 7, height = 5, limitsize = FALSE)
 
 glimpse(df7)
 
@@ -200,7 +215,7 @@ fin_plot <- gheatmap(q2, df7, offset=2, width=0.2, colnames = F) #+
 
 fin_plot
 
-ggsave("Results/Tree_phylo_king_mass.pdf", width = 7, height = 5, limitsize = FALSE)
+ggsave("R/Data_outputs/exploring/Tree_phylo_Group_mass.pdf", width = 7, height = 5, limitsize = FALSE)
 
 
 write_csv(bodysize_data_phylogeny_plot, "R/Data_outputs/databases/bodysize_phylogeny_plot.csv")
