@@ -1,0 +1,602 @@
+location.code,habitat,location,country,continent,latitude,longitude
+loc-1,lake,Lake Siggeforasjön,Sweeden,Europe,59.977783,17.146841
+loc-2,pond,"Botanical garden, Gothenburg",Sweeden,Europe,57.677273,11.953868
+loc-3,lake,Trindemossen,Sweeden,Europe,57.665891,11.965299
+loc-4,lake,Lake Finnsmossen,Sweeden,Europe,57.675041,11.952768
+loc-5,lake,Stora Delsjön,Sweeden,Europe,57.680699,12.045753
+loc-6,lake,Valmossen,Sweeden,Europe,57.643242,11.773005
+loc-7,lake,Torneträsk,Sweeden,Europe,68.361747,18.802152
+loc-8,lake,Lake Västra Ringsjön,Sweeden,Europe,55.896517,13.469619
+loc-9,lake,Lake Ryssbysjön,Sweeden,Europe,57.703567,14.639673
+loc-11,lake,Lake Skedviken,Sweeden,Europe,59.768184,18.274054
+loc-12,lake,Blelham Tarn,UK,Europe,54.396576,-2.976605
+loc-13,lab,Carolina Biological Supply Company,USA,North America,36.104745,-79.488611
+loc-14,lake,Greiner lake,Canada,North America,69.2083,-104.7503
+loc-15,pond,Greiner lake,Canada,North America,69.171388,-104.62111
+loc-16,pond,Greiner lake,Canada,North America,69.285277,-104.75666
+loc-17,lake,Greiner lake,Canada,North America,69.22305,-10475666
+loc-18,lake,Greiner lake,Canada,North America,69.296387999999993,-104.75749999999999
+loc-19,lake,Greiner lake,Canada,North America,69.289439999999999,-104.89610999999999
+loc-20,lake,Greiner lake,Canada,North America,69.237769999999998,-104.85138000000001
+loc-21,lake,Greiner lake,Canada,North America,69.157769999999999,-104.9992
+loc-22,lake,Greiner lake,Canada,North America,69.103054999999998,-104.54083300000001
+loc-23,pond,Greiner lake,Canada,North America,69.200833000000003,-104.755278
+loc-24,lake,Lake Fühlinger See,Germany,Europe,51.022500,6.930028
+loc-25,pond,Vleteren,Belgium,Europe,50.918528,2.724167
+loc-26,pond,De Haan,Belgium,Europe,51.23161,3.030333
+loc-27,lake,lake alta,Canada,North America,50.116730,-122.981553
+loc-28,lake,lake brohm,Canada,North America,49.821217,-123.135023
+loc-29,lake,lake chilliwack,Canada,North America,49.057445,-121.414463
+loc-30,lake,lake cultus,Canada,North America,49.057367,-121.982622
+loc-31,lake,lake deer,Canada,North America,49.236103,-122.971390
+loc-32,lake,lake cowichan,Canada,North America,48.876629,-124.266104
+loc-33,lake,lake lizard,Canada,North America,48.606232,-124.223017
+loc-34,lake,lake pixie,Canada,North America,48.595024,-124.197592
+loc-35,lab,University of Texas,USA,North America,30.287082,-97.739733
+loc-36,pond,Książęca Park,Poland,Europe,52.231368,21.028677
+loc-37,lake,Lake Gehu,China,Asia,31.599094,119.792778
+loc-38,lake,Lake Tianmu,China,Asia,31.296373,119.421114
+loc-39,lake,Lake Dianshan,China,Asia,31.127766,120.973334
+loc-40,lake,Lake Hongze,China,Asia,33.282035,118.698675
+loc-41,lake,Lake Taihu,China,Asia,31.204605,120.165293
+loc-42,lake,Qiandao lake,China,Asia,29.597444,118.960566
+loc-43,lab,Culture Collection of Algae and Protozoa,UK,Europe,56.451074,-5.440372
+loc-44,lake,Convict Lake,USA,North America,37.589895,-118.858224
+loc-45,lake,lake Klostersee,Germany,Europe,52.333764,12.740191
+loc-49,lab,MicroBioTests Inc.,Belgium,Europe,51.086511,3.672637
+loc-50,backwaters,Araguaia River,Brazil,South America,-14.680729,-51.031147
+loc-53,lake,Guelph Lake,Canada,North America,43.596394,-80.239140
+loc-54,lake,Lake Ontario,USA,North America,43.514544,-77.369520
+loc-55,river,Mekong River,Vietnam,Asia,10.802752,105.248898
+loc-56,river,Ganges - Buxar,India,Asia,25.579869,83.971349
+loc-57,river,Ganges - Patna,India,Asia,25.617669,85.218275
+loc-58,river,Ganges - Bhagalpur,India,Asia,25.263568,87.048921
+loc-59,river,Ganges - Farakka,India,Asia,24.808686,87.928152
+loc-60,river,Ganges - Jangipur,India,Asia,24.469423,88.113300
+loc-61,river,Ganges - Berhampore,India,Asia,24.110438,88.244384
+loc-62,pond,Belgium,Belgium,Europe,NA,NA
+loc-63,pond,Belgium's North Sea coast,Belgium,Europe,51.00540556,2.858569444
+loc-64,pond,Belgium's North Sea coast,Belgium,Europe,51.24858889,3.266569444
+loc-65,pond,Belgium's North Sea coast,Belgium,Europe,51.259275,3.281425
+loc-66,pond,Belgium's North Sea coast,Belgium,Europe,51.35691111,3.342822222
+loc-67,pond,Belgium's North Sea coast,Belgium,Europe,51.33646389,3.348697222
+loc-68,pond,Belgium's North Sea coast,Belgium,Europe,51.33489444,3.348230556
+loc-69,pond,Belgium's North Sea coast,Belgium,Europe,51.35054722,3.330438889
+loc-70,pond,Belgium's North Sea coast,Belgium,Europe,51.35570833,3.334488889
+loc-71,pond,Leuven,Belgium,Europe,50.82835556,4.639055556
+loc-79,pond,Belgium's North Sea coast,Belgium,Europe,51.29297222,3.1167
+loc-80,pond,Belgium's North Sea coast,Belgium,Europe,51.27769167,3.094155556
+loc-83,lake,Lake Illahuapi,Chile,South America,-40.271486,-72.299918
+loc-84,lake,Lake San Pedro,Chile,South America,-39.038391,-72.029280
+loc-85,lab,Federal University of São Carlos,Brazil,South America,-21.983999,-47.881536
+loc-86,lake,Lake Pabezninkai,Lithuania,Europe,54.349652,24.570579
+loc-87,lake,Nobleboro,USA,North America,44.103499,-69.484599
+loc-88,lake,Lake Vombsjön,Sweeden,Europe,55.683836,13.586879
+loc-90,wetlands,Upo Wetlands,South Korea,Asia,35.548201,128.411806
+loc-91,artificial pond,CUEPF,USA,North America,42.500000,-76.433333
+loc-92,river,Paraná River,Brazil,South America,-22.908417,-53.640083
+loc-93,pond,Nazrul Islam Sarak Pond,Bangladesh,Asia,22.711608,90.349386
+loc-94,lake,Rupatali Lake,Bangladesh,Asia,22.679837,90.349403
+loc-95,pond,College Road Pond,Bangladesh,Asia,23.684989,90.356325
+loc-96,reservoir,Santa Branca reservoir,Brazil,South America,-23.334245,-45.796645
+loc-97,reservoir,Vigário reservoir,Brazil,South America,-22.670357,-43.880823
+loc-98,reservoir,Ilha dos Pombos reservoir,Brazil,South America,-21.854615,-42.606545
+loc-99,lake,Lake Mondsee,Austria,Europe,47.818145,13.380482
+loc-100,lake,Lake Wivenhoe,Australia,Australasia,-27.266684,152.533333
+loc-101,pond,Lund,Sweeden,Europe,55.660695,13.541119
+loc-102,lake,Piekary,Poland,Europe,50.013911,19.793251
+loc-103,lake,Tyniec,Poland,Europe,50.029719,19.827724
+loc-104,lake,Podkamycze,Poland,Europe,50.086384,19.833780
+loc-105,lake,Lagoa do Peri,Brazil,South America,-27.733400,-48.516688
+loc-106,lake,Lake Vechelye,Belarus,Europe,55.145761,28.626638
+loc-107,lake,Doñana,Spain,Europe,37.042695,-6.434447
+loc-108,lab,Stanford University,USA,North America,37.427657,-122.170059
+loc-109,estury,Cochin backwaters,India,Asia,9.931207,76.267300
+loc-110,lake,Lake Gale,Canada,North America,45.269812,-72.694741
+loc-111,reservoir,Cottage Grove Reservoir,USA,North America,43.701458,-123.065537
+loc-112,pond,Lake Mariano Procópio,Brazil,South America,-21.747439,-43.360506
+loc-113,pond,University of Bonn,Germany,Europe,50.726770,7.086456
+loc-114,pond,Finland,Finland,Europe,NA,NA
+loc-115,lake,Madison Lake,USA,North America,44.196481,-93.807024
+loc-116,lake,Lake Konnevesi,Finland,Europe,62.603279,26.524604
+loc-118,reservoir,Salto Grande reservoir,Uruguay,South America,-31.274935,-57.939162
+loc-119,lake,Miní Lake,Argentina,South America,-27.257717,-55.535362
+loc-120,lab,University of Minnesota,USA,North America,44.973987,-93.227728
+loc-121,bog,Wenger Moor,Austria,Europe,47.933944,13.173836
+loc-122,rice paddy field,Jangseong,South Korea,Asia,35.304804,126.787742
+loc-123,lab,Han-River Environment Research Center,South Korea,Asia,37.516665,126.958085
+loc-124,river,La Mezquitera,Mexico,North America,21.545447,-102.191549
+loc-125,lake,Lake Superior,USA,North America,47.721471,-86.939651
+loc-126,lake,Lake Huron,USA,North America,45.051694,-82.485781
+loc-127,lake,Lake Erie,USA,North America,42.063317,-81.337881
+loc-129,lake,Lake Michigan,USA,North America,43.448320,-87.220573
+loc-130,reservoir,Ecology and Evolutionary Biology Department,Brazil,South America,-21.984010,-47.881535
+loc-131,reservoir,Los Molinos Reservoir,argentina,South America,-31.830004,-64.536387
+loc-132,lake,Lake Biwa,japan,Asia,35.345636,136.170903
+loc-133,lab,"SAG Culture Collection of Algae, Göttingen",Germany,Europe,51.538834,9.937834
+loc-134,resevoir,Římov reservoir,Czechia,Europe,48.833169,14.483225
+loc-135,lake,Lake Cep,Czechia,Europe,48.928370,14.883513
+loc-137,river,Hanjiang River,China,Asia,30.138079,112.202674
+loc-138,reservoir,Macau Storage Reservoir,China,Asia,22.201759,113.558745
+loc-139,reservoir,Lobo Reservoir,Brazil,South America,-22.250030,-47.816667
+loc-141,stream,Pant Stream,UK,Europe,53.663536,-0.003201
+loc-142,lab,Chinese Academy of Sciences,China,Asia,39.910556,116.335226
+loc-143,lake,Dissertation Lake,USA,North America,37.267197,-118.692494
+loc-144,lake,Crystal Lake,USA,North America,46.002048,-89.613028
+loc-145,stream,Poggiolo,France,Europe,42.172514,8.898483
+loc-147,pool,Sawtooth Range,USA,North America,44.146665,-115.004722
+loc-148,resevoir,Abelardo Rodríguez Dam,Mexico,North America,21.909122,-102.422117
+loc-150,lake,Lake Suwa,japan,Asia,36.033281,138.083344
+loc-151,lake,Lake Kasumigaura,japan,Asia,36.016644,140.400008
+loc-152,lab,National Institute for Environmental Studies,japan,Asia,36.050078,140.119085
+loc-154,pond,Jilin Agriculture University,China,Asia,43.813843,125.406612
+loc-155,lake,Colgada lake,Spain,Europe,38.959565,-2.874540
+loc-158,resevoir,Kongsfjord,Norway,Europe,78.918056,11.933333
+loc-159,lab,Max Planck Institute for Limnology,Germany,Europe,54.160205,10.433667
+loc-161,reservoir,La Chèze,France,Europe,48.135076,-2.656716
+loc-162,resevoir,Nová Říše,Czechia,Europe,49.139410,15.563597
+loc-164,reservoir,Vír resevoir,Czechia,Europe,49.564481,16.309878
+loc-165,lake,Lake Müggelsee,Germany,Europe,52.434879,13.635063
+loc-166,reservoir,Cedar Farm Reservoir,New Zealand,Australasia,-45.792541,170.591920
+loc-167,lake,Lake Wanaka,New Zealand,Australasia,-44.530919,169.110834
+loc-168,reservoir,Klingenberg Reservoir,Germany,Europe,50.899966,13.546667
+loc-170,lake,Lake St Lucia,South Africa,Africa,-28.007209,32.480694
+loc-171,reservoir,Çaygören Reservoir,Turkey,Asia,39.273124,28.219612
+loc-172,reservoir,Ikizcetepeler Reservoir,Turkey,Asia,39.483300,27.933344
+loc-173,lake,Bhalaswa Lake,India,Asia,28.744433,77.172243
+loc-174,pond,Tajmahal,India,Asia,27.175131,78.042141
+loc-175,pond,University of Delhi,India,Asia,28.583764,77.164125
+loc-176,pond,Delhi,India,Asia,28.704021,77.102516
+loc-177,lake,Lake Sevan,Armenia,Europe,40.344986,45.335218
+loc-178,reservoir,Garças Reservoir,Brazil,South America,-23.650039,-46.616645
+loc-179,reservoir,Barra Bonita Reservoir,Brazil,South America,-22.542976,-48.490667
+loc-180,reservoir,Salto Grande Reservoir,Brazil,South America,-22.739553,-47.331357
+loc-181,reservoir,Jucazinho Reservoir,Brazil,South America,-7.967265,-35.742489
+loc-183,lake,Lake Schöhsee,Germany,Europe,54.166240,10.441155
+loc-184,lake,Lake constance,Germany,Europe,47.636255,9.389221
+loc-187,lab,The Pasteur Culture Collection,France,Europe,48.840582,2.310711
+loc-188,lake,Australia,Australia,Australasia,NA,NA
+loc-189,reservoir,Braakman Reservoir,Netherlands,Europe,51.322841,3.739730
+loc-190,pond,Ornamental Pond,Australia,Australasia,-33.869273,151.209449
+loc-191,reservoir,Wingecarribee Reservoir,Australia,Australasia,-34.556583,150.497933
+loc-192,lake,Lake Alsdorf,Germany,Europe,50.862578,6.153119
+loc-193,lab,Escuela Nacional de Ciencias Biológicas Unidad Santo Tomás IPN,Mexico,North America,19.453029,-99.171937
+loc-195,lake,Lake Constance,France,Europe,47.636318,9.389265
+loc-197,lake,Lake Chautauqua,USA,North America,40.364985,-90.023314
+loc-198,lake,Lake Riñihue,Chile,South America,-39.808828,-72.366593
+loc-199,pond,Ibaraki Prefectural Freshwater Fisheries Experimental Station,Japan,Asia,36.099083,140.402402
+loc-200,river,River Meuse,Belgium,Europe,50.450009,4.858585
+loc-201,lake,Gainesville,USA,North America,29.651953,-82.324997
+loc-204,pond,Saddle Hill Quarry,New Zealand,Australasia,-45.879562,170.500617
+loc-206,lake,Lake Mendota,USA,North America,43.109669,-89.420610
+loc-207,lake,Lake Pohjalampi,Finland,Europe,62.674600,29.550850
+loc-208,pond,Lammi,Finland,Europe,61.077500,25.010996
+loc-209,lake,Lake Varaslampi,Finland,Europe,62.599365,29.788894
+loc-210,lake,Lake Ladoga,Russia,Europe,60.866439,31.510374
+loc-212,lake,Lake Plußsee,Germany,Europe,54.181816,10.444279
+loc-214,lake,Piburger See,Austria,Europe,47.195304,10.888459
+loc-215,lake,Lake Hartbeespoort,South Africa,Africa,-25.749925,27.904904
+loc-217,lake,Paul lake,USA,North America,46.251442,-89.503446
+loc-218,lake,Tuesday lake,USA,North America,46.251424,-89.497277
+loc-219,lake,Lake Kinneret,Israel,Asia,32.824384,35.588027
+loc-220,freshwater,unknown,NA,NA,NA,NA
+loc-221,lake,lake Thibault,Canada,North America,45.977575,-74.020072
+loc-222,lake,lake long,Canada,North America,46.168616,-73.672844
+loc-223,lake,lake Pin Rouge,Canada,North America,46.239432,-73.881558
+loc-224,lake,lake coeurs,Canada,North America,45.945581,-74.395572
+loc-225,lake,croche lake,Canada,North America,46.833989,-72.498642
+loc-226,lake,lake sally,Canada,North America,45.178219,-72.438127
+loc-227,lake,lake libby,Canada,North America,45.274182,-72.367445
+loc-228,lake,lake roxton,Canada,North America,45.465981,-72.652395
+loc-229,lake,lake Choiniere,Canada,North America,45.426983,-72.602337
+loc-230,lake,lake Chromwell,Canada,North America,45.988461,-74.000613
+loc-231,lake,Croche pond,Canada,North America,45.992590,-74.009781
+loc-233,lake,Lake Memphremagog,Canada,North America,45.044091,-72.256453
+loc-234,pond,Zulueta pond,spain,Europe,43.333297,-2.483318
+loc-235,pond,Gartxeta pond,spain,Europe,42.966572,-3.016588
+loc-236,river,blue river,USA,North America,44.254324,-122.218774
+loc-237,reservoir,cougar reservoir,USA,North America,44.092891,-122.224888
+loc-238,lake,fall creek lake,USA,North America,43.949072,-122.738384
+loc-239,reservoir,hills creek reservoir,USA,North America,43.671091,-122.425826
+loc-240,lake,lookout point lake,USA,North America,43.870907,-122.681533
+loc-241,pond,Egypt pond,USA,North America,44.518808,-70.050567
+loc-242,pond,Hall pond,USA,North America,44.217968,-70.456665
+loc-243,pond,Sewell pond,USA,North America,43.869424,-69.780983
+loc-244,lake,Great slave lake,Canada,North America,61.451757,-115.087568
+loc-245,lake,Wren lake,Canada,North America,45.187018,-78.862825
+loc-246,lake,Rest lake,USA,North America,46.140959,-89.874855
+loc-247,lake,Mayer lake,Canada,North America,53.674938,-132.047972
+loc-248,lake,Inuvik region,Canada,North America,68.126980,-132.429995
+loc-249,lake,Bergen,Norway,Europe,60.391219,5.322155
+loc-250,lake,Red rock pond,Canada,North America,46.782603,-66.483164
+loc-251,lake,Soldier pond,USA,North America,42.668681,-103.608140
+loc-252,lake,Saunders pond,USA,North America,43.533715,-124.219601
+loc-253,lake,Lago Coari,Brazil,South America,-4.098607,-63.368250
+loc-254,lake,Rio Negro,Brazil,South America,-1.020000,-49.240000
+loc-255,lake,Lake Dorr,USA,North America,28.999606,-81.619951
+loc-256,lake,Moosehead lake,USA,North America,45.655022,-69.650594
+loc-257,lake,Lake James,USA,North America,35.747724,-81.878477
+loc-258,lake,Hiwassee lake,USA,North America,35.158896,-84.163948
+loc-259,lake,Lake Budzyński,Poland,Europe,50.047809,19.785973
+loc-262,lab,University of Pisa,Italy,Europe,43.716523,10.398851
+loc-266,lab,University of Girona,Spain,Europe,41.985700,2.827203
+loc-267,pond,University of British Columbia Research Ponds,USA,North America,49.260586,-123.245989
+loc-268,lake,Lake Miramar,USA,North America,32.915187,-117.099263
+loc-269,lab,Norwegian Institute for Water Research,Norway,Europe,59.924757,10.793343
+loc-271,lake,Alberta,Canada,North America,53.933233,-116.576506
+loc-272,stream,Pampean ecoregion,argentina,South America,-33.146508,-61.500506
+loc-273,lake,Eastern Townships,Canada,North America,45.503897,-71.752407
+loc-276,pond,Ismaning,Germany,Europe,48.206222,11.717528
+loc-279,river,Waimakariri River,New Zealand,Australasia,-43.240885,171.968418
+loc-280,stream,Ohoka Stream,New Zealand,Australasia,-43.374072,172.605065
+loc-281,creek,Saltwater Creek,New Zealand,Australasia,-43.257415,172.677522
+loc-282,lake,Barlosche Kolk,Netherlands,Europe,52.367725,6.111488
+loc-283,lake,t Hammetje,Netherlands,Europe,52.199445,5.436681
+loc-284,lake,Lake Maarsseveen,Netherlands,Europe,52.142147,5.086865
+loc-285,river,Zhangjiakou City,China,Asia,40.768687,114.885578
+loc-286,freshwater,Daqing City,China,Asia,46.587579,125.103079
+loc-292,lake,Lake Chaohu,China,Asia,31.548449999999999,117.573066
+loc-293,freshwater,Europe,NA,Europe,NA,NA
+loc-294,freshwater,Korea,Korea,Asia,NA,NA
+loc-295,lake,Ojala,Finland,Europe,61.847780,26.291450
+loc-296,lake,Heinäjärvi,Finland,Europe,62.881120,25.497240
+loc-300,lake,Lago di Tovel,Italy,Europe,46.260410,10.948910
+loc-301,lab,Indiana University,USA,North America,39.168240,-86.523004
+loc-302,lake,Finland,Finland,Europe,NA,NA
+loc-303,lake,Yeniseher Lake,Turkey,Asia,36.236944000000001,36.568610999999997
+loc-304,lake,Keban dam lake,Turkey,Asia,38.848197999999996,39.080280000000002
+loc-306,reservoir,Green Mountain Reservoir,USA,North America,39.875228999999997,-106.292778
+loc-307,lake,Lake Dillon,USA,North America,39.609192999999998,-106.060137
+loc-308,lake,Lake Aquatina,Italy,Europe,40.26,18.14
+loc-310,bromeliads,João Pessoa,Brazil,South America,-7.118844,-34.881430
+loc-311,lake,Lake Dæhlivann,Norway,Europe,59.921748,10.540630
+loc-312,pond,Ontario,Canada,North America,44.878333,-79.486944
+loc-316,bromeliads,Santiago,Dominican Republic,North America,-33.448880,-70.669254
+loc-317,bromeliads,Puerto Plata,Dominican Republic,North America,19.780765,-70.687109
+loc-318,pond,Salzburg,Austria,Europe,47.801415,13.044849
+loc-319,lab,University of Michigan,USA,North America,42.277142,-83.738207
+loc-320,pond,Catfish Pond,Canada,North America,43.639948,-79.469508
+loc-324,lab,Universidad de Buenos Aires,argentina,South America,-34.599714,-58.373081
+loc-325,lake,Lake Monte Alegre,Brazil,South America,-21.183512,-47.716640
+loc-326,lab,Connecticut Valley Biological Supply Company,USA,North America,42.229255,-72.730093
+loc-327,river,Zangbar River,Iran,Asia,37.145631,46.105622
+loc-328,peatland,Pradeaux,France,Europe,45.533288,3.916677
+loc-329,river,Swan Oxbow,China,Asia,29.826602,112.560855
+loc-330,reservoir,Liuxi He,China,Asia,23.249991,113.183335
+loc-331,lake,Lake Piaseczno,Poland,Europe,51.384140,23.029455
+loc-333,lake,Lake Donghu,China,Asia,30.549954,114.383344
+loc-335,lake,Lake Kahoku-gata,Japan,Asia,36.653864,136.665677
+loc-336,pond,Simmelried moorland,Germany,Europe,47.717457,9.093500
+loc-337,reservoir,Tianjin,China,Asia,39.000000,117.000000
+loc-338,pond,Torrent de Llunach,Spain,Europe,40.031743,4.092182
+loc-339,pond,Ullal des Puntarró,Spain,Europe,39.936699,4.227920
+loc-341,river,Thongjaorok river,India,Asia,24.623093,93.759917
+loc-342,freshwater,Korea,Korea,Asia,NA,NA
+loc-343,lake,Lake Mitchell,USA,North America,44.248762,-85.483940
+loc-344,lake,USA,USA,North America,NA,NA
+loc-345,freshwater,Europe,NA,Europe,NA,NA
+loc-346,freshwater,Netherlands,Netherlands,Europe,NA,NA
+loc-347,freshwater,Galway,Ireland,Europe,53.274002,-9.051265
+loc-348,freshwater,Europe,NA,Europe,NA,NA
+loc-349,freshwater,Asia,NA,Asia,NA,NA
+loc-350,reservoir,Eglwys Nynyd,UK,Europe,51.549440,-3.739442
+loc-351,lake,Lake Huetzalin,Mexico,North America,19.291043,-99.098845
+loc-353,lake,Lake Bhaleswa,India,Asia,28.742997,77.171001
+loc-354,reservoir,Bariri reservoir,Brazil,South America,-22.163733,-48.739245
+loc-355,pond,Germany,Germany,Europe,NA,NA
+loc-356,freshwater,Spring Creek Prairie Audubon Center,USA,North America,40.693148,-96.854823
+loc-357,lake,Lake Paione Superiore,Italy,Europe,46.175780,8.190819
+loc-358,lake,Experimental Lakes Area,Canada,North America,49.661202,-93.729431
+loc-359,lake,Lake Mikri Prespa,Greece,Europe,40.759434,21.087752
+loc-360,lake,lago di Monate,Italy,Europe,45.797024,8.662526
+loc-361,lake,Bay of Quinte,Canada,North America,44.149030,-77.212643
+loc-362,River,La Antigua River,Mexico,North America,19.338227,-96.562310
+loc-363,lake,Lac d'Aydat,France,Europe,45.664032,2.986759
+loc-369,lake,La Caldera,Spain,Europe,37.054666,-3.329364
+loc-370,reservoir,Lagoa Dourada,Brazil,South America,-20.914746,-44.075432
+loc-374,pond,Marrakesh,Morocco,Africa,NA,NA
+loc-375,lab,Pasteur Culture Collection,France,Europe,48.840586,2.310908
+loc-376,lake,Lake Baikal,Russia,Asia,51.789627,104.925688
+loc-377,river,Potomac river,USA,North America,38.653796,-77.230185
+loc-378,lake,Lake Okaro,New Zealand,Australasia,-38.299554,176.394682
+loc-379,lake,Oneida Lake,USA,North America,43.204557,75.923103
+loc-380,lake,Cazenovia Lake,USA,North America,42.948458,-75.873728
+loc-381,lake,Lough Neagh,UK,Europe,54.593342,-6.416197
+loc-383,lake,Sydney,Australia,Australasia,-33.869005,151.209255
+loc-386,river,St. Lawrence River basin,Canada,North America,47.687087,-69.716562
+loc-387,lake,Esthwaite Water,UK,Europe,54.349981,-3.000000
+loc-388,lake,Lake Arancio,Italy,Europe,37.636510,13.063065
+loc-389,lake,Rama IX lake,Thailand,Asia,13.688315,100.664195
+loc-390,lake,Mono Lake,USA,North America,38.012832,-118.976151
+loc-393,lake,Lake Auensee,Germany,Europe,51.368999,12.319387
+loc-394,river,Baía River,Brazil,South America,-22.716716,-53.283323
+loc-396,lake,Egg Lake,USA,North America,48.566710,-123.081611
+loc-397,lake,Sportsmans Lake,USA,North America,48.568350,-123.073295
+loc-402,lake,Sudbury Region lakes,Canada,North America,47.471813,-81.817051
+loc-403,freshwater,Western Hemisphere,NA,NA,NA,NA
+loc-404,lake,Heart lake,Canada,North America,43.741033,-79.795352
+loc-405,freshwater,North America,NA,North America,NA,NA
+loc-406,lake,Lake Schierensee,Germany,Europe,54.105683,10.225679
+loc-410,freshwater,UK,UK,Europe,NA,NA
+loc-413,lake,Head lake,Canada,North America,44.716664,-78.933333
+loc-414,lake,Moore lake,Canada,North America,44.797375,-78.807109
+loc-415,lake,Gullwing Lake,Canada,North America,44.979971,-79.538530
+loc-416,lake,Blue Chalk Lake,Canada,North America,45.198904,-78.938002
+loc-417,lake,Plastic Lake,Canada,North America,45.178783,-78.823611
+loc-418,lake,Picard Lake,Canada,North America,44.778901,-78.390874
+loc-419,lab,University of Toronto,Canada,North America,43.663489,-79.396059
+loc-424,freshwater,Saidenbach,Germany,Europe,50.733283,13.238783
+loc-425,pond,Quarry pond,New zealand,Australasia,-43.529268,172.498679
+loc-426,lake,Tomahawk Lagoon,New zealand,Australasia,-45.900612,170.543046
+loc-427,lake,Lake Hayes,New zealand,Australasia,-44.982424,168.809888
+loc-429,lake,Lunzer Untersee,Germany,Europe,47.695659,9.023167
+loc-430,lake,Lake Valencia,Venezuela,South America,10.201014,-67.737750
+loc-431,lake,Lake Sibaya,South Africa,Africa,-27.348466,32.684238
+loc-433,lake,Lake George,Uganda,Africa,0.016124,30.182019
+loc-434,lake,Kalterer See,Italy,Europe,46.379341,11.262875
+loc-435,lake,Lago di Terlago,Italy,Europe,46.098908,11.055486
+loc-436,lake,Lago di Levico,Italy,Europe,46.014906,11.277153
+loc-437,lake,Lago di Caldonazzo,Italy,Europe,46.014505,11.244624
+loc-438,lake,Großer Montiggler See,Italy,Europe,46.423451,11.290705
+loc-439,lake,Lago di Canzolino,Italy,Europe,46.083039,11.226011
+loc-440,lake,Lago di Varna,Italy,Europe,46.765381,11.634607
+loc-441,lake,Raier Moos,Italy,Europe,46.747280,11.665511
+loc-442,lake,Lago della Serraia,Italy,Europe,46.135507,11.254228
+loc-443,lake,Völser Weiher,Italy,Europe,46.523466,11.523349
+loc-444,lake,Lake Lavarone,Italy,Europe,45.936353,11.252384
+loc-445,lake,Wolfsgrubner See,Italy,Europe,46.520683,11.427369
+loc-447,lake,Antholzer See,Italy,Europe,46.884754,12.167272
+loc-448,lake,Glittner,Italy,Europe,46.725348,11.829970
+loc-449,lake,Radlsee,Italy,Europe,46.707487,11.578524
+loc-450,lake,Lago di Crespeina,Italy,Europe,46.568567,11.825173
+loc-452,pond,Ireland,Ireland,Europe,NA,NA
+loc-453,lake,Char Lake,Canada,North America,74.699942,-94.899972
+loc-454,lake,Lake Pääjärvi,Finland,Europe,61.067587,25.128629
+loc-456,lake,Laurentian Great Lakes,USA,North America,45.052232,-82.484610
+loc-457,freshwater,Sweeden,Sweeden,Europe,NA,NA
+loc-459,pond,Pond view pond,USA,North America,43.809516,-72.155917
+loc-460,pond,Post pond,USA,North America,43.826392,-72.148849
+loc-465,lake,Castle Lake,USA,North America,41.227009,-122.383160
+loc-467,lake,Großer Vätersee,Germany,Europe,53.005074,13.553011
+loc-469,pond,Storrs Pond,USA,North America,43.724806,-72.264568
+loc-471,lake,Überlinger See,Germany,Europe,47.749978,9.133355
+loc-479,lake,Fennoscandia,NA,Europe,NA,NA
+loc-480,lake,global,NA,NA,NA,NA
+loc-481,lake,River Treene,Germany,Europe,54.219368,9.696121
+loc-482,river,Europe,NA,Europe,NA,NA
+loc-483,lake,Alberta/British Columbia border,Canada,North America,52.150643,-117.538649
+loc-484,lake,Windermere,UK,Europe,54.373927,-2.937647
+loc-486,lake,Cumbria,UK,Europe,54.577225,-2.797480
+loc-488,reservoir,Funil Reservoir,Brazil,South America,-22.560565,-44.631061
+loc-489,freshwater,Antarctic,NA,Antarctica,NA,NA
+loc-491,pond,Devon Island,Canada,North America,75.198235,-81.851180
+loc-492,lake,Meretta Lake,Canada,North America,74.700867,-94.994736
+loc-493,pond,McMurdo ice shelf,New zealand,Antarctica,-78.000013,166.000021
+loc-494,pond,Toolik Lake,USA,North America,68.631780,-149.606012
+loc-495,pond,Bylot Island,Canada,North America,73.365246,-79.015256
+loc-496,lake,Poste de la Baleine,Canada,North America,55.274567,-77.763782
+loc-497,lake,Lac i la l'eau Claire,Canada,North America,55.999814,-73.999965
+loc-498,reservoir,Shiga,Japan,Asia,35.329197,136.056320
+loc-499,lab,National Museum of Japan,Japan,Asia,35.717462,139.775575
+loc-500,lake,Cape Flora,Russia,Asia,79.947643,50.089644
+loc-501,lake,Skarsvåg,Norway,Europe,71.113188,25.826997
+loc-502,lake,Hokkaidō,Japan,Asia,43.220323,142.863470
+loc-503,lake,Prague,Czechia,Europe,50.075533,14.437800
+loc-504,lake,Mt. Cotopaxi,Ecuador,South America,-0.683757,-78.437189
+loc-505,lake,Lake Ol Bolossat,Kenya,Africa,-0.155560,36.440557
+loc-508,freshwater,Palaearctic,NA,NA,NA,NA
+loc-509,freshwater,Nearctic,NA,North America,NA,NA
+loc-510,freshwater,Neotropical,NA,North America,NA,NA
+loc-511,freshwater,Afrotropical,NA,Africa,NA,NA
+loc-512,freshwater,Indo-Malaya,NA,Asia,NA,NA
+loc-513,freshwater,Australasian,NA,Australasia,NA,NA
+loc-514,freshwater,Oceania,NA,Australasia,NA,NA
+loc-520,lake,Fox lake,Canada,North America,60.5,-137.00
+loc-521,lake,Meziadin lake,Canada,North America,31.1,-129.30
+loc-522,lake,Pine lake,Canada,North America,60.1,-130.90
+loc-523,lake,Quiet lake,Canada,North America,61.1,-133.10
+loc-524,lake,Tatchun lake,Canada,North America,62.3,-136.20
+loc-525,lake,White lake,Canada,North America,50.9,-119.30
+loc-526,lake,Beaver lake,Canada,North America,52.5,-121.90
+loc-527,lake,Kawkawa lake,Canada,North America,49.4,-121.40
+loc-528,lake,Paul lake,Canada,North America,50.7,-120.10
+loc-529,lake,Summit lake,Canada,North America,54.3,-122.60
+loc-530,lake,Adams lake,Canada,North America,51.3,-119.50
+loc-531,lake,Becker lake,Canada,North America,51.8,-121.10
+loc-532,lake,Corbett lake,Canada,North America,50,-120.60
+loc-533,lake,Dease lake,Canada,North America,58.5,-130.00
+loc-534,lake,Kentucky lake,Canada,North America,49.9,-120.60
+loc-535,lake,Lakelse lake,Canada,North America,54.4,-128.60
+loc-536,lake,Ness lake,Canada,North America,54,-123.10
+loc-537,lake,Little Salmon lake,Canada,North America,62.2,-134.70
+loc-538,lake,Wood lake,Canada,North America,50.1,-119.40
+loc-539,lake,Lake Chamo,Ethiopia,Africa,5.821278,37.574764
+loc-540,lake,Lake Hayk,Ethiopia,Africa,11.345459,39.708496
+loc-541,reservoir,Koka Reservoir,Ethiopia,Africa,8.432930,39.033307
+loc-542,lake,Lake Langano,Ethiopia,Africa,7.593091,38.757750
+loc-543,lake,Lake Tana,Ethiopia,Africa,12.026588,37.303470
+loc-544,lake,Lake Ziway,Ethiopia,Africa,8.006628,38.841413
+loc-545,lake,Lake Abaya,Ethiopia,Africa,6.403366,37.850430
+loc-546,lake,Lake Ashenge,Ethiopia,Africa,12.574268,39.496819
+loc-547,lake,Lake Awassa,Ethiopia,Africa,7.031208,38.422043
+loc-548,reservoir,Beaverdam Reservoir,USA,North America,37.312997,-79.816000
+loc-549,reservoir,Carvins Cove Reservoir,USA,North America,37.3706,-79.9582
+loc-550,reservoir,Falling Creek Reservoir,USA,North America,37.30325,-79.8373
+loc-551,reservoir,Gatewood Reservoir,USA,North America,37.0443528070071,-80.8632991493157
+loc-552,reservoir,Spring Hollow Reservoir,USA,North America,37.2308522269357,-80.1759001355518
+loc-553,lake,Akşehir Lake,Turkey,Asia,38.511277,31.422766
+loc-554,lake,Eber Lake,Turkey,Asia,38.655713,31.159588
+loc-555,reservoir,Akdeğirmen Reservoir,Turkey,Asia,38.609408,30.238281
+loc-556,lake,Ağustos Lake,Turkey,Asia,40.338118,41.142604
+loc-557,lake,Karamık Reeds,Turkey,Asia,38.426149,30.838411
+loc-558,pond,Ağzıkara Pond,Turkey,Asia,38.583464,30.559674
+loc-559,pond,Şehit Uz. Çvş. Nurullah Oymak Pond,Turkey,Asia,38.433889,30.514878
+loc-560,lake,Tazlar Satı Gelin Pond,Turkey,Asia,38.748090,30.069762
+loc-561,lake,Eğirdir Lake,Turkey,Asia,38.023689,30.872840
+loc-562,lake,Kovada Lake,Turkey,Asia,37.642008,30.878599
+loc-563,lake,Duruca Lake,Turkey,Asia,36.951297,32.135226
+loc-564,lake,Küllü Lake,Turkey,Asia,36.947636,32.148357
+loc-565,lake,Düden Lake,Turkey,Asia,39.076259,33.140775
+loc-566,lake,Çıldır Lake,Turkey,Asia,41.057995,43.211589
+loc-567,lake,Reyhanlı (Yenihisar) Lake,Turkey,Asia,36.237166,36.569134
+loc-568,reservoir,Yayladağ Reservoir,Turkey,Asia,35.945097,36.060200
+loc-569,lake,Karagöl Lake,Turkey,Asia,40.524997,38.152779
+loc-570,lake,Dipsiz Lake,Turkey,Asia,40.609220,33.791199
+loc-571,reservoir,Yarseli Reservoir,Turkey,Asia,36.186414,36.325436
+loc-572,pond,Üçpınar Pond,Turkey,Asia,36.868010,36.943839
+loc-573,pond,Sapkanlı Pond,Turkey,Asia,36.777417,37.226315
+loc-574,lake,Gölhisar Lake,Turkey,Asia,37.114216,29.600645
+loc-575,lake,Girdev Lake,Turkey,Asia,36.685799,29.658603
+loc-576,lake,Avlan Lake,Turkey,Asia,36.581652,29.947497
+loc-577,wetlands,Dalaman Wetlands,Turkey,Asia,36.662560,28.850268
+loc-578,lake,Denizcik Lake,Turkey,Asia,37.255911,27.789696
+loc-579,lake,Kocagöl Lake,Turkey,Asia,36.681567,28.827633
+loc-580,lake,Kusuru Lake,Turkey,Asia,35.012827,76.095195
+loc-581,lake,Köyceğiz Lake,Turkey,Asia,36.883437,28.614817
+loc-582,lake,Küçükdalyan Lake,Turkey,Asia,36.692611,28.802138
+loc-583,lake,Yazır Lake,Turkey,Asia,36.992809,29.739712
+loc-584,lake,Baranda Lake,Turkey,Asia,36.646205,29.716177
+loc-585,lake,Karçayır lake,Turkey,Asia,39.870361,38.238079
+loc-586,lake,Gölcük Lake,Turkey,Asia,40.654717,31.626571
+loc-587,lake,Koca Lake,Turkey,Asia,40.843788,32.445439
+loc-588,reservoir,Kartalkaya Reservoir,Turkey,Asia,37.488488,37.273136
+loc-589,pond,Zerdali Pond,Turkey,Asia,37.435913,35.621749
+loc-590,lake,Şavşat Karagöl Lake,Turkey,Asia,41.308286,42.483572
+loc-591,lake,Aygır Lake,Turkey,Asia,38.838645,42.824043
+loc-592,lake,Uzun Lake,Turkey,Asia,41.565275,36.093056
+loc-593,pond,Değirmendere Pond,Turkey,Asia,40.708762,29.738128
+loc-594,pond,Cemilli Çevlik Pond,Turkey,Asia,36.801318,34.444676
+loc-595,pond,Başyayla Pond,Turkey,Asia,36.753704,32.677008
+loc-596,pond,Göktepe Pond,Turkey,Asia,36.607853,32.616434
+loc-597,reservoir,Bağbaşı Reservoir,Turkey,Asia,37.740241,29.130336
+loc-598,lake,Çamlu Lake,Turkey,Asia,40.403297,39.482013
+loc-599,lake,Kaz Lake,Turkey,Asia,39.336811,42.323392
+loc-600,lake,Ahır Lake,Turkey,Asia,38.838645,42.824042
+loc-601,lake,Haçlı Lake,Turkey,Asia,39.024667,42.296633
+loc-602,lake,Hazar lake,Turkey,Asia,38.488859,39.401222
+loc-604,pond,Palandöken Pond,Turkey,Asia,39.848886,41.284168
+loc-605,reservoir,Güroymak Reservoir,Turkey,Asia,38.602811,42.101135
+loc-606,reservoir,Kalecik Reservoir,Turkey,Asia,37.147692,36.459268
+loc-607,pond,Kapıaçmaz Pond,Turkey,Asia,38.709912,39.882575
+loc-608,pond,Dedeyolu Pond,Turkey,Asia,38.470035,39.200723
+loc-609,pond,Güzelyurt Sulama Pond,Turkey,Asia,35.194562,33.015588
+loc-610,pond,Hasancık Pond,Turkey,Asia,37.774275,38.443973
+loc-611,pond,İncesu Pond,Turkey,Asia,40.814473,40.767819
+loc-612,lake,Otlukbeli Lake,Turkey,Asia,40.016843,39.978717
+loc-613,pond,Siverek Yeleken Pond,Turkey,Asia,37.583014,39.501192
+loc-615,reservoir,Demirköprü Reservoir,Turkey,Asia,38.668490,28.387106
+loc-616,lake,Marmara Lake,Turkey,Asia,38.621597,28.030330
+loc-617,lake,Hafik Lake,Turkey,Asia,39.869331,37.383990
+loc-618,lake,Arı Lake,Turkey,Asia,39.354981,36.988221
+loc-619,lake,Yeşilgöl Lake,Turkey,Asia,39.425726,40.599724
+loc-620,lake,Bardakçılı Mevki Lake,Turkey,Asia,39.561872,40.215301
+loc-621,lake,Beyşehir Lake,Turkey,Asia,37.772401,31.521213
+loc-622,lake,Tuz Lake,Turkey,Asia,38.762724,33.348613
+loc-623,lake,Gök (Kozanlı) Lake,Turkey,Asia,39.013052,32.832500
+loc-624,lake,Meke Lake (Meke Maarı),Turkey,Asia,37.684515,33.635050
+loc-625,lake,Gavur Lake,Turkey,Asia,39.809945,37.737609
+loc-626,lake,Acıgöl Lake 2,Turkey,Asia,37.829876,29.893092
+loc-627,lake,Küçük Lake,Turkey,Asia,40.829040,41.391248
+loc-628,lake,Boz Lake,Turkey,Asia,38.333331,27.750001
+loc-629,reservoir,Güzelhisar Reservoir,Turkey,Asia,38.788343,27.106860
+loc-630,reservoir,Sevişler Reservoir,Turkey,Asia,38.788344,27.106861
+loc-631,lake,Tepe Lake,Turkey,Asia,39.468856,27.927827
+loc-632,lake,Gebekirse Lake,Turkey,Asia,37.986479,27.304351
+loc-633,lake,Gala Lake,Turkey,Europe,40.752474,26.167372
+loc-634,lake,Pamuklu Lake,Turkey,Europe,40.787704,26.280672
+loc-635,lake,Domuz Lake,Turkey,Europe,40.776039,26.235266
+loc-636,lake,Taşkısığı Lake,Turkey,Asia,40.868601,30.403340
+loc-637,lake,Çubuk Lake,Turkey,Asia,40.480830,30.835557
+loc-638,lake,Poyrazlar Lake,Turkey,Asia,40.838333,30.467192
+loc-639,lake,Sapanca Lake,Turkey,Asia,40.838334,30.467191
+loc-640,lake,Işık Dağı Karagöl Lake,Turkey,Asia,38.557401,27.217278
+loc-641,lake,Çavuşcu Lake,Turkey,Asia,38.350553,31.876945
+loc-642,lake,Mogan Lake,Turkey,Asia,39.763339,32.794340
+loc-643,pond,Üçlerkayası Pond,Turkey,Asia,39.088181,30.417963
+loc-644,lake,Çubuk Karagöl Lake,Turkey,Asia,40.412073,32.912390
+loc-645,lake,Eymir Lake,Turkey,Asia,39.826202,32.832427
+loc-646,lake,Küçük Akgöl Lake,Turkey,Asia,40.878087,30.431873
+loc-647,lake,Avdan Lake,Turkey,Asia,37.581401,28.794006
+loc-648,lake,Kayuslu Lake,Turkey,Asia,39.992533,35.986125
+loc-649,lake,Karamurat Lake,Turkey,Asia,40.565778,30.956417
+loc-650,pond,Cüneyt Sönmez Pond,Turkey,Asia,36.890935,30.710383
+loc-651,pond,Çılgınlar Pond,Turkey,Asia,40.950068,29.340953
+loc-652,pond,Yıldırım Evci Pond,Turkey,Asia,40.448831,32.877595
+loc-653,lake,Sülüklü Lake,Turkey,Asia,37.566400,32.048235
+loc-654,pond,Çamkoru Pond,Turkey,Asia,40.585154,32.512504
+loc-655,lake,Anagöl Lake,Turkey,Asia,37.514163,33.717222
+loc-656,pond,Tufanbeyli Demiroluk Pond,Turkey,Asia,38.225478,36.064317
+loc-657,pond,Pekmezli-Çatalçam Pond,Turkey,Asia,40.252254,27.127947
+loc-658,pond,Topacık Pond,Turkey,Asia,37.469450,31.795400
+loc-659,pond,Hüsniye Pond,Turkey,Asia,37.646516,34.589144
+loc-660,lake,Manyas Lake,Turkey,Asia,40.202934,27.948339
+loc-661,lake,Uluabat Lake,Turkey,Asia,40.148880,28.614815
+loc-663,reservoir,Nilüfer Reservoir,Turkey,Asia,40.011919,29.116512
+loc-664,lake,Erçek Lake,Turkey,Asia,38.669553,43.588451
+loc-665,lake,Van Lake,Turkey,Asia,38.613986,42.918156
+loc-666,lake,Lake Annecy,France,Europe,45.898132390000001,6.1406700000000001
+loc-667,lake,Lake Bourget,France,Europe,45.727080999999998,5.85764
+loc-668,lake,Lake Geneva,France,Europe,46.433244000000002,6.5305780000000002
+loc-669,lake,Morcille River,France,Europe,46.126801,4.7013769999999999
+loc-670,lake,Lake Geneva,France,Europe,46.433244000000002,6.5305780000000002
+loc-671,lake,Lake Montriond,France,Europe,46.208846999999999,6.7287179999999998
+loc-672,lake,Lake Brévent,France,Europe,45.928961999999999,6.8275170000000003
+loc-673,lake,Lake d'Anterne,France,Europe,45.991166,6.7982120000000004
+loc-674,lake,Bultière Reservoir,France,Europe,46.917968999999999,-1.201584
+loc-675,lake,Lake Cornu,France,Europe,45.957709999999999,6.8482849999999997
+loc-676,lake,Plan Vianney Lake,France,Europe,44.957743000000001,6.0440189999999996
+loc-677,lake,Mount Damavand,Iran,Asia,35.951000000000001,52.109
+loc-678,lake,Babeni,Romania,Europe,44.975000000000001,24.231111
+loc-680,lake,Kachemak Bay,USA,North America,59.609166999999999,-151.3475
+loc-681,lake,Ore mountains,NA,Europe,NA,NA
+loc-682,lake,Lake Aiguebelette,France,Europe,45.552778000000004,5.797222
+loc-683,lake,Allequash Lake,USA,North America,46.038316999999999,-89.620616999999996
+loc-684,lake,Big Muskellunge Lake,USA,North America,46.021067000000002,-89.611783000000003
+loc-685,lake,Crystal Bog,USA,North America,46.007582999999997,-89.606183000000001
+loc-688,lake,Lake Monona,USA,North America,43.063369999999999,-89.360860000000002
+loc-689,lake,Sparkling Lake,USA,North America,46.007733000000002,-89.701183
+loc-690,lake,Trout Bog,USA,North America,46.041249999999998,-89.686283000000003
+loc-691,lake,Trout Lake,USA,North America,46.029266999999997,-89.665017000000006
+loc-692,lake,Lake Wingra,USA,North America,43.052579999999999,-89.424989999999994
+loc-695,lake,Norway,Norway,Europe,59.911490999999998,10.757933
+loc-696,lake,Sacramento,USA,North America,38.575763999999999,-121.47885100000001
+loc-697,lake,Onondaga Lake,USA,North America,43.090297999999997,-76.210250000000002
+loc-701,freshwater,Southern Africa,NA,Africa,-24.175146999999999,19.227253000000001
+loc-702,lake,canada,canada,North America,NA,NA
+loc-708,lake,Lake Biel,Switzerland,Europe,47.081102999999999,7.1696309999999999
+loc-711,freshwater,denmark,denmark,Europe,NA,NA
+loc-719,freshwater,Marley's Hill,New Zealand,Australasia,-43.612221,172.633273
+loc-723,freshwater,South Africa,South Africa,Africa,NA,NA
+loc-724,freshwater,Camargue,France,Europe,43.593912,4.468988
+loc-728,pond,Madurai,India,Asia,9.9333329999999993,78.133332999999993
+loc-729,lake,Island lake,USA,North America,47.01981,-92.145172000000002
+loc-730,lake,Pike Lake,USA,North America,46.866455000000002,-92.300404999999998
+loc-732,lake,Tjeukemeer,Netherlands,Europe,52.888390999999999,5.7994310000000002
+loc-741,reservoir,Queen Elizabeth II,UK,Europe,51.390930,-0.395765
+loc-742,reservoir,King George VI,UK,Europe,51.448255,-0.502883
+loc-743,lake,lake Erken,Sweeden,Europe,59.845795,18.564878
+loc-746,lake,Resolute lake,Canada,North America,74.686811,-94.939315
+loc-749,freshwater,Warsaw,Poland,Europe,52.229676,21.012232
+loc-751,pond,Jefferson County,USA,North America,36.041785,-83.464358
+loc-763,lake,Silver lake,USA,North America,44.903287,-94.19553
+loc-768,lake,Mekkojärvi,Finland,Europe,63.254792,25.040180
+loc-770,freshwater,European Russia,Russia,Europe,NA,NA
+loc-771,lake,France,France,Europe,NA,NA
+loc-772,freshwater,Europe,NA,Europe,NA,NA
+loc-775,freshwater,European Russia,NA,NA,NA,NA
+loc-776,freshwater,Estonia,Estonia,Europe,NA,NA
+loc-777,river,Tiete River,Brazil,South America,-23.489567,-46.525000
+loc-778,lake,Parque Ecológico do Tietê,Brazil,South America,-23.484250,-46.515650
+loc-779,river,Tigris River,Turkey,Asia,NA,NA
+loc-780,bog,Le Cachot bog,Switzerland,Europe,47.001803,6.671025
+loc-781,river,Afon Cynon,UK,Europe,51.700903,-3.419929
+loc-783,freshwater,Sahelo-Sudan,NA,Africa,NA,NA
+loc-785,freshwater,Van Kalesi,Turkey,Asia,38.502664,43.339883
+loc-786,pond,Gazinet-Cestas,France,Europe,44.775026,-0.695638
+loc-787,freshwater,North America,USA,North America,NA,NA
+loc-788,lab,Canadian Phycological Culture Centre,canada,North America,43.471454,-80.543148
+loc-789,freshwater,China,China,Asia,NA,NA
+loc-790,freshwater,New Zealand,New Zealand,Australasia,NA,NA
+loc-791,freshwater,Loughgall,UK,Europe,54.409358,-6.602901
+loc-792,lake,Lake Balaton,Hungary,Europe,46.830265,17.734036
+loc-793,lake,Washington,USA,North America,47.751074,-120.740137

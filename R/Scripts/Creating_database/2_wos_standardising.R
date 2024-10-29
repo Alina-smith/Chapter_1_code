@@ -64,7 +64,7 @@ wos_formatted <- wos_raw_body %>%
       # divide total population biovolume by abundance
       !is.na(total.bs) ~ total.bs/abundance,
       # take average of range values when the average isn't given already
-      measurement.type == "range" & is.na(body.size) ~ (min.body.size*max.body.size)/2,
+      measurement.type == "range" & is.na(body.size) ~ (min.body.size+max.body.size)/2,
       # select min values
       measurement.type == "min" & is.na(body.size) ~ min.body.size,
       # select max values
@@ -269,4 +269,4 @@ wos_formatted <- wos_raw_body %>%
            bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
+saveRDS(wos_formatted, file = "R/Data_outputs/full_database/wos_formatted.rds")
