@@ -13,75 +13,9 @@ library(stringi)
 wos_raw <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
 db_raw <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
 
-# Removing multiple measurements ----
-# Some individuals have biovolume and dimension or length and mass measurements so want o keep just the biovolume or mass ones in these cases
-
-# make a list of all individual uids that has more than one measurement type to use in next step to remove datapoints I don't want
-multiple_measurements <- bind_rows(db_raw, wos_raw) %>% 
-  
-  # merge the measurment types into groups to help with working out when theres a biovolumne and a dimension measurment
-  mutate(
-    bs.check = case_when(
-      bodysize.measurement == "biovolume" ~ "biovolume",
-      bodysize.measurement %in% c("length", "height", "width", "depth", "diameter") ~ "dimension",
-      bodysize.measurement %in% c("dry mass", "wet mass") ~ "mass",
-      TRUE ~ "other"
-    )
-  ) %>% 
-  
-  # group by individual.uid to check for multiple measurement types within each individual
-  group_by(
-    individual.uid
-  ) %>% 
-  
-  # get distinct measurement types so that only looking for multiple measurement types not multiple measurements
-  distinct(
-    bs.check
-  ) %>% 
-  
-  # count how many measurement types per individual
-  mutate(
-    bs.check.2 = n()
-  ) %>% 
-  
-  # select ones that are more than one
-  filter(
-    bs.check.2 > 1
-  )
 
 # Joining db and wos ----
 bodysize_joined <- bind_rows(db_raw, wos_raw) %>% 
-  
-  ## Remove multiple measurements ----
-  # remove dimension measurements when there is already a biovolume or mass
-
-  # merge measurement.type together like in removing multiple measurements step above to make easier
-  mutate(
-    bs.type = case_when(
-      bodysize.measurement == "biovolume" ~ "biovolume",
-      bodysize.measurement %in% c("length", "height", "width", "depth", "diameter") ~ "dimension",
-      bodysize.measurement %in% c("dry mass", "wet mass") ~ "mass",
-      TRUE ~ "other"
-    ),
-  
-  # When the individual.uid is in the multiple_measurements individual.uid then assign each datapoint either yes to keep if it is biovolume or mass and no to remove if a dimension
-  keep = case_when(
-    individual.uid %in% multiple_measurements$individual.uid & bs.type == "dimension" ~ "no",
-    individual.uid %in% multiple_measurements$individual.uid & bs.type == "biovolume" ~ "yes",
-    individual.uid %in% multiple_measurements$individual.uid & bs.type == "mass" ~ "yes",
-    TRUE ~ "yes" # ones that aren't multiple measurements to keep
-    )
-  ) %>% 
-  
-  # filter out ones I don't want
-  filter(
-    keep == "yes"
-  ) %>% 
-  
-  select(
-    -keep,
-    -bs.type
-  ) %>% 
   
   mutate(
     # make uid column so each data point has it's own uid
