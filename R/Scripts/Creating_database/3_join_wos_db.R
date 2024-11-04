@@ -1,4 +1,6 @@
-## Join the DB and WOS data together and format anything to make the same
+# Aim of script:
+# Join the DB and WOS data together and format anything to make the same
+## This will then have the taxonomy, location and source info added and filtered for duplicate sources 
 
 # Packages 
 library(here)
@@ -6,48 +8,112 @@ library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(data.table)
 
 # Data ----
-wos_raw <- readRDS("R/Data_outputs/databases/wos_formatted.rds")
-db_raw <- readRDS("R/Data_outputs/databases/db_formatted.rds")
+wos_raw <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
+db_raw <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
+
+# Removing multiple measurements ----
+# Some individuals have biovolume and dimension or length and mass measurements so want o keep just the biovolume or mass ones in these cases
+
+# make a list of all individual uids that has more than one measurement type to use in next step to remove datapoints I don't want
+multiple_measurements <- bind_rows(db_raw, wos_raw) %>% 
+  
+  # merge the measurment types into groups to help with working out when theres a biovolumne and a dimension measurment
+  mutate(
+    bs.check = case_when(
+      bodysize.measurement == "biovolume" ~ "biovolume",
+      bodysize.measurement %in% c("length", "height", "width", "depth", "diameter") ~ "dimension",
+      bodysize.measurement %in% c("dry mass", "wet mass") ~ "mass",
+      TRUE ~ "other"
+    )
+  ) %>% 
+  
+  # group by individual.uid to check for multiple measurement types within each individual
+  group_by(
+    individual.uid
+  ) %>% 
+  
+  # get distinct measurement types so that only looking for multiple measurement types not multiple measurements
+  distinct(
+    bs.check
+  ) %>% 
+  
+  # count how many measurement types per individual
+  mutate(
+    bs.check.2 = n()
+  ) %>% 
+  
+  # select ones that are more than one
+  filter(
+    bs.check.2 > 1
+  )
 
 # Joining db and wos ----
-# Make a dataframe of all the db and wos data - will filter this for duplicate sources and then add location data to
-# There are a couple of data points where the original sources couldn't be found - when this is the case the original.source.1 will be NA
-
 bodysize_joined <- bind_rows(db_raw, wos_raw) %>% 
   
+  ## Remove multiple measurements ----
+  # remove dimension measurements when there is already a biovolume or mass
+
+  # merge measurement.type together like in removing multiple measurements step above to make easier
   mutate(
-    ## Make uid column ----
-    # to give each data.point a uid aswell as each individual a uid
+    bs.type = case_when(
+      bodysize.measurement == "biovolume" ~ "biovolume",
+      bodysize.measurement %in% c("length", "height", "width", "depth", "diameter") ~ "dimension",
+      bodysize.measurement %in% c("dry mass", "wet mass") ~ "mass",
+      TRUE ~ "other"
+    ),
+  
+  # When the individual.uid is in the multiple_measurements individual.uid then assign each datapoint either yes to keep if it is biovolume or mass and no to remove if a dimension
+  keep = case_when(
+    individual.uid %in% multiple_measurements$individual.uid & bs.type == "dimension" ~ "no",
+    individual.uid %in% multiple_measurements$individual.uid & bs.type == "biovolume" ~ "yes",
+    individual.uid %in% multiple_measurements$individual.uid & bs.type == "mass" ~ "yes",
+    TRUE ~ "yes" # ones that aren't multiple measurements to keep
+    )
+  ) %>% 
+  
+  # filter out ones I don't want
+  filter(
+    keep == "yes"
+  ) %>% 
+  
+  select(
+    -keep,
+    -bs.type
+  ) %>% 
+  
+  mutate(
+    # make uid column so each data point has it's own uid
     uid = row_number(),
     
-    # set original.taxa.name to lower case to make later steps with taxonomy easier
-    original.taxa.name = tolower(original.taxa.name),
-    
-    # Remove any invisible chacters from the original.taxa.name - replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
+    ## Invisible characters ----
+    # Remove any invisible characters from the original.taxa.name - replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
     original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*")
   ) %>% 
   
-  ## reorder - make easier for mutating across
-  relocate(uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
-           join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
-           join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
-           min.body.size, max.body.size, body.size,
-           bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type) %>% 
+  ## reorder ----
+  # make easier for mutating across
+  relocate(
+    uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
+    join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
+    join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+    individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+    min.body.size, max.body.size, body.size,
+    bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type
+  ) %>% 
     
   mutate(
-    ## Change NA - original.source.codes ----
-    # set NA original.source.code.1 to "unknown"
+    ## Original.source.codes NAs
+    # set NA original.source.code.1 to "unknown" - because if original.source.code.1 is NA then it means there is no original source code and so it is unknown
     original.source.code.1 = if_else(
       is.na(original.source.code.1),
       "unknown",
       original.source.code.1
     ),
     
-    # set Na in the original.source.columns to no.source
+    # set NA in the original.source.columns to no.source - because if these are NA it is because it just didn't have that many original source codes
+    # set to "no.source" instead of NA to make later steps for the sources easier
     across(
       .cols = original.source.code.2:original.source.code.18,
       ~ if_else(
@@ -57,17 +123,43 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
         )
       ),
     
-    ## Change NA - join.source ----
-    # set join.source to no.source for NAs - this isn't for if there isn't a source for the location it means there isn't that many locations fir this source so it would be an NA for this column but changing it to a NA code instead to avoid confusion what left joining later as some of the join,location codes are "NA" for a country
+    ## join.source NAs ----
+    # set join.source to no.source for NAs - because if these are NA it is because it just didn't have that many locations
+    # set to "no.source" instead of NA to make later steps for the location codes easier
     across(
-      .cols = join.location.2:join.location.17, # all join.location.1 column should have a value as the unknonws have their own data points
+      .cols = join.location.2:join.location.17, # all join.location.1 column should have a value as the unknonws have their own location code
       ~ if_else(
         is.na(.),
         "no.source",
         .)
-      )
+      ),
+    
+    # General edits ----
+    # make general edits that got missed in previous steps
+    
+    # paper code 10.1038/s41598-022-14301-y is actually body length not body size so change that
+    bodysize.measurement = case_when(
+      bodysize.measurement == "body size" ~ "length",
+      TRUE ~ bodysize.measurement
+    ),
+    
+    # change units that are unicode to be the same
+    units = case_when(
+      units %in% c("µm", "μm") ~ "µm",
+      units %in% c("µg", "μg") ~ "µg",
+      units %in% c("µm^3", "μm^3") ~ "µm^3",
+      TRUE ~ units
+    ),
+    
+    # calculate min max
+    # for nay that still have only min and max and not body size calculate this
+    body.size = case_when(
+      is.na(body.size) & !is.na(min.body.size) & !is.na(max.body.size) ~ (min.body.size + max.body.size)/2,
+      is.na(body.size) & is.na(min.body.size) & !is.na(max.body.size) ~ max.body.size,
+      is.na(body.size) & !is.na(min.body.size) & is.na(max.body.size) ~ min.body.size,
+      TRUE ~ body.size
+    )
   )
 
-saveRDS(bodysize_joined, file = "R/Data_outputs/databases/bodysize_joined.rds")
-
-
+# Save ----
+saveRDS(bodysize_joined, file = "R/Data_outputs/full_database/bodysize_joined.rds")

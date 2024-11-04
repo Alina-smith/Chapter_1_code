@@ -1,6 +1,6 @@
-## Standadizing the WOS data
+# Aim of script: Standadizing the WOS data
 
-# Packages 
+# Packages
 library(here)
 library(readxl)
 library(tidyr)
@@ -12,14 +12,17 @@ library(data.table)
 wos_raw_body <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 40000)
 wos_source_list <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "source_list")
 
-# Standardising ----
+# Formatting ----
+
 wos_formatted <- wos_raw_body %>%
+  
   ## Filter ----
   filter(
     !(original.taxa.name == "unknown"), # remove "unknown" taxa names
   ) %>% 
   
-  ## Select columns ----
+  ## Select columns
+  # remove columns I don't need as were not present in all data
   select(
     - experimental.design,
     - treatment.1.name,
@@ -63,12 +66,16 @@ wos_formatted <- wos_raw_body %>%
     body.size = case_when(
       # divide total population biovolume by abundance
       !is.na(total.bs) ~ total.bs/abundance,
+      
       # take average of range values when the average isn't given already
-      measurement.type == "range" & is.na(body.size) ~ (min.body.size*max.body.size)/2,
+      measurement.type == "range" & is.na(body.size) ~ (min.body.size+max.body.size)/2,
+      
       # select min values
       measurement.type == "min" & is.na(body.size) ~ min.body.size,
+      
       # select max values
       measurement.type == "max" & is.na(body.size) ~ max.body.size,
+      
       # keep the rest the same
       TRUE ~ body.size
     )
@@ -82,10 +89,12 @@ wos_formatted <- wos_raw_body %>%
       "keep"
     )
   ) %>% 
-  # keep onlt ones with "keep"
+  
+  # keep only ones with "keep"
   filter(
     keep == "keep"
   ) %>% 
+  
   # remove redundant columns
   select(
     - keep,
@@ -99,10 +108,10 @@ wos_formatted <- wos_raw_body %>%
     bodysize.measurement.notes = stri_extract_first_regex(bodysize.measurement, "(?<=\\- ).*"),
     bodysize.measurement = stri_replace_all_regex(bodysize.measurement, " \\- .*", ""),
     
-    # fix spelling mistakes
-    bodysize.measurement = stri_replace_all_regex(bodysize.measurement, "B", "b",),
+    # set everything to lower case to make easier
+    bodysize.measurement = tolower(bodysize.measurement),
     
-    # make into the same
+    # lots of different measurment types to standadize into a set few
     bodysize.measurement = case_when(
       stri_detect_regex(bodysize.measurement, "length") ~ "length",
       stri_detect_regex(bodysize.measurement, "width") ~ "width",
@@ -121,7 +130,7 @@ wos_formatted <- wos_raw_body %>%
       TRUE ~ units
     ),
     
-    # standardize to the same units
+    # convert to the same units
     body.size = case_when(
       units == "mg" ~ body.size*1000,
       units == "cm" ~ body.size*10,
@@ -137,7 +146,7 @@ wos_formatted <- wos_raw_body %>%
     ),
     
     ## life stage ----
-    # sort out captals
+    # sort out capitals
     life.stage = stri_replace_all_regex(life.stage, "A", "a"),
     
     # change to either adult or juvenile
@@ -147,6 +156,7 @@ wos_formatted <- wos_raw_body %>%
       source.code %in% c("61", "263") & stri_detect_regex(life.stage, "C") ~ "adult",
       life.stage == "7 days" ~ "adult",
       is.na(life.stage) ~ "adult", # assume they are adults unless specified otherwise
+      
       # juvenile
       stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile|metamorphasis") ~ "juvenile",
       source.code %in% c("61", "263") & stri_detect_regex(life.stage, "N|Instar") ~ "juvenile",
@@ -162,6 +172,7 @@ wos_formatted <- wos_raw_body %>%
     sample.end.year = as.character(sample.end.year),
     
     # Year
+    # when it is in the full format extract the year
     sample.start.year = case_when(
       !is.na(sample.start.date.full) ~ stri_extract_first_regex(sample.start.date.full, "\\d{4}"),
       TRUE ~ sample.start.year
@@ -173,7 +184,9 @@ wos_formatted <- wos_raw_body %>%
     ),
     
     # Month
+    # when it is in the full format then extract the month
     sample.start.month = case_when(
+      
       # american style date
       !is.na(sample.start.date.full) & source.code == "8" ~ stri_extract_first_regex(sample.start.date.full, "(?<!\\/)\\d+(?=\\/)"), # take the two digits that don't have a / infront but have on following it - dd/
       
@@ -221,6 +234,8 @@ wos_formatted <- wos_raw_body %>%
   
   mutate(
     ## Form ----
+    # edit weird form ones
+    
     form = if_else(
       form == "coenobium",
       "colony",
@@ -235,7 +250,7 @@ wos_formatted <- wos_raw_body %>%
     ),
     
     ## Unknown
-    # change unknown to NA is reps and sample.size
+    # change unknown to NA in reps and sample.size
     sample.size = if_else(
       sample.size == "unknown",
       NA,
@@ -269,4 +284,4 @@ wos_formatted <- wos_raw_body %>%
            bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(wos_formatted, file = "R/Data_outputs/databases/wos_formatted.rds")
+saveRDS(wos_formatted, file = "R/Data_outputs/full_database/wos_formatted.rds")

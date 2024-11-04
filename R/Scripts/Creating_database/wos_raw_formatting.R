@@ -158,3 +158,21 @@ original_sources_citations_list <- read_xlsx(here("Raw_data/wos_formatting", "zo
 
 zotero_source_list <- original_sources_citations_list %>% 
   left_join(., zotero_source_list_edit, by = )
+
+
+
+## 1312
+# left join the source.code from my list to the correspinding source in their list
+# data
+raw_1312 <- read.csv(here("Raw_data/wos_formatting", "1312.csv"))
+
+edit_1312 <- raw_1312 %>% 
+  filter(
+    MarksInOcularMicrometer_No. != ""
+  ) %>% 
+  
+  mutate(
+    body.size = case_when(
+      
+    )
+  )
