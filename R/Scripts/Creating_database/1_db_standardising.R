@@ -19,7 +19,7 @@ library(data.table)
 
 # data ----
 #set relative file paths
-master_db_path <- here("Raw_data", "master_db_data.xlsx")
+master_db_path <- here("raw_data", "master_db_data.xlsx")
 
 
 rimet <- read_xlsx(master_db_path, sheet = "Rimmet")
@@ -259,7 +259,7 @@ rimet_formatted <- rimet %>%
             bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save ----
-saveRDS(rimet_formatted, file = "R/Data_outputs/databases/rimet_formatted.rds")
+saveRDS(rimet_formatted, file = "R/data_outputs/databases/rimet_formatted.rds")
 
 
 
@@ -420,7 +420,7 @@ kremer_formatted <- kremer %>%
 
 
 ## Save ----
-saveRDS(kremer_formatted, file = "R/Data_outputs/databases/kremer_formatted.rds")
+saveRDS(kremer_formatted, file = "R/data_outputs/databases/kremer_formatted.rds")
 
 
 
@@ -899,7 +899,7 @@ odume_formatted <- bind_rows(odume_exact, odume_ranges, odume_lwh, odume_approx,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 # Odume - save ----
-saveRDS(odume_formatted, file = "R/Data_outputs/databases/odume_formatted.rds")
+saveRDS(odume_formatted, file = "R/data_outputs/databases/odume_formatted.rds")
 
 
 # Hebert ----
@@ -1292,7 +1292,7 @@ hebert_formatted <- hebert %>%
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save ----
-saveRDS(hebert_formatted, file = "R/Data_outputs/databases/hebert_formatted.rds")
+saveRDS(hebert_formatted, file = "R/data_outputs/databases/hebert_formatted.rds")
 
 
 
@@ -1380,7 +1380,7 @@ gavrilko_formatted <- Gavrilko %>%
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save
-saveRDS(gavrilko_formatted, file = "R/Data_outputs/databases/gavrilko_formatted.rds")
+saveRDS(gavrilko_formatted, file = "R/data_outputs/databases/gavrilko_formatted.rds")
 
 
 # Laplace-Treyture ----
@@ -1488,7 +1488,7 @@ lt_formatted <- LT %>%
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## Save ----
-saveRDS(lt_formatted, file = "R/Data_outputs/databases/lt_formatted.rds")
+saveRDS(lt_formatted, file = "R/data_outputs/databases/lt_formatted.rds")
 
 
 
@@ -1712,7 +1712,7 @@ no_formatted <- NO %>%
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## save ----
-saveRDS(no_formatted, file = "R/Data_outputs/databases/no_formatted.rds")
+saveRDS(no_formatted, file = "R/data_outputs/databases/no_formatted.rds")
 
 
 #  Rimet 2012 ----  
@@ -1819,7 +1819,7 @@ rimet2012_formatted <- rimet2012 %>%
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 ## save ----
-saveRDS(rimet2012_formatted, file = "R/Data_outputs/databases/rimet2012_formatted.rds")
+saveRDS(rimet2012_formatted, file = "R/data_outputs/databases/rimet2012_formatted.rds")
 
 
 # Combine together ----
@@ -1837,5 +1837,5 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(db_formatted, file = "R/Data_outputs/full_database/db_formatted.rds")
+saveRDS(db_formatted, file = "R/data_outputs/full_database/db_formatted.rds")
 

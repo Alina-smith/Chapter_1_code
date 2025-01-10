@@ -15,15 +15,68 @@ db_raw <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
 
 
 # Joining db and wos ----
-bodysize_joined <- bind_rows(db_raw, wos_raw) %>% 
+joined_raw <- bind_rows(db_raw, wos_raw) 
+
+
+# Invisible characters ----
+# Remove any invisible characters from the original.taxa.name
+
+## Replace with regex ----
+spec_char_to_fix <- joined_raw %>% 
+  mutate(
+    # Replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
+    original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*")
+  ) %>% 
+  distinct(
+    original.taxa.name
+  ) %>% 
+  filter(
+    stri_detect_regex(original.taxa.name, "\\*SpecChar\\*")
+  )
+
+# save
+write_csv(spec_char_to_fix, "R/data_outputs/taxonomy/spec_char_to_fix.csv")
+
+## Swap old for new names ----
+# read in updated names
+updated_spec_char <- read_xlsx(here("raw_data","manual_taxonomy.xlsx"), sheet = "special_characters")
+
+# replace ones with *SpecChar* with updated name
+bodysize_spec_char <- joined_raw %>% 
   
   mutate(
-    # make uid column so each data point has it's own uid
-    uid = row_number(),
+    # add in *SpecChar* again
+    original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*"),
+  ) %>% 
+  
+  # Join updated names
+  left_join(
+    updated_spec_char, by = "original.taxa.name"
+  ) %>% 
+  
+  mutate(
+    # replace old with new
+    original.taxa.name = if_else(
+      !is.na(new.taxa.name), new.taxa.name, original.taxa.name
+    ),
     
-    ## Invisible characters ----
-    # Remove any invisible characters from the original.taxa.name - replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
-    original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*")
+    # Remove any white spaces if there are any
+    original.taxa.name = trimws(original.taxa.name)
+  ) %>% 
+  
+  # remove redundant columns
+  select(
+    - new.taxa.name
+  )
+
+# Final edits ----
+
+bodysize_joined <- bodysize_spec_char %>% 
+  
+  mutate(
+    ## UID ----
+    # make uid column so each data point has it's own uid
+    uid = row_number()
   ) %>% 
   
   ## reorder ----
@@ -36,9 +89,9 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type
   ) %>% 
-    
+  
   mutate(
-    ## Original.source.codes NAs
+    ## Original.source.codes NAs ----
     # set NA original.source.code.1 to "unknown" - because if original.source.code.1 is NA then it means there is no original source code and so it is unknown
     original.source.code.1 = if_else(
       is.na(original.source.code.1),
@@ -78,15 +131,10 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
     ),
     
     # change units that are unicode to be the same
-    units = case_when(
-      units %in% c("µm", "μm") ~ "µm",
-      units %in% c("µg", "μg") ~ "µg",
-      units %in% c("µm^3", "μm^3") ~ "µm^3",
-      TRUE ~ units
-    ),
+    units = stri_replace_all_regex(units, "[^\\x20-\\x7E]", "µ"),
     
     # calculate min max
-    # for nay that still have only min and max and not body size calculate this
+    # for any that still have only min and max and not body size calculate this
     body.size = case_when(
       is.na(body.size) & !is.na(min.body.size) & !is.na(max.body.size) ~ (min.body.size + max.body.size)/2,
       is.na(body.size) & is.na(min.body.size) & !is.na(max.body.size) ~ max.body.size,
@@ -96,4 +144,4 @@ bodysize_joined <- bind_rows(db_raw, wos_raw) %>%
   )
 
 # Save ----
-saveRDS(bodysize_joined, file = "R/Data_outputs/full_database/bodysize_joined.rds")
+saveRDS(bodysize_joined, file = "R/data_outputs/full_database/bodysize_joined.rds")

@@ -9,8 +9,8 @@ library(stringi)
 library(data.table)
 
 # Data ---- 
-wos_raw_body <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 40000)
-wos_source_list <- read_xlsx(here("Raw_data","master_wos_data.xlsx"), sheet = "source_list")
+wos_raw_body <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 40000)
+wos_source_list <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "source_list")
 
 # Formatting ----
 
@@ -284,4 +284,4 @@ wos_formatted <- wos_raw_body %>%
            bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(wos_formatted, file = "R/Data_outputs/full_database/wos_formatted.rds")
+saveRDS(wos_formatted, file = "R/data_outputs/full_database/wos_formatted.rds")
