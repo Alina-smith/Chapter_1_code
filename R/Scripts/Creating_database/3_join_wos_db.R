@@ -140,6 +140,18 @@ bodysize_joined <- bodysize_spec_char %>%
       is.na(body.size) & is.na(min.body.size) & !is.na(max.body.size) ~ max.body.size,
       is.na(body.size) & !is.na(min.body.size) & is.na(max.body.size) ~ min.body.size,
       TRUE ~ body.size
+    ),
+    
+    # remove any random capitals - set just first letter to upper case, gna_verify doesn't work with anything else
+    original.taxa.name = tolower(original.taxa.name), # set all to lower case
+    original.taxa.name = paste(
+      toupper(
+        str_sub(
+          original.taxa.name, 1,1 # select first letter and set to upper case
+          )
+        ),
+      str_sub(original.taxa.name, 2), # paste remaining word
+      sep = ""
     )
   )
 

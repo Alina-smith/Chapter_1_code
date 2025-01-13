@@ -29,13 +29,14 @@ bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
 
 # get a list of all distinct names 
 distinct_names <- select(bodysize_joined, original.taxa.name) %>% 
+  # get distinct names
   distinct(original.taxa.name)
 
 # convert to a string of names
 names_list <- paste0(distinct_names$original.taxa.name)
 glimpse(names_list)
 
-# run string through the resolver and select columns I want - run through a catchall because it will throw an error when it doesn't recognise a name
+# run string through the resolver and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
 resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
   tryCatch(
     {
@@ -76,10 +77,15 @@ to_resolve_manually <- resolved_names_gna %>%
     manual = case_when(
       # Ones that weren't picked up by the resolver at all - gave NA for the resolved.taxa.name
       is.na(resolved.taxa.name.gna) ~ "na",
+      
+      # Ones that were a varity or form as the resolver removed the var. and f.
+      stri_detect_regex(original.taxa.name, " f\\.| var\\.") ~ "var.f",
+      
       # Ones that were bumped up a taxonomic rank by the resolver, ones that are two words in original.species.name (contain a space) but one word in the resolved name (no sapce)
       stri_detect_regex(original.taxa.name, " ") & 
         !(stri_detect_regex(resolved.taxa.name.gna, " ")) & 
         !(stri_detect_regex(original.taxa.name, "\\b(?i)sp\\.|\\b(?i)spp\\.|\\b(?i)sp\\b|\\b(?i)spp\\b|\\b(?i)sp(\\d+)|\\b(?i)ssp\\b")) ~ "bumped",
+      
       # Ones where the resolved.taxa.name was set to the name of the juvenile form or a common name instead of the taxa.name (e.g. nauplii or cyclops instead of copepoda)
       stri_detect_regex(resolved.taxa.name.gna, "\\b(?i)cyst\\b|\\b(?i)stomatocyst\\b|\\b(?i)nauplius\\b|\\b(?i)centric\\b|\\b(?i)volvocales\\b|\\b(?i)cyclops\\b") ~ "juvenile",
       TRUE ~ "keep"
@@ -100,15 +106,8 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/to_resolve_manually.csv"
   # when the species can't be found then the next highest rank is chosen
   # When two species are stated then the closet common higher group is used
 
-old_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "old_manual_resolve")
-to_resolve <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "manual_resolve")
-
-x <- left_join(to_resolve, old_resolved, by = "original.taxa.name")
-
-
 # Import the to_resolve_manual list with the now manually resolved names
 manually_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "resolve")
-
 
 # Join the manually resolved names from the manually_resolved
 resolved_names <- resolved_names_gnr %>% 
