@@ -30,7 +30,7 @@ bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
 # get a list of all distinct names 
 distinct_names <- select(bodysize_joined, original.taxa.name) %>% 
   # get distinct names
-  distinct(original.taxa.name)
+  distinct(original.taxa.name) 
 
 # convert to a string of names
 names_list <- paste0(distinct_names$original.taxa.name)
@@ -57,7 +57,7 @@ resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
   rename(
     original.taxa.name = submittedName,
     resolved.taxa.name.gna = matchedCanonicalFull,
-    resolved.source.gnr = dataSourceTitleShort
+    resolved.source.gna = dataSourceTitleShort
   )
 
 # Save
@@ -110,7 +110,7 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/to_resolve_manually.csv"
 manually_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "resolve")
 
 # Join the manually resolved names from the manually_resolved
-resolved_names <- resolved_names_gnr %>% 
+resolved_names <- resolved_names_gna %>% 
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
     manually_resolved,
@@ -118,16 +118,16 @@ resolved_names <- resolved_names_gnr %>%
   ) %>% 
   # select the ones left joined in
   mutate(
-    resolved.taxa.name = case_when(
-      resolved.taxa.name.manual == "couldn't resolve" ~ NA, # change the ones that couldn't be resolved to NA
-      !is.na(resolved.taxa.name.manual) ~ resolved.taxa.name.manual,
-      TRUE ~ resolved.taxa.name.gnr
+    resolved.taxa.name = if_else(
+      !is.na(resolved.source.manual),
+      resolved.taxa.name.manual,
+      resolved.taxa.name.gna
     ),
     
-    resolved.source = case_when(
-      resolved.taxa.name.manual == "couldn't resolve" ~ NA,
-      !is.na(resolved.source.manual) ~ resolved.source.manual,
-      TRUE ~ resolved.source.gnr
+    resolved.source = if_else(
+      !is.na(resolved.source.manual),
+      resolved.source.manual,
+      resolved.source.gna
     )
   ) %>% 
   
@@ -138,18 +138,41 @@ resolved_names <- resolved_names_gnr %>%
   )
 
 # Save
-saveRDS(resolved_names, file = "R/Data_outputs/Taxonomy/tol/resolved_names.rds")
+saveRDS(resolved_names, file = "R/data_outputs/taxonomy/resolved_names.rds")
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 # Taxonomy ----
 
 ## Step 1: Classification ----
 # Run through classification with tree of life
-
-taxonomy_tol_step1_raw <- select(resolved_names, resolved.taxa.name) %>% 
-  
-  # Select all distinct resolved.taxa.names from resolved_names
+# get a list of all distinct names 
+distinct_resolved_names <- select(resolved_names, resolved.taxa.name) %>% 
+  # get distinct names
   distinct(resolved.taxa.name) %>% 
+  head(5)
+
+# convert to a string of names
+resolved_names_list <- paste0(distinct_resolved_names$resolved.taxa.name)
+glimpse(distinct_resolved_names)
+
+tax_exp <- do.call(rbind, lapply(resolved_names_list, function(taxonomy) {
+  # Process each name and return the result
+  classification(taxonomy, db = "tol", return_id = TRUE, rows = 1)
+  }))
+
+tax_exp <- do.call(rbind, pivot_wider(
+  classification(resolved_names_list, db = "tol", return_id = TRUE, rows = 1),
+  names_from = rank,
+  values_from = name
+  )
+)
+  
+x <- rbind(classification(resolved_names_list, db = "tol", return_id = TRUE, rows = 1))
+
+x <- rbind(lapply(resolved_names_list, function(taxonomy) {
+  # Process each name and return the result
+  classification(taxonomy, db = "tol", return_id = TRUE, rows = 1)
+}))
   
   # set to rowwise so that tit takes each value individually - otherwise just assigns the first row for all of them
   rowwise() %>% 
@@ -158,6 +181,15 @@ taxonomy_tol_step1_raw <- select(resolved_names, resolved.taxa.name) %>%
   mutate(
     taxonomy = list(classification(resolved.taxa.name, db = "tol", return_id = TRUE, rows = 1)[[1]])
   )
+
+resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
+  tryCatch(
+    {
+      # Process each name and return the result
+      gna_verifier(name) %>%
+        as.data.frame() %>%
+        select(submittedName, matchedCanonicalFull, dataSourceTitleShort)
+
 
 # Save
 saveRDS(taxonomy_tol_step1_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step1_raw.rds") 
