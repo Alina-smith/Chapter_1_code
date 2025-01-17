@@ -1,11 +1,10 @@
 # Adding taxonomy data to the species list 
-# data run through resolver on 17/10/2024
-# data ran through taxize on 24/10/2024
+# data run through veryfier on 13/1/2025
+# data ran through taxize on 17/1/2025
 
 # Aim of script
-# 1) gna_verifyer - Run the names through the gna_verifyer first to get rid of any spelling mistakes 
-# 2) Manually resolve any names that weren't picked up by resolver and also change ones that are form or variety back as they resolver gets rid of the var. f. and I want to keep them
-# 3) Run through classification to get taxonomy
+# Resolve names - Run the names through gna_veryfier to fix spellings and get most up to date synonyms and manually resolve any that weren't picked up
+# Taxonomy - Run resolved names through classification for tol, worms, itis and gbif to get taxonomic hierarchy for taxa and manually fill in any that weren't picked up
 
 library(devtools)
 install_github("ropensci/bold")
@@ -29,7 +28,6 @@ bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
 
 # get a list of all distinct names 
 distinct_names <- select(bodysize_joined, original.taxa.name) %>% 
-  # get distinct names
   distinct(original.taxa.name) 
 
 # convert to a string of names
@@ -46,14 +44,15 @@ resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
         select(submittedName, matchedCanonicalFull, dataSourceTitleShort)
     },
     error = function(e) {
-      # Fallback for errors
+      # Fallback for errors - fill columns with NAs
       data.frame(
         submittedName = name,
         matchedCanonicalFull = NA,
         dataSourceTitleShort = NA)
-    }
-  )
-})) %>% 
+      }
+    )
+  })
+  ) %>% 
   rename(
     original.taxa.name = submittedName,
     resolved.taxa.name.gna = matchedCanonicalFull,
@@ -63,25 +62,24 @@ resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
 # Save
 saveRDS(resolved_names_gna, file = "R/data_outputs/taxonomy/resolved_names_gna.rds")
 
-## manual ----
+## Manual ----
 # How manual resolving was carried out:
   # When the species name could be found then use that
+  # When the species name couldn't be found on a database then keep the original.taxa.name in case it is a newly discovered species not in the databases yet
   # When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
-  # when the species can't be found then the next highest rank is chosen
   # When two species are stated then the closet common higher group is used
 
-# Finding all the taxa.names from resolved_gna to manually resolve based on the criteria below
-# Weren't resolved:
+# 1) Find all the taxa.names from resolved_gna to manually resolve based on the criteria in the comments
 to_resolve_manually <- resolved_names_gna %>% 
   mutate(
     manual = case_when(
       # Ones that weren't picked up by the resolver at all - gave NA for the resolved.taxa.name
       is.na(resolved.taxa.name.gna) ~ "na",
       
-      # Ones that were a varity or form as the resolver removed the var. and f.
+      # Ones that were a variety or form as the resolver removed the var. and f. and this is needed for classification steps
       stri_detect_regex(original.taxa.name, " f\\.| var\\.") ~ "var.f",
       
-      # Ones that were bumped up a taxonomic rank by the resolver, ones that are two words in original.species.name (contain a space) but one word in the resolved name (no sapce)
+      # Ones that were bumped up a taxonomic rank by the resolver - had two words in original.species.name (contain a space) but one word in the resolved name (no space)
       stri_detect_regex(original.taxa.name, " ") & 
         !(stri_detect_regex(resolved.taxa.name.gna, " ")) & 
         !(stri_detect_regex(original.taxa.name, "\\b(?i)sp\\.|\\b(?i)spp\\.|\\b(?i)sp\\b|\\b(?i)spp\\b|\\b(?i)sp(\\d+)|\\b(?i)ssp\\b")) ~ "bumped",
@@ -98,25 +96,19 @@ to_resolve_manually <- resolved_names_gna %>%
 # Save
 write_csv(to_resolve_manually, "R/data_outputs/taxonomy/to_resolve_manually.csv")
 
-# Join in manually resolved ones
-# replace the resolved.taxa.name of the ones in resolved_names_gna to the manually resolved ones when a manually resolved name is present
-# How manual resolving was carried out:
-  # When the species name could be found then use that
-  # When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
-  # when the species can't be found then the next highest rank is chosen
-  # When two species are stated then the closet common higher group is used
+# 2) Update resolved.taxa.names with the manually resolved names
 
-# Import the to_resolve_manual list with the now manually resolved names
+# Import the manually resolved names
 manually_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "resolve")
 
-# Join the manually resolved names from the manually_resolved
+# Replace resolved.taxa.name with manually resolved names when ones is present
 resolved_names <- resolved_names_gna %>% 
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
     manually_resolved,
     by = "original.taxa.name"
   ) %>% 
-  # select the ones left joined in
+  # when a name has been resolved manually (resolved source = "manaully") then select that name else keep the current one
   mutate(
     resolved.taxa.name = if_else(
       !is.na(resolved.source.manual),
@@ -143,56 +135,140 @@ saveRDS(resolved_names, file = "R/data_outputs/taxonomy/resolved_names.rds")
 
 # Taxonomy ----
 
-## Step 1: Classification ----
-# Run through classification with tree of life
+## Classification ----
+
 # get a list of all distinct names 
 distinct_resolved_names <- select(resolved_names, resolved.taxa.name) %>% 
   # get distinct names
-  distinct(resolved.taxa.name) %>% 
-  head(5)
+  distinct(resolved.taxa.name)
 
 # convert to a string of names
 resolved_names_list <- paste0(distinct_resolved_names$resolved.taxa.name)
 glimpse(distinct_resolved_names)
 
-tax_exp <- do.call(rbind, lapply(resolved_names_list, function(taxonomy) {
-  # Process each name and return the result
-  classification(taxonomy, db = "tol", return_id = TRUE, rows = 1)
-  }))
-
-tax_exp <- do.call(rbind, pivot_wider(
-  classification(resolved_names_list, db = "tol", return_id = TRUE, rows = 1),
-  names_from = rank,
-  values_from = name
-  )
-)
-  
-x <- rbind(classification(resolved_names_list, db = "tol", return_id = TRUE, rows = 1))
-
-x <- rbind(lapply(resolved_names_list, function(taxonomy) {
-  # Process each name and return the result
-  classification(taxonomy, db = "tol", return_id = TRUE, rows = 1)
-}))
-  
-  # set to rowwise so that tit takes each value individually - otherwise just assigns the first row for all of them
-  rowwise() %>% 
-  
-  # run through classification - doing it in the dataframe and not passing a string like above so the original name is kept incase a new name is given by TOL
+# Initial run through classification to get taxonomic hierachy
+# Tree of life
+tax_tol_raw <- rbind(classification(resolved_names_list, db = "tol", return_id = FALSE, rows = 1)) %>% 
+  filter(
+    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
+  ) %>% 
   mutate(
-    taxonomy = list(classification(resolved.taxa.name, db = "tol", return_id = TRUE, rows = 1)[[1]])
-  )
-
-resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
-  tryCatch(
-    {
-      # Process each name and return the result
-      gna_verifier(name) %>%
-        as.data.frame() %>%
-        select(submittedName, matchedCanonicalFull, dataSourceTitleShort)
-
+    rank = paste(rank, "tol", sep = ".")
+  ) %>% 
+  pivot_wider(.,
+              names_from = rank,
+              values_from = name) %>% 
+    unnest_wider(col = everything(), names_sep = ".") %>% 
+  rename(
+    resolved.taxa.name = query.1
+  )  %>% 
+  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
 
 # Save
-saveRDS(taxonomy_tol_step1_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step1_raw.rds") 
+saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
+
+# Worms
+tax_worms_raw <- rbind(classification(resolved_names_list, db = "worms", return_id = FALSE, rows = 1)) %>% 
+  filter(
+    rank %in% c("Form", "Variety", "Species", "Genus", "Family", "Order", "Class", "Phylum", "Kingdom", "Domain")
+  ) %>% 
+  mutate(
+    rank = paste(rank, "worms", sep = ".")
+  ) %>% 
+  pivot_wider(.,
+              names_from = rank,
+              values_from = name) %>% 
+  unnest_wider(col = everything(), names_sep = ".") %>% 
+  rename(
+    resolved.taxa.name = query.1
+  ) %>% 
+  rename_with(
+    ., tolower
+  ) %>% 
+  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
+
+# Save
+saveRDS(tax_worms_raw, file = "R/data_outputs/taxonomy/tax_worms_raw.rds")
+
+# Gbif
+tax_gbif_raw <- rbind(classification(resolved_names_list, db = "gbif", return_id = FALSE, rows = 1)) %>% 
+  filter(
+    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
+  ) %>% 
+  mutate(
+    rank = paste(rank, "gbif", sep = ".")
+  ) %>% 
+  pivot_wider(.,
+              names_from = rank,
+              values_from = name) %>% 
+  unnest_wider(col = everything(), names_sep = ".") %>% 
+  rename(
+    resolved.taxa.name = query.1
+  ) %>% 
+  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
+
+# Save
+saveRDS(tax_gbif_raw, file = "R/data_outputs/taxonomy/tax_gbif_raw.rds")
+
+# Itis
+tax_itis_raw <- rbind(classification(resolved_names_list, db = "itis", return_id = FALSE, rows = 1)) %>% 
+  filter(
+    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
+  ) %>% 
+  mutate(
+    rank = paste(rank, "itis", sep = ".")
+  ) %>% 
+  pivot_wider(.,
+              names_from = rank,
+              values_from = name) %>% 
+  unnest_wider(col = everything(), names_sep = ".") %>% 
+  rename(
+    resolved.taxa.name = query.1
+  ) %>% 
+  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
+
+# Save
+saveRDS(tax_itis_raw, file = "R/data_outputs/taxonomy/tax_itis_raw.rds")
+
+# combine all together
+tax_all_raw <- left_join(distinct_resolved_names, tax_gbif_raw, by = "resolved.taxa.name") %>% 
+  left_join(., tax_tol_raw, by = "resolved.taxa.name") %>% 
+  left_join(., tax_worms_raw, by = "resolved.taxa.name") %>% 
+  mutate(
+    form.tol.1 = NA,
+    variety.tol.1 = NA,
+    
+    domain.gbif.1 = NA,
+    
+    form.worms.1 = NA,
+    domain.worms.1 = NA,
+  ) %>% 
+  relocate(
+    resolved.taxa.name, form.tol.1, variety.tol.1, species.tol.1, genus.tol.1, genus.tol.2, family.tol.1, family.tol.2, order.tol.1, order.tol.2, class.tol.1, class.tol.2, phylum.tol.1, phylum.tol.2, kingdom.tol.1, kingdom.tol.2, domain.tol.1,
+    form.gbif.1, variety.gbif.1, species.gbif.1, genus.gbif.1, family.gbif.1, order.gbif.1, class.gbif.1, phylum.gbif.1, kingdom.gbif.1, domain.gbif.1,
+    form.worms.1, variety.worms.1, species.worms.1, genus.worms.1, family.worms.1, order.worms.1, class.worms.1, phylum.worms.1, kingdom.worms.1, domain.worms.1,
+  )
+
+# Save
+saveRDS(tax_all_raw, file = "R/data_outputs/taxonomy/tax_all_raw.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Extract info
 taxonomy_tol_step1_extracted <- taxonomy_tol_step1_raw %>% # make data frame to remove rowwise for the tax.uid
