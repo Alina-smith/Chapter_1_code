@@ -87,7 +87,10 @@ to_resolve_manually <- resolved_names_gna %>%
         !(stri_detect_regex(original.taxa.name, "\\b(?i)sp\\.|\\b(?i)spp\\.|\\b(?i)sp\\b|\\b(?i)spp\\b|\\b(?i)sp(\\d+)|\\b(?i)ssp\\b")) ~ "bumped",
       
       # Ones where the resolved.taxa.name was set to the name of the juvenile form or a common name instead of the taxa.name (e.g. nauplii or cyclops instead of copepoda)
-      stri_detect_regex(resolved.taxa.name.gna, "\\b(?i)cyst\\b|\\b(?i)stomatocyst\\b|\\b(?i)nauplius\\b|\\b(?i)centric\\b|\\b(?i)volvocales\\b|\\b(?i)cyclops\\b") ~ "juvenile",
+      stri_detect_regex(resolved.taxa.name.gna, "\\b(?i)cyst\\b|\\b(?i)stomatocyst\\b|\\b(?i)nauplius\\b|\\b(?i)centric\\b|\\b(?i)volvocales\\b|\\b(?i)cyclops\\b|\\b(?i)mite\\b") ~ "juvenile",
+      
+      # Unknown
+      stri_detect_regex(resolved.taxa.name.gna, "\\b(?i)unknown\\b") ~ "unknown",
       TRUE ~ "keep"
     )
   ) %>% 
@@ -129,6 +132,10 @@ resolved_names <- resolved_names_gna %>%
     original.taxa.name,
     resolved.taxa.name,
     resolved.source
+  ) %>% 
+  
+  filter(
+    !(is.na(resolved.taxa.name))
   )
 
 # Save
@@ -204,12 +211,74 @@ tax_tol_raw <- distinct_resolved_names %>%
     tax.uid = row_number()
   )
 
-
 # Save
 saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
-    
+
+# 2) When there are multiple options for the same rank select the correct one
 tax_tol_filtered <- tax_tol_raw %>% 
-  select(resolved.taxa.name)
+  
+  # Select correct names
+  mutate(
+    species = case_when(
+      is.na(species.1) & !(is.na(subspecies.1)) ~ subspecies.1,
+      is.na(species.1) & !(is.na(varietas.1)) ~ varietas.1,
+      TRUE ~ species.1
+    ),
+    
+    genus = genus.2, # checked through them all and all are genus.2
+    
+    order = case_when(
+      order.2 %in% c("Craspedida", "Neobodonida", "Parabodonida") ~ order.2,
+      resolved.taxa.name %in% c("Bodo", "Bodo ovatus", "Bodo saltans") ~ "Bodonida",
+      resolved.taxa.name == "Ochromonas viridis" ~ "Ochromonadales",
+      resolved.taxa.name == "Trypanosomatida" ~ NA,
+      TRUE ~ order.1
+    ),
+    
+    family = case_when(
+      !(is.na(family.2)) ~ family.2, # only one family.2 so don't need to specify which one
+      TRUE ~ family.1
+    ),
+    
+    class = case_when(
+      class.2 %in% c("Oligotrichea", "Pavlovophyceae") ~ class.2,
+      class.2 == "Prymnesiophyceae" ~ "Coccolithophyceae",
+      TRUE ~ class.1
+    ),
+    
+    superclass = superclass.1, # checked through them all and all are superclass.1
+    
+    subphylum = subphylum.1, # checked through them all and all are subphylum.1
+    
+    phylum = phylum.2, # checked through them all and all are phylum.2
+    
+    kingdom = case_when(
+      !is.na(kingdom.2) ~ "Plantae",
+      TRUE ~ kingdom.1
+    )
+  )%>% 
+  
+  rename(
+    variety = varietas.1,
+    subspecies = subspecies.1,
+    subgenus = subgenus.1,
+    subfamily = subfamily.1,
+    superfamily = superfamily.1,
+    suborder = suborder.1,
+    superorder = superorder.1,
+    subclass = subclass.1,
+    subkingdom = subkingdom.1,
+    domain = domain.1
+  ) %>% 
+  
+  # select relevant columns
+  select(
+    tax.uid, resolved.taxa.name, variety, subspecies, species, subgenus, genus, subfamily, family, superfamily, suborder, order, superorder, subclass, class, superclass,
+    subphylum, phylum, kingdom
+  ) 
+
+# Save
+saveRDS(tax_tol_filtered, file = "R/data_outputs/taxonomy/tax_tol_filtered.rds")
   
 
 # 2) Find all that weren't classified and see if they have any synonyms and update them
@@ -232,11 +301,6 @@ tol_not_classified <- tax_tol_raw %>%
   # Select only ones that haven't been classified
   filter(
     classified == "not classified"
-  ) %>% 
-  
-  # reorder columns to make easier to read
-  relocate(
-    tax.uid, species.1, genus.1, family.1, order.1, class.1, order.1, phylum.1, kingdom.1, domain.1, classified
   )
 
     

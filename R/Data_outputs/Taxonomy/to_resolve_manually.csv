@@ -1,4 +1,4 @@
-original.taxa.name,resolved.taxa.name.gna,resolved.source.gnr,manual
+original.taxa.name,resolved.taxa.name.gna,resolved.source.gna,manual
 Aphanothece clathrata var. rosea,Aphanothece clathrata,Catalogue of Life,var.f
 Aphanocapsa parasitica f. dinobryonis,Aphanocapsa parasitica,EOL,var.f
 Aphanocapsa parasitica f. dinobryonis single cell,Aphanocapsa parasitica,EOL,var.f
@@ -512,6 +512,7 @@ Stauroneis siberica var. siberica,Stauroneis siberica siberica,EOL,var.f
 Tryblionella gracilis var. subsalina,Tryblionella subsalina,EOL,var.f
 Thalassiosira hyperborea var. pelagica,Thalassiosira hyperborea pelagica,EOL,var.f
 Ulnaria ulna var. angustissima,Ulnaria ulna,EOL,var.f
+Unknown,Unknown,EOL,unknown
 Cyclops sp,Cyclops,Catalogue of Life,juvenile
 Cyclopoid copepod,NA,NA,na
 Limnomonas gaiensis,Limnomonas,EOL,bumped
@@ -525,6 +526,7 @@ Stonefly,NA,NA,na
 Mayfly,NA,NA,na
 Beetle,NA,NA,na
 Unknown rotifer,Unknown,EOL,bumped
+Mite,Mite,EOL,juvenile
 Pseudokirchneriella subcapitata,Pseudokirchneriella,Catalogue of Life,bumped
 Oscillatoria jovis,Oscillatoria,Catalogue of Life,bumped
 Anabena,NA,NA,na
