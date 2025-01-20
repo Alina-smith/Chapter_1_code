@@ -1,6 +1,6 @@
 # Adding taxonomy data to the species list 
 # data run through veryfier on 13/1/2025
-# data ran through taxize on 17/1/2025
+# data ran through taxize on 20/1/2025
 
 # Aim of script
 # Resolve names - Run the names through gna_veryfier to fix spellings and get most up to date synonyms and manually resolve any that weren't picked up
@@ -20,6 +20,8 @@ library(taxize)
 
 # Import data ----
 bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
+
+# Finished script ----
 
 # Resolve names ----
 
@@ -136,18 +138,139 @@ saveRDS(resolved_names, file = "R/data_outputs/taxonomy/resolved_names.rds")
 # Taxonomy ----
 
 ## Classification ----
+# TOL: First run through classification with TOL and try and get as many of them with this database as this is the database that will be used in later steps for taxonomy figure
 
-# get a list of all distinct names 
+# Get a list of all distinct names
 distinct_resolved_names <- select(resolved_names, resolved.taxa.name) %>% 
+  
   # get distinct names
-  distinct(resolved.taxa.name)
+  distinct(resolved.taxa.name) %>% 
+  
+  # TOL doesn't recognise variety and forms well so make a separate column which will be used to run through classification that selects the species name when var or f is present
+  mutate(
+    classification.name = if_else(
+      stri_detect_regex(resolved.taxa.name, "var\\.|f\\."),
+      paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+(-\\w+)? \\w+(-\\w+)?\\b")),
+      resolved.taxa.name
+    )
+  )
+
+# 1) Initial run through classification
+tax_tol_raw <- distinct_resolved_names %>% 
+  
+  rowwise() %>% # use rowwise so it looks at each row at a time
+  
+  mutate(
+    # Run through classification
+    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+      classification(
+        classification.name, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+        )[[1]] # select the first element of the list
+      ),
+    
+    # Change ones that didn't get classified from just NA to a dataframe of NAs
+    tax = ifelse(
+      is.data.frame(tax),
+      list(tax),
+      list(data.frame(name = NA, rank = "no rank"))
+      ),
+    
+    # Pivot tax so that it makes columns for each rank
+    pivot_wider(tax,
+                names_from = rank,
+                values_from = name)
+    ) %>% 
+  
+  # remove unnecessary columns
+  select(
+    -`no rank`,
+    - tax,
+    - classification.name
+    ) %>% 
+  
+  # Separate columns that have multiple names for a rank into multiple columns
+  unnest_wider(
+    col = everything(), names_sep = "."
+    ) %>% 
+  
+  rename(
+    resolved.taxa.name = resolved.taxa.name.1
+      ) %>% 
+  
+  ungroup() %>% # ungroup for row_number step
+  
+  mutate(
+    # Make a column with a unique taxonomy number
+    tax.uid = row_number()
+  )
+
+
+# Save
+saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
+    
+tax_tol_filtered <- tax_tol_raw %>% 
+  select(resolved.taxa.name)
+  
+
+# 2) Find all that weren't classified and see if they have any synonyms and update them
+tol_not_classified <- tax_tol_raw %>% 
+  
+  # Make a column to say if the taxa.name was picked up by TOL or not
+  mutate(
+    classified = if_else(
+      apply( # apply to each column
+        select(
+          .,-resolved.taxa.name, - tax.uid # select all columns apart from these two as we only want to check the columns gotten from classification()
+          ), 1, function(row) all(
+            is.na(row) # if all selected columns in row is NA
+            )
+        ),
+      "not classified",
+      "classified"),
+  ) %>% 
+  
+  # Select only ones that haven't been classified
+  filter(
+    classified == "not classified"
+  ) %>% 
+  
+  # reorder columns to make easier to read
+  relocate(
+    tax.uid, species.1, genus.1, family.1, order.1, class.1, order.1, phylum.1, kingdom.1, domain.1, classified
+  )
+
+    
+# 2) Find all NA's and see if there are more up to date names for them and then rerun through classification
+# 3) find any that were not classified, have missing ranks or were bumped up a taxonomic level and rerun classification with rows = 1 off so i can manually select ones
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Working script ----
 
 # convert to a string of names
 resolved_names_list <- paste0(distinct_resolved_names$resolved.taxa.name)
 glimpse(distinct_resolved_names)
 
-# Initial run through classification to get taxonomic hierachy
-# Tree of life
+# 1) Initial run through classification to get taxonomic hierarchy
 tax_tol_raw <- rbind(classification(resolved_names_list, db = "tol", return_id = FALSE, rows = 1)) %>% 
   filter(
     rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
@@ -166,6 +289,33 @@ tax_tol_raw <- rbind(classification(resolved_names_list, db = "tol", return_id =
 
 # Save
 saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
+
+# 2) TOL doesn't recognise ones with form and variety will so select just the species name and rerun
+tax_tol_var_f <- tax_tol_raw %>% 
+  select(
+    resolved.taxa.name
+  ) %>% 
+  filter(
+    stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")
+  ) %>% 
+  mutate(
+    new.name = paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+(-\\w+)? \\w+(-\\w+)?\\b"))
+  ) %>% 
+  head(5) %>% 
+  rbind(classification(resolved_names_list, db = "tol", return_id = FALSE, rows = 1))
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Worms
 tax_worms_raw <- rbind(classification(resolved_names_list, db = "worms", return_id = FALSE, rows = 1)) %>% 
@@ -242,9 +392,12 @@ tax_all_raw <- left_join(distinct_resolved_names, tax_gbif_raw, by = "resolved.t
     
     form.worms.1 = NA,
     domain.worms.1 = NA,
+    
+    tax.uid = row_number()
   ) %>% 
   relocate(
-    resolved.taxa.name, form.tol.1, variety.tol.1, species.tol.1, genus.tol.1, genus.tol.2, family.tol.1, family.tol.2, order.tol.1, order.tol.2, class.tol.1, class.tol.2, phylum.tol.1, phylum.tol.2, kingdom.tol.1, kingdom.tol.2, domain.tol.1,
+    tax.uid, resolved.taxa.name,
+    form.tol.1, variety.tol.1, species.tol.1, genus.tol.1, genus.tol.2, family.tol.1, family.tol.2, order.tol.1, order.tol.2, class.tol.1, class.tol.2, phylum.tol.1, phylum.tol.2, kingdom.tol.1, kingdom.tol.2, domain.tol.1,
     form.gbif.1, variety.gbif.1, species.gbif.1, genus.gbif.1, family.gbif.1, order.gbif.1, class.gbif.1, phylum.gbif.1, kingdom.gbif.1, domain.gbif.1,
     form.worms.1, variety.worms.1, species.worms.1, genus.worms.1, family.worms.1, order.worms.1, class.worms.1, phylum.worms.1, kingdom.worms.1, domain.worms.1,
   )
@@ -269,120 +422,6 @@ saveRDS(tax_all_raw, file = "R/data_outputs/taxonomy/tax_all_raw.rds")
 
 
 
-
-# Extract info
-taxonomy_tol_step1_extracted <- taxonomy_tol_step1_raw %>% # make data frame to remove rowwise for the tax.uid
-    
-  mutate(
-    # Set all taxa that didn't come back with a name to NA
-    taxonomy = ifelse("name" %in% colnames(taxonomy), list(taxonomy), NA),
-    
-    # Extract information
-    # If desired rank name is present in the rank column, select the row of the name column that matches the row for that rank
-    # Ranks:
-    form = ifelse("form" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "form"], NA_character_),
-    variety = ifelse("variety" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "variety"], NA_character_),
-    species = ifelse("species" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "species"], NA_character_),
-    genus = ifelse("genus" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "genus"], NA_character_),
-    family = ifelse("family" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "family"], NA_character_),
-    order = ifelse("order" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "order"], NA_character_),
-    class = ifelse("class" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "class"], NA_character_),
-    phylum = ifelse("phylum" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "phylum"], NA_character_),
-    kingdom = ifelse("kingdom" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "kingdom"], NA_character_),
-    
-    # Extra info:
-    rank = ifelse("rank" %in% colnames(taxonomy), as.character(taxonomy$rank[nrow(taxonomy)]), NA_character_),
-    tol.id = ifelse("id" %in% colnames(taxonomy), as.character(taxonomy$id[nrow(taxonomy)]), NA_character_),
-    
-    # source
-    source = "tol"
-  ) %>% 
-  
-  select(
-    -taxonomy
-  )
-
-## Step 2: Variety/form ----
-# tol does't pick up the form or variety ones well so select just the first two words when theres three and re-run
-
-taxonomy_tol_step2_raw <- taxonomy_tol_step1_extracted %>% 
-  filter(
-    is.na(tol.id)
-  ) %>% 
-  
-  select(
-    resolved.taxa.name,
-    tol.name
-  ) %>% 
-  
-  mutate(
-    # select first two words
-    tol.name = paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+(-\\w+)? \\w+(-\\w+)?\\b")),
-    
-    # run through classification
-    taxonomy = list(classification(tol.name, db = "tol", return_id = TRUE, rows = 1)[[1]])
-  )
-
-# Save
-saveRDS(taxonomy_tol_step2_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step2_raw.rds") 
-
-# Extract info
-taxonomy_tol_step2_extracted <- taxonomy_tol_step2_raw %>%
-  
-  mutate(
-    # Set all taxa that didn't come back with a name to NA
-    taxonomy = ifelse("name" %in% colnames(taxonomy), list(taxonomy), NA),
-    
-    # Extract information
-    # If desired rank name is present in the rank column, select the row of the name column that matches the row for that rank
-    # Ranks:
-    form = ifelse("form" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "form"], NA_character_),
-    variety = ifelse("variety" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "variety"], NA_character_),
-    species = ifelse("species" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "species"], NA_character_),
-    genus = ifelse("genus" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "genus"], NA_character_),
-    family = ifelse("family" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "family"], NA_character_),
-    order = ifelse("order" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "order"], NA_character_),
-    class = ifelse("class" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "class"], NA_character_),
-    phylum = ifelse("phylum" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "phylum"], NA_character_),
-    kingdom = ifelse("kingdom" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "kingdom"], NA_character_),
-    
-    # Extra info:
-    rank = ifelse("rank" %in% colnames(taxonomy), as.character(taxonomy$rank[nrow(taxonomy)]), NA_character_),
-    tol.id = ifelse("id" %in% colnames(taxonomy), as.character(taxonomy$id[nrow(taxonomy)]), NA_character_),
-    
-    # source
-    source = "tol"
-  ) %>% 
-  
-  select(
-    -taxonomy,
-    -tol.name
-  )
-
-# Add to main data
-taxonomy_tol_step2 <- left_join(
-  taxonomy_tol_step1_extracted, taxonomy_tol_step2_extracted,
-  by = "resolved.taxa.name",
-  suffix = c(".old", ".new")
-  ) %>% 
-  
-  mutate(
-    form = if_else(!is.na(tol.id.new), form.new, form.old),
-    variety = if_else(!is.na(tol.id.new), variety.new, variety.old),
-    species = if_else(!is.na(tol.id.new), species.new, species.old),
-    genus = if_else(!is.na(tol.id.new), genus.new, genus.old),
-    family = if_else(!is.na(tol.id.new), family.new, family.old),
-    order = if_else(!is.na(tol.id.new), order.new, order.old),
-    class = if_else(!is.na(tol.id.new), class.new, class.old),
-    phylum = if_else(!is.na(tol.id.new), phylum.new, phylum.old),
-    kingdom = if_else(!is.na(tol.id.new), kingdom.new, kingdom.old),
-    rank = if_else(!is.na(tol.id.new), rank.new, rank.old),
-    tol.id = if_else(!is.na(tol.id.new), tol.id.new, tol.id.old),
-    source = if_else(!is.na(tol.id.new), source.new, source.old)
-  ) %>% 
-  select(
-    -form.old:-source.new
-  )
 
 
 ## Step 3: NAs ----
@@ -414,85 +453,6 @@ taxonomy_tol_step3_raw <- tol_na_manual %>%
   
 # Save
 saveRDS(taxonomy_tol_step3_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step3_raw.rds") 
-
-# Extract info
-taxonomy_tol_step3_extracted <- taxonomy_tol_step3_raw %>%
-  
-  mutate(
-    # Set all taxa that didn't come back with a name to NA
-    taxonomy = ifelse("name" %in% colnames(taxonomy), list(taxonomy), NA),
-    
-    # Extract information
-    # If desired rank name is present in the rank column, select the row of the name column that matches the row for that rank
-    # Ranks:
-    form = ifelse("form" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "form"], NA_character_),
-    variety = ifelse("variety" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "variety"], NA_character_),
-    species = ifelse("species" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "species"], NA_character_),
-    genus = ifelse("genus" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "genus"], NA_character_),
-    family = ifelse("family" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "family"], NA_character_),
-    order = ifelse("order" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "order"], NA_character_),
-    class = ifelse("class" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "class"], NA_character_),
-    phylum = ifelse("phylum" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "phylum"], NA_character_),
-    kingdom = ifelse("kingdom" %in% taxonomy$rank, taxonomy$name[taxonomy$rank == "kingdom"], NA_character_),
-    
-    # Extra info:
-    rank = ifelse("rank" %in% colnames(taxonomy), as.character(taxonomy$rank[nrow(taxonomy)]), NA_character_),
-    tol.id = ifelse("id" %in% colnames(taxonomy), as.character(taxonomy$id[nrow(taxonomy)]), NA_character_),
-    
-    # source
-    source = "tol"
-  ) %>% 
-  
-  select(
-    -taxonomy,
-    -new.name
-  )
-
-# Add to main data
-taxonomy_tol_step3 <- left_join(
-  taxonomy_tol_step2, taxonomy_tol_step3_extracted,
-  by = "resolved.taxa.name",
-  suffix = c(".old", ".new")
-  ) %>% 
-  
-  mutate(
-    form = if_else(!is.na(tol.id.new), form.new, form.old),
-    variety = if_else(!is.na(tol.id.new), variety.new, variety.old),
-    species = if_else(!is.na(tol.id.new), species.new, species.old),
-    genus = if_else(!is.na(tol.id.new), genus.new, genus.old),
-    family = if_else(!is.na(tol.id.new), family.new, family.old),
-    order = if_else(!is.na(tol.id.new), order.new, order.old),
-    class = if_else(!is.na(tol.id.new), class.new, class.old),
-    phylum = if_else(!is.na(tol.id.new), phylum.new, phylum.old),
-    kingdom = if_else(!is.na(tol.id.new), kingdom.new, kingdom.old),
-    rank = if_else(!is.na(tol.id.new), rank.new, rank.old),
-    tol.id = if_else(!is.na(tol.id.new), tol.id.new, tol.id.old),
-    source = if_else(!is.na(tol.id.new), source.new, source.old)
-  ) %>% 
-  select(
-    -form.old:-source.new
-  )
-
-# Save and manually edit any missing ranks
-write_csv(taxonomy_tol_step3, "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step3.csv")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Classification: rows != 1 ----
 # find any that were not classified, have missing ranks or were bumped up a taxonmic level and rerun classification with rows = 1 off so i can manually select ones
@@ -534,110 +494,6 @@ taxonomy_tol_step2_raw <- select(taxonomy_step2_subset, resolved.taxa.name) %>%
 # Save
 saveRDS(taxonomy_tol_step2_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step2_raw.rds") 
 
-# Extract info
-taxonomy_tol_step2_extracted <- taxonomy_tol_step2_raw %>%
-  
-  mutate(
-    # Set all taxa that didn't come back with a name to NA
-    taxonomy = ifelse(
-      "name" %in% colnames(taxonomy),
-      list(taxonomy),
-      NA
-    ),
-    
-    # Extract information
-    form = ifelse(
-      "form" %in% taxonomy$rank, # if form is present in the rank column
-      taxonomy$name[taxonomy$rank == "form"], # select the row of the name column that matches the row for form
-      NA_character_),
-    
-    variety = ifelse(
-      "variety" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "variety"],
-      NA_character_),
-    
-    species = ifelse(
-      "species" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "species"],
-      NA_character_),
-    
-    genus = ifelse(
-      "genus" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "genus"],
-      NA_character_),
-    
-    family = ifelse(
-      "family" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "family"],
-      NA_character_),
-    
-    order = ifelse(
-      "order" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "order"],
-      NA_character_),
-    
-    class = ifelse(
-      "class" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "class"],
-      NA_character_),
-    
-    phylum = ifelse(
-      "phylum" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "phylum"],
-      NA_character_),
-    
-    kingdom = ifelse(
-      "kingdom" %in% taxonomy$rank,
-      taxonomy$name[taxonomy$rank == "kingdom"],
-      NA_character_),
-    
-    rank = ifelse(
-      "rank" %in% colnames(taxonomy),
-      as.character(taxonomy$rank[nrow(taxonomy)]),
-      NA_character_),
-    
-    tol.id = ifelse(
-      "id" %in% colnames(taxonomy),
-      as.character(taxonomy$id[nrow(taxonomy)]),
-      NA_character_),
-    
-    # source
-    source = "tol"
-  ) %>% 
-  
-  select(
-    -taxonomy
-  )
-
-# Join new stuff from subset onto main data
-
-taxonomy_tol_step2 <- left_join(
-  taxonomy_tol_step1_extracted, taxonomy_tol_step2_extracted,
-  by = "resolved.taxa.name",
-  suffix = c(".old", ".new")) %>% 
-  
-  mutate(
-    form = if_else(!is.na(tol.id.new), form.new, form.old),
-    variety = if_else(!is.na(tol.id.new), variety.new, variety.old),
-    species = if_else(!is.na(tol.id.new), species.new, species.old),
-    genus = if_else(!is.na(tol.id.new), genus.new, genus.old),
-    family = if_else(!is.na(tol.id.new), family.new, family.old),
-    order = if_else(!is.na(tol.id.new), order.new, order.old),
-    class = if_else(!is.na(tol.id.new), class.new, class.old),
-    phylum = if_else(!is.na(tol.id.new), phylum.new, phylum.old),
-    kingdom = if_else(!is.na(tol.id.new), kingdom.new, kingdom.old),
-    rank = if_else(!is.na(tol.id.new), rank.new, rank.old),
-    tol.id = if_else(!is.na(tol.id.new), tol.id.new, tol.id.old),
-    source = if_else(!is.na(tol.id.new), source.new, source.old)
-  ) %>% 
-  select(
-    -form.old:-source.new
-  )
-
-x <- taxonomy_tol_step2 %>% 
-  filter(
-    is.na(tol.id)
-  )
 
 
 
