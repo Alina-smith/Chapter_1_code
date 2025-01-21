@@ -4,7 +4,10 @@
 
 # Aim of script
 # Resolve names - Run the names through gna_veryfier to fix spellings and get most up to date synonyms and manually resolve any that weren't picked up
-# Taxonomy - Run resolved names through classification for tol, worms, itis and gbif to get taxonomic hierarchy for taxa and manually fill in any that weren't picked up
+# Taxonomy
+  # 1) Run resolved names through classification with tol, then select all that weren't recognised by tol and update any synonyms and then rerun
+  # 2) Run the names through classification with gbif 
+  # 3) Fill in any gaps in the tol data with the gbif data
 
 library(devtools)
 install_github("ropensci/bold")
@@ -37,7 +40,7 @@ names_list <- paste0(distinct_names$original.taxa.name)
 glimpse(names_list)
 
 # run string through the resolver and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
-resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
+resolved_names_1_gna <- do.call(rbind, lapply(names_list, function(name) {
   tryCatch(
     {
       # Process each name and return the result
@@ -62,7 +65,7 @@ resolved_names_gna <- do.call(rbind, lapply(names_list, function(name) {
   )
 
 # Save
-saveRDS(resolved_names_gna, file = "R/data_outputs/taxonomy/resolved_names_gna.rds")
+saveRDS(resolved_names_1_gna, file = "R/data_outputs/taxonomy/resolved_names_1_gna.rds")
 
 ## Manual ----
 # How manual resolving was carried out:
@@ -107,7 +110,7 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/to_resolve_manually.csv"
 manually_resolved <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "resolve")
 
 # Replace resolved.taxa.name with manually resolved names when ones is present
-resolved_names <- resolved_names_gna %>% 
+resolved_names_2_manual <- resolved_names_gna %>% 
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
     manually_resolved,
@@ -139,16 +142,16 @@ resolved_names <- resolved_names_gna %>%
   )
 
 # Save
-saveRDS(resolved_names, file = "R/data_outputs/taxonomy/resolved_names.rds")
+saveRDS(resolved_names_2_manual, file = "R/data_outputs/taxonomy/resolved_names_2_manual.rds")
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 # Taxonomy ----
 
-## Classification ----
+## Classification: distinct names ----
 # TOL: First run through classification with TOL and try and get as many of them with this database as this is the database that will be used in later steps for taxonomy figure
 
 # Get a list of all distinct names
-distinct_resolved_names <- select(resolved_names, resolved.taxa.name) %>% 
+distinct_resolved_names <- select(resolved_names_2_manual, resolved.taxa.name) %>% 
   
   # get distinct names
   distinct(resolved.taxa.name) %>% 
@@ -162,8 +165,8 @@ distinct_resolved_names <- select(resolved_names, resolved.taxa.name) %>%
     )
   )
 
-# 1) Initial run through classification
-tax_tol_raw <- distinct_resolved_names %>% 
+## Classification: TOL - Initial run ----
+tax_tol_1_raw <- distinct_resolved_names %>% 
   
   rowwise() %>% # use rowwise so it looks at each row at a time
   
@@ -204,30 +207,30 @@ tax_tol_raw <- distinct_resolved_names %>%
     resolved.taxa.name = resolved.taxa.name.1
       ) %>% 
   
-  ungroup() %>% # ungroup for row_number step
+  ungroup() # ungroup to remove rowwise
   
-  mutate(
-    # Make a column with a unique taxonomy number
-    tax.uid = row_number()
-  )
-
 # Save
-saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
+saveRDS(tax_tol_1_raw, file = "R/data_outputs/taxonomy/tax_tol_1_raw.rds")
 
-# 2) When there are multiple options for the same rank select the correct one
-tax_tol_filtered <- tax_tol_raw %>% 
+## Classification: TOL - Clean intial run ----
+# When there are multiple options for the same rank select the correct one
+tax_tol_1_cleaned <- tax_tol_1_raw %>% 
   
   # Select correct names
   mutate(
-    species = case_when(
+    species.1 = case_when(
       is.na(species.1) & !(is.na(subspecies.1)) ~ subspecies.1,
       is.na(species.1) & !(is.na(varietas.1)) ~ varietas.1,
       TRUE ~ species.1
     ),
     
-    genus = genus.2, # checked through them all and all are genus.2
+    genus.1 = if_else(
+      !(is.na(genus.2)), # checked through them all and all are genus.2
+      genus.2,
+      genus.1
+      ),
     
-    order = case_when(
+    order.1 = case_when(
       order.2 %in% c("Craspedida", "Neobodonida", "Parabodonida") ~ order.2,
       resolved.taxa.name %in% c("Bodo", "Bodo ovatus", "Bodo saltans") ~ "Bodonida",
       resolved.taxa.name == "Ochromonas viridis" ~ "Ochromonadales",
@@ -235,61 +238,57 @@ tax_tol_filtered <- tax_tol_raw %>%
       TRUE ~ order.1
     ),
     
-    family = case_when(
-      !(is.na(family.2)) ~ family.2, # only one family.2 so don't need to specify which one
-      TRUE ~ family.1
+    family.1 = if_else(
+      !(is.na(family.2)),
+      family.2, # only one family.2 so don't need to specify which one
+      family.1
     ),
     
-    class = case_when(
+    class.1 = case_when(
       class.2 %in% c("Oligotrichea", "Pavlovophyceae") ~ class.2,
       class.2 == "Prymnesiophyceae" ~ "Coccolithophyceae",
       TRUE ~ class.1
     ),
     
-    superclass = superclass.1, # checked through them all and all are superclass.1
+    phylum.1 = if_else(
+      !(is.na(phylum.2)),
+      phylum.2, # checked through them all and all are phylum.2
+      phylum.1
+    ),
     
-    subphylum = subphylum.1, # checked through them all and all are subphylum.1
-    
-    phylum = phylum.2, # checked through them all and all are phylum.2
-    
-    kingdom = case_when(
+    kingdom.1 = case_when(
       !is.na(kingdom.2) ~ "Plantae",
       TRUE ~ kingdom.1
     )
-  )%>% 
-  
-  rename(
-    variety = varietas.1,
-    subspecies = subspecies.1,
-    subgenus = subgenus.1,
-    subfamily = subfamily.1,
-    superfamily = superfamily.1,
-    suborder = suborder.1,
-    superorder = superorder.1,
-    subclass = subclass.1,
-    subkingdom = subkingdom.1,
-    domain = domain.1
   ) %>% 
   
-  # select relevant columns
   select(
-    tax.uid, resolved.taxa.name, variety, subspecies, species, subgenus, genus, subfamily, family, superfamily, suborder, order, superorder, subclass, class, superclass,
-    subphylum, phylum, kingdom
-  ) 
+    resolved.taxa.name, varietas.1 , subspecies.1, species.1, subgenus.1, genus.1, subfamily.1, family.1, superfamily.1, suborder.1, order.1, superorder.1, subclass.1, class.1, superclass.1,
+    subphylum.1, phylum.1, kingdom.1
+  ) %>% 
+  
+  rename_with(
+    ~ stri_replace_all_regex(., "\\.1$", "")
+    ) %>% 
+  
+  rename(
+    variety = varietas
+  )
 
 # Save
-saveRDS(tax_tol_filtered, file = "R/data_outputs/taxonomy/tax_tol_filtered.rds")
-  
+saveRDS(tax_tol_1_cleaned, file = "R/data_outputs/taxonomy/tax_tol_1_cleaned.rds")
 
-# 2) Find all that weren't classified and see if they have any synonyms and update them
-tol_not_classified <- tax_tol_raw %>% 
+## Classification: TOL - Not classified list ----
+
+# Find all that weren't classified and see if they have any synonyms and update them
+tol_not_classified <- tax_tol_1_cleaned %>% 
   
   # Make a column to say if the taxa.name was picked up by TOL or not
   mutate(
     classified = if_else(
       apply( # apply to each column
         select(
-          .,-resolved.taxa.name, - tax.uid # select all columns apart from these two as we only want to check the columns gotten from classification()
+          .,-resolved.taxa.name # select all columns apart from these two as we only want to check the columns gotten from classification()
           ), 1, function(row) all(
             is.na(row) # if all selected columns in row is NA
             )
@@ -303,9 +302,383 @@ tol_not_classified <- tax_tol_raw %>%
     classified == "not classified"
   )
 
+# Save
+write_csv(tol_not_classified, "R/data_outputs/taxonomy/tol_not_classified.csv")
+
+# Read in new names
+tol_not_classified_fix <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "tol_not_classified_fix")
+
+# Update resolved names list with new names
+resolved_names_3_not_classified_fix <- tol_not_classified_fix %>% 
+  filter(
+    !(is.na(new.name))
+  ) %>% 
+  left_join(resolved_names_2_manual, ., by = "resolved.taxa.name") %>% 
+  mutate(
+    resolved.taxa.name = if_else(
+      !(is.na(new.name)),
+      new.name,
+      resolved.taxa.name
+    ),
     
-# 2) Find all NA's and see if there are more up to date names for them and then rerun through classification
-# 3) find any that were not classified, have missing ranks or were bumped up a taxonomic level and rerun classification with rows = 1 off so i can manually select ones
+    resolved.source = if_else(
+      !(is.na(new.name)),
+      "manually",
+      resolved.source
+    )
+  ) %>% 
+  
+  select(-new.name)
+  
+# Save
+saveRDS(resolved_names_3_not_classified_fix, file = "R/data_outputs/taxonomy/resolved_names_3_not_classified_fix.rds")
+
+## Classification: TOL - Second run ----
+
+# Run new names from not_classified_fix through classification
+tax_tol_2_not_classified_fix_raw <- tol_not_classified_fix %>% 
+  filter(
+    !(is.na(new.name))
+  ) %>% 
+
+  rowwise() %>% 
+  
+  mutate(
+    # Run through classification
+    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+      classification(
+        new.name, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+      )[[1]] # select the first element of the list
+    ),
+    
+    # Change ones that didn't get classified from just NA to a dataframe of NAs
+    tax = ifelse(
+      is.data.frame(tax),
+      list(tax),
+      list(data.frame(name = NA, rank = "no rank"))
+    ),
+    
+    # Pivot tax so that it makes columns for each rank
+    pivot_wider(tax,
+                names_from = rank,
+                values_from = name)
+  ) %>% 
+  # remove unnecessary columns
+  select(
+    -`no rank`,
+    - tax
+  ) %>% 
+  
+  # Separate columns that have multiple names for a rank into multiple columns
+  unnest_wider(
+    col = everything(), names_sep = "."
+  ) %>% 
+  
+  ungroup() %>%  # ungroup to remove rowwise
+  
+  rename(
+    resolved.taxa.name = resolved.taxa.name.1,
+    new.name = new.name.1
+  )
+  
+# Save
+saveRDS(tax_tol_2_not_classified_fix_raw, file = "R/data_outputs/taxonomy/tax_tol_2_not_classified_fix_raw.rds")
+
+## Classification: TOL - Second clean ----
+
+# Select columns I want and when there are multiple names for the same rank choose the correct one
+tax_tol_2_not_classified_fix_cleaned <- tax_tol_2_not_classified_fix_raw %>% 
+  
+  mutate(
+    kingdom.1 = case_when(
+      !is.na(kingdom.2) ~ "Plantae",
+      TRUE ~ kingdom.1
+      )
+  ) %>% 
+  
+  select(
+    resolved.taxa.name, new.name, varietas.1 , species.1, genus.1, subfamily.1, family.1, superfamily.1, suborder.1, order.1, subclass.1, class.1,
+    subphylum.1, phylum.1, kingdom.1
+  ) %>% 
+  
+  rename_with(
+    ~ stri_replace_all_regex(., "\\.1$", "")
+  ) %>% 
+  
+  rename(
+    variety = varietas
+  )
+
+# Replace the above names in the full list of names
+tax_tol_2_cleaned <- tax_tol_1_cleaned %>% 
+  filter(
+    !(resolved.taxa.name %in% tax_tol_2_not_classified_fix_cleaned$resolved.taxa.name)
+  ) %>% 
+  
+  bind_rows(., tax_tol_2_not_classified_fix_cleaned) %>% 
+  
+  mutate(
+    resolved.taxa.name = if_else(
+      !(is.na(new.name)),
+      new.name,
+      resolved.taxa.name
+    )
+  ) %>% 
+  
+  select(
+    - new.name
+  )
+
+# Save
+saveRDS(tax_tol_2_cleaned, file = "R/data_outputs/taxonomy/tax_tol_2_cleaned.rds")
+
+
+## Classification: GBIF - Initial run ----
+# Have gotten all I can from TOL so now run through gbif and fill in gaps with gbif
+
+# Initial run through classification
+tax_gbif_1_raw <- resolved_names_3_not_classified_fix %>% 
+  
+  distinct(resolved.taxa.name) %>% 
+  
+  rowwise() %>% # use rowwise so it looks at each row at a time
+  
+  mutate(
+    # Run through classification
+    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+      classification(
+        resolved.taxa.name, db = "gbif", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+      )[[1]] # select the first element of the list
+    ),
+    
+    # Change ones that didn't get classified from just NA to a dataframe of NAs
+    tax = ifelse(
+      is.data.frame(tax),
+      list(tax),
+      list(data.frame(name = NA, rank = "no rank"))
+    ),
+    
+    # Pivot tax so that it makes columns for each rank
+    pivot_wider(tax,
+                names_from = rank,
+                values_from = name)
+  ) %>% 
+  
+  # remove unnecessary columns
+  select(
+    -`no rank`,
+    - tax
+  ) %>% 
+  
+  # Separate columns that have multiple names for a rank into multiple columns
+  unnest_wider(
+    col = everything(), names_sep = "."
+  ) %>% 
+  
+  rename(
+    resolved.taxa.name = resolved.taxa.name.1
+  ) %>% 
+  
+  ungroup() # ungroup to remove rowwise 
+
+# Save
+saveRDS(tax_gbif_1_raw, file = "R/data_outputs/taxonomy/tax_gbif_1_raw.rds")
+
+## Classification: GBIF - Initial clean ----
+tax_gbif_1_cleaned <- tax_gbif_1_raw %>% 
+  rename_with(~ stri_replace_all_regex(., "\\.1$", "")) %>% 
+  relocate(
+    resolved.taxa.name, variety, form, subspecies, species, genus, family, order, class, phylum, kingdom
+  )
+
+# Save
+saveRDS(tax_gbif_1_cleaned, file = "R/data_outputs/taxonomy/tax_gbif_1_cleaned.rds")
+
+## Classification: GBIF - bumped up rerun ----
+
+# Find all taxa that were bumped up a taxanomic group or have missing ranks and rerun with rows = 1 off to manaully chose them
+tax_gbif_2_bumped <- tax_gbif_1_cleaned %>% 
+  mutate(
+    
+    classified = if_else(
+      apply( # apply to each column
+        select(
+          .,-resolved.taxa.name, # select all columns apart from these two as we only want to check the columns gotten from classification()
+        ), 1, function(row) all(
+          is.na(row) # if all selected columns in row is NA
+        )
+      ),
+      "not classified",
+      "classified"),
+    
+    rerun = case_when(
+      
+      # ones that were not picked up at all
+      classified == "not classified" ~ "yes",
+      
+      # ones that were bumped up to a higher rank
+      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes", # were a species in resolved.taxa.name (had a space) but the species column is empty
+      classified == "classified" & is.na(genus) ~ "yes",
+      classified == "classified" & is.na(family) ~ "yes",
+      classified == "classified" & is.na(order) ~ "yes",
+      classified == "classified" & is.na(class) ~ "yes",
+      classified == "classified" & is.na(phylum) ~ "yes",
+      classified == "classified" & is.na(kingdom) ~ "yes",
+      
+      TRUE ~ "no"
+    )
+  ) %>% 
+  
+  filter(
+    rerun == "yes"
+  ) %>% 
+  
+  select(
+    resolved.taxa.name
+  ) %>% 
+  mutate(
+    id = row_number()
+  )
+
+classification("Cosmarium punctulatum", db = "gbif")
+
+%>% 
+  
+  rowwise() %>% # use rowwise so it looks at each row at a time
+  
+  mutate(
+    # Run through classification
+    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+      classification(
+        resolved.taxa.name, db = "gbif", return_id = FALSE # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+      )[[1]] # select the first element of the list
+    ),
+    
+    # Change ones that didn't get classified from just NA to a dataframe of NAs
+    tax = ifelse(
+      is.data.frame(tax),
+      list(tax),
+      list(data.frame(name = NA, rank = "no rank"))
+    ),
+    
+    # Pivot tax so that it makes columns for each rank
+    pivot_wider(tax,
+                names_from = rank,
+                values_from = name)
+  ) %>% 
+  
+  # remove unnecessary columns
+  select(
+    -`no rank`,
+    - tax
+  ) %>% 
+  
+  # Separate columns that have multiple names for a rank into multiple columns
+  unnest_wider(
+    col = everything(), names_sep = "."
+  ) %>% 
+  
+  rename(
+    resolved.taxa.name = resolved.taxa.name.1
+  ) %>% 
+  
+  ungroup() # ungroup to remove rowwise 
+    
+
+
+x <- taxonomy_tol_step1_extracted %>% 
+  filter(
+    is.na(tol.id)
+  )
+
+# Select ones that were not classified or were bumped up
+taxonomy_step2_subset <- taxonomy_tol_step1_extracted %>%
+  mutate(
+    manual = case_when(
+      # ones that were not picked up at all
+      is.na(tol.id) ~ "yes",
+      
+      # ones that were bumped up to a higher rank
+      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes",
+      rank == "kingdom" & resolved.taxa.name != kingdom ~ "yes",
+      rank == "phylum" & resolved.taxa.name != phylum ~ "yes",
+      rank == "class" & resolved.taxa.name != class ~ "yes",
+      rank == "order" & resolved.taxa.name != order ~ "yes",
+      rank == "family" & resolved.taxa.name != family ~ "yes",
+    )
+  ) %>% 
+  
+  filter(
+    manual == "yes"
+  )
+
+
+
+
+
+
+
+
+
+# Find any that were not classified, have missing ranks or were bumped up a taxonomic level and rerun classification with rows = 1 off so i can manually select ones
+
+classification("Geissleria acceptata", db = "gbif")
+
+
+x <- tax_tol_2_cleaned %>% 
+  filter(
+    is.na(phylum)
+  )
+  filter(
+    stri_detect_regex(resolved.taxa.name, " ") & is.na(species)
+  )
+  distinct(
+    genus
+  )
+
+# Select ones that were not classified or were bumped up
+tax_tol_3_rerun_subset <- tax_tol_2_cleaned %>%
+  mutate(
+    
+    classified = if_else(
+      apply( # apply to each column
+        select(
+          .,-resolved.taxa.name, # select all columns apart from these two as we only want to check the columns gotten from classification()
+        ), 1, function(row) all(
+          is.na(row) # if all selected columns in row is NA
+        )
+      ),
+      "not classified",
+      "classified"),
+    
+    manual = case_when(
+      
+      # ones that were not picked up at all
+      classified == "not classified" ~ "yes",
+      
+      # ones that were bumped up to a higher rank
+      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes", # were a species in resolved.taxa.name (had a space) but the species column is empty
+      classified == "classified" & is.na(genus) ~ "yes",
+      classified == "classified" & is.na(family) ~ "yes",
+      classified == "classified" & is.na(order) ~ "yes",
+      classified == "classified" & is.na(class) ~ "yes",
+      classified == "classified" & is.na(phylum) ~ "yes",
+      classified == "classified" & is.na(kingdom) ~ "yes",
+      classified == "classified" & is.na(domain) ~ "yes",
+      
+      TRUE ~ "no"
+    )
+  ) %>% 
+  
+  filter(
+    manual == "yes"
+  )
+
+
+
+
+
+
 
 
 
