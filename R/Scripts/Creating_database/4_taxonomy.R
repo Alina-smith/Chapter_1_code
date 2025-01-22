@@ -398,7 +398,7 @@ tax_tol_2_not_classified_fix_cleaned <- tax_tol_2_not_classified_fix_raw %>%
   
   select(
     resolved.taxa.name, new.name, varietas.1 , species.1, genus.1, subfamily.1, family.1, superfamily.1, suborder.1, order.1, subclass.1, class.1,
-    subphylum.1, phylum.1, kingdom.1
+    subphylum.1, phylum.1, kingdom.1, domain.1
   ) %>% 
   
   rename_with(
@@ -536,29 +536,37 @@ tax_gbif_2_bumped <- tax_gbif_1_cleaned %>%
   select(
     resolved.taxa.name
   ) %>% 
-  mutate(
-    id = row_number()
-  )
-
-classification("Cosmarium punctulatum", db = "gbif")
-
-%>% 
   
   rowwise() %>% # use rowwise so it looks at each row at a time
   
+  
   mutate(
-    # Run through classification
-    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
-      classification(
-        resolved.taxa.name, db = "gbif", return_id = FALSE # rows = 1 so that is only takes the first one and doesn't require you select options for each one
-      )[[1]] # select the first element of the list
+    tax = tryCatch( # run through try catch because it randomly throws errors at different places each time and can't work out why
+      {
+        # Process each name and return the result
+        list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+          classification(
+            resolved.taxa.name, db = "gbif", return_id = FALSE # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+          )[[1]] # select the first element of the list
+        )
+      },
+      error = function(e) {
+        # Fallback for errors - fill columns with NAs
+        list(data.frame(
+          name = NA,
+          rank = "no rank"
+          ))
+      }
     ),
     
     # Change ones that didn't get classified from just NA to a dataframe of NAs
     tax = ifelse(
       is.data.frame(tax),
       list(tax),
-      list(data.frame(name = NA, rank = "no rank"))
+      list(data.frame(
+        name = NA,
+        rank = "no rank"
+        ))
     ),
     
     # Pivot tax so that it makes columns for each rank
@@ -584,445 +592,397 @@ classification("Cosmarium punctulatum", db = "gbif")
   
   ungroup() # ungroup to remove rowwise 
     
+# Save
+saveRDS(tax_gbif_2_bumped_raw, file = "R/data_outputs/taxonomy/tax_gbif_2_bumped_raw.rds")
 
+## Classification: GBIF - Clean and add into full list ----
 
-x <- taxonomy_tol_step1_extracted %>% 
-  filter(
-    is.na(tol.id)
+# Clean tax_gbif_2_bumped
+tax_gbif_2_bumped_cleaned <- tax_gbif_2_bumped_raw %>% 
+  rename_with(~ stri_replace_all_regex(., "\\.1$", "")) %>% 
+  relocate(
+    resolved.taxa.name, variety, form, subspecies, species, genus, family, order, class, phylum, kingdom
   )
 
-# Select ones that were not classified or were bumped up
-taxonomy_step2_subset <- taxonomy_tol_step1_extracted %>%
-  mutate(
-    manual = case_when(
-      # ones that were not picked up at all
-      is.na(tol.id) ~ "yes",
-      
-      # ones that were bumped up to a higher rank
-      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes",
-      rank == "kingdom" & resolved.taxa.name != kingdom ~ "yes",
-      rank == "phylum" & resolved.taxa.name != phylum ~ "yes",
-      rank == "class" & resolved.taxa.name != class ~ "yes",
-      rank == "order" & resolved.taxa.name != order ~ "yes",
-      rank == "family" & resolved.taxa.name != family ~ "yes",
-    )
-  ) %>% 
+# add in tax_gbif_2_bumped_cleaned to full list
+tax_gbif_2_cleaned <- tax_gbif_1_cleaned %>% 
   
   filter(
-    manual == "yes"
-  )
-
-
-
-
-
-
-
-
-
-# Find any that were not classified, have missing ranks or were bumped up a taxonomic level and rerun classification with rows = 1 off so i can manually select ones
-
-classification("Geissleria acceptata", db = "gbif")
-
-
-x <- tax_tol_2_cleaned %>% 
-  filter(
-    is.na(phylum)
-  )
-  filter(
-    stri_detect_regex(resolved.taxa.name, " ") & is.na(species)
-  )
-  distinct(
-    genus
-  )
-
-# Select ones that were not classified or were bumped up
-tax_tol_3_rerun_subset <- tax_tol_2_cleaned %>%
-  mutate(
-    
-    classified = if_else(
-      apply( # apply to each column
-        select(
-          .,-resolved.taxa.name, # select all columns apart from these two as we only want to check the columns gotten from classification()
-        ), 1, function(row) all(
-          is.na(row) # if all selected columns in row is NA
-        )
-      ),
-      "not classified",
-      "classified"),
-    
-    manual = case_when(
-      
-      # ones that were not picked up at all
-      classified == "not classified" ~ "yes",
-      
-      # ones that were bumped up to a higher rank
-      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes", # were a species in resolved.taxa.name (had a space) but the species column is empty
-      classified == "classified" & is.na(genus) ~ "yes",
-      classified == "classified" & is.na(family) ~ "yes",
-      classified == "classified" & is.na(order) ~ "yes",
-      classified == "classified" & is.na(class) ~ "yes",
-      classified == "classified" & is.na(phylum) ~ "yes",
-      classified == "classified" & is.na(kingdom) ~ "yes",
-      classified == "classified" & is.na(domain) ~ "yes",
-      
-      TRUE ~ "no"
-    )
-  ) %>% 
+    !(resolved.taxa.name %in% tax_gbif_2_bumped_cleaned$resolved.taxa.name)
+  )%>% 
   
-  filter(
-    manual == "yes"
-  )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Working script ----
-
-# convert to a string of names
-resolved_names_list <- paste0(distinct_resolved_names$resolved.taxa.name)
-glimpse(distinct_resolved_names)
-
-# 1) Initial run through classification to get taxonomic hierarchy
-tax_tol_raw <- rbind(classification(resolved_names_list, db = "tol", return_id = FALSE, rows = 1)) %>% 
-  filter(
-    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
-  ) %>% 
-  mutate(
-    rank = paste(rank, "tol", sep = ".")
-  ) %>% 
-  pivot_wider(.,
-              names_from = rank,
-              values_from = name) %>% 
-    unnest_wider(col = everything(), names_sep = ".") %>% 
-  rename(
-    resolved.taxa.name = query.1
-  )  %>% 
-  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
+  bind_rows(., tax_gbif_2_bumped_cleaned) 
 
 # Save
-saveRDS(tax_tol_raw, file = "R/data_outputs/taxonomy/tax_tol_raw.rds")
+saveRDS(tax_gbif_2_cleaned, file = "R/data_outputs/taxonomy/tax_gbif_2_cleaned.rds")
 
-# 2) TOL doesn't recognise ones with form and variety will so select just the species name and rerun
-tax_tol_var_f <- tax_tol_raw %>% 
+## Combining tol and gbif ----
+tax_all <- left_join(
+  tax_tol_2_cleaned, tax_gbif_2_cleaned,
+  suffix = c(".tol", ".gbif"),
+  by = "resolved.taxa.name") %>% 
+  
+  rename(
+    form.gbif = form,
+    domain.tol = domain
+  ) %>% 
+  
+  mutate(
+    
+    # merge tol and gbif with preference for tol
+    variety = case_when(
+      !(is.na(variety.tol)) ~ variety.tol,
+      is.na(variety.tol) & !(is.na(variety.gbif)) ~ variety.gbif,
+      TRUE ~ NA
+    ),
+    
+    form = case_when(
+      !(is.na(form.gbif)) ~ form.gbif,
+      TRUE ~ NA
+    ),
+    
+    species = case_when(
+      !(is.na(species.tol)) ~ species.tol,
+      is.na(species.tol) & !(is.na(species.gbif)) ~ species.gbif,
+      TRUE ~ NA
+    ),
+    
+    genus = case_when(
+      !(is.na(genus.tol)) ~ genus.tol,
+      is.na(genus.tol) & !(is.na(genus.gbif)) ~ genus.gbif,
+      TRUE ~ NA
+    ), 
+    
+    family = case_when(
+      !(is.na(family.tol)) ~ family.tol,
+      is.na(family.tol) & !(is.na(family.gbif)) ~ family.gbif,
+      TRUE ~ NA
+    ), 
+    
+    order = case_when(
+      !(is.na(order.tol)) ~ order.tol,
+      is.na(order.tol) & !(is.na(order.gbif)) ~ order.gbif,
+      TRUE ~ NA
+    ), 
+    
+    class = case_when(
+      !(is.na(class.tol)) ~ class.tol,
+      is.na(class.tol) & !(is.na(class.gbif)) ~ class.gbif,
+      TRUE ~ NA
+    ), 
+    
+    phylum = case_when(
+      !(is.na(phylum.tol)) ~ phylum.tol,
+      is.na(phylum.tol) & !(is.na(phylum.gbif)) ~ phylum.gbif,
+      TRUE ~ NA
+    ), 
+    
+    kingdom = case_when(
+      !(is.na(kingdom.tol)) ~ kingdom.tol,
+      is.na(kingdom.tol) & !(is.na(kingdom.gbif)) ~ kingdom.gbif,
+      TRUE ~ NA
+    ), 
+    
+    domain = case_when(
+      !(is.na(domain.tol)) ~ domain.tol,
+      TRUE ~ NA
+    ),
+    
+    # Manually fill in gaps
+    variety = case_when(
+      !(is.na(variety)) ~ variety,
+      is.na(variety) & stri_detect_regex(resolved.taxa.name, "var\\.") ~ resolved.taxa.name,
+      TRUE ~ variety
+    ),
+    
+    form = case_when(
+      !(is.na(form)) ~ variety,
+      is.na(form) & stri_detect_regex(resolved.taxa.name, "f\\.") ~ resolved.taxa.name,
+      TRUE ~ form
+    ),
+    
+    species = case_when(
+      !(is.na(species)) ~ species,
+      is.na(species) & stri_detect_regex(resolved.taxa.name, " ") ~ resolved.taxa.name, # select all that have a space in
+      TRUE ~ species
+    ),
+    
+    # Genus will be the first word of the two
+    genus = if_else(
+      is.na(genus),
+      stri_extract_first_regex(resolved.taxa.name, "\\w+(?= )"),
+      genus
+    ),
+    
+    family = case_when(
+      !(is.na(family)) ~ family,
+      genus %in% c("Romeria", "Rhabdoderma", "Lemmermannia") ~ "Cymatolegaceae",
+      genus == "Fallacia" ~ "Sellaphoraceae",
+      genus %in% c("Nitzschia", "Bacillaria") ~ "Bacillariaceae",
+      genus == "Trichodina" ~ "Achatinidae",
+      genus == "Schroederia" ~ "Schroederiaceae",
+      genus == "Carteria" ~ "Chlamydomonadaceae",
+      genus %in% c("Coccomyxa", "Microglena") ~ "Coccomyxaceae",
+      genus %in%  c("Stokesiella", "Pseudokephyrion") ~ "Dinobryaceae",
+      genus == "Anabaena" ~ "Aphanizomenonaceae",
+      genus == "Euastrum" ~ "Desmidiaceae",
+      genus == "Jaaginema" ~ "Synechococcales familia incertae sedis",
+      genus == "Coenocystis" ~ "Radiococcaceae",
+      genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis",
+      genus %in% c("Encyonema", "Cymbella") ~ "Cymbellaceae",
+      genus == "Oscillatoria" ~ "Oscillatoriaceae",
+      genus == "Staurosira" ~ "Staurosiraceae",
+      genus == "Stephanodiscus" ~ "Stephanodiscaceae",
+      genus %in% c("Synuropsis", "Chrysodendron") ~ "Ochromonadaceae",
+      genus == "Heterothrix" ~ "Tribonemataceae",
+      genus == "Picochlorum" ~ "Chlorellales incertae sedis",
+      genus == "Achnanthidium" ~ "Achnanthidiaceae",
+      genus == "Eunotia" ~ "Eunotiaceae",
+      genus == "Stauroneis" ~ "Stauroneidaceae",
+      genus == "Amoeba" ~ "Amoebidae",
+      genus == "Achnanthes" ~ "Achnanthaceae",
+      genus == "Gomphonella" ~ "Cymbellales incertae sedis",
+      genus == "Syracosphaera" ~ "Syracosphaeraceae",
+      genus == "Amphichrysis" ~ "Chromulinaceae",
+      genus == "Chroostipes" ~ "Cyanophyceae familia incertae sedis",
+      genus %in% c("Chrysoxys", "Saccochrysis") ~ "Chromulinaceae",
+      genus == "Dactylosphaerium" ~ "Dictyosphaeriaceae",
+      genus == "Glenodinium" ~ "Peridiniales familia incertae sedis",
+      genus == "Hortobagyiella" ~ "Hortobagyiella",
+      genus == "Kephyrion" ~ "Chrysococcaceae",
+      genus == "Monodus" ~ "Pleurochloridaceae",
+      genus == "Phaeobotrys" ~ "Phaeothamniaceae",
+      genus == "Rhaphidiopsis" ~ "Aphanizomenonaceae",
+      genus == "Rhodomonas" ~ "Pyrenomonadaceae",
+      genus == "Spirulina" ~ "Spirulinaceae",
+      genus == "Euplotes" ~ "Euplotidae",
+      genus == "Astasia" ~ "Astasiidae",
+      TRUE ~ NA
+    ),
+    
+    order = case_when(
+      !(is.na(order)) ~ order,
+      family == "Cymatolegaceae" ~ "Nodosilineales",
+      family == "Wilmottiaceae" ~ "Coleofasciculales",
+      family == "Radiococcaceae" ~ "Sphaeropleales",
+      family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
+      family == "Amphidiniaceae" ~ "Dinophyceae",
+      family == "Cymbellaceae" ~ "Cymbellales",
+      family == "Bacillariaceae" ~ "Bacillariales",
+      family == "Katablepharidaceae" ~ "	Katablepharidales",
+      family %in% c("Achnanthidiaceae","Achnanthaceae") ~ "Achnanthales",
+      family == "Eunotiaceae" ~ "Eunotiales",
+      family %in% c("Stauroneidaceae", "Sellaphoraceae") ~ "Naviculales",
+      family == "Stephanodiscaceae" ~ "Stephanodiscales",
+      family == "Paramastigaceae" ~ "Spironematellales",
+      family %in% c("Potamididae", "Thiaridae", "Paludomidae") ~ "Caenogastropoda incertae sedis",
+      family == "Achatinidae" ~ "Stylommatophora",
+      family == "Schroederiaceae" ~ "Sphaeropleales",
+      family == "Suessiaceae" ~ "Suessiales",
+      family == "Bicosoecaceae" ~ "Bicosoecales",
+      family == "Chlamydomonadaceae" ~ "Chlamydomonadales",
+      family == "Cyanophyceae familia incertae sedis" ~ "Cyanophyceae ordo incertae sedis",
+      family == "Chrysosaccaceae" ~ "Chrysosaccales",
+      family == "Hortobagyiella" ~ "Chlorophyceae incertae sedis",
+      family == "Lepidochromonadaceae" ~ "Paraphysomonadales",
+      family == "Schizotrichaceae" ~ "Leptolyngbyales",
+      family == "Tovelliaceae" ~ "Tovelliales",
+      family == "Spirulinaceae" ~ "Spirulinales",
+      family == "Dinobryaceae" ~ "Chromulinales",
+      family == "Euplotidae" ~ "Euplotida",
+      family == "Amoebidae" ~ "Euamoebida",
+      family == "Astasiidae" ~ "Natomonadida",
+      family == "Aphanizomenonaceae" ~ "Nostocales",
+      family == "Desmidiaceae" ~ "Desmidiales",
+      TRUE ~ order
+    ),
+    
+    class = case_when(
+      !(is.na(class)) ~ class,
+      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales", "Cyanophyceae ordo incertae sedis") ~ "Cyanophyceae",
+      order == "Spironematellales" ~ "Spironematellophyceae",
+      order %in% c("Naviculales", "Bacillariales") ~ "Bacillariophyceae",
+      order == "Stylommatophora" ~ "Gastropoda",
+      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
+      order == "Bicosoecales" ~ "Bicoecidea",
+      order == "Eustigmatales" ~ "Eustigmatophyceae",
+      order == "Cryptomonadales" ~ "Cryptophyceae",
+      order %in% c("Chromulinales", "Synurales") ~ "Chrysophyceae",
+      order == "Desmidiales" ~ "Zygnematophyceae",
+      order == "Euamoebida" ~ "Tubulinea",
+      order == "Natomonadida" ~ "Peranemea",
+      order == "Trebouxiophyceae ordo incertae sedis" ~ "Trebouxiophyceae",
+      TRUE ~ class
+    ),
+    
+    phylum = case_when(
+      !(is.na(phylum)) ~ phylum,
+      class %in% c("Chrysophyceae", "Xanthophyceae", "Bacillariophyceae", "Chrysomeridophyceae", "Eustigmatophyceae") ~ "Heterokontophyta",
+      class == "Coccolithophyceae" ~ "Haptophyta",
+      class == "Gastropoda" ~ "Mollusca",
+      class == "Trebouxiophyceae" ~ "Chlorophyta",
+      class == "Dinophyceae" ~ "Dinoflagellata",
+      class == "Zygnematophyceae" ~ "Charophyta",
+      class == "Tubulinea" ~ "Amoebozoa",
+      TRUE ~ phylum
+    ),
+    
+    # Make a rank column
+    rank = case_when(
+      !(is.na(variety)) ~ "variety",
+      is.na(variety) & !(is.na(form)) ~ "form",
+      is.na(variety) & is.na(form) & !(is.na(species)) ~ "species",
+      is.na(variety) & is.na(form) & is.na(species) & !(is.na(genus)) ~ "genus",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & !(is.na(family)) ~ "family",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & !(is.na(order)) ~ "order",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & !(is.na(class)) ~ "class",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & !(is.na(phylum)) ~ "phylum",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & is.na(phylum) & !(is.na(kingdom)) ~ "kingdom",
+      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & is.na(phylum) & is.na(kingdom) & !(is.na(domain)) ~ "domain",
+      TRUE ~ NA
+    ),
+    
+    # update resolved.taxa.name with names from classification
+    classification.resolved.taxa.name = case_when(
+      rank == "variety" ~ variety,
+      rank == "form" ~ form,
+      rank == "species" ~ species,
+      rank == "genus" ~ genus,
+      rank == "family" ~ family,
+      rank == "order" ~ order,
+      rank == "class" ~ class,
+      rank == "phylum" ~ phylum,
+      rank == "kingdom" ~ kingdom,
+      rank == "domain" ~ domain,
+      TRUE ~ resolved.taxa.name
+    ),
+    
+    # make columns for the source of each rank
+    variety.source = case_when(
+      !(is.na(variety.tol)) ~ "tol",
+      is.na(variety.tol) & !(is.na(variety.gbif)) ~ "gbif",
+      is.na(variety.tol) & is.na(variety.gbif) & !(is.na(variety)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+    form.source = case_when(
+      !(is.na(form.gbif)) ~ "gbif",
+      is.na(form.gbif) & !(is.na(form)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+    species.source = case_when(
+      !(is.na(species.tol)) ~ "tol",
+      is.na(species.tol) & !(is.na(species.gbif)) ~ "gbif",
+      is.na(species.tol) & is.na(species.gbif) & !(is.na(species)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+    genus.source = case_when(
+      !(is.na(genus.tol)) ~ "tol",
+      is.na(genus.tol) & !(is.na(genus.gbif)) ~ "gbif",
+      is.na(genus.tol) & is.na(genus.gbif) & !(is.na(genus)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+    family.source = case_when(
+      !(is.na(family.tol)) ~ "tol",
+      is.na(family.tol) & !(is.na(family.gbif)) ~ "gbif",
+      is.na(family.tol) & is.na(family.gbif) & !(is.na(family)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+    order.source = case_when(
+      !(is.na(order.tol)) ~ "tol",
+      is.na(order.tol) & !(is.na(order.gbif)) ~ "gbif",
+      is.na(order.tol) & is.na(order.gbif) & !(is.na(order)) ~ "manually",
+      TRUE ~ NA
+    ), 
+    
+    class.source = case_when(
+      !(is.na(class.tol)) ~ "tol",
+      is.na(class.tol) & !(is.na(class.gbif)) ~ "gbif",
+      is.na(order.tol) & is.na(order.gbif) & !(is.na(order)) ~ "manually",
+      TRUE ~ NA
+    ), 
+    
+    phylum.source = case_when(
+      !(is.na(phylum.tol)) ~ "tol",
+      is.na(phylum.tol) & !(is.na(phylum.gbif)) ~ "gbif",
+      is.na(phylum.tol) & is.na(phylum.gbif) & !(is.na(phylum)) ~ "manually",
+      TRUE ~ NA
+    ), 
+    
+    kingdom.source = case_when(
+      !(is.na(kingdom.tol)) ~ "tol",
+      is.na(kingdom.tol) & !(is.na(kingdom.gbif)) ~ "gbif",
+      is.na(kingdom.tol) & is.na(kingdom.gbif) & !(is.na(kingdom)) ~ "manually",
+      TRUE ~ NA
+    ), 
+    
+    domain.source = case_when(
+      !(is.na(domain.tol)) ~ "tol",
+      is.na(domain.tol) & !(is.na(domain)) ~ "manually",
+      TRUE ~ NA
+    ),
+    
+  ) %>% 
+  
   select(
-    resolved.taxa.name
+    resolved.taxa.name, classification.resolved.taxa.name, rank,
+    variety, form, species, genus, family, order, class, phylum, kingdom, domain,
+    variety.source, form.source, species.source, genus.source, family.source, order.source, class.source, phylum.source, kingdom.source, domain.source
   ) %>% 
-  filter(
-    stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")
+  ungroup()
+
+# Final taxonomy list ----
+taxonomy <- tax_all %>% 
+  distinct(
+    classification.resolved.taxa.name, .keep_all = TRUE
   ) %>% 
-  mutate(
-    new.name = paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+(-\\w+)? \\w+(-\\w+)?\\b"))
-  ) %>% 
-  head(5) %>% 
-  rbind(classification(resolved_names_list, db = "tol", return_id = FALSE, rows = 1))
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Worms
-tax_worms_raw <- rbind(classification(resolved_names_list, db = "worms", return_id = FALSE, rows = 1)) %>% 
-  filter(
-    rank %in% c("Form", "Variety", "Species", "Genus", "Family", "Order", "Class", "Phylum", "Kingdom", "Domain")
-  ) %>% 
   mutate(
-    rank = paste(rank, "worms", sep = ".")
-  ) %>% 
-  pivot_wider(.,
-              names_from = rank,
-              values_from = name) %>% 
-  unnest_wider(col = everything(), names_sep = ".") %>% 
-  rename(
-    resolved.taxa.name = query.1
-  ) %>% 
-  rename_with(
-    ., tolower
-  ) %>% 
-  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
-
-# Save
-saveRDS(tax_worms_raw, file = "R/data_outputs/taxonomy/tax_worms_raw.rds")
-
-# Gbif
-tax_gbif_raw <- rbind(classification(resolved_names_list, db = "gbif", return_id = FALSE, rows = 1)) %>% 
-  filter(
-    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
-  ) %>% 
-  mutate(
-    rank = paste(rank, "gbif", sep = ".")
-  ) %>% 
-  pivot_wider(.,
-              names_from = rank,
-              values_from = name) %>% 
-  unnest_wider(col = everything(), names_sep = ".") %>% 
-  rename(
-    resolved.taxa.name = query.1
-  ) %>% 
-  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
-
-# Save
-saveRDS(tax_gbif_raw, file = "R/data_outputs/taxonomy/tax_gbif_raw.rds")
-
-# Itis
-tax_itis_raw <- rbind(classification(resolved_names_list, db = "itis", return_id = FALSE, rows = 1)) %>% 
-  filter(
-    rank %in% c("form", "variety", "species", "genus", "family", "order", "class", "phylum", "kingdom", "domain")
-  ) %>% 
-  mutate(
-    rank = paste(rank, "itis", sep = ".")
-  ) %>% 
-  pivot_wider(.,
-              names_from = rank,
-              values_from = name) %>% 
-  unnest_wider(col = everything(), names_sep = ".") %>% 
-  rename(
-    resolved.taxa.name = query.1
-  ) %>% 
-  left_join(distinct_resolved_names, ., by = "resolved.taxa.name")
-
-# Save
-saveRDS(tax_itis_raw, file = "R/data_outputs/taxonomy/tax_itis_raw.rds")
-
-# combine all together
-tax_all_raw <- left_join(distinct_resolved_names, tax_gbif_raw, by = "resolved.taxa.name") %>% 
-  left_join(., tax_tol_raw, by = "resolved.taxa.name") %>% 
-  left_join(., tax_worms_raw, by = "resolved.taxa.name") %>% 
-  mutate(
-    form.tol.1 = NA,
-    variety.tol.1 = NA,
-    
-    domain.gbif.1 = NA,
-    
-    form.worms.1 = NA,
-    domain.worms.1 = NA,
-    
     tax.uid = row_number()
   ) %>% 
+  
+  select(-resolved.taxa.name) %>% 
+  
+  rename(
+    resolved.taxa.name = classification.resolved.taxa.name
+  ) %>% 
+  
   relocate(
-    tax.uid, resolved.taxa.name,
-    form.tol.1, variety.tol.1, species.tol.1, genus.tol.1, genus.tol.2, family.tol.1, family.tol.2, order.tol.1, order.tol.2, class.tol.1, class.tol.2, phylum.tol.1, phylum.tol.2, kingdom.tol.1, kingdom.tol.2, domain.tol.1,
-    form.gbif.1, variety.gbif.1, species.gbif.1, genus.gbif.1, family.gbif.1, order.gbif.1, class.gbif.1, phylum.gbif.1, kingdom.gbif.1, domain.gbif.1,
-    form.worms.1, variety.worms.1, species.worms.1, genus.worms.1, family.worms.1, order.worms.1, class.worms.1, phylum.worms.1, kingdom.worms.1, domain.worms.1,
+    tax.uid, resolved.taxa.name, rank,
+    variety, form, species, genus, family, order, class, phylum, kingdom, domain,
+    variety.source, form.source, species.source, genus.source, family.source, order.source, class.source, phylum.source, kingdom.source, domain.source
   )
 
 # Save
-saveRDS(tax_all_raw, file = "R/data_outputs/taxonomy/tax_all_raw.rds")
+saveRDS(taxonomy, file = "R/Data_outputs/taxonomy/taxonomy.rds") 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Step 3: NAs ----
-# find all that weren't picked up by tol and check if there are more up top date names and run with those
-tol_na <- taxonomy_tol_step2_extracted %>% 
-  filter(
-    is.na(tol.id)
-  ) %>% 
-  select(
-    resolved.taxa.name
-  )
-
-# save
-write_csv(tol_na, "R/Data_outputs/Taxonomy/tol/tol_na.csv")
-
-# Import updated names
-tol_na_manual <- read_xlsx(here("Raw_data","manual_taxonomy.xlsx"), sheet = "na")
-
-# Run updated names through classification
-taxonomy_tol_step3_raw <- tol_na_manual %>% 
-  
-  # redo rowwsie becasue it's a newly imported data frame
-  rowwise() %>% 
-  
-  mutate(
-    # run through classification
-    taxonomy = list(classification(new.name, db = "tol", return_id = TRUE, rows = 1)[[1]])
-  )
-  
-# Save
-saveRDS(taxonomy_tol_step3_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step3_raw.rds") 
-
-## Classification: rows != 1 ----
-# find any that were not classified, have missing ranks or were bumped up a taxonmic level and rerun classification with rows = 1 off so i can manually select ones
-
-x <- taxonomy_tol_step1_extracted %>% 
-  filter(
-    is.na(tol.id)
-  )
-
-# Select ones that were not classified or were bumped up
-taxonomy_step2_subset <- taxonomy_tol_step1_extracted %>%
-  mutate(
-    manual = case_when(
-      # ones that were not picked up at all
-      is.na(tol.id) ~ "yes",
-      
-      # ones that were bumped up to a higher rank
-      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes",
-      rank == "kingdom" & resolved.taxa.name != kingdom ~ "yes",
-      rank == "phylum" & resolved.taxa.name != phylum ~ "yes",
-      rank == "class" & resolved.taxa.name != class ~ "yes",
-      rank == "order" & resolved.taxa.name != order ~ "yes",
-      rank == "family" & resolved.taxa.name != family ~ "yes",
-    )
-  ) %>% 
-  
-  filter(
-    manual == "yes"
-  )
-  
-# Run through classification qith rows = 1 turned off
-taxonomy_tol_step2_raw <- select(taxonomy_step2_subset, resolved.taxa.name) %>% 
-  
-  # run through classification - doing it in the dataframe and not passing a string like above so the original name is kept incase a new name is given by TOL
-  mutate(
-    taxonomy = list(classification(resolved.taxa.name, db = "tol", return_id = TRUE)[[1]])
-  )
-
-# Save
-saveRDS(taxonomy_tol_step2_raw, file = "R/Data_outputs/Taxonomy/tol/taxonomy_tol_step2_raw.rds") 
-
-
-
-
-
-
-
-## Manual edits ----
-# manullay fill in any missing info or any that were bumped up a taxonomic level
-# NEED TO REDO ACCEPTED TAXA NAME AND ASSIGN PHYTO/ZOO GROUP AND MAKE EVERYTHING BELOW SPECIES A SPECIES, TAX.UID
-
-to_taxonomy_manual <- taxonomy_tol_raw_extracted %>%
-  mutate(
-    manual = case_when(
-      # ones that were not picked up at all
-      is.na(tol.id) ~ "yes",
-      
-      # ones with missing ranks
-      is.na(kingdom) ~ "yes",
-      is.na(phylum) ~ "yes",
-      is.na(class) ~ "yes",
-      is.na(order) ~ "yes",
-      is.na(family) ~ "yes",
-      is.na(genus) ~ "yes",
-      
-      # ones that were bumped up to a higher rank
-      stri_detect_regex(resolved.taxa.name, " ") & is.na(species) ~ "yes",
-      rank == "kingdom" & resolved.taxa.name != kingdom ~ "yes",
-      rank == "phylum" & resolved.taxa.name != phylum ~ "yes",
-      rank == "class" & resolved.taxa.name != class ~ "yes",
-      rank == "order" & resolved.taxa.name != order ~ "yes",
-      rank == "family" & resolved.taxa.name != family ~ "yes",
-    )
-  ) %>% 
-  
-  filter(
-    manual == "yes"
-  )
-
-x <- taxonomy_tol_extracted %>% 
-  filter(
-    stri_detect_regex(resolved.taxa.name, " "),
-    is.na(species)
-  )
-
-# NA - 57
-
-# Save
-saveRDS(taxonomy_tol_extracted, file = "R/Data_outputs/taxonomy/tol/taxonomy_tol_extracted.rds") 
-
-## Final taxonomy list ----
-# geti distinct accepted.taxa.names that aren't na
-
-taxonomy_list <- taxonomy_tol_extracted %>% 
-  filter(
-    !is.na(tol.id)
-  ) %>% 
-  distinct(
-    accepted.taxa.name, .keep_all = TRUE
-  ) %>% 
-  select(
-    -resolved.taxa.name
-  ) %>% 
-  relocate(
-    tax.uid, tol.id, accepted.taxa.name, species, genus, family, order, class, phylum, kingdom
-  )
-
-write_csv(taxonomy_list, file = "R/Data_outputs/full_database/taxonomy_list.csv")
-
-## add to main data ----
-bodysize_taxonomy <- bodysize_location %>% 
-  
-  # first add in the resolved names
+# Add to main data ----
+bodysize_taxonomy <- bodysize_joined %>% 
   left_join(
-    select(
-      resolved_names, original.taxa.name, resolved.taxa.name
-    ), by = "original.taxa.name"
+    ., select(
+      resolved_names_3_not_classified_fix, original.taxa.name, resolved.taxa.name),
+      by = "original.taxa.name"
   ) %>% 
-  
-  # use the resolved names to add in taxonomy info
   left_join(
-    select(
-      taxonomy_tol_extracted, resolved.taxa.name, tax.uid, accepted.taxa.name
-      ), by = "resolved.taxa.name"
+    ., select(
+      tax_all, resolved.taxa.name, classification.resolved.taxa.name),
+      by = "resolved.taxa.name"
+    ) %>% 
+  left_join(
+    ., select(
+      taxonomy, resolved.taxa.name, tax.uid
+    ),
+    by = "resolved.taxa.name"
   ) %>% 
   
-  select(
-    -resolved.taxa.name,
-    - original.taxa.name
-  ) %>% 
-  
-  relocate(
-    uid, individual.uid, tax.uid, accepted.taxa.name, form, form.no, life.stage, sex, min.body.size, max.body.size, body.size, units, sample.size, error, error.type, sample.year, sample.month
+  select(- resolved.taxa.name) %>% 
+    
+  rename(
+    resolved.taxa.name = classification.resolved.taxa.name
   )
 
 # Save
