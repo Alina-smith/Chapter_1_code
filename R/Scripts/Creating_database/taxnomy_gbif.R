@@ -5,9 +5,9 @@
 # Aim of script
 # Resolve names - Run the names through gna_veryfier to fix spellings and get most up to date synonyms and manually resolve any that weren't picked up
 # Taxonomy
-  # 1) Run resolved names through classification with tol, then select all that weren't recognised by tol and update any synonyms and then rerun
-  # 2) Run the names through classification with gbif 
-  # 3) Fill in any gaps in the tol data with the gbif data
+# 1) Run resolved names through classification with tol, then select all that weren't recognised by tol and update any synonyms and then rerun
+# 2) Run the names through classification with gbif 
+# 3) Fill in any gaps in the tol data with the gbif data
 
 library(devtools)
 install_github("ropensci/bold")
@@ -54,10 +54,10 @@ resolved_names_1_gna <- do.call(rbind, lapply(names_list, function(name) {
         submittedName = name,
         matchedCanonicalFull = NA,
         dataSourceTitleShort = NA)
-      }
-    )
-  })
-  ) %>% 
+    }
+  )
+})
+) %>% 
   rename(
     original.taxa.name = submittedName,
     resolved.taxa.name.gna = matchedCanonicalFull,
@@ -69,10 +69,10 @@ saveRDS(resolved_names_1_gna, file = "R/data_outputs/taxonomy/resolved_names_1_g
 
 ## Manual ----
 # How manual resolving was carried out:
-  # When the species name could be found then use that
-  # When the species name couldn't be found on a database then keep the original.taxa.name in case it is a newly discovered species not in the databases yet
-  # When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
-  # When two species are stated then the closet common higher group is used
+# When the species name could be found then use that
+# When the species name couldn't be found on a database then keep the original.taxa.name in case it is a newly discovered species not in the databases yet
+# When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
+# When two species are stated then the closet common higher group is used
 
 # 1) Find all the taxa.names from resolved_gna to manually resolve based on the criteria in the comments
 to_resolve_manually <- resolved_names_gna %>% 
@@ -175,40 +175,40 @@ tax_tol_1_raw <- distinct_resolved_names %>%
     tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
       classification(
         classification.name, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
-        )[[1]] # select the first element of the list
-      ),
+      )[[1]] # select the first element of the list
+    ),
     
     # Change ones that didn't get classified from just NA to a dataframe of NAs
     tax = ifelse(
       is.data.frame(tax),
       list(tax),
       list(data.frame(name = NA, rank = "no rank"))
-      ),
+    ),
     
     # Pivot tax so that it makes columns for each rank
     pivot_wider(tax,
                 names_from = rank,
                 values_from = name)
-    ) %>% 
+  ) %>% 
   
   # remove unnecessary columns
   select(
     -`no rank`,
     - tax,
     - classification.name
-    ) %>% 
+  ) %>% 
   
   # Separate columns that have multiple names for a rank into multiple columns
   unnest_wider(
     col = everything(), names_sep = "."
-    ) %>% 
+  ) %>% 
   
   rename(
     resolved.taxa.name = resolved.taxa.name.1
-      ) %>% 
+  ) %>% 
   
   ungroup() # ungroup to remove rowwise
-  
+
 # Save
 saveRDS(tax_tol_1_raw, file = "R/data_outputs/taxonomy/tax_tol_1_raw.rds")
 
@@ -228,7 +228,7 @@ tax_tol_1_cleaned <- tax_tol_1_raw %>%
       !(is.na(genus.2)), # checked through them all and all are genus.2
       genus.2,
       genus.1
-      ),
+    ),
     
     order.1 = case_when(
       order.2 %in% c("Craspedida", "Neobodonida", "Parabodonida") ~ order.2,
@@ -269,7 +269,7 @@ tax_tol_1_cleaned <- tax_tol_1_raw %>%
   
   rename_with(
     ~ stri_replace_all_regex(., "\\.1$", "")
-    ) %>% 
+  ) %>% 
   
   rename(
     variety = varietas
@@ -289,10 +289,10 @@ tol_not_classified <- tax_tol_1_cleaned %>%
       apply( # apply to each column
         select(
           .,-resolved.taxa.name # select all columns apart from these two as we only want to check the columns gotten from classification()
-          ), 1, function(row) all(
-            is.na(row) # if all selected columns in row is NA
-            )
-        ),
+        ), 1, function(row) all(
+          is.na(row) # if all selected columns in row is NA
+        )
+      ),
       "not classified",
       "classified"),
   ) %>% 
@@ -329,7 +329,7 @@ resolved_names_3_not_classified_fix <- tol_not_classified_fix %>%
   ) %>% 
   
   select(-new.name)
-  
+
 # Save
 saveRDS(resolved_names_3_not_classified_fix, file = "R/data_outputs/taxonomy/resolved_names_3_not_classified_fix.rds")
 
@@ -340,7 +340,7 @@ tax_tol_2_not_classified_fix_raw <- tol_not_classified_fix %>%
   filter(
     !(is.na(new.name))
   ) %>% 
-
+  
   rowwise() %>% 
   
   mutate(
@@ -380,7 +380,7 @@ tax_tol_2_not_classified_fix_raw <- tol_not_classified_fix %>%
     resolved.taxa.name = resolved.taxa.name.1,
     new.name = new.name.1
   )
-  
+
 # Save
 saveRDS(tax_tol_2_not_classified_fix_raw, file = "R/data_outputs/taxonomy/tax_tol_2_not_classified_fix_raw.rds")
 
@@ -393,7 +393,7 @@ tax_tol_2_not_classified_fix_cleaned <- tax_tol_2_not_classified_fix_raw %>%
     kingdom.1 = case_when(
       !is.na(kingdom.2) ~ "Plantae",
       TRUE ~ kingdom.1
-      )
+    )
   ) %>% 
   
   select(
@@ -555,7 +555,7 @@ tax_gbif_2_bumped <- tax_gbif_1_cleaned %>%
         list(data.frame(
           name = NA,
           rank = "no rank"
-          ))
+        ))
       }
     ),
     
@@ -566,7 +566,7 @@ tax_gbif_2_bumped <- tax_gbif_1_cleaned %>%
       list(data.frame(
         name = NA,
         rank = "no rank"
-        ))
+      ))
     ),
     
     # Pivot tax so that it makes columns for each rank
@@ -591,7 +591,7 @@ tax_gbif_2_bumped <- tax_gbif_1_cleaned %>%
   ) %>% 
   
   ungroup() # ungroup to remove rowwise 
-    
+
 # Save
 saveRDS(tax_gbif_2_bumped_raw, file = "R/data_outputs/taxonomy/tax_gbif_2_bumped_raw.rds")
 
@@ -616,391 +616,234 @@ tax_gbif_2_cleaned <- tax_gbif_1_cleaned %>%
 # Save
 saveRDS(tax_gbif_2_cleaned, file = "R/data_outputs/taxonomy/tax_gbif_2_cleaned.rds")
 
-# Combining tol and gbif ----
-tax_all <- left_join(
-  tax_tol_2_cleaned, tax_gbif_2_cleaned,
-  suffix = c(".tol", ".gbif"),
-  by = "resolved.taxa.name") %>% 
-  
-  rename(
-    form.gbif = form,
-    domain.tol = domain
-  ) %>% 
+## Final tax list ----
+# decided to use just gbif data as it covers the most species and means all species will use the same format
+
+tax_final <- tax_gbif_2_cleaned %>% 
   
   mutate(
-    
-    # merge tol and gbif with preference for tol
-    variety = case_when(
-      !(is.na(variety.tol)) ~ variety.tol,
-      is.na(variety.tol) & !(is.na(variety.gbif)) ~ variety.gbif,
-      TRUE ~ NA
-    ),
-    
-    form = case_when(
-      !(is.na(form.gbif)) ~ form.gbif,
-      TRUE ~ NA
-    ),
-    
+    # fill in gaps
     species = case_when(
-      !(is.na(species.tol)) ~ species.tol,
-      is.na(species.tol) & !(is.na(species.gbif)) ~ species.gbif,
-      TRUE ~ NA
-    ),
+      # resolved wrong
+      resolved.taxa.name == "Apodochloris simplicissima" ~ "Apodochloris simplicissima",
+      resolved.taxa.name == "Epicystis peridinearum" ~ "Epicystis peridinearum",
+      
+      # gaps
+      !(is.na(species)) ~ species,
+      resolved.taxa.name == "Microcystis holsatica" ~ "Aphanocapsa holsatica",
+      resolved.taxa.name == "Protococcus wimmeri" ~ "Protococcus wimmeri",
+      resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium glaucum",
+      resolved.taxa.name %in% c("Scenedesmus bicaudatus", "Scenedesmus bicaudatus var. brevicaudatus") ~ "Desmodesmus bicaudatus",
+      resolved.taxa.name == "Chlorotetraëdron bitridens" ~ "Chlorotetraedron bitridens",
+      resolved.taxa.name == "Delicata alpestris" ~ "Delicata alpestris",
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysopora fenestrata",
+      resolved.taxa.name == "Crucigeniella secta" ~ "Crucigeniella secta",
+      
+      # when it has been resolved right but has the species missing
+      is.na(species) & stri_detect_regex(resolved.taxa.name, " ") & !(stri_detect_regex(resolved.taxa.name, "var\\.")) ~ resolved.taxa.name,
+      (stri_detect_regex(resolved.taxa.name, "var\\.")) ~ stri_replace_first_regex(species, "(?<=var\\.)\\w+", ""),
+      
+      TRUE ~ species
+    ))
+    
+    (?<=var\\.)\\w+
+
+x <- tax_final %>% 
+  filter(
+    stri_detect_regex(species, "var\\.")
+  )
+  
+
+,
     
     genus = case_when(
-      !(is.na(genus.tol)) ~ genus.tol,
-      is.na(genus.tol) & !(is.na(genus.gbif)) ~ genus.gbif,
-      TRUE ~ NA
-    ), 
+      # ones that were resolved wrong
+      resolved.taxa.name == "Apodochloris simplicissima" ~ "Apodochloris",
+      resolved.taxa.name == "Diacanthos" ~ "Micractinium",
+      resolved.taxa.name == "Epicystis peridinearum" ~ "Epicystis",
+      resolved.taxa.name == "Protococcus wimmeri" ~ "Protococcus",
+      resolved.taxa.name == "Delicata alpestris" ~ "Delicata",
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysopora",
+      resolved.taxa.name == "Crucigeniella secta" ~ "Crucigeniella",
+      resolved.taxa.name == "Sphaerastrum" ~ "Sphaerastrum",
+      
+      !(is.na(genus)) ~ genus,
+      
+      # missing gaps
+      resolved.taxa.name == "Chrysodendron ramosum" ~ "Chrysodendron",
+      stri_detect_regex(resolved.taxa.name, "Cosmarium ") ~ "Cosmarium",
+      stri_detect_regex(resolved.taxa.name, "Euastrum ") ~ "Euastrum",
+      stri_detect_regex(resolved.taxa.name, "Kephyriopsis ") ~ "Kephyriopsis",
+      resolved.taxa.name == "Mougeotia thylespora" ~ "Mougeotia",
+      resolved.taxa.name == "Pseudochlorangium anomalum" ~ "Pseudochlorangium",
+      resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium",
+      stri_detect_regex(resolved.taxa.name, "Xanthidium ") ~ "Xanthidium",
+      TRUE ~ genus
+      ),
     
     family = case_when(
-      !(is.na(family.tol)) ~ family.tol,
-      is.na(family.tol) & !(is.na(family.gbif)) ~ family.gbif,
-      TRUE ~ NA
-    ), 
-    
-    order = case_when(
-      !(is.na(order.tol)) ~ order.tol,
-      is.na(order.tol) & !(is.na(order.gbif)) ~ order.gbif,
-      TRUE ~ NA
-    ), 
-    
-    class = case_when(
-      !(is.na(class.tol)) ~ class.tol,
-      is.na(class.tol) & !(is.na(class.gbif)) ~ class.gbif,
-      TRUE ~ NA
-    ), 
-    
-    phylum = case_when(
-      !(is.na(phylum.tol)) ~ phylum.tol,
-      is.na(phylum.tol) & !(is.na(phylum.gbif)) ~ phylum.gbif,
-      TRUE ~ NA
-    ), 
-    
-    kingdom = case_when(
-      !(is.na(kingdom.tol)) ~ kingdom.tol,
-      is.na(kingdom.tol) & !(is.na(kingdom.gbif)) ~ kingdom.gbif,
-      TRUE ~ NA
-    ), 
-    
-    domain = case_when(
-      !(is.na(domain.tol)) ~ domain.tol,
-      TRUE ~ NA
-    ),
-    
-    # Manually fill in gaps
-    variety = case_when(
-      !(is.na(variety)) ~ variety,
-      is.na(variety) & stri_detect_regex(resolved.taxa.name, "var\\.") ~ resolved.taxa.name,
-      TRUE ~ variety
-    ),
-    
-    form = case_when(
-      !(is.na(form)) ~ variety,
-      is.na(form) & stri_detect_regex(resolved.taxa.name, "f\\.") ~ resolved.taxa.name,
-      TRUE ~ form
-    ),
-    
-    species = case_when(
-      !(is.na(species)) ~ species,
-      is.na(species) & stri_detect_regex(resolved.taxa.name, " ") ~ resolved.taxa.name, # select all that have a space in
-      TRUE ~ species
-    ),
-    
-    # Genus will be the first word of the two
-    genus = if_else(
-      is.na(genus),
-      stri_extract_first_regex(resolved.taxa.name, "\\w+(?= )"),
-      genus
-    ),
-    
-    family = case_when(
+      # ones thst were resolved wrong
+      family == "Cyanobiaceae" ~ "Prochlorococcaceae",
+      family == "Spirodiniidae" ~ "Gymnodiniaceae",
+      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysosphaeraceae",
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysocapsaceae",
+      resolved.taxa.name == "Crucigeniella secta" ~ "Oocystaceae",
+      
       !(is.na(family)) ~ family,
-      genus %in% c("Romeria", "Rhabdoderma", "Lemmermannia") ~ "Cymatolegaceae",
-      genus == "Fallacia" ~ "Sellaphoraceae",
-      genus %in% c("Nitzschia", "Bacillaria") ~ "Bacillariaceae",
-      genus == "Trichodina" ~ "Achatinidae",
-      genus == "Schroederia" ~ "Schroederiaceae",
-      genus == "Carteria" ~ "Chlamydomonadaceae",
-      genus %in% c("Coccomyxa", "Microglena") ~ "Coccomyxaceae",
-      genus %in%  c("Stokesiella", "Pseudokephyrion") ~ "Dinobryaceae",
-      genus == "Anabaena" ~ "Aphanizomenonaceae",
-      genus == "Euastrum" ~ "Desmidiaceae",
+      genus %in% c("Coccomyxa", "Microglena", "Paradoxia") ~ "Coccomyxaceae",
+      genus == "Crucigenia" ~ "Trebouxiophyceae incertae sedis",
+      genus %in% c("Spondylosium", "Cosmarium", "Staurodesmus", "Teilingia", "Xanthidium", "Staurastrum", "Pleurotaenium", "Euastrum", "Desmidium", "Bambusina",
+                   "Micrasterias", "Octacanthium", "Onychonema", "Tetmemorus", "Hyalotheca", "Oocardium", "Docidium", "Haplotaenium", "Sphaerozosma") ~ "Desmidiaceae",
+      genus %in% c("Monema", "Biblarium", "Microneis", "Discoplea") ~ "Bacillariophyceae familia incertae sedis",
+      genus %in% c("Geminella", "Micractinium") ~ "Chlorellaceae",
+      genus == "Polyedriopsis" ~ "Sphaeropleales incertae sedis",
+      genus == "Polychaos" ~ "Euamoebida incertae sedis",
+      genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
+      genus == "Apodochloris" ~ "Chlorococcaceae",
+      genus == "Ecballocystis" ~ "Oocystaceae",
+      genus == "Kephyriopsis" ~ "Dinobryaceae",
+      genus == "Pseudochlorangium" ~ "Chlorangiellaceae",
+      genus == "Baldinia" ~ "Borghiellaceae",
+      genus == "Spirotaenia" ~ "Mesotaeniaceae",
+      genus == "Mougeotia" ~ "Zygnemataceae",
       genus == "Jaaginema" ~ "Synechococcales familia incertae sedis",
       genus == "Coenocystis" ~ "Radiococcaceae",
       genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis",
-      genus %in% c("Encyonema", "Cymbella") ~ "Cymbellaceae",
-      genus == "Oscillatoria" ~ "Oscillatoriaceae",
-      genus == "Staurosira" ~ "Staurosiraceae",
-      genus == "Stephanodiscus" ~ "Stephanodiscaceae",
+      genus == "Pleurostauron" ~ "Staurosiraceae",
       genus %in% c("Synuropsis", "Chrysodendron") ~ "Ochromonadaceae",
-      genus == "Heterothrix" ~ "Tribonemataceae",
       genus == "Picochlorum" ~ "Chlorellales incertae sedis",
-      genus == "Achnanthidium" ~ "Achnanthidiaceae",
-      genus == "Eunotia" ~ "Eunotiaceae",
-      genus == "Stauroneis" ~ "Stauroneidaceae",
-      genus == "Amoeba" ~ "Amoebidae",
-      genus == "Achnanthes" ~ "Achnanthaceae",
+      genus == "Himantidium" ~ "Eunotiaceae",
+      genus %in%c("Amoeba", "Vibrio") ~ "Amoebidae",
       genus == "Gomphonella" ~ "Cymbellales incertae sedis",
-      genus == "Syracosphaera" ~ "Syracosphaeraceae",
-      genus == "Amphichrysis" ~ "Chromulinaceae",
       genus == "Chroostipes" ~ "Cyanophyceae familia incertae sedis",
-      genus %in% c("Chrysoxys", "Saccochrysis") ~ "Chromulinaceae",
+      genus %in% c("Chrysoxys", "Saccochrysis", "Amphichrysis") ~ "Chromulinaceae",
       genus == "Dactylosphaerium" ~ "Dictyosphaeriaceae",
-      genus == "Glenodinium" ~ "Peridiniales familia incertae sedis",
-      genus == "Hortobagyiella" ~ "Hortobagyiella",
-      genus == "Kephyrion" ~ "Chrysococcaceae",
-      genus == "Monodus" ~ "Pleurochloridaceae",
+      genus == "Hortobagyiella" ~ "Koliellaceae",
       genus == "Phaeobotrys" ~ "Phaeothamniaceae",
       genus == "Rhaphidiopsis" ~ "Aphanizomenonaceae",
-      genus == "Rhodomonas" ~ "Pyrenomonadaceae",
-      genus == "Spirulina" ~ "Spirulinaceae",
       genus == "Euplotes" ~ "Euplotidae",
-      genus == "Astasia" ~ "Astasiidae",
-      TRUE ~ NA
+      genus == "Diaphanosoma" ~ "Sididae",
+      genus == "Lebouridinium" ~ "Gymnodiniales incertae sedis",
+      TRUE ~ family
     ),
     
     order = case_when(
+      # resolved wrong
+      order == "Euglypha" ~ "Euglyphida",
+      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysosphaerales",
+      resolved.taxa.name == "Protococcus wimmeri" ~ "Chlamydomonadales",
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chromulinales",
+      resolved.taxa.name == "Crucigeniella secta" ~ "Chlorellales",
+      
       !(is.na(order)) ~ order,
-      family == "Cymatolegaceae" ~ "Nodosilineales",
-      family == "Wilmottiaceae" ~ "Coleofasciculales",
-      family == "Radiococcaceae" ~ "Sphaeropleales",
-      family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
-      family == "Amphidiniaceae" ~ "Dinophyceae",
-      family == "Cymbellaceae" ~ "Cymbellales",
-      family == "Bacillariaceae" ~ "Bacillariales",
-      family == "Katablepharidaceae" ~ "	Katablepharidales",
-      family %in% c("Achnanthidiaceae","Achnanthaceae") ~ "Achnanthales",
-      family == "Eunotiaceae" ~ "Eunotiales",
-      family %in% c("Stauroneidaceae", "Sellaphoraceae") ~ "Naviculales",
-      family == "Stephanodiscaceae" ~ "Stephanodiscales",
-      family == "Paramastigaceae" ~ "Spironematellales",
-      family %in% c("Potamididae", "Thiaridae", "Paludomidae") ~ "Caenogastropoda incertae sedis",
-      family == "Achatinidae" ~ "Stylommatophora",
-      family == "Schroederiaceae" ~ "Sphaeropleales",
-      family == "Suessiaceae" ~ "Suessiales",
-      family == "Bicosoecaceae" ~ "Bicosoecales",
-      family == "Chlamydomonadaceae" ~ "Chlamydomonadales",
-      family == "Cyanophyceae familia incertae sedis" ~ "Cyanophyceae ordo incertae sedis",
-      family == "Chrysosaccaceae" ~ "Chrysosaccales",
-      family == "Hortobagyiella" ~ "Chlorophyceae incertae sedis",
-      family == "Lepidochromonadaceae" ~ "Paraphysomonadales",
-      family == "Schizotrichaceae" ~ "Leptolyngbyales",
-      family == "Tovelliaceae" ~ "Tovelliales",
-      family == "Spirulinaceae" ~ "Spirulinales",
-      family == "Dinobryaceae" ~ "Chromulinales",
-      family == "Euplotidae" ~ "Euplotida",
       family == "Amoebidae" ~ "Euamoebida",
-      family == "Astasiidae" ~ "Natomonadida",
-      family == "Aphanizomenonaceae" ~ "Nostocales",
+      family == "Amphidiniaceae" ~ "Amphidiniales",
+      family == "Bicosoecaceae" ~ "Bicosoecales",
+      family == "Chlorellaceae" ~ "Chlorellales",
+      family == "Chlorococcaceae" ~ "Chlamydomonadales",
+      family == "Chrysosaccaceae" ~ "Chrysosaccales",
+      family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
+      family == "Cymatolegaceae" ~ "Nodosilineales",
       family == "Desmidiaceae" ~ "Desmidiales",
+      family == "Dinobryaceae" ~ "Chromulinales",
+      family == "Ebriaceae" ~ "Ebriales",
+      family == "Eunotiaceae" ~ "Eunotiales",
+      family == "Katablepharidaceae" ~ "Katablepharidales",
+      family == "Koliellaceae" ~ "Koliellaceae",
+      family == "Lepidochromonadaceae" ~ "Paraphysomonadales",
+      family %in% c("Mesotaeniaceae", "Zygnemataceae") ~ "Zygnematales",
+      family == "Ochromonadaceae" ~ "Ochromonadales",
+      family == "Paramastigaceae" ~ "Spironematellales",
+      family == "Radiococcaceae" ~ "Sphaeropleales",
+      family == "Staurosiraceae" ~ "Fragilariales",
+      family == "Wilmottiaceae" ~ "Coleofasciculales",
+      family %in% c("Potamididae", "Thiaridae", "Paludomidae") ~ "Caenogastropoda incertae sedis",
+      family == "Gnesiocerotidae" ~ "Polycladida",
+      family == "Trinematidae" ~ "Euglyphida",
+      family == "Neogosseidae" ~ "Chaetonotida",
+      family == "Euplotidae" ~ "Euplotida",
+      family == "Prochlorococcaceae" ~ "Synechococcales",
+      family == "Gymnodiniaceae" ~ "Gymnodiniales",
+      
+      family == "Trebouxiophyceae incertae sedis" ~ "Trebouxiophyceae ordo incertae sedis",
+      family == "Bacillariophyceae familia incertae sedis" ~ "Bacillariophyceae ordo incertae sedis",
+      
+      genus == "Polychaos" ~ "Euamoebida",
+      genus == "Chroostipes" ~ "Cyanophyceae incertae sedis",
+      genus == "Lebouridinium" ~ "Gymnodiniales",
       TRUE ~ order
     ),
     
     class = case_when(
+      # resolved wrong 
+      class == "Filosia" ~ "Imbricatea",
+      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysophyceae",
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysophyceae",
+      
       !(is.na(class)) ~ class,
-      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales", "Cyanophyceae ordo incertae sedis") ~ "Cyanophyceae",
+      order == "Ebriales" ~ "Thecofilosea",
+      order %in% c("Nodosilineales", "Coleofasciculales") ~ "Cyanophyceae",
       order == "Spironematellales" ~ "Spironematellophyceae",
-      order %in% c("Naviculales", "Bacillariales") ~ "Bacillariophyceae",
-      order == "Stylommatophora" ~ "Gastropoda",
-      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
       order == "Bicosoecales" ~ "Bicoecidea",
-      order == "Eustigmatales" ~ "Eustigmatophyceae",
-      order == "Cryptomonadales" ~ "Cryptophyceae",
-      order %in% c("Chromulinales", "Synurales") ~ "Chrysophyceae",
+      order == "Chromulinales" ~ "Chrysophyceae",
       order == "Desmidiales" ~ "Zygnematophyceae",
       order == "Euamoebida" ~ "Tubulinea",
-      order == "Natomonadida" ~ "Peranemea",
-      order == "Trebouxiophyceae ordo incertae sedis" ~ "Trebouxiophyceae",
+      order == "Chlorellales" ~ "Trebouxiophyceae",
+      order == "Euglyphida" ~ "Imbricatea",
+      order == "Gymnodiniales" ~ "Dinophyceae",
+      order == "Zygnematales" ~ "Zygnematophyceae",
+      order == "Euplotida" ~ "Spirotrichea",
+      order == "Cyanophyceae incertae sedis" ~ "Cyanophyceae",
       TRUE ~ class
     ),
     
     phylum = case_when(
+      # resolved wrong
+      resolved.taxa.name %in% c("Epicystis peridinearum", "Chrysopora fenestrata") ~ "Ochrophyta",
+      
       !(is.na(phylum)) ~ phylum,
-      class %in% c("Chrysophyceae", "Xanthophyceae", "Bacillariophyceae", "Chrysomeridophyceae", "Eustigmatophyceae") ~ "Heterokontophyta",
-      class == "Coccolithophyceae" ~ "Haptophyta",
-      class == "Gastropoda" ~ "Mollusca",
-      class == "Trebouxiophyceae" ~ "Chlorophyta",
-      class == "Dinophyceae" ~ "Dinoflagellata",
       class == "Zygnematophyceae" ~ "Charophyta",
+      class == "Polycystina" ~ "Radiozoa",
+      class == "Spironematellophyceae" ~ "Spironematellophyta",
+      class == "Dinophyceae" ~ "Dinoflagellata",
+      class == "Spirotrichea" ~ "Ciliophora",
       class == "Tubulinea" ~ "Amoebozoa",
+      class %in% c("Imbricatea", "Thecofilosea") ~ "Cercozoa",
       TRUE ~ phylum
     ),
     
-    # Make a rank column
-    rank = case_when(
-      !(is.na(variety)) ~ "variety",
-      is.na(variety) & !(is.na(form)) ~ "form",
-      is.na(variety) & is.na(form) & !(is.na(species)) ~ "species",
-      is.na(variety) & is.na(form) & is.na(species) & !(is.na(genus)) ~ "genus",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & !(is.na(family)) ~ "family",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & !(is.na(order)) ~ "order",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & !(is.na(class)) ~ "class",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & !(is.na(phylum)) ~ "phylum",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & is.na(phylum) & !(is.na(kingdom)) ~ "kingdom",
-      is.na(variety) & is.na(form) & is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & is.na(phylum) & is.na(kingdom) & !(is.na(domain)) ~ "domain",
-      TRUE ~ NA
-    )) %>% 
-  select(
-    resolved.taxa.name, rank,
-    variety, form, species, genus, family, order, class, phylum, kingdom, domain)
-
-x <- tax_all %>% 
-  distinct(
-    class
+    kingdom = case_when(
+      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chromista",
+      TRUE ~ kingdom
+    )
   )
-
-,
-    
-    # update resolved.taxa.name with names from classification
-    classification.resolved.taxa.name = case_when(
-      rank == "variety" ~ variety,
-      rank == "form" ~ form,
-      rank == "species" ~ species,
-      rank == "genus" ~ genus,
-      rank == "family" ~ family,
-      rank == "order" ~ order,
-      rank == "class" ~ class,
-      rank == "phylum" ~ phylum,
-      rank == "kingdom" ~ kingdom,
-      rank == "domain" ~ domain,
-      TRUE ~ resolved.taxa.name
-    ),
-    
-    # make columns for the source of each rank
-    variety.source = case_when(
-      !(is.na(variety.tol)) ~ "tol",
-      is.na(variety.tol) & !(is.na(variety.gbif)) ~ "gbif",
-      is.na(variety.tol) & is.na(variety.gbif) & !(is.na(variety)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-    form.source = case_when(
-      !(is.na(form.gbif)) ~ "gbif",
-      is.na(form.gbif) & !(is.na(form)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-    species.source = case_when(
-      !(is.na(species.tol)) ~ "tol",
-      is.na(species.tol) & !(is.na(species.gbif)) ~ "gbif",
-      is.na(species.tol) & is.na(species.gbif) & !(is.na(species)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-    genus.source = case_when(
-      !(is.na(genus.tol)) ~ "tol",
-      is.na(genus.tol) & !(is.na(genus.gbif)) ~ "gbif",
-      is.na(genus.tol) & is.na(genus.gbif) & !(is.na(genus)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-    family.source = case_when(
-      !(is.na(family.tol)) ~ "tol",
-      is.na(family.tol) & !(is.na(family.gbif)) ~ "gbif",
-      is.na(family.tol) & is.na(family.gbif) & !(is.na(family)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-    order.source = case_when(
-      !(is.na(order.tol)) ~ "tol",
-      is.na(order.tol) & !(is.na(order.gbif)) ~ "gbif",
-      is.na(order.tol) & is.na(order.gbif) & !(is.na(order)) ~ "manually",
-      TRUE ~ NA
-    ), 
-    
-    class.source = case_when(
-      !(is.na(class.tol)) ~ "tol",
-      is.na(class.tol) & !(is.na(class.gbif)) ~ "gbif",
-      is.na(order.tol) & is.na(order.gbif) & !(is.na(order)) ~ "manually",
-      TRUE ~ NA
-    ), 
-    
-    phylum.source = case_when(
-      !(is.na(phylum.tol)) ~ "tol",
-      is.na(phylum.tol) & !(is.na(phylum.gbif)) ~ "gbif",
-      is.na(phylum.tol) & is.na(phylum.gbif) & !(is.na(phylum)) ~ "manually",
-      TRUE ~ NA
-    ), 
-    
-    kingdom.source = case_when(
-      !(is.na(kingdom.tol)) ~ "tol",
-      is.na(kingdom.tol) & !(is.na(kingdom.gbif)) ~ "gbif",
-      is.na(kingdom.tol) & is.na(kingdom.gbif) & !(is.na(kingdom)) ~ "manually",
-      TRUE ~ NA
-    ), 
-    
-    domain.source = case_when(
-      !(is.na(domain.tol)) ~ "tol",
-      is.na(domain.tol) & !(is.na(domain)) ~ "manually",
-      TRUE ~ NA
-    ),
-    
-  ) %>% 
   
-  select(
-    resolved.taxa.name, classification.resolved.taxa.name, rank,
-    variety, form, species, genus, family, order, class, phylum, kingdom, domain,
-    variety.source, form.source, species.source, genus.source, family.source, order.source, class.source, phylum.source, kingdom.source, domain.source
-  ) %>% 
-  ungroup()
-
-# Final taxonomy list ----
-taxonomy <- tax_all %>% 
-  distinct(
-    classification.resolved.taxa.name, .keep_all = TRUE
-  ) %>% 
   
-  mutate(
-    tax.uid = row_number()
-  ) %>% 
-  
-  select(-resolved.taxa.name) %>% 
-  
-  rename(
-    resolved.taxa.name = classification.resolved.taxa.name
-  ) %>% 
-  
-  relocate(
-    tax.uid, resolved.taxa.name, rank,
-    variety, form, species, genus, family, order, class, phylum, kingdom, domain,
-    variety.source, form.source, species.source, genus.source, family.source, order.source, class.source, phylum.source, kingdom.source, domain.source
+x <- tax_final %>% 
+  filter(
+    !(is.na(kingdom)),
+    is.na(species),
+    stri_detect_regex(resolved.taxa.name, " ")
+  ) 
+%>% 
+  separate(resolved.taxa.name, into = c(".1", ".2"), sep = " ") %>% 
+  filter(
+    `.1` != genus
   )
-
-# Save
-saveRDS(taxonomy, file = "R/Data_outputs/taxonomy/taxonomy.rds") 
-
-# Add to main data ----
-bodysize_taxonomy <- bodysize_joined %>% 
-  left_join(
-    ., select(
-      resolved_names_3_not_classified_fix, original.taxa.name, resolved.taxa.name),
-      by = "original.taxa.name"
-  ) %>% 
-  left_join(
-    ., select(
-      tax_all, resolved.taxa.name, classification.resolved.taxa.name),
-      by = "resolved.taxa.name"
-    ) %>% 
-  left_join(
-    ., select(
-      taxonomy, resolved.taxa.name, tax.uid
-    ),
-    by = "resolved.taxa.name"
-  ) %>% 
   
-  select(- resolved.taxa.name) %>% 
-    
-  rename(
-    resolved.taxa.name = classification.resolved.taxa.name
-  )
-
-# Save
-saveRDS(bodysize_taxonomy, file = "R/Data_outputs/full_database/bodysize_taxonomy.rds") 
 
 
-  
-  
+
+
+
+
+
+
+
+
+
+
+
 
 
 
