@@ -619,10 +619,24 @@ saveRDS(tax_gbif_2_cleaned, file = "R/data_outputs/taxonomy/tax_gbif_2_cleaned.r
 ## Final tax list ----
 # decided to use just gbif data as it covers the most species and means all species will use the same format
 
+x <- tax_final %>% 
+  filter(
+    is.na(genus)
+  ) 
+%>% 
+  separate(resolved.taxa.name, into = c("a", "b", "c", "d"), sep = " ")
+
 tax_final <- tax_gbif_2_cleaned %>% 
   
+  # don't have infor for all of these so only keep species up
+  select(
+    -form,
+    -variety,
+    -subspecies
+  ) %>% 
+  
   mutate(
-    # fill in gaps
+    
     species = case_when(
       # resolved wrong
       resolved.taxa.name == "Apodochloris simplicissima" ~ "Apodochloris simplicissima",
@@ -640,21 +654,11 @@ tax_final <- tax_gbif_2_cleaned %>%
       resolved.taxa.name == "Crucigeniella secta" ~ "Crucigeniella secta",
       
       # when it has been resolved right but has the species missing
-      is.na(species) & stri_detect_regex(resolved.taxa.name, " ") & !(stri_detect_regex(resolved.taxa.name, "var\\.")) ~ resolved.taxa.name,
-      (stri_detect_regex(resolved.taxa.name, "var\\.")) ~ stri_replace_first_regex(species, "(?<=var\\.)\\w+", ""),
+      is.na(species) & stri_detect_regex(resolved.taxa.name, " ") & !(stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")) ~ resolved.taxa.name,
+      is.na(species) & (stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")) ~ paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+ \\w+")), # when there is a variety then take just the first two words
       
       TRUE ~ species
-    ))
-    
-    (?<=var\\.)\\w+
-
-x <- tax_final %>% 
-  filter(
-    stri_detect_regex(species, "var\\.")
-  )
-  
-
-,
+    ),
     
     genus = case_when(
       # ones that were resolved wrong
@@ -669,20 +673,16 @@ x <- tax_final %>%
       
       !(is.na(genus)) ~ genus,
       
-      # missing gaps
-      resolved.taxa.name == "Chrysodendron ramosum" ~ "Chrysodendron",
-      stri_detect_regex(resolved.taxa.name, "Cosmarium ") ~ "Cosmarium",
-      stri_detect_regex(resolved.taxa.name, "Euastrum ") ~ "Euastrum",
-      stri_detect_regex(resolved.taxa.name, "Kephyriopsis ") ~ "Kephyriopsis",
-      resolved.taxa.name == "Mougeotia thylespora" ~ "Mougeotia",
-      resolved.taxa.name == "Pseudochlorangium anomalum" ~ "Pseudochlorangium",
-      resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium",
-      stri_detect_regex(resolved.taxa.name, "Xanthidium ") ~ "Xanthidium",
+      # missing gaps - they will just be the first word of the species column
+      !(is.na(species)) ~ stri_extract_first_regex(species, "\\w+"),
+
+      
+      # rest of the missing 
       TRUE ~ genus
       ),
     
     family = case_when(
-      # ones thst were resolved wrong
+      # ones that were resolved wrong
       family == "Cyanobiaceae" ~ "Prochlorococcaceae",
       family == "Spirodiniidae" ~ "Gymnodiniaceae",
       resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysosphaeraceae",
@@ -695,13 +695,13 @@ x <- tax_final %>%
       genus %in% c("Spondylosium", "Cosmarium", "Staurodesmus", "Teilingia", "Xanthidium", "Staurastrum", "Pleurotaenium", "Euastrum", "Desmidium", "Bambusina",
                    "Micrasterias", "Octacanthium", "Onychonema", "Tetmemorus", "Hyalotheca", "Oocardium", "Docidium", "Haplotaenium", "Sphaerozosma") ~ "Desmidiaceae",
       genus %in% c("Monema", "Biblarium", "Microneis", "Discoplea") ~ "Bacillariophyceae familia incertae sedis",
-      genus %in% c("Geminella", "Micractinium") ~ "Chlorellaceae",
+      genus %in% c("Geminella", "Micractinium", "Chlorella", "Aliichlorella") ~ "Chlorellaceae",
       genus == "Polyedriopsis" ~ "Sphaeropleales incertae sedis",
       genus == "Polychaos" ~ "Euamoebida incertae sedis",
       genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
       genus == "Apodochloris" ~ "Chlorococcaceae",
       genus == "Ecballocystis" ~ "Oocystaceae",
-      genus == "Kephyriopsis" ~ "Dinobryaceae",
+      genus %in% c("Kephyriopsis", "Stokesiella") ~ "Dinobryaceae",
       genus == "Pseudochlorangium" ~ "Chlorangiellaceae",
       genus == "Baldinia" ~ "Borghiellaceae",
       genus == "Spirotaenia" ~ "Mesotaeniaceae",
@@ -724,6 +724,26 @@ x <- tax_final %>%
       genus == "Euplotes" ~ "Euplotidae",
       genus == "Diaphanosoma" ~ "Sididae",
       genus == "Lebouridinium" ~ "Gymnodiniales incertae sedis",
+      genus %in% c("Rhabdoderma", "Romeria") ~ "Cymatolegaceae",
+      genus == "Ulothrix" ~ "Ulotrichaceae",
+      genus == "Heterothrix" ~ "Tribonemataceae",
+      genus == "Fallacia" ~ "Sellaphoraceae",
+      genus == "Nitzschia" ~ "Bacillariaceae",
+      genus == "Iconella" ~ "Surirellaceae",
+      genus %in% c("Carteria", "Sphaerellopsis") ~ "Chlamydomonadaceae",
+      genus == "Schroederia" ~ "Schroederiaceae",
+      genus == "Haematococcus" ~ "Haematococcaceae",
+      genus == "Kirchneriella" ~ "Selenastraceae",
+      genus == "Monodus" ~ "Pleurochloridaceae",
+      genus == "Radiococcus" ~ "Radiococcaceae",
+      genus == "Rhodomonas" ~ "Pyrenomonadaceae",
+      genus == "Schizothrix" ~ "Schizotrichaceae",
+      genus == "Sphaerochloris" ~ "Xanthophyceae familia incertae sedis",
+      genus == "Spirulina" ~ "Spirulinaceae",
+      genus == "Anabaena" ~ "Aphanizomenonaceae",
+      genus == "Diplopora" ~ "Diploporaceae",
+      genus == "Astasia" ~ "Astasiidae",
+      
       TRUE ~ family
     ),
     
@@ -764,13 +784,29 @@ x <- tax_final %>%
       family == "Euplotidae" ~ "Euplotida",
       family == "Prochlorococcaceae" ~ "Synechococcales",
       family == "Gymnodiniaceae" ~ "Gymnodiniales",
-      
+      family == "Ulotrichaceae" ~ "Ulotrichales",
+      family == "Tribonemataceae" ~ "Tribonematales",
+      family == "Sellaphoraceae" ~ "Naviculales",
+      family == "Bacillariaceae" ~ "Bacillariales",
+      family == "Surirellaceae" ~ "Surirellales",
+      family %in% c("Chlamydomonadaceae", "Haematococcaceae") ~ "Chlamydomonadales",
+      family %in% c("Schroederiaceae", "Selenastraceae") ~ "Sphaeropleales",
+      family == "Pleurochloridaceae" ~ "Mischococcales",
+      family == "Pyrenomonadaceae" ~ "Pyrenomonadales",
+      family == "Schizotrichaceae" ~ "Leptolyngbyales",
+      family == "Spirulinaceae" ~ "Spirulinales",
+      family == "Aphanizomenonaceae" ~ "Nostocales",
+      family == "Diploporaceae" ~ "Dasycladales",
+      family == "Astasiidae" ~ "Natomonadida",
+       
       family == "Trebouxiophyceae incertae sedis" ~ "Trebouxiophyceae ordo incertae sedis",
       family == "Bacillariophyceae familia incertae sedis" ~ "Bacillariophyceae ordo incertae sedis",
       
       genus == "Polychaos" ~ "Euamoebida",
       genus == "Chroostipes" ~ "Cyanophyceae incertae sedis",
       genus == "Lebouridinium" ~ "Gymnodiniales",
+      genus == "Sphaerochloris" ~ "Xanthophyceae ordo incertae sedis",
+      
       TRUE ~ order
     ),
     
@@ -782,7 +818,7 @@ x <- tax_final %>%
       
       !(is.na(class)) ~ class,
       order == "Ebriales" ~ "Thecofilosea",
-      order %in% c("Nodosilineales", "Coleofasciculales") ~ "Cyanophyceae",
+      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales") ~ "Cyanophyceae",
       order == "Spironematellales" ~ "Spironematellophyceae",
       order == "Bicosoecales" ~ "Bicoecidea",
       order == "Chromulinales" ~ "Chrysophyceae",
@@ -794,6 +830,16 @@ x <- tax_final %>%
       order == "Zygnematales" ~ "Zygnematophyceae",
       order == "Euplotida" ~ "Spirotrichea",
       order == "Cyanophyceae incertae sedis" ~ "Cyanophyceae",
+      order == "Ulotrichales" ~ "Ulvophyceae",
+      order %in% c("Tribonematales", "Mischococcales") ~ "Xanthophyceae",
+      order %in% c("Naviculales", "Bacillariales", "Surirellales") ~ "Bacillariophyceae",
+      order %in% c("Chlamydomonadales", "Sphaeropleales") ~ "Chlorophyceae",
+      order == "Pyrenomonadales" ~ "Cryptophyceae",
+      order == "Dasycladales" ~ "Ulvophyceae",
+      order == "Natomonadida" ~ "Peranemea",
+      
+      family == "Coccomyxaceae" ~ "Trebouxiophyceae",
+      genus == "Sphaerochloris" ~ "Xanthophyceae",
       TRUE ~ class
     ),
     
@@ -809,11 +855,26 @@ x <- tax_final %>%
       class == "Spirotrichea" ~ "Ciliophora",
       class == "Tubulinea" ~ "Amoebozoa",
       class %in% c("Imbricatea", "Thecofilosea") ~ "Cercozoa",
+      class == "Cyanophyceae" ~ "Cyanobacteria",
+      class %in% c("Trebouxiophyceae", "Ulvophyceae", "Chlorophyceae") ~ "Chlorophyta",
+      class %in% c("Chrysophyceae", "Xanthophyceae", "Bacillariophyceae") ~ "Ochrophyta",
+      class == "Cryptophyceae" ~ "Cryptista",
+      class == "Peranemea" ~ "Euglenophyta",
       TRUE ~ phylum
     ),
     
     kingdom = case_when(
+      !(is.na(kingdom)) ~ kingdom,
+      
+      # resolved wrong
       resolved.taxa.name == "Chrysopora fenestrata" ~ "Chromista",
+      
+      # missing
+      phylum == "Cyanobacteria" ~ "Bacteria",
+      phylum %in% c("Chlorophyta", "Charophyta") ~ "Plantae",
+      phylum %in% c("Ochrophyta", "Cryptista") ~ "Chromista",
+      phylum %in% c("Amoebozoa", "Euglenophyta") ~ "Protozoa",
+      
       TRUE ~ kingdom
     )
   )
@@ -821,10 +882,13 @@ x <- tax_final %>%
   
 x <- tax_final %>% 
   filter(
-    !(is.na(kingdom)),
-    is.na(species),
-    stri_detect_regex(resolved.taxa.name, " ")
-  ) 
+    is.na(kingdom)
+  )
+
+%>% 
+  distinct(
+    phylum
+  )
 %>% 
   separate(resolved.taxa.name, into = c(".1", ".2"), sep = " ") %>% 
   filter(
@@ -836,7 +900,14 @@ x <- tax_final %>%
 
 
 
-
+resolved.taxa.name == "Chrysodendron ramosum" ~ "Chrysodendron",
+stri_detect_regex(resolved.taxa.name, "Cosmarium ") ~ "Cosmarium",
+stri_detect_regex(resolved.taxa.name, "Euastrum ") ~ "Euastrum",
+stri_detect_regex(resolved.taxa.name, "Kephyriopsis ") ~ "Kephyriopsis",
+resolved.taxa.name == "Mougeotia thylespora" ~ "Mougeotia",
+resolved.taxa.name == "Pseudochlorangium anomalum" ~ "Pseudochlorangium",
+resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium",
+stri_detect_regex(resolved.taxa.name, "Xanthidium ") ~ "Xanthidium",
 
 
 
