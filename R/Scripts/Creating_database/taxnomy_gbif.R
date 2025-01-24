@@ -619,15 +619,9 @@ saveRDS(tax_gbif_2_cleaned, file = "R/data_outputs/taxonomy/tax_gbif_2_cleaned.r
 ## Final tax list ----
 # decided to use just gbif data as it covers the most species and means all species will use the same format
 
-x <- tax_final %>% 
-  filter(
-    is.na(genus)
-  ) 
-%>% 
-  separate(resolved.taxa.name, into = c("a", "b", "c", "d"), sep = " ")
-
 tax_final <- tax_gbif_2_cleaned %>% 
   
+  ungroup() %>% 
   # don't have infor for all of these so only keep species up
   select(
     -form,
@@ -636,6 +630,8 @@ tax_final <- tax_gbif_2_cleaned %>%
   ) %>% 
   
   mutate(
+    
+    tax.uid = row_number(),
     
     species = case_when(
       # resolved wrong
@@ -685,11 +681,12 @@ tax_final <- tax_gbif_2_cleaned %>%
       # ones that were resolved wrong
       family == "Cyanobiaceae" ~ "Prochlorococcaceae",
       family == "Spirodiniidae" ~ "Gymnodiniaceae",
-      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysosphaeraceae",
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysocapsaceae",
-      resolved.taxa.name == "Crucigeniella secta" ~ "Oocystaceae",
+      genus %in% c("Epicystis", "Chrysopora") ~ "Chrysosphaeraceae",
+      genus == "Nais" ~ "Cryptomonadaceae",
+      genus == "Raciborskiella" ~ "Wislouchiaceae",
+      genus == "Pompholyx" ~ "Testudinellidae",
       
-      !(is.na(family)) ~ family,
+      # missing ones
       genus %in% c("Coccomyxa", "Microglena", "Paradoxia") ~ "Coccomyxaceae",
       genus == "Crucigenia" ~ "Trebouxiophyceae incertae sedis",
       genus %in% c("Spondylosium", "Cosmarium", "Staurodesmus", "Teilingia", "Xanthidium", "Staurastrum", "Pleurotaenium", "Euastrum", "Desmidium", "Bambusina",
@@ -700,7 +697,7 @@ tax_final <- tax_gbif_2_cleaned %>%
       genus == "Polychaos" ~ "Euamoebida incertae sedis",
       genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
       genus == "Apodochloris" ~ "Chlorococcaceae",
-      genus == "Ecballocystis" ~ "Oocystaceae",
+      genus %in% c("Ecballocystis", "Crucigeniella") ~ "Oocystaceae",
       genus %in% c("Kephyriopsis", "Stokesiella") ~ "Dinobryaceae",
       genus == "Pseudochlorangium" ~ "Chlorangiellaceae",
       genus == "Baldinia" ~ "Borghiellaceae",
@@ -748,19 +745,13 @@ tax_final <- tax_gbif_2_cleaned %>%
     ),
     
     order = case_when(
-      # resolved wrong
-      order == "Euglypha" ~ "Euglyphida",
-      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysosphaerales",
-      resolved.taxa.name == "Protococcus wimmeri" ~ "Chlamydomonadales",
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chromulinales",
-      resolved.taxa.name == "Crucigeniella secta" ~ "Chlorellales",
-      
-      !(is.na(order)) ~ order,
+      family == "Euglyphidae" ~ "	Euglyphida",
+      family == "Chrysosphaeraceae" ~ "Chrysosphaerales",
+      family == "Testudinellidae" ~ "Flosculariaceae",
       family == "Amoebidae" ~ "Euamoebida",
       family == "Amphidiniaceae" ~ "Amphidiniales",
       family == "Bicosoecaceae" ~ "Bicosoecales",
-      family == "Chlorellaceae" ~ "Chlorellales",
-      family == "Chlorococcaceae" ~ "Chlamydomonadales",
+      family %in% c("Chlorellaceae", "Oocystaceae") ~ "Chlorellales",
       family == "Chrysosaccaceae" ~ "Chrysosaccales",
       family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
       family == "Cymatolegaceae" ~ "Nodosilineales",
@@ -789,7 +780,7 @@ tax_final <- tax_gbif_2_cleaned %>%
       family == "Sellaphoraceae" ~ "Naviculales",
       family == "Bacillariaceae" ~ "Bacillariales",
       family == "Surirellaceae" ~ "Surirellales",
-      family %in% c("Chlamydomonadaceae", "Haematococcaceae") ~ "Chlamydomonadales",
+      family %in% c("Chlamydomonadaceae", "Haematococcaceae", "Chlorococcaceae", "Cryptomonadaceae", "Wislouchiaceae") ~ "Chlamydomonadales",
       family %in% c("Schroederiaceae", "Selenastraceae") ~ "Sphaeropleales",
       family == "Pleurochloridaceae" ~ "Mischococcales",
       family == "Pyrenomonadaceae" ~ "Pyrenomonadales",
@@ -811,17 +802,12 @@ tax_final <- tax_gbif_2_cleaned %>%
     ),
     
     class = case_when(
-      # resolved wrong 
-      class == "Filosia" ~ "Imbricatea",
-      resolved.taxa.name == "Epicystis peridinearum" ~ "Chrysophyceae",
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysophyceae",
-      
-      !(is.na(class)) ~ class,
+      order == "Flosculariaceae" ~ "Eurotatoria",
       order == "Ebriales" ~ "Thecofilosea",
       order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales") ~ "Cyanophyceae",
       order == "Spironematellales" ~ "Spironematellophyceae",
       order == "Bicosoecales" ~ "Bicoecidea",
-      order == "Chromulinales" ~ "Chrysophyceae",
+      order %in% c("Chromulinales", "Chrysosphaerales") ~ "Chrysophyceae",
       order == "Desmidiales" ~ "Zygnematophyceae",
       order == "Euamoebida" ~ "Tubulinea",
       order == "Chlorellales" ~ "Trebouxiophyceae",
@@ -844,10 +830,7 @@ tax_final <- tax_gbif_2_cleaned %>%
     ),
     
     phylum = case_when(
-      # resolved wrong
-      resolved.taxa.name %in% c("Epicystis peridinearum", "Chrysopora fenestrata") ~ "Ochrophyta",
-      
-      !(is.na(phylum)) ~ phylum,
+      class == "Eurotatoria" ~ "Rotifera",
       class == "Zygnematophyceae" ~ "Charophyta",
       class == "Polycystina" ~ "Radiozoa",
       class == "Spironematellophyceae" ~ "Spironematellophyta",
@@ -864,12 +847,8 @@ tax_final <- tax_gbif_2_cleaned %>%
     ),
     
     kingdom = case_when(
-      !(is.na(kingdom)) ~ kingdom,
-      
-      # resolved wrong
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chromista",
-      
       # missing
+      phylum == "Rotifera" ~ "Animalia",
       phylum == "Cyanobacteria" ~ "Bacteria",
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Plantae",
       phylum %in% c("Ochrophyta", "Cryptista") ~ "Chromista",
@@ -877,38 +856,20 @@ tax_final <- tax_gbif_2_cleaned %>%
       
       TRUE ~ kingdom
     )
-  )
+  ) %>% 
+  
+  relocate(tax.uid, resolved.taxa.name, species, genus, family, order, class, phylum, kingdom)
   
   
 x <- tax_final %>% 
-  filter(
-    is.na(kingdom)
-  )
-
-%>% 
   distinct(
     phylum
   )
-%>% 
-  separate(resolved.taxa.name, into = c(".1", ".2"), sep = " ") %>% 
+
+y <- tax_final %>% 
   filter(
-    `.1` != genus
+    phylum == "Mollusca"
   )
-  
-
-
-
-
-
-resolved.taxa.name == "Chrysodendron ramosum" ~ "Chrysodendron",
-stri_detect_regex(resolved.taxa.name, "Cosmarium ") ~ "Cosmarium",
-stri_detect_regex(resolved.taxa.name, "Euastrum ") ~ "Euastrum",
-stri_detect_regex(resolved.taxa.name, "Kephyriopsis ") ~ "Kephyriopsis",
-resolved.taxa.name == "Mougeotia thylespora" ~ "Mougeotia",
-resolved.taxa.name == "Pseudochlorangium anomalum" ~ "Pseudochlorangium",
-resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium",
-stri_detect_regex(resolved.taxa.name, "Xanthidium ") ~ "Xanthidium",
-
 
 
 
