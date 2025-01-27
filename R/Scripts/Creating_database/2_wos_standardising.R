@@ -265,17 +265,29 @@ wos_formatted <- wos_raw_body %>%
   
   ## original.source.codes: ----
   # change types to merge with db
-    source.code = as.character(source.code),
-    original.source.code.1 = as.character(original.source.code.1),
-    original.source.code.2 = as.character(original.source.code.2),
-    original.source.code.3 = as.character(original.source.code.3),
-    original.source.code.4 = as.character(original.source.code.4),
-    original.source.code.5 = as.character(original.source.code.5),
-    original.source.code.6 = as.character(original.source.code.6)
+  source.code = as.character(source.code),
+  original.source.code.1 = as.character(original.source.code.1),
+  original.source.code.2 = as.character(original.source.code.2),
+  original.source.code.3 = as.character(original.source.code.3),
+  original.source.code.4 = as.character(original.source.code.4),
+  original.source.code.5 = as.character(original.source.code.5),
+  original.source.code.6 = as.character(original.source.code.6),
+  original.source.code.7 = as.character(original.source.code.7),
+  original.source.code.8 = as.character(original.source.code.8),
+  original.source.code.9 = as.character(original.source.code.9),
+  original.source.code.10 = as.character(original.source.code.10),
+  original.source.code.11 = as.character(original.source.code.11),
+  original.source.code.12 = as.character(original.source.code.12),
+  original.source.code.13 = as.character(original.source.code.13),
+  original.source.code.14 = as.character(original.source.code.14),
+  original.source.code.15 = as.character(original.source.code.15),
+  original.source.code.16 = as.character(original.source.code.16)
   ) %>% 
   
   # reorder
-  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6,
+  relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7,
+           original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14,
+           original.source.code.15, original.source.code.16, 
            sample.year, sample.month,
            join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
            join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,

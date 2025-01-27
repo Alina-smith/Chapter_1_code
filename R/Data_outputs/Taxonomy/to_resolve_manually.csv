@@ -1,30 +1,42 @@
 original.taxa.name,resolved.taxa.name.gna,resolved.source.gna,manual
+Merismopedia cf. minima,Merismopedia minima,Catalogue of Life,cf
 Aphanothece clathrata var. rosea,Aphanothece clathrata,Catalogue of Life,var.f
 Aphanocapsa parasitica f. dinobryonis,Aphanocapsa parasitica,EOL,var.f
 Aphanocapsa parasitica f. dinobryonis single cell,Aphanocapsa parasitica,EOL,var.f
 Aphanocapsa elachista var. conferta,Aphanocapsa elachista conferta,EOL,var.f
 Chlorophyceae small colony,Chlorophyceae,Catalogue of Life,bumped
+Dictyosphaerium cf subsolitarium,Dictyosphaerium subsolitarium,EOL,cf
 Chlorella + choricysits,NA,NA,na
-Choricystis cf minor,Choricystis,Catalogue of Life,bumped
+Choricystis cf minor,Choricystis,Catalogue of Life,cf
 Choricystis minor,Choricystis,Catalogue of Life,bumped
+Oscillatoria cf. limnetica,Oscillatoria limnetica,Catalogue of Life,cf
+Pseudanabaena cf. tenuis,Pseudanabaena tenuis,EOL,cf
 Coelosphaerium kutzingii,Coelosphaerium,Catalogue of Life,bumped
 Radiocystis aphaniticoidea,Radiocystis,Catalogue of Life,bumped
 Chlorelloidea sp.,NA,NA,na
 Schroederia antillarum,Schroederia,Catalogue of Life,bumped
+Merismopedia cf. hyalina,Merismopedia hyalina,EOL,cf
+Merismopedia cf. punctata,Merismopedia punctata,Catalogue of Life,cf
+Komvophoron cf. skujae,Komvophoron skujae,EOL,cf
+Oscillatoria cf. janus,Oscillatoria janus,EOL,cf
 Ulothrix barrel cell somtimes surounded by mucous,Ulothrix,Catalogue of Life,bumped
 Anabaena flos-aquae f. lemmermannii,Anabaena lemmermannii,Catalogue of Life,var.f
 Anabaena flos-aquae var. treleasii,Anabaena flos-aquae treleasii,EOL,var.f
 Kirchneriella subcapitata,Kirchneriella,Catalogue of Life,bumped
+Limnotrix cf. planctonica,Limnothrix planctonica,EOL,cf
 Woronichinia naegeliana f. cellulaire,Woronichinia naegeliana,EOL,var.f
 Chlorophyceae indetermined big,Chlorophyceae,Catalogue of Life,bumped
 Aphanizomenon flos-aquae var. gracile,Aphanizomenon flos-aquae gracile,EOL,var.f
 Didymocystis planctonica,Didymocystis,Catalogue of Life,bumped
 Cf mantellum sp.,NA,NA,na
+Microcystis cf. flos-aquae,Microcystis flos-aquae,EOL,cf
 Cylindrospermum bourget03,Cylindrospermum,Catalogue of Life,bumped
+Choricystis cf chodatii,Choricystis chodatii,EOL,cf
 Kirchneriella contorta,Kirchneriella,Catalogue of Life,bumped
 Pediastrum boryanum var. longicorne,Pediastrum boryanum longicorne,EOL,var.f
 Pseudokephyrion striatum,Pseudokephyrion,Catalogue of Life,bumped
 Scenedesmus intermedius var. acaudatus,Scenedesmus intermedius acaudatus,EOL,var.f
+Oocystis cf. bispora,Oocystis bispora,EOL,cf
 Scenedesmus lunatus,Scenedesmus,Catalogue of Life,bumped
 Gomphonema intricatum var. pumila,Gomphonema intricatum pumila,EOL,var.f
 Crucigeniella rectangularis,Crucigeniella,Catalogue of Life,bumped
@@ -35,9 +47,11 @@ Anabaena oscillarioides f. elliptica,Anabaena oscillarioides elliptica,EOL,var.f
 Coenochloris pyrenoideum var. minimum,Coenochloris,Catalogue of Life,var.f
 Tetrastrum punctatum,Tetrastrum,Catalogue of Life,bumped
 Scenedesmus intermedius var. bicaudatus,Scenedesmus intermedius bicaudatus,EOL,var.f
+Quadrigula cf. closterioides,Quadrigula closterioides,EOL,cf
 Tetrastrum komarekii,Tetrastrum,Catalogue of Life,bumped
 Anabaena bergii var. limneticum,Anabaena bergii limnetica,EOL,var.f
 Scenedesmus bicaudatus var. brevicaudatus,Scenedesmus bicaudatus,EOL,var.f
+Skeletonema cf subsalsum,Skeletonema subsalsum,EOL,cf
 Rhodomonas minuta var. nannoplanctica,Rhodomonas minuta nannoplanctica,EOL,var.f
 Scenedesmus ecornis var. polymorphus,Scenedesmus ecornis polymorphus,EOL,var.f
 Stomatocyst 114,NA,NA,na
@@ -50,65 +64,76 @@ Centric spp.,Centric,EOL,juvenile
 Centric (cyclotella + stephanodiscus),NA,NA,na
 Centric,Centric,EOL,juvenile
 Scenedesmus acutus var. acutus,Scenedesmus acutus acutus,EOL,var.f
+Chroomonas cf coerulea,Chroomonas coerulea,EOL,cf
 Heterothrix constricta,Heterothrix,Catalogue of Life,bumped
+Chlorella cf ellipsoidea,Chlorella elipsoidea,EOL,cf
 Stichogloea olivacea var. sphaerica,Stichogloea olivacea sphaerica,EOL,var.f
 Stichogloea olivacea var. sphaerica single cell,Stichogloea olivacea sphaerica,EOL,var.f
 Ankyra flagellated zoospore,Ankyra,Catalogue of Life,bumped
+Oscillatoria cf. major,Oscillatoria major,EOL,cf
 Anabaena solitaria var. planctonica,Anabaena solitaria planctonica,EOL,var.f
 Scenedesmus denticulatus var. fenestratus,Scenedesmus denticulatus fenestratus,EOL,var.f
 Cosmarium pygmaeum var. heimerlii,Cosmarium pygmaeum heimerlii,EOL,var.f
 Scenedesmus lefevrii var. manguinii,Scenedesmus lefevrei manguinii,EOL,var.f
+Bicoeca cf paropsis,Bicoeca paropsis,EOL,cf
 Chrooccocus distans (4 cells),NA,NA,na
 Cf. katodinium fongiforme,NA,NA,na
-Dictyosphaerium cf tetrachotomum,Dictyosphaerium,Catalogue of Life,bumped
+Dictyosphaerium cf tetrachotomum,Dictyosphaerium,Catalogue of Life,cf
 Dinobryon sertularia var. protractum,Dinobryon sertularia,EOL,var.f
 Kirchneriella dichotomococcoides,Kirchneriella,Catalogue of Life,bumped
 Stomatocyst fr1,NA,NA,na
 Coenochloris ovalis,Coenochloris,Catalogue of Life,bumped
 Oscillatoria bourrellyi,Oscillatoria,Catalogue of Life,bumped
 Scenedesmus disciformis f. disciformis,Scenedesmus disciformis,EOL,var.f
+Ulothrix cf. amphigranulata,Ulothrix amphigranulata,EOL,cf
+Ochromonas cf. variabilis,Ochromonas variabilis,EOL,cf
 Peridinium inconspicuum var. remotum,Peridinium remotum,EOL,var.f
 Anabaena spiroides f. minima,Anabaena minima,EOL,var.f
 Stomatocyst sp.,NA,NA,na
-Chlamydomonas cf botryospora,Chlamydomonas,Catalogue of Life,bumped
+Chlamydomonas cf botryospora,Chlamydomonas,Catalogue of Life,cf
 Volvocale 4 flagella,NA,NA,na
 Fragilaria construens f. binodis,Fragilaria construens binodis,EOL,var.f
 Scenedesmus intermedius var. intermedius,Scenedesmus intermedius intermedius,EOL,var.f
 Scenedesmus spinosus,Scenedesmus,Catalogue of Life,bumped
 Scenedesmus opoliensis var. carinatus,Scenedesmus opoliensis carinatus,EOL,var.f
 Anabaena circinalis f. tenuis,Anabaena tenuis,EOL,var.f
-Dinobryon cf stokesii var. neustonicum,Dinobryon stokesii,EOL,var.f
+Dinobryon cf stokesii var. neustonicum,Dinobryon stokesii,EOL,cf
 Scenedesmus obtusus f. alternans,Scenedesmus obtusus alternans,EOL,var.f
 Scenedesmus acutiformis,Scenedesmus,Catalogue of Life,bumped
 Aulacoseira granulata var. angustissima f. curvata,Aulacoseira granulata angustissima,EOL,var.f
 Pediastrum biradiatum,Pediastrum,Catalogue of Life,bumped
-Cyclotella cf. distinguenda var. unipunctata,Cyclotella distinguenda,EOL,var.f
+Cyclotella cf. distinguenda var. unipunctata,Cyclotella distinguenda,EOL,cf
 Pediastrum duplex var. gracillimum,Pediastrum duplex gracillimum,EOL,var.f
 Staurodesmus incus f. minor,Staurodesmus incus minor,EOL,var.f
 Chlamydomonas gloeophila var. irregularis,Chlamydomonas gloeophila irregularis,EOL,var.f
 Chlorophyceae indetermined small,Chlorophyceae,Catalogue of Life,bumped
 Fragilaria capucina var. vaucheriae,Fragilaria capucina vaucheriae,EOL,var.f
+Oscillatoria cf. tenuis,Oscillatoria tenuis,Catalogue of Life,cf
 Cosmarium polygonum var. hexagonum,Cosmarium polygonum hexagonum,EOL,var.f
 Scenedesmus acutus var. alternans,Scenedesmus acutus alternans,EOL,var.f
 Anabaena solitaria,Anabaena,Catalogue of Life,bumped
+Mallomonas cf. minuta,Mallomonas minuta,EOL,cf
 Cyst 1 of chrysophyceae,NA,NA,na
 Fragilaria construens f. venter,Fragilaria construens venter,EOL,var.f
 Bicoeca cylindrica,Bicoeca,EOL,bumped
 Oedogonium large cell bourget03,Oedogonium,Catalogue of Life,bumped
 Ulothrix long cell,Ulothrix,Catalogue of Life,bumped
 Stokesiella epipyxis,Stokesiella,Catalogue of Life,bumped
-Chromulina cf erkensis,Chromulina,Catalogue of Life,bumped
+Chromulina cf erkensis,Chromulina,Catalogue of Life,cf
 Fragilaria capucina var. radians,Fragilaria capucina radians,EOL,var.f
 Cosmarium abbreviatum f. minor,Cosmarium abbreviatum minor,EOL,var.f
+Cryptomonas cf. lucens,Cryptomonas lucens,EOL,cf
 Fragilaria tenera var. lemanensis,Fragilaria tenera lemanensis,EOL,var.f
+Tribonema cf. ambiguum,Tribonema ambiguum,EOL,cf
 Pediastrum simplex var. sturmii,Pediastrum sturmii,EOL,var.f
 Gomphonema parvulum var. exilissimum,Gomphonema parvulum exilissimum,EOL,var.f
 Scenedesmus protuberans,Scenedesmus,Catalogue of Life,bumped
+Phacus cf. pusillus,Phacus pusillus,EOL,cf
 Aulacoseira granulata var. angustissima,Aulacoseira granulata angustissima,EOL,var.f
 Cyst chrysophycee,NA,NA,na
 Salpingoeca minor,Salpingoeca,Catalogue of Life,bumped
 Palmeacea sp.,NA,NA,na
-Bicoeca cf. campanulata petit morphotype,Bicoeca,EOL,bumped
+Bicoeca cf. campanulata petit morphotype,Bicoeca,EOL,cf
 Epipyxis cylindrica,Epipyxis,Catalogue of Life,bumped
 Navicula clementis f. minor,Navicula minor,EOL,var.f
 Chlamydomonas conica var. subconica,Chlamydomonas subconica,EOL,var.f
@@ -117,6 +142,7 @@ Cyclotella costei f. petite aire centrale,Cyclotella costei,EOL,var.f
 Fotterella tetrachlorella,Fotterella,Catalogue of Life,bumped
 Dinobryon anneciense,Dinobryon,Catalogue of Life,bumped
 Dinobryon sertularia var. protuberans,Dinobryon sertularia protuberans,EOL,var.f
+Aulacoseira cf ambigua,Aulacoseira ambigua,EOL,cf
 Closterium acutum var. linea,Closterium acutum linea,EOL,var.f
 Bicoeca planctonica,Bicoeca,EOL,bumped
 Dinobryon sociale var. americanum,Dinobryon sociale var. americanum,EOL,var.f
@@ -126,6 +152,8 @@ Dinobryon sociale var. stipitatum,Dinobryon sociale stipitatum,EOL,var.f
 Dinobryon sociale var. stipitatum plein,Dinobryon sociale stipitatum,EOL,var.f
 Dinobryon sociale var. stipitatum vide,Dinobryon sociale stipitatum,EOL,var.f
 Cyst 2 of chrysophyceae,NA,NA,na
+Cryptomonas cf. pyrenoidifera,Cryptomonas pyrenoidifera,EOL,cf
+Surirella cf brebissonii,Surirella brebissonii,EOL,cf
 Polyedriopsis bitridens,Polyedriopsis,Catalogue of Life,bumped
 Pandorina morum var. major,Pandorina morum major,EOL,var.f
 Sphaerellopsis aulata,Sphaerellopsis,Catalogue of Life,bumped
@@ -134,6 +162,7 @@ Closterium acutum var. variabile,Closterium acutum variabile,EOL,var.f
 Bicoeca campanulata,Bicoeca,EOL,bumped
 Katodinium hiemale,Katodinium,EOL,bumped
 Stomatocyst 153,NA,NA,na
+Goniochloris cf. smithii,Goniochloris smithii,EOL,cf
 Cosmarium sexangulare var. minus,Cosmarium sexangulare minus,EOL,var.f
 Calycomonas pascheri,Calycomonas,Catalogue of Life,bumped
 Cyst of dinobryon,NA,NA,na
@@ -151,11 +180,13 @@ Cosmarium subsalsum,Cosmarium,Catalogue of Life,bumped
 Ulothricophyceae sp.,NA,NA,na
 Pseudostaurastrum alternans,Pseudostaurastrum,Catalogue of Life,bumped
 Closterium venus var. westii,Closterium venus westii,EOL,var.f
+Mallomonas cf. minima,Mallomonas minima,EOL,cf
 Trachelomonas volvocina var. subglobosa,Trachelomonas volvocina subglobosa,EOL,var.f
 Stomatocyst 3 spines,NA,NA,na
 Stomatocyst 62,NA,NA,na
 Pseudostaurastrum hastatum var. palatinum,Pseudostaurastrum hastatum palatinum,EOL,var.f
 Cosmarium venustum var. minus,Cosmarium venustum minus,EOL,var.f
+Cryptomonas cf. brevis,Cryptomonas brevis,EOL,cf
 Stomatocyst 4 spines,NA,NA,na
 Cosmarium subcostatum var. minus,Cosmarium subcostatum minus,EOL,var.f
 Gymnodinium lantzschii f. major,Gymnodinium lantzschii,Catalogue of Life,var.f
@@ -169,21 +200,26 @@ Cymbella helvetica var. curta,Cymbella helvetica curta,EOL,var.f
 Stomatocyst 6 spines,NA,NA,na
 Cosmarium subprotumidum var. gregorii,Cosmarium subprotumidum gregorii,EOL,var.f
 Cosmarium undulatum var. minutum,Cosmarium undulatum minutum,EOL,var.f
+Cyclotella cf. rossii,Cyclotella rossii,EOL,cf
 Peridinium inconspicuum var. contactum,Peridinium,EOL,var.f
 Stephanodiscus hantzschii f. tenuis,Stephanodiscus hantzschii tenuis,EOL,var.f
 Cosmarium subcostatum var. subcostatum,Cosmarium subcostatum subcostatum,EOL,var.f
 Phacus pleuronectes var. pleuronectes,Phacus pleuronectes pleuronectes,EOL,var.f
 Closterium acutum var. latius,Closterium acutum latius,EOL,var.f
+Mallomonas cf. genevensis,Mallomonas genevensis,EOL,cf
 Cosmarium depressum var. planctonicum,Cosmarium depressum planctonicum,EOL,var.f
 Peridinium umbonatum,Peridinium,EOL,bumped
 Peridinium umbonatum var. conjectum f. spiniferum,Peridinium spiniferum,EOL,var.f
+Nitzschia cf. linearis,Nitzschia linearis,EOL,cf
 Staurastrum johnsoni var. triradiatum,Staurastrum johnsonii triradiatum,EOL,var.f
 Staurastrum messikomerii f. planctonicum,Staurastrum planctonicum,EOL,var.f
 Cyst of ceratium hirundinella,NA,NA,na
 Cyst of peridinien,NA,NA,na
-Closterium cf. lanceolatum var. parvum,Closterium lanceolatum,EOL,var.f
+Closterium cf. lanceolatum var. parvum,Closterium lanceolatum,EOL,cf
 Staurastrum sebaldii var. ornatum,Staurastrum sebaldii ornatum,EOL,var.f
 Staurastrum sebaldii var. ornatum f quadriradiata,Staurastrum quadriradiatum,EOL,var.f
+Nitzschia cf. tryblionella,Nitzschia tryblionella,EOL,cf
+Cyclotella cf. quadrijuncta,Cyclotella quadrijuncta,EOL,cf
 Eunotia serra var. tetraodon,Eunotia serra tetraodon,EOL,var.f
 Cosmarium margaritiferum f. regularius,Cosmarium margaritiferum regularius,EOL,var.f
 Cosmarium pseudopyramidum,Cosmarium,Catalogue of Life,bumped
@@ -275,6 +311,7 @@ Ictinogomphus soror,Ictinogomphus,Catalogue of Life,bumped
 Allocnemis singularis,Allocnemis,Catalogue of Life,bumped
 Ehteria elliptica,NA,NA,na
 Chaoborus (sayomyia),Chaoborus,Catalogue of Life,bumped
+Clogmia albopuncta,Clogmia,Catalogue of Life,bumped
 Thaumeliidae,NA,NA,na
 Bosmina liederi/longirostris,Bosmina,Catalogue of Life,bumped
 Bosminids spp.,NA,NA,na
@@ -330,6 +367,7 @@ Achnanthes brevipes var. brevipes,Achnanthes brevipes brevipes,EOL,var.f
 Achnanthes biasolettiana var. thienemannii,Achnanthes biasolettiana thienemannii,EOL,var.f
 Amphora coffeaeformis var. acutiuscula,Amphora coffeaeformis acutiuscula,EOL,var.f
 Amphora coffeaeformis var. coffeaeformis,Amphora coffeaeformis coffeaeformis,EOL,var.f
+Achnanthidium cf gracillimum,Achnanthidium gracillimum,EOL,cf
 Achnanthidium minutissima var. affinis,Achnanthidium minutissimum affinis,EOL,var.f
 Adlafia minuscula var. muralis,Adlafia minuscula muralis,EOL,var.f
 Achnanthidium rosenstockianum,Achnanthidium,EOL,bumped
@@ -439,6 +477,7 @@ Mayamaea atomus var. permitis,Mayamaea permitis,EOL,var.f
 Meridion circulare var. constrictum,Meridion circulare constrictum,EOL,var.f
 Meridion circulare var. circulare,Meridion circulare circulare,EOL,var.f
 Mayamaea fossalis var. obsidialis,Mayamaea fossalis obsidialis,EOL,var.f
+Mayamaea cf fossaloides,Mayamaea fossaloides,EOL,cf
 Nitzschia amphibia f.  amphibia,Nitzschia amphibia amphibia,EOL,var.f
 Nitzschia dianae,Nitzschia,Catalogue of Life,bumped
 Nitzschia dissipata var. dissipata,Nitzschia dissipata dissipata,EOL,var.f
@@ -557,7 +596,10 @@ Chlamydomonas lobata,Chlamydomonas,Catalogue of Life,bumped
 Volvocal sp.2,NA,NA,na
 Volvocal sp.1,NA,NA,na
 Dinoflagelado desnudo,NA,NA,na
+Phacus cf. brevicaudatus,Phacus brevicaudatus,EOL,cf
 Phacus agilis,Phacus,Catalogue of Life,bumped
+Trachelomonas cf. oblonga,Trachelomonas oblonga,EOL,cf
+Trachelomonas cf. rotunda,Trachelomonas rotunda,EOL,cf
 Trachelomonas sydneyensis var. minor,Trachelomonas minor,EOL,var.f
 Raphydophyta,NA,NA,na
 Pseudocuadrigula sp,NA,NA,na
@@ -566,13 +608,16 @@ Polynucleobacterasymbioticus,NA,NA,na
 Polynucleobacterduraquae,NA,NA,na
 Polynucleobactersinensis,NA,NA,na
 Polynucleobacteryangtzensis,NA,NA,na
+Cyclotella cf. delicatula,Cyclotella delicatula,EOL,cf
 Fragilaria pinnata var. intercedens,Fragilaria pinnata intercedens,EOL,var.f
+Frankophila cf. similoides,Frankophila similioides,EOL,cf
 Aulacoseira granulata var. valida,Aulacoseira granulata valida,EOL,var.f
 Fragilaria brevistriata var. inflata,Fragilaria brevistriata inflata,EOL,var.f
 Bothriococcus,NA,NA,na
 Nitzchia,NA,NA,na
 Trichodina diaptomi,Trichodina,Catalogue of Life,bumped
 Clamydomonas sajao,NA,NA,na
+Oocystis cf. lacustris,Oocystis lacustris,EOL,cf
 Planctonema lacustris,Planctonema,Catalogue of Life,bumped
 Small flagelates,NA,NA,na
 Asplachna sp.,NA,NA,na
@@ -588,6 +633,7 @@ Comasiella arcuata var. platydisca,Comasiella arcuata platydisca,EOL,var.f
 Oscillatoria rosea,Oscillatoria,Catalogue of Life,bumped
 Lecane lunaris ehrenberg,Lecane,Catalogue of Life,bumped
 Lecane quadridentata ehrenberg,Lecane,Catalogue of Life,bumped
+Lepadella cf heterodactyla,Lepadella heterodactyla,Catalogue of Life,cf
 Macrochetus sp.,NA,NA,na
 Nauplii cyclopoida,NA,NA,na
 Nauplii calanoida,NA,NA,na
@@ -832,6 +878,7 @@ Chrooccocus turgidus,NA,NA,na
 Daphnia ambiuga,Daphnia,Catalogue of Life,bumped
 Gleocapsa sp.,NA,NA,na
 Planktothrix aghardii,Planktothrix,Catalogue of Life,bumped
+Halteria cf. grandinella,Halteria grandinella,Catalogue of Life,cf
 Borgheillia dodgei,NA,NA,na
 Polyarthra dolycoptera,Polyarthra,Catalogue of Life,bumped
 Synchatea pectinata,NA,NA,na
@@ -893,11 +940,19 @@ Staurodesmus dejectus var. brevispinus,Staurodesmus dejectus brevispinus,EOL,var
 Tetmemorus leavis var. minutus,Tetmemorus minutus,EOL,var.f
 Xanthidium antilopaeum var. leave,Xanthidium antilopaeum leve,EOL,var.f
 Xanthidium antilopaeum var. planum,Xanthidium antilopaeum planum,EOL,var.f
+Dicranophorus cf. luetkeni,Dicranophorus luetkeni,Catalogue of Life,cf
+Encentrum cf. belluinum,Encentrum belluinum,Catalogue of Life,cf
+Encentrum cf. boreale,Encentrum boreale,Catalogue of Life,cf
+Encentrum cf. fluviatile,Encentrum fluviatile,Catalogue of Life,cf
+Encentrum cf. limicola,Encentrum limicola,Catalogue of Life,cf
+Notommata cf. doneta,Notommata doneta,Catalogue of Life,cf
 Cyclops abyssorum copodites stage i,Cyclops stygius,Catalogue of Life,juvenile
 Cyclops abyssorum copodites stage ii,Cyclops,Catalogue of Life,bumped
 Calanoid nauplii,NA,NA,na
 Copepd nauplii,NA,NA,na
 Cyclopoid copepodites,NA,NA,na
+Cryptomonas cf. ovata,Cryptomonas ovata,EOL,cf
+Synedra sp. cf scotica,Synedra,EOL,cf
 Ankistrodesmus falcatus var. spirilliformis,Ankistrodesmus falcatus spirilliformis,EOL,var.f
 Cyclotella praeterissima,Cyclotella,EOL,bumped
 Oscillatoria amphigranulata,Oscillatoria,Catalogue of Life,bumped
@@ -905,6 +960,7 @@ Skeletonema costatuni,Skeletonema,EOL,bumped
 Daphnia coregoni,Daphnia,Catalogue of Life,bumped
 Calanus jinrnarchicus,Calanus,Catalogue of Life,bumped
 Pseudodiaptornus hessei,NA,NA,na
+Notommata cf. cyrtopus,Notommata cyrtopus,Catalogue of Life,cf
 Pseudencentrum cf. diglandula,NA,NA,na
 Pseudencentrum cf. sutor,NA,NA,na
 Mixed ciliates,Mixed,EOL,bumped
@@ -1052,3 +1108,245 @@ Tetraedron minimum f. apiculatum,Tetraedron minimum,EOL,var.f
 Tetraedron octaedricum var. spinosum,Tetraedron octaedricum,EOL,var.f
 Tetraedron trigonum f. minus-obtusum,Tetraedron trigonum,EOL,var.f
 Tetraedron trigonum var. longispinum,Tetraedron longispinum,EOL,var.f
+Achnanthidium cf minutissima,Achnanthidium minutissimum,EOL,cf
+Achnathidium cf microcephalum,Achnanthidium microcephalum,EOL,cf
+Actinastrum aciculare f minimum,Actinastrum,Catalogue of Life,bumped
+Actinastrum hantzschii f minima,Actinastrum,Catalogue of Life,bumped
+Anathece cf clathrata,Anathece clathrata,EOL,cf
+Ankistrodesmus cf fasciculatus,Ankistrodesmus fasciculatus,EOL,cf
+Aphanocapsa/aphanothece,NA,NA,na
+Aphanothece cf nidulans,Aphanothece nidulans,Catalogue of Life,cf
+Aphanothece minuttisima,Aphanothece,Catalogue of Life,bumped
+Botryococcus cf braunii,Botryococcus braunii,EOL,cf
+Ceratium cf furcoides,Ceratium furcoides,EOL,cf
+Chlamydomonas cf agloeformis,Chlamydomonas agloeformis,EOL,cf
+Chlamydomonas cf globosa,Chlamydomonas globosa,EOL,cf
+Chlamydomonas cf obergurbiglii,Chlamydomonas,Catalogue of Life,cf
+Chlamydophyceae 2,Chlamydophyceae,EOL,bumped
+Chlamydophyceae 5,Chlamydophyceae,EOL,bumped
+Chlorella homosphaera,Chlorella,Catalogue of Life,bumped
+Chlorobium saxatile,Chlorobium,Catalogue of Life,bumped
+Chlorococal sp1,NA,NA,na
+Chlorococcal 1,NA,NA,na
+Chlorococcales 5,Chlorococcales,Catalogue of Life,bumped
+Chlorococcales 6,Chlorococcales,Catalogue of Life,bumped
+Chlorocystis minor,Chlorocystis,Catalogue of Life,bumped
+Chlorolobium cf lunulatum,Chlorolobium,EOL,cf
+Chloromonas cf flos-aquae,Chloromonas,Catalogue of Life,cf
+Chloromonas cf grovei,Chloromonas grovei,EOL,cf
+Chlorophyceae 1,Chlorophyceae,Catalogue of Life,bumped
+Chlorophyceae 1 (fla),Chlorophyceae,Catalogue of Life,bumped
+Chlorophyceae 2 (fla),Chlorophyceae,Catalogue of Life,bumped
+Chlorophyceae 8,Chlorophyceae,Catalogue of Life,bumped
+Choricystis gutulla,Choricystis,Catalogue of Life,bumped
+Chromulina cf elegans,Chromulina elegans,EOL,cf
+Chromulina cf ettlii,Chromulina,Catalogue of Life,cf
+Chromulina cf gyrans,Chromulina,Catalogue of Life,cf
+Chromulina cf obconica,Chromulina obconica,EOL,cf
+Chromulina gyrans,Chromulina,Catalogue of Life,bumped
+Chromulina ovaloides,Chromulina,Catalogue of Life,bumped
+Ekrenia subguiciliata,NA,NA,na
+Chromulina/chrysococcus,NA,NA,na
+Chroococcal,NA,NA,na
+Chroococcus cf aphanocapsoides,Chroococcus aphanocapsoides,EOL,cf
+Chroococus cf pescottii,NA,NA,na
+Chroocodiopsis sp,NA,NA,na
+Chrysococcus cf punctiformis,Chrysococcus punctiformis,EOL,cf
+Chrysophyceae 10,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 11,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 2,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 3,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 4,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 5,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 6,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 7,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 8,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae 9,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae ni,Chrysophyceae,Catalogue of Life,bumped
+Chrysophyceae/xanthophyceae,NA,NA,na
+Closterium cf gracile,Closterium gracile,EOL,cf
+Closterium cf moniliferum,Closterium moniliferum,EOL,cf
+Closterium cf parvulum,Closterium parvulum,EOL,cf
+Closterium/closteriopsis,NA,NA,na
+Coelastrum cf astroideum,Coelastrum astroideum,EOL,cf
+Coelastrum spx org,Coelastrum,Catalogue of Life,bumped
+Coeleastrum cf pulchrum,Coelastrum pulchrum,EOL,cf
+Coelomorom microcystoides/eucapsis parallelepipedon,NA,NA,na
+Coelomoron/woronchinia 2,NA,NA,na
+Coelomorum cf tropicale,Coelomorum,EOL,cf
+Coelomorum pusillum,Coelomorum,EOL,bumped
+Coelosphaerium cf evidenter-marginatum,Coelosphaerium evidenter-marginatum,EOL,cf
+Coenochloris planconvexa,Coenochloris,Catalogue of Life,bumped
+Coenocystis cf subcylindrica,Coenocystis subcylindrica,EOL,cf
+Coenocystis/oocystis,NA,NA,na
+Cosmarium cf majae,Cosmarium majae,EOL,cf
+Cryptochrysis cf pochmanni,Cryptochrysis,Catalogue of Life,cf
+Cryptoficea (flageado 2),NA,NA,na
+Cryptoficea 5,NA,NA,na
+Cryptomonas cf curvata,Cryptomonas curvata,EOL,cf
+Cryptomonas cf erosa,Cryptomonas erosa,EOL,cf
+Cryptomonas cf marsonii,Cryptomonas marsonii,EOL,cf
+Cryptomonas cf obovata,Cryptomonas obovata,EOL,cf
+Cryptophyceae 1,Cryptophyceae,Catalogue of Life,bumped
+Cryptophyceae 7,Cryptophyceae,Catalogue of Life,bumped
+Desmatractrum sp,NA,NA,na
+Desmodesmus cf opoliensis,Desmodesmus opoliensis,EOL,cf
+Desmodesmus cf quadricauda,Desmodesmus quadricauda,EOL,cf
+Diatomococcus/tetralitris,NA,NA,na
+Dictyosphaerium cf chlorelloides,Dictyosphaerium chlorelloides,EOL,cf
+Didymocystis cf fina,Didymocystis fina,EOL,cf
+Dinobryon cf bavaricum,Dinobryon bavaricum,EOL,cf
+Dinobryon cf borgei,Dinobryon borgei,EOL,cf
+Dinobryon cf divergens,Dinobryon divergens,EOL,cf
+Dinoflagelado menor,NA,NA,na
+Dinoflagelado/peridinium,NA,NA,na
+Dinophyceae 1,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 2,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 3,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 4,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 5,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 7,Dinophyceae,Catalogue of Life,bumped
+Dinophyceae 8,Dinophyceae,Catalogue of Life,bumped
+Discostella cf stelligera,Discostella stelligera,EOL,cf
+Dolichospermum bergii,Dolichospermum,EOL,bumped
+Dolichospermum fertilissima,Dolichospermum,EOL,bumped
+Dolichospermum flos aquae,Dolichospermum,EOL,bumped
+Elakatotrix americana x cel,NA,NA,na
+Epigloesphaera cf glebulenta,Epigloeosphaera glebulenta,EOL,cf
+Euglena polymorfa,Euglena,Catalogue of Life,bumped
+Euglenophyceae 1,Euglenophyceae,Catalogue of Life,bumped
+Eunotia (aff),Eunotia,EOL,bumped
+Fragilaria construens/breviestriata,Fragilaria,EOL,bumped
+Fragilaria/synedra,NA,NA,na
+Geminella/binuclearia,NA,NA,na
+Glaucospira laxissima/spirulina,Glaucospira,EOL,bumped
+Gloeocystis gigas x org,NA,NA,na
+Golenkinia/ golenkiniopsis 1,NA,NA,na
+Golenkinia/ golenkiniopsis 2,NA,NA,na
+Golenkinia/golenkiniopsis sp3,NA,NA,na
+Gomphonema cf acuminatum,Gomphonema acuminatum,EOL,cf
+Gomphosphaeria cf natans,Gomphosphaeria natans,EOL,cf
+Gymnodiniales 2,Gymnodiniales,Catalogue of Life,bumped
+Hemidinium aff brasiliense,Hemidinium,EOL,bumped
+Kephyrion cf ampulla,Kephyrion ampulla,EOL,cf
+Kephyrion cf planctonicum,Kephyrion planctonicum,EOL,cf
+Kirchneriella cfobesa,Kirchneriella,Catalogue of Life,bumped
+Kirchneriella contorta varelongata,Kirchneriella,Catalogue of Life,bumped
+Lagherimia subsalsa lemm,NA,NA,na
+Lemermaniella sp1,NA,NA,na
+Lemmermmaniella pallida,NA,NA,na
+Leptolyngbya cf thermalis,Leptolyngbya thermalis,EOL,cf
+Leptolyngybya angusta/ercejovicii,NA,NA,na
+Lobocystis cf planctonica,Lobocystis planctonica,EOL,cf
+Mallomonas cf anglica,Mallomonas anglica,EOL,cf
+Mallomonas cf papillosa,Mallomonas papillosa,EOL,cf
+Merismopedia cf arctica,Merismopedia arctica,EOL,cf
+Merismopedia cf marsonii,Merismopedia marssonii,Catalogue of Life,cf
+Merismopedia cf minima,Merismopedia minima,Catalogue of Life,cf
+Merismopedia x  org,Merismopedia,Catalogue of Life,bumped
+Micractinium cf bornhemiense,Micractinium bornhemiense,EOL,cf
+Microcystis aeruginosa x org,NA,NA,na
+Microcystis tenuissima,Microcystis,Catalogue of Life,bumped
+Monodus aff clavata,Monodus,Catalogue of Life,bumped
+Monodus curvata,Monodus,Catalogue of Life,bumped
+Monoraphidium cf dybowskii,Monoraphidium dybowskii,EOL,cf
+Mougeotia cf delicata,Mougeotia delicata,EOL,cf
+Nanofla no id,NA,NA,na
+Naviculoide 1,NA,NA,na
+Naviculoide 3 (brachysira),NA,NA,na
+Nephrochlamys cf subsolitaria,Nephrochlamys subsolitaria,EOL,cf
+Nephrocytium cf agardhianum,Nephrocytium agardhianum,EOL,cf
+Nitzschia cf palea,Nitzschia palea,EOL,cf
+Nitzschia cf sigma,Nitzschia sigma,EOL,cf
+Nitzschia cf subacicularis,Nitzschia subacicularis,EOL,cf
+Nitzschioide 2,NA,NA,na
+Nitzschioide 4,NA,NA,na
+Nitzschioides,NA,NA,na
+Ochromonadales 1,Ochromonadales,Catalogue of Life,bumped
+Ochromonadales 2,Ochromonadales,Catalogue of Life,bumped
+Ochromonas  cf crenata,Ochromonas crenata,EOL,cf
+Ochromonas cf minuscula,Ochromonas minuscula,EOL,cf
+Ochromonas cf sphaerella,Ochromonas,Catalogue of Life,cf
+Octacanthiumoctocorne,NA,NA,na
+Oocystis cf marsonii,Oocystis marssonii,EOL,cf
+Oscillatoriales 1,Oscillatoriales,Catalogue of Life,bumped
+Pediastrum cf privum,Pediastrum,Catalogue of Life,cf
+Pennada,NA,NA,na
+Pennada sp4,NA,NA,na
+Pennal sp,NA,NA,na
+Pennales 12,Pennales,EOL,bumped
+Pennales 16,Pennales,EOL,bumped
+Pennales 20,Pennales,EOL,bumped
+Pennales 22,Pennales,EOL,bumped
+Pennales 25,Pennales,EOL,bumped
+Pennales 26,Pennales,EOL,bumped
+Pennales 29,Pennales,EOL,bumped
+Pennales 3,Pennales,EOL,bumped
+Pennales 30,Pennales,EOL,bumped
+Pennales 4,Pennales,EOL,bumped
+Pennales 9,Pennales,EOL,bumped
+Peridinium incospicum,Peridinium,EOL,bumped
+Peridinium umbonatum (com espinho),Peridinium,EOL,bumped
+Peridinium umbonatum (sem espinho),Peridinium,EOL,bumped
+Peridinium/gyrodinium,NA,NA,na
+Pico chloro flagelado 1,NA,NA,na
+Pico chloro gota,NA,NA,na
+Pico chryso 2,NA,NA,na
+Pico chryso 3,NA,NA,na
+Pico chryso 4,NA,NA,na
+Pico chryso fla 1,NA,NA,na
+Pico ni esferoide,NA,NA,na
+Pico ni flagelado 1,NA,NA,na
+Planktolynbya/eubacteria,NA,NA,na
+Planktolyngbya cf minor,Planktolyngbya minor,EOL,cf
+Pseudanabaena aff moniliformis,Pseudanabaena,Catalogue of Life,bumped
+Pseudanabaena capillaris,Pseudanabaena,Catalogue of Life,bumped
+Pseudanabaena cf galeata,Pseudanabaena galeata,Catalogue of Life,cf
+Pseudodictyosphaerium jurisii,Pseudodictyosphaerium,Catalogue of Life,bumped
+Pseudopedinella hexacostata,Pseudopedinella,Catalogue of Life,bumped
+Quadrigula cf pfitzeri,Quadrigula pfitzeri,EOL,cf
+Quadrigula cf quaternata,Quadrigula quaternata,EOL,cf
+Raphidiopsis/cylindrospermopsis,NA,NA,na
+Raphidophyceae 1,Raphidophyceae,Catalogue of Life,bumped
+Raphidophyceae 2,Raphidophyceae,Catalogue of Life,bumped
+Rhabdoderma afflineare,Rhabdoderma,Catalogue of Life,bumped
+Rhabdogloea cf linearis,Rhabdogloea linearis,EOL,cf
+Roichosphaeria (aff),NA,NA,na
+Romeria cf gracilis,Romeria gracilis,EOL,cf
+Romeria cilindrocelullaris,Romeria,Catalogue of Life,bumped
+Scenedesmus intermedius chod,Scenedesmus,Catalogue of Life,bumped
+Schroederia cf antillarum,Schroederia,Catalogue of Life,cf
+Schroedriella setigera,NA,NA,na
+Schroedriella sp,NA,NA,na
+Selenastrum cf bibraianus,Selenastrum bibraianus,EOL,cf
+Siderocelys (aff),NA,NA,na
+Small centrics,NA,NA,na
+Snowella cf lacustris b,Snowella lacustris,EOL,cf
+Sphaerelopsis sp,NA,NA,na
+Sphaerocavum/mpanniformis (isolada),NA,NA,na
+Sphaerocystis cf schroeteri x org,NA,NA,na
+Spineferomonas sp,NA,NA,na
+Spirulina affadriatica,Spirulina,Catalogue of Life,bumped
+Spirulina laxisima/nodosa/eubacteria,Spirulina,Catalogue of Life,bumped
+Staurastrum polimorphus/paradoxum,Staurastrum,Catalogue of Life,bumped
+Staurastrum quadricauda (turp) breb,Staurastrum,Catalogue of Life,bumped
+Staurodesmus cf connatus,Staurodesmus connatus,EOL,cf
+Staurodesmus cf dejectus,Staurodesmus dejectus,EOL,cf
+Surirella cfrobusta/caproni,Surirella,EOL,bumped
+Synechococcus aquatilis,Synechococcus,Catalogue of Life,bumped
+Synechococcus cf bigranulatus,Synechococcus bigranulatus,EOL,cf
+Synedra (aff),Synedra,EOL,bumped
+Tetraedron minimun (a br) hansg,Tetraedron,Catalogue of Life,bumped
+Tetraselmis (aff),Tetraselmis,Catalogue of Life,bumped
+Tetrastrum cf komarekii,Tetrastrum,Catalogue of Life,cf
+Thorakochloris cf nygaardii,Thorakochloris nygaardii,EOL,cf
+Trachelomonas 10,Trachelomonas,Catalogue of Life,bumped
+Trachelomonas cf cervicula,Trachelomonas cervicula,EOL,cf
+Trachelomonas cf hispida var duplex,Trachelomonas hispida,EOL,cf
+Trachelomonas cf intermedia,Trachelomonas intermedia,EOL,cf
+Trachelomonas cf volvocinopsis,Trachelomonas volvocinopsis,EOL,cf
+Trachelomonas rugulosa stein,Trachelomonas,Catalogue of Life,bumped
+Trybionela sp,NA,NA,na
+Trybionella vitoriae,NA,NA,na
+Volvocales 1,Volvocales,Catalogue of Life,bumped
+Volvocales 6 (fla unicell),Volvocales,Catalogue of Life,bumped
