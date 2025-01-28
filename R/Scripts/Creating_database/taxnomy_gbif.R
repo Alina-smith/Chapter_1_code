@@ -214,7 +214,7 @@ tax_1gbif_cleaned <- tax_1gbif_raw %>%
 # Save
 saveRDS(tax_1gbif_cleaned, file = "R/data_outputs/taxonomy/gbif/tax_1gbif_cleaned.rds")
 
-## Classification: GBIF - bumped up rerun ----
+## Classification: rerun ----
 
 # Find all taxa that were bumped up a taxanomic group or have missing ranks and rerun with rows = 1 off to manaully chose them
 tax_2gbif_rerun_raw <- tax_gbif_1_cleaned %>% 
@@ -316,7 +316,7 @@ tax_2gbif_rerun_raw <- tax_gbif_1_cleaned %>%
 # Save
 saveRDS(tax_2gbif_rerun_raw, file = "R/data_outputs/taxonomy/gbif/tax_2gbif_rerun_raw.rds")
 
-## Classification: GBIF - Clean and add into full list ----
+## Classification: Clean rerun ----
 
 # Clean tax_gbif_2_bumped
 tax_2gbif_rerun_cleaned <- tax_2gbif_rerun_raw %>% 
@@ -340,12 +340,12 @@ tax_2gbif_cleaned <- tax_1gbif_cleaned %>%
 saveRDS(tax_2gbif_cleaned, file = "R/data_outputs/taxonomy/gbif/tax_2gbif_cleaned.rds")
 
 ## Final tax list ----
-# decided to use just gbif data as it covers the most species and means all species will use the same format
+# fill in missing gaps and taxa that have been resolved wrong
 
-tax_final <- tax_gbif_2_cleaned %>% 
+tax_final <- tax_2gbif_cleaned %>% 
   
   ungroup() %>% 
-  # don't have infor for all of these so only keep species up
+  # don't have info for all of these so only keep species up
   select(
     -form,
     -variety,
@@ -354,248 +354,321 @@ tax_final <- tax_gbif_2_cleaned %>%
   
   mutate(
     
-    tax.uid = row_number(),
-    
+    # Species:
     species = case_when(
-      # resolved wrong
-      resolved.taxa.name == "Apodochloris simplicissima" ~ "Apodochloris simplicissima",
-      resolved.taxa.name == "Epicystis peridinearum" ~ "Epicystis peridinearum",
       
-      # gaps
-      !(is.na(species)) ~ species,
-      resolved.taxa.name == "Microcystis holsatica" ~ "Aphanocapsa holsatica",
-      resolved.taxa.name == "Protococcus wimmeri" ~ "Protococcus wimmeri",
-      resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium glaucum",
-      resolved.taxa.name %in% c("Scenedesmus bicaudatus", "Scenedesmus bicaudatus var. brevicaudatus") ~ "Desmodesmus bicaudatus",
+      # 1) keep blank because couldn't find the species anywhere
+      resolved.taxa.name %in% c("Unapertura latens", "Fallacia difficillimoides", "Coccomyxa lunaris", "Microcystis tenuissima", "Diplopora oregonensis", "Pica cyana", "Heterothrix tenuissima") ~ NA,
+      
+      # 1) Were assigned wrong
+      resolved.taxa.name %in% c("Lemmermannia cf. komarekii", "Lemmermannia komarekii") ~ "Lemmermannia komarekii",
+      resolved.taxa.name == "Lemmermannia tetrapedia" ~ "Lemmermannia tetrapedia",
+      resolved.taxa.name == "Tetrastrum triangulare" ~ "Lemmermannia triangularis",
+      resolved.taxa.name == "Echinopus minutus" ~ "Echinopus minutus",
+      resolved.taxa.name == "Chlorobium saxatile" ~ "Monoraphidium saxatile",
+      resolved.taxa.name == "Chlorolobium braunii" ~ "Chlorolobion braunii",
+      resolved.taxa.name == "Monoraphidium arcuatum" ~ "Ankistrodesmus arcuatus",
+      
+      # 2) Gaps:
+      # These ones have a more updated name than the resolved.taxa.name so need changing
+      resolved.taxa.name == "cf. Katodinium fungiforme" ~ "Speroidium fungiforme",
+      resolved.taxa.name == "Haematococcus buetschlii" ~ "Balticola buetschlii",
+      resolved.taxa.name == "Rhodomonas ovalis" ~ "Pyrenomonas ovalis",
+      resolved.taxa.name == "Coccomyxa lacustris" ~ "Planktococcomyxa lacustris",
+      resolved.taxa.name == "Scenedesmus bicaudatus var. brevicaudatus" ~ "Desmodesmus bicaudatus",
       resolved.taxa.name == "Chlorotetraëdron bitridens" ~ "Chlorotetraedron bitridens",
-      resolved.taxa.name == "Delicata alpestris" ~ "Delicata alpestris",
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysopora fenestrata",
-      resolved.taxa.name == "Crucigeniella secta" ~ "Crucigeniella secta",
+      resolved.taxa.name == "Delicata alpestris" ~ "Delicatophycus alpestris",
+      resolved.taxa.name == "Microcystis holsatica" ~ "Aphanocapsa holsatica",
+      resolved.taxa.name == "Coenocystis quadriguloides" ~ "Palmococcus quadriguloides",
+      resolved.taxa.name == "Spirodinium glaucum" ~ "Lebouridinium glaucum",
+      resolved.taxa.name == "Crucigenia rectangularis" ~ "Willea rectangularis",
+      resolved.taxa.name %in% c("Crucigenia tetrapedia", "Lemmermannia tetrapedia") ~ "Lemmermannia tetrapedia",
+      resolved.taxa.name %in% c("Bacillaria paxillifer", "Bacillaria paradoxa", "Bacillaria paxillifera") ~ "Bacillaria paxillifera",
       
-      # when it has been resolved right but has the species missing
+      
+      # These have a gap but the species exists with that as the most up to date name so just use resolved.taxa.name
+      is.na(species) & stri_detect_regex(resolved.taxa.name, "aff\\.") ~ stri_replace_all_regex(resolved.taxa.name, "aff\\. ", ""), # remove cf. when its present
+      is.na(species) & stri_detect_regex(resolved.taxa.name, "cf\\.") ~ stri_replace_all_regex(resolved.taxa.name, "cf\\. ", ""), # remove cf. when its present
       is.na(species) & stri_detect_regex(resolved.taxa.name, " ") & !(stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")) ~ resolved.taxa.name,
       is.na(species) & (stri_detect_regex(resolved.taxa.name, "var\\.|f\\.")) ~ paste0(stri_extract_all_regex(resolved.taxa.name, "\\w+ \\w+")), # when there is a variety then take just the first two words
       
       TRUE ~ species
     ),
     
+    # Genus
     genus = case_when(
-      # ones that were resolved wrong
-      resolved.taxa.name == "Apodochloris simplicissima" ~ "Apodochloris",
+      # Not a species
+      resolved.taxa.name %in% c("Pica cyana", "Pennate", "Unapertura latens") ~ NA,
+      
+      # 1) Assigned wrong
+      resolved.taxa.name %in% c("Sphaerastrum fockii", "Epicystis peridinearum", "Protococcus wimmeri") ~ stri_extract_first_regex(resolved.taxa.name, "\\w+"),
       resolved.taxa.name == "Diacanthos" ~ "Micractinium",
-      resolved.taxa.name == "Epicystis peridinearum" ~ "Epicystis",
-      resolved.taxa.name == "Protococcus wimmeri" ~ "Protococcus",
-      resolved.taxa.name == "Delicata alpestris" ~ "Delicata",
-      resolved.taxa.name == "Chrysopora fenestrata" ~ "Chrysopora",
-      resolved.taxa.name == "Crucigeniella secta" ~ "Crucigeniella",
-      resolved.taxa.name == "Sphaerastrum" ~ "Sphaerastrum",
+      genus == "Apodocloris" ~ "Apodochloris",
+      resolved.taxa.name %in% c("Chrysopora", "Chrysopora fenestrata") ~ "Chrysopora",
+      species %in% c("Crucigeniella lunaris", "Crucigeniella secta") ~ "Crucigeniella",
+      resolved.taxa.name == "Crucigeniella" ~ "Crucigeniella",
+      species %in% c("Lemmermannia punctata", "Lemmermannia triangularis", "Lemmermannia komarekii", "Lemmermannia tetrapedia") ~ "Lemmermannia",
+      genus == "Pennellia" ~ "Xanthonema",
+      resolved.taxa.name %in% c("Echinopus minutus", "Echinopus minutus", "Echinopus") ~ "Echinopus",
+      resolved.taxa.name == "Rhaphidiopsis" ~ "Raphidiopsis",
+      species == "Monoraphidium saxatile" ~ "Monoraphidium",
+      species == "Chlorolobion braunii" ~ "Chlorolobion",
+      species == "Willea rectangularis" ~ "Willea",
+      species == "Bacillaria paxillifera" ~ "Bacillaria",
       
-      !(is.na(genus)) ~ genus,
+      # 2) Gaps
+      # Genus level
+      resolved.taxa.name == "Dinoflagelado/peridinium" ~ "Peridinium",
+      resolved.taxa.name == "Heterothrix tenuissima" ~ "Xanthonema",
       
-      # missing gaps - they will just be the first word of the species column
-      !(is.na(species)) ~ stri_extract_first_regex(species, "\\w+"),
+      # species level - Checked for names and species are up to date so just need to take the first word of the species column
+      is.na(genus) & !is.na(species) ~ stri_extract_first_regex(species, "\\w+"),
+      is.na(genus) & stri_detect_regex(resolved.taxa.name, " ") ~ stri_extract_first_regex(resolved.taxa.name, "\\w+"),
 
-      
-      # rest of the missing 
       TRUE ~ genus
-      ),
+    ),
     
+    # Family
     family = case_when(
-      # ones that were resolved wrong
-      family == "Cyanobiaceae" ~ "Prochlorococcaceae",
-      family == "Spirodiniidae" ~ "Gymnodiniaceae",
-      genus %in% c("Epicystis", "Chrysopora") ~ "Chrysosphaeraceae",
-      genus == "Nais" ~ "Cryptomonadaceae",
-      genus == "Raciborskiella" ~ "Wislouchiaceae",
-      genus == "Pompholyx" ~ "Testudinellidae",
+      # Not a sepcies
+      resolved.taxa.name == "Unapertura latens" ~ NA,
       
-      # missing ones
-      genus %in% c("Coccomyxa", "Microglena", "Paradoxia") ~ "Coccomyxaceae",
-      genus == "Crucigenia" ~ "Trebouxiophyceae incertae sedis",
-      genus %in% c("Spondylosium", "Cosmarium", "Staurodesmus", "Teilingia", "Xanthidium", "Staurastrum", "Pleurotaenium", "Euastrum", "Desmidium", "Bambusina",
-                   "Micrasterias", "Octacanthium", "Onychonema", "Tetmemorus", "Hyalotheca", "Oocardium", "Docidium", "Haplotaenium", "Sphaerozosma") ~ "Desmidiaceae",
-      genus %in% c("Monema", "Biblarium", "Microneis", "Discoplea") ~ "Bacillariophyceae familia incertae sedis",
-      genus %in% c("Geminella", "Micractinium", "Chlorella", "Aliichlorella") ~ "Chlorellaceae",
-      genus == "Polyedriopsis" ~ "Sphaeropleales incertae sedis",
-      genus == "Polychaos" ~ "Euamoebida incertae sedis",
-      genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
-      genus == "Apodochloris" ~ "Chlorococcaceae",
-      genus %in% c("Ecballocystis", "Crucigeniella") ~ "Oocystaceae",
-      genus %in% c("Kephyriopsis", "Stokesiella") ~ "Dinobryaceae",
-      genus == "Pseudochlorangium" ~ "Chlorangiellaceae",
-      genus == "Baldinia" ~ "Borghiellaceae",
-      genus == "Spirotaenia" ~ "Mesotaeniaceae",
-      genus == "Mougeotia" ~ "Zygnemataceae",
-      genus == "Jaaginema" ~ "Synechococcales familia incertae sedis",
-      genus == "Coenocystis" ~ "Radiococcaceae",
-      genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis",
-      genus == "Pleurostauron" ~ "Staurosiraceae",
+      # Gaps
+      genus %in% c("Spondylosium", "Cosmarium", "Staurodesmus", "Teilingia", "Xanthidium", "Staurastrum", "Hyalotheca", "Euastrum", "Pleurotaenium", "Desmidium", "Bambusina",
+                   "Micrasterias","Octacanthium", "Onychonema", "Tetmemorus", "Oocardium", "Docidium", "Haplotaenium", "Sphaerozosma") ~ "Desmidiaceae",
+      genus %in% c("Crucigeniella", "Ecballocystis", "Willea") ~ "Oocystaceae",
+      genus %in% c("Stokesiella", "Kephyriopsis") ~ "Dinobryaceae",
+      genus %in%c("Vibrio", "Amoeba", "Polychaos") ~ "Amoebidae",
+      genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae familia incertae sedis",
       genus %in% c("Synuropsis", "Chrysodendron") ~ "Ochromonadaceae",
-      genus == "Picochlorum" ~ "Chlorellales incertae sedis",
-      genus == "Himantidium" ~ "Eunotiaceae",
-      genus %in%c("Amoeba", "Vibrio") ~ "Amoebidae",
-      genus == "Gomphonella" ~ "Cymbellales incertae sedis",
-      genus == "Chroostipes" ~ "Cyanophyceae familia incertae sedis",
+      genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
+      genus %in% c("Carteria", "Sphaerellopsis", "Microglena") ~ "Chlamydomonadaceae",
       genus %in% c("Chrysoxys", "Saccochrysis", "Amphichrysis") ~ "Chromulinaceae",
-      genus == "Dactylosphaerium" ~ "Dictyosphaeriaceae",
-      genus == "Hortobagyiella" ~ "Koliellaceae",
-      genus == "Phaeobotrys" ~ "Phaeothamniaceae",
-      genus == "Rhaphidiopsis" ~ "Aphanizomenonaceae",
-      genus == "Euplotes" ~ "Euplotidae",
-      genus == "Diaphanosoma" ~ "Sididae",
-      genus == "Lebouridinium" ~ "Gymnodiniales incertae sedis",
+      genus %in% c("Geminella", "Chlorella", "Aliichlorella", "Micractinium") ~ "Chlorellaceae",
+      genus %in% c("Coccomyxa", "Microglena", "Paradoxia") ~ "Coccomyxaceae",
+      genus %in% c("Raphidiopsis", "Anabaena") ~ "Aphanizomenonaceae",
+      genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae incertae sedis",
+      genus %in% c("Coenocystis", "Palmococcus", "Radiococcus", "Sphaerochloris") ~ "Radiococcaceae",
+      genus %in% c("Monoraphidium", "Chlorolobion", "Kirchneriella", "Planktococcomyxa") ~ "Selenastraceae",
+      
       genus %in% c("Rhabdoderma", "Romeria") ~ "Cymatolegaceae",
       genus == "Ulothrix" ~ "Ulotrichaceae",
-      genus == "Heterothrix" ~ "Tribonemataceae",
+      genus == "Jaaginema" ~ "Synechococcales familia incertae sedis",
+      genus == "Speroidium" ~ "Pfiesteriaceae",
+      genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis", #### got to here checking
+      genus == "Pleurostauron" ~ "Staurosiraceae",
+      genus == "Polyedriopsis" ~ "Sphaeropleales incertae sedis",
+      genus == "Xanthonema" ~ "Tribonemataceae",
+      genus == "Picochlorum" ~ "Chlorellales incertae sedis",
+      genus == "Echinopus" ~ "Baetidae",
       genus == "Fallacia" ~ "Sellaphoraceae",
+      genus == "Gomphonella" ~ "Cymbellales incertae sedis",
       genus == "Nitzschia" ~ "Bacillariaceae",
       genus == "Iconella" ~ "Surirellaceae",
-      genus %in% c("Carteria", "Sphaerellopsis") ~ "Chlamydomonadaceae",
+      genus == "Trichodina" ~ "Trichodinidae",
       genus == "Schroederia" ~ "Schroederiaceae",
-      genus == "Haematococcus" ~ "Haematococcaceae",
-      genus == "Kirchneriella" ~ "Selenastraceae",
+      genus == "Apodochloris" ~ "Chlorococcaceae",
+      genus == "Chroostipes" ~ "Cyanophyceae familia incertae sedis",
+      genus == "Dactylosphaerium" ~ "Dactylopodida incertae sedis",
+      genus == "Baldinia" ~ "Borghiellaceae",
+      genus == "Balticola" ~ "Haematococcaceae",
+      genus == "Hortobagyiella" ~ "Koliellaceae",
       genus == "Monodus" ~ "Pleurochloridaceae",
-      genus == "Radiococcus" ~ "Radiococcaceae",
-      genus == "Rhodomonas" ~ "Pyrenomonadaceae",
-      genus == "Schizothrix" ~ "Schizotrichaceae",
-      genus == "Sphaerochloris" ~ "Xanthophyceae familia incertae sedis",
+      genus == "Phaeobotrys" ~ "Phaeothamniaceae",
+      genus == "Pseudochlorangium" ~ "Chlorangiellaceae",
+      genus == "Pyrenomonas" ~ "Pyrenomonadaceae",
+      genus == "Schizothrix" ~ "Trichocoleusaceae",
+      genus == "Lebouridinium" ~ "Gymnodiniales incertae sedis",
+      genus == "Spirotaenia" ~ "Mesotaeniaceae",
       genus == "Spirulina" ~ "Spirulinaceae",
-      genus == "Anabaena" ~ "Aphanizomenonaceae",
+      genus == "Euplotes" ~ "Euplotidae",
+      genus == "Mougeotia" ~ "Zygnemataceae",
       genus == "Diplopora" ~ "Diploporaceae",
+      genus == "Diaphanosoma" ~ "Sididae",
       genus == "Astasia" ~ "Astasiidae",
+      genus == "Microcystis" ~ "Microcystaceae",
+      genus == "Peridinium" ~ "Peridiniaceae",
+      genus == "Cyanobium" ~ "Prochlorococcaceae",
+      genus == "Bacillaria" ~ "Bacillariaceae",
       
+      genus %in% c("Gloeocapsa", "Gloeocapsopsis") ~ "Aliterellaceae",
+      genus == "Geitlerinema" ~ "Geitlerinemataceae",
+      genus == "Sphaerocystis" ~ "Sphaerocystidaceae",
+      genus == "Chrysopora" ~ "Chrysocapsaceae",
+      
+      family == "Spirodinium" ~ "Gymnodiniaceae",
+      family == "Microcystaceae_A" ~ "Microcystaceae",
+
       TRUE ~ family
     ),
     
     order = case_when(
-      family == "Euglyphidae" ~ "	Euglyphida",
-      family == "Chrysosphaeraceae" ~ "Chrysosphaerales",
-      family == "Testudinellidae" ~ "Flosculariaceae",
-      family == "Amoebidae" ~ "Euamoebida",
-      family == "Amphidiniaceae" ~ "Amphidiniales",
-      family == "Bicosoecaceae" ~ "Bicosoecales",
+      
+      # not a species
+      resolved.taxa.name %in% c("Unapertura latens") ~ NA,
+      
+      # Gaps
       family %in% c("Chlorellaceae", "Oocystaceae") ~ "Chlorellales",
-      family == "Chrysosaccaceae" ~ "Chrysosaccales",
-      family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
-      family == "Cymatolegaceae" ~ "Nodosilineales",
-      family == "Desmidiaceae" ~ "Desmidiales",
-      family == "Dinobryaceae" ~ "Chromulinales",
-      family == "Ebriaceae" ~ "Ebriales",
-      family == "Eunotiaceae" ~ "Eunotiales",
-      family == "Katablepharidaceae" ~ "Katablepharidales",
-      family == "Koliellaceae" ~ "Koliellaceae",
-      family == "Lepidochromonadaceae" ~ "Paraphysomonadales",
-      family %in% c("Mesotaeniaceae", "Zygnemataceae") ~ "Zygnematales",
-      family == "Ochromonadaceae" ~ "Ochromonadales",
-      family == "Paramastigaceae" ~ "Spironematellales",
-      family == "Radiococcaceae" ~ "Sphaeropleales",
-      family == "Staurosiraceae" ~ "Fragilariales",
-      family == "Wilmottiaceae" ~ "Coleofasciculales",
       family %in% c("Potamididae", "Thiaridae", "Paludomidae") ~ "Caenogastropoda incertae sedis",
+      family %in% c("Chlamydomonadaceae", "Haematococcaceae", "Chlorococcaceae") ~ "Chlamydomonadales",
+      family %in% c("Schroederiaceae", "Selenastraceae") ~ "Sphaeropleales",
+      family %in% c("Mesotaeniaceae", "Zygnemataceae") ~ "Zygnematales",
+      
+      family == "Cymatolegaceae" ~ "Nodosilineales",
+      family == "Wilmottiaceae" ~ "Coleofasciculales",
+      family == "Prochlorococcaceae" ~ "Synechococcales",
+      family == "Ulotrichaceae" ~ "Ulotrichales",
+      family == "Radiococcaceae" ~ "Sphaeropleales",
+      family == "Desmidiaceae" ~ "Desmidiales",
+      family == "Bicosoecaceae" ~ "Bicosoecales",
+      family == "Pfiesteriaceae" ~ "Thoracosphaerales",
+      family == "Coccomyxaceae" ~ "Trebouxiophyceae ordo incertae sedis",
+      family == "Dinobryaceae" ~ "Chromulinales",
+      family == "Amphidiniaceae" ~ "Amphidiniales",
+      family == "Amoebidae" ~ "Euamoebida",
+      family == "Katablepharidaceae" ~ "Katablepharidales",
+      family == "Staurosiraceae" ~ "Fragilariales",
+      family == "Ebriaceae" ~ "Ebriales",
+      family == "Paramastigaceae" ~ "Spironematellales",
+      family == "Tribonemataceae" ~ "Tribonematales",
       family == "Gnesiocerotidae" ~ "Polycladida",
       family == "Trinematidae" ~ "Euglyphida",
-      family == "Neogosseidae" ~ "Chaetonotida",
-      family == "Euplotidae" ~ "Euplotida",
-      family == "Prochlorococcaceae" ~ "Synechococcales",
-      family == "Gymnodiniaceae" ~ "Gymnodiniales",
-      family == "Ulotrichaceae" ~ "Ulotrichales",
-      family == "Tribonemataceae" ~ "Tribonematales",
       family == "Sellaphoraceae" ~ "Naviculales",
       family == "Bacillariaceae" ~ "Bacillariales",
       family == "Surirellaceae" ~ "Surirellales",
-      family %in% c("Chlamydomonadaceae", "Haematococcaceae", "Chlorococcaceae", "Cryptomonadaceae", "Wislouchiaceae") ~ "Chlamydomonadales",
-      family %in% c("Schroederiaceae", "Selenastraceae") ~ "Sphaeropleales",
+      family == "Neogosseidae" ~ "Chaetonotida",
+      family == "Ochromonadaceae" ~ "Ochromonadales",
+      family == "Chrysosaccaceae" ~ "Chrysosaccales",
+      family == "Koliellaceae" ~ "Prasiolales",
+      family == "Lepidochromonadaceae" ~ "Paraphysomonadales",
       family == "Pleurochloridaceae" ~ "Mischococcales",
       family == "Pyrenomonadaceae" ~ "Pyrenomonadales",
-      family == "Schizotrichaceae" ~ "Leptolyngbyales",
       family == "Spirulinaceae" ~ "Spirulinales",
-      family == "Aphanizomenonaceae" ~ "Nostocales",
+      family == "Euplotidae" ~ "Euplotida",
+      family %in% c("Aphanizomenonaceae", "Nostocaceae", "Nodulariaceae", "Hapalosiphonaceae", "Scytonemataceae", "Rivulariaceae", "Tolypothrichaceae", "Leptobasaceae", "Stigonemataceae") ~ "Nostocales",
       family == "Diploporaceae" ~ "Dasycladales",
       family == "Astasiidae" ~ "Natomonadida",
-       
-      family == "Trebouxiophyceae incertae sedis" ~ "Trebouxiophyceae ordo incertae sedis",
-      family == "Bacillariophyceae familia incertae sedis" ~ "Bacillariophyceae ordo incertae sedis",
+      family == "Trichodinidae" ~ "Mobilida",
+      family == "Trichocoleusaceae" ~ "Leptolyngbyales",
+      family == "Gymnodiniaceae" ~ "Gymnodiniales",
+      family == "Peridiniaceae" ~ "Peridiniales",
+      family == "Thermostichaceae" ~ "Thermostichales",
+      family == "Bacillariaceae" ~ "Bacillariales",
+      family == "Baetidae" ~ "Ephemeroptera",
       
-      genus == "Polychaos" ~ "Euamoebida",
-      genus == "Chroostipes" ~ "Cyanophyceae incertae sedis",
+      # Assigned wrong
+      family %in% c("Microcystaceae", "Gomphosphaeriaceae", "Cyanobacteriaceae", "Chroococcaceae", "Cyanothrichaceae", "Pleurocapsaceae", "Geminocystaceae") ~ "Chroococcales",
+      family %in% c("Chamaesiphonaceae", "Gomontiellaceae") ~ "Gomontiellales",
+      family %in% c("Microcoleaceae", "Oscillatoriaceae", "Phormidiaceae", "Aerosakkonemataceae") ~ "Oscillatoriales",
+      family %in% c("Xenococcaceae", "Hyellaceae", "Dermocarpellaceae") ~ "Pleurocapsales",
+      family == "Coleofasciculaceae" ~ "Coleofasciculales",
+      family == "Desertifilaceae" ~ "Desertifilales",
+      family %in% c("Chroococcidiopsidaceae", "Aliterellaceae") ~ "Chroococcidiopsidales",
+      family == "Geitlerinemataceae" ~ "Geitlerinematales",
+      resolved.taxa.name == "Chroococcales" ~ "Chroococcales",
+      resolved.taxa.name == "Oscillatoriales" ~ "Oscillatoriales",
+      family == "Sphaerocystidaceae" ~ "Chlamydomonadales",
+      family == "Euglyphidae" ~ "Euglyphida",
+      family %in% c("Chrysocapsaceae", "Chromulinaceae") ~ "Chromulinales",
+      family == "Lobocystis" ~ "Chlorophyceae ordo incertae sedis",
+      
+      genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae ordo incertae sedis",
+      genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae ordo incertae sedis",
+      genus == "Chroostipes" ~ "Cyanophyceae ordo incertae sedis",
       genus == "Lebouridinium" ~ "Gymnodiniales",
-      genus == "Sphaerochloris" ~ "Xanthophyceae ordo incertae sedis",
       
       TRUE ~ order
     ),
     
     class = case_when(
-      order == "Flosculariaceae" ~ "Eurotatoria",
-      order == "Ebriales" ~ "Thecofilosea",
-      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales") ~ "Cyanophyceae",
-      order == "Spironematellales" ~ "Spironematellophyceae",
-      order == "Bicosoecales" ~ "Bicoecidea",
-      order %in% c("Chromulinales", "Chrysosphaerales") ~ "Chrysophyceae",
-      order == "Desmidiales" ~ "Zygnematophyceae",
-      order == "Euamoebida" ~ "Tubulinea",
-      order == "Chlorellales" ~ "Trebouxiophyceae",
-      order == "Euglyphida" ~ "Imbricatea",
-      order == "Gymnodiniales" ~ "Dinophyceae",
-      order == "Zygnematales" ~ "Zygnematophyceae",
-      order == "Euplotida" ~ "Spirotrichea",
-      order == "Cyanophyceae incertae sedis" ~ "Cyanophyceae",
-      order == "Ulotrichales" ~ "Ulvophyceae",
+      
+      # not species
+      resolved.taxa.name %in% c("Unapertura latens") ~ NA,
+      
+      # gaps
+      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales", "Chroococcales", "Thermostichales", "Cyanophyceae ordo incertae sedis") ~ "Cyanophyceae",
       order %in% c("Tribonematales", "Mischococcales") ~ "Xanthophyceae",
       order %in% c("Naviculales", "Bacillariales", "Surirellales") ~ "Bacillariophyceae",
       order %in% c("Chlamydomonadales", "Sphaeropleales") ~ "Chlorophyceae",
+      order %in% c("Gymnodiniales", "Peridiniales", "Thoracosphaerales") ~ "Dinophyceae",
+      
+      order == "Ulotrichales" ~ "Ulvophyceae",
+      order == "Desmidiales" ~ "Zygnematophyceae",
+      order == "Bicosoecales" ~ "Bicoecidea",
+      order == "Chlorellales" ~ "Trebouxiophyceae",
+      order == "Chromulinales" ~ "Chrysophyceae",
+      order == "Ebriales" ~ "Thecofilosea",
+      order == "Spironematellales" ~ "Spironematellophyceae",
+      order == "Euglyphida" ~ "Imbricatea",
+      order == "Euamoebida" ~ "Tubulinea",
       order == "Pyrenomonadales" ~ "Cryptophyceae",
+      order == "Zygnematales" ~ "Zygnematophyceae",
       order == "Dasycladales" ~ "Ulvophyceae",
       order == "Natomonadida" ~ "Peranemea",
+      order == "Euplotida" ~ "Spirotrichea",
+      order == "Mobilida" ~ "Oligohymenophorea",
+      order == "Trebouxiophyceae ordo incertae sedis" ~ "Trebouxiophyceae",
+      order == "Ephemeroptera" ~ "Hexapoda",
+      order == "Euglyphida" ~ "Imbricatea",
       
-      family == "Coccomyxaceae" ~ "Trebouxiophyceae",
-      genus == "Sphaerochloris" ~ "Xanthophyceae",
+      family == "Synechococcales" ~ "Cyanophyceae",
+      
+      # Assigned wrong
+      class == "Cyanobacteriia" ~ "Cyanophyceae",
+      
       TRUE ~ class
     ),
     
     phylum = case_when(
-      class == "Eurotatoria" ~ "Rotifera",
-      class == "Zygnematophyceae" ~ "Charophyta",
-      class == "Polycystina" ~ "Radiozoa",
-      class == "Spironematellophyceae" ~ "Spironematellophyta",
-      class == "Dinophyceae" ~ "Dinoflagellata",
-      class == "Spirotrichea" ~ "Ciliophora",
-      class == "Tubulinea" ~ "Amoebozoa",
-      class %in% c("Imbricatea", "Thecofilosea") ~ "Cercozoa",
+      
+      # not species
+      resolved.taxa.name %in% c("Unapertura latens", "Pica cyana") ~ NA,
+      
+      
       class == "Cyanophyceae" ~ "Cyanobacteria",
-      class %in% c("Trebouxiophyceae", "Ulvophyceae", "Chlorophyceae") ~ "Chlorophyta",
+      class == "Zygnematophyceae" ~ "Charophyta",
+      class == "Dinophyceae" ~ "Myzozoa",
       class %in% c("Chrysophyceae", "Xanthophyceae", "Bacillariophyceae") ~ "Ochrophyta",
-      class == "Cryptophyceae" ~ "Cryptista",
-      class == "Peranemea" ~ "Euglenophyta",
+      class == "Polycystina" ~ "Radiozoa",
+      class == "Thecofilosea" ~ "Cercozoa",
+      class == "Spironematellophyceae" ~ "Spironematellophyta",
+      class == "Hexapoda" ~ "Arthropoda",
+      class == "Tubulinea" ~ "Amoebozoa",
+      class %in% c("Oligohymenophorea", "Spirotrichea") ~ "Ciliophora",
+      class == "Cryptophyceae" ~ "Cryptophyta",
+      class == "Peranemea" ~ "Euglenozoa",
+      class == "Imbricatea" ~ "Cercozoa",
+      class %in% c("Chlorophyceae", "Ulvophyceae", "Trebouxiophyceae") ~ "Chlorophyta",
+      
       TRUE ~ phylum
     ),
     
     kingdom = case_when(
-      # missing
-      phylum == "Rotifera" ~ "Animalia",
-      phylum == "Cyanobacteria" ~ "Bacteria",
+      # not species
+      resolved.taxa.name %in% c("Pennate", "Unapertura latens", "Pica cyana") ~ NA,
+      
+      # gaps
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Plantae",
-      phylum %in% c("Ochrophyta", "Cryptista") ~ "Chromista",
-      phylum %in% c("Amoebozoa", "Euglenophyta") ~ "Protozoa",
+      phylum %in% c("Cercozoa", "Myzozoa", "Ochrophyta", "Ciliophora", "Cryptophyta") ~ "Chromista",
+      phylum == "Cyanobacteria" ~ "Bacteria",
+      phylum == "Arthropoda" ~ "Animalia",
+      phylum %in% c("Amoebozoa", "Euglenozoa") ~ "Protozoa",
       
       TRUE ~ kingdom
     )
-  ) %>% 
-  
-  relocate(tax.uid, resolved.taxa.name, species, genus, family, order, class, phylum, kingdom)
-  
-  
+    
+    
+  )
+
+
 x <- tax_final %>% 
+  filter(
+    is.na(kingdom)
+  )
+%>% 
   distinct(
     phylum
   )
-
-y <- tax_final %>% 
-  filter(
-    phylum == "Mollusca"
-  )
-
-
-
 
 
 
