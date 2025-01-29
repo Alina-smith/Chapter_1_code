@@ -368,6 +368,7 @@ tax_final <- tax_2gbif_cleaned %>%
       resolved.taxa.name == "Chlorobium saxatile" ~ "Monoraphidium saxatile",
       resolved.taxa.name == "Chlorolobium braunii" ~ "Chlorolobion braunii",
       resolved.taxa.name == "Monoraphidium arcuatum" ~ "Ankistrodesmus arcuatus",
+      resolved.taxa.name == "Euglena rostrata" ~ "Euglena rostrata",
       
       # 2) Gaps:
       # These ones have a more updated name than the resolved.taxa.name so need changing
@@ -415,6 +416,8 @@ tax_final <- tax_2gbif_cleaned %>%
       species == "Chlorolobion braunii" ~ "Chlorolobion",
       species == "Willea rectangularis" ~ "Willea",
       species == "Bacillaria paxillifera" ~ "Bacillaria",
+      resolved.taxa.name == "Chrysodendron" ~ "Chrysodendron",
+      species == "Euglena rostrata" ~ "Euglena",
       
       # 2) Gaps
       # Genus level
@@ -455,15 +458,15 @@ tax_final <- tax_2gbif_cleaned %>%
       genus == "Ulothrix" ~ "Ulotrichaceae",
       genus == "Jaaginema" ~ "Synechococcales familia incertae sedis",
       genus == "Speroidium" ~ "Pfiesteriaceae",
-      genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis", #### got to here checking
+      genus == "Lobocystis" ~ "Chlorophyceae familia incertae sedis",
       genus == "Pleurostauron" ~ "Staurosiraceae",
       genus == "Polyedriopsis" ~ "Sphaeropleales incertae sedis",
-      genus == "Xanthonema" ~ "Tribonemataceae",
+      genus %in% c("Xanthonema", "Brachynematella") ~ "Tribonemataceae",
       genus == "Picochlorum" ~ "Chlorellales incertae sedis",
       genus == "Echinopus" ~ "Baetidae",
       genus == "Fallacia" ~ "Sellaphoraceae",
       genus == "Gomphonella" ~ "Cymbellales incertae sedis",
-      genus == "Nitzschia" ~ "Bacillariaceae",
+      genus %in% c("Nitzschia", "Bacillaria") ~ "Bacillariaceae",
       genus == "Iconella" ~ "Surirellaceae",
       genus == "Trichodina" ~ "Trichodinidae",
       genus == "Schroederia" ~ "Schroederiaceae",
@@ -489,12 +492,24 @@ tax_final <- tax_2gbif_cleaned %>%
       genus == "Microcystis" ~ "Microcystaceae",
       genus == "Peridinium" ~ "Peridiniaceae",
       genus == "Cyanobium" ~ "Prochlorococcaceae",
-      genus == "Bacillaria" ~ "Bacillariaceae",
       
       genus %in% c("Gloeocapsa", "Gloeocapsopsis") ~ "Aliterellaceae",
       genus == "Geitlerinema" ~ "Geitlerinemataceae",
       genus == "Sphaerocystis" ~ "Sphaerocystidaceae",
       genus == "Chrysopora" ~ "Chrysocapsaceae",
+      genus == "Nais" ~ "Naididae",
+      genus == "Raciborskiella" ~ "Wislouchiaceae",
+      genus == "Pompholyx" ~ "Testudinellidae",
+      genus == "Actinocyclus" ~ "Hemidiscaceae",
+      genus == "Epicystis" ~ "Chrysosphaeraceae",
+      genus == "Cryptoglena" ~ "Euglenaceae",
+      genus == "Euglena" ~ "Euglenaceae",
+      genus == "Chaetophora" ~ "Chaetophoraceae",
+      genus == "Sida" ~ "Sididae",
+      genus == "Brachynema" ~ "Brachynematella",
+      genus == "Opercularia" ~ "Operculariidae",
+      genus == "Chrysodendron" ~ "Ochromonadales",
+      
       
       family == "Spirodinium" ~ "Gymnodiniaceae",
       family == "Microcystaceae_A" ~ "Microcystaceae",
@@ -510,15 +525,14 @@ tax_final <- tax_2gbif_cleaned %>%
       # Gaps
       family %in% c("Chlorellaceae", "Oocystaceae") ~ "Chlorellales",
       family %in% c("Potamididae", "Thiaridae", "Paludomidae") ~ "Caenogastropoda incertae sedis",
-      family %in% c("Chlamydomonadaceae", "Haematococcaceae", "Chlorococcaceae") ~ "Chlamydomonadales",
-      family %in% c("Schroederiaceae", "Selenastraceae") ~ "Sphaeropleales",
+      family %in% c("Chlamydomonadaceae", "Haematococcaceae", "Chlorococcaceae", "Chlorangiellaceae", "Wislouchiaceae") ~ "Chlamydomonadales",
+      family %in% c("Schroederiaceae", "Selenastraceae", "Radiococcaceae") ~ "Sphaeropleales",
       family %in% c("Mesotaeniaceae", "Zygnemataceae") ~ "Zygnematales",
       
-      family == "Cymatolegaceae" ~ "Nodosilineales",
+      family == "Cymatolegaceae" ~ "Nodosilineales", 
       family == "Wilmottiaceae" ~ "Coleofasciculales",
       family == "Prochlorococcaceae" ~ "Synechococcales",
       family == "Ulotrichaceae" ~ "Ulotrichales",
-      family == "Radiococcaceae" ~ "Sphaeropleales",
       family == "Desmidiaceae" ~ "Desmidiales",
       family == "Bicosoecaceae" ~ "Bicosoecales",
       family == "Pfiesteriaceae" ~ "Thoracosphaerales",
@@ -553,8 +567,8 @@ tax_final <- tax_2gbif_cleaned %>%
       family == "Gymnodiniaceae" ~ "Gymnodiniales",
       family == "Peridiniaceae" ~ "Peridiniales",
       family == "Thermostichaceae" ~ "Thermostichales",
-      family == "Bacillariaceae" ~ "Bacillariales",
       family == "Baetidae" ~ "Ephemeroptera",
+      
       
       # Assigned wrong
       family %in% c("Microcystaceae", "Gomphosphaeriaceae", "Cyanobacteriaceae", "Chroococcaceae", "Cyanothrichaceae", "Pleurocapsaceae", "Geminocystaceae") ~ "Chroococcales",
@@ -570,7 +584,18 @@ tax_final <- tax_2gbif_cleaned %>%
       family == "Sphaerocystidaceae" ~ "Chlamydomonadales",
       family == "Euglyphidae" ~ "Euglyphida",
       family %in% c("Chrysocapsaceae", "Chromulinaceae") ~ "Chromulinales",
-      family == "Lobocystis" ~ "Chlorophyceae ordo incertae sedis",
+      genus == "Lobocystis" ~ "Chlorophyceae ordo incertae sedis",
+      family == "Borghiellaceae" ~ "Suessiales",
+      family == "Phaeothamniaceae" ~ "Phaeothamniales",
+      family == "Naididae" ~ "Tubificida",
+      family == "Testudinellidae" ~ "Flosculariaceae",
+      family == "Pelonemataceae" ~ "Pelonematales",
+      family == "Hemidiscaceae" ~ "Coscinodiscales",
+      family == "Chrysosphaeraceae" ~ "Chrysosphaerales",
+      family == "Euglenaceae" ~ "Euglenales",
+      family == "Chaetophoraceae" ~ "Chaetophorales",
+      family == "Sididae" ~ "Ctenopoda",
+      family == "Operculariidae" ~ "Sessilida",
       
       genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae ordo incertae sedis",
       genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae ordo incertae sedis",
@@ -586,35 +611,39 @@ tax_final <- tax_2gbif_cleaned %>%
       resolved.taxa.name %in% c("Unapertura latens") ~ NA,
       
       # gaps
-      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales", "Chroococcales", "Thermostichales", "Cyanophyceae ordo incertae sedis") ~ "Cyanophyceae",
+      order %in% c("Nodosilineales", "Coleofasciculales", "Leptolyngbyales", "Spirulinales", "Nostocales", "Chroococcales", "Thermostichales", "Cyanophyceae ordo incertae sedis", "Pelonematales") ~ "Cyanophyceae",
       order %in% c("Tribonematales", "Mischococcales") ~ "Xanthophyceae",
       order %in% c("Naviculales", "Bacillariales", "Surirellales") ~ "Bacillariophyceae",
-      order %in% c("Chlamydomonadales", "Sphaeropleales") ~ "Chlorophyceae",
+      order %in% c("Chlamydomonadales", "Sphaeropleales", "Chaetophorales") ~ "Chlorophyceae",
       order %in% c("Gymnodiniales", "Peridiniales", "Thoracosphaerales") ~ "Dinophyceae",
       
-      order == "Ulotrichales" ~ "Ulvophyceae",
-      order == "Desmidiales" ~ "Zygnematophyceae",
-      order == "Bicosoecales" ~ "Bicoecidea",
-      order == "Chlorellales" ~ "Trebouxiophyceae",
+      order %in% c("Ulotrichales", "Dasycladales") ~ "Ulvophyceae",
+      order %in% c("Desmidiales", "Zygnematales") ~ "Zygnematophyceae",
+      order == "Bicosoecales" ~ "Bicosoecophyceae",
+      order %in% c("Chlorellales", "Trebouxiophyceae ordo incertae sedis") ~ "Trebouxiophyceae",
       order == "Chromulinales" ~ "Chrysophyceae",
       order == "Ebriales" ~ "Thecofilosea",
       order == "Spironematellales" ~ "Spironematellophyceae",
       order == "Euglyphida" ~ "Imbricatea",
       order == "Euamoebida" ~ "Tubulinea",
       order == "Pyrenomonadales" ~ "Cryptophyceae",
-      order == "Zygnematales" ~ "Zygnematophyceae",
-      order == "Dasycladales" ~ "Ulvophyceae",
       order == "Natomonadida" ~ "Peranemea",
       order == "Euplotida" ~ "Spirotrichea",
       order == "Mobilida" ~ "Oligohymenophorea",
-      order == "Trebouxiophyceae ordo incertae sedis" ~ "Trebouxiophyceae",
       order == "Ephemeroptera" ~ "Hexapoda",
-      order == "Euglyphida" ~ "Imbricatea",
-      
-      family == "Synechococcales" ~ "Cyanophyceae",
+      order == "Synechococcales" ~ "Cyanophyceae",
+      order == "Euglenales" ~ "Euglenophyceae",
       
       # Assigned wrong
       class == "Cyanobacteriia" ~ "Cyanophyceae",
+      order == "Phaeothamniales" ~ "Phaeophyceae",
+      order %in% c("Ochromonadales", "Chrysosphaerales") ~ "Chrysophyceae",
+      order == "Prasiolales" ~ "Trebouxiophyceae",
+      order == "Tubificida" ~ "Clitellata",
+      order == "Flosculariaceae" ~ "Eurotatoria",
+      order == "Coscinodiscales" ~ "Bacillariophyceae",
+      order == "Ctenopoda" ~ "Branchiopoda",
+      order == "Sessilida" ~ "Oligohymenophorea",
       
       TRUE ~ class
     ),
@@ -630,20 +659,23 @@ tax_final <- tax_2gbif_cleaned %>%
       class == "Dinophyceae" ~ "Myzozoa",
       class %in% c("Chrysophyceae", "Xanthophyceae", "Bacillariophyceae") ~ "Ochrophyta",
       class == "Polycystina" ~ "Radiozoa",
-      class == "Thecofilosea" ~ "Cercozoa",
+      class %in% c("Thecofilosea", "Imbricatea") ~ "Cercozoa",
+      
       class == "Spironematellophyceae" ~ "Spironematellophyta",
-      class == "Hexapoda" ~ "Arthropoda",
+      class %in% c("Hexapoda", "Branchiopoda") ~ "Arthropoda",
       class == "Tubulinea" ~ "Amoebozoa",
-      class %in% c("Oligohymenophorea", "Spirotrichea") ~ "Ciliophora",
+      class %in% c("Oligohymenophorea", "Spirotrichea", "Oligohymenophorea") ~ "Ciliophora",
       class == "Cryptophyceae" ~ "Cryptophyta",
-      class == "Peranemea" ~ "Euglenozoa",
-      class == "Imbricatea" ~ "Cercozoa",
+      class %in% c("Peranemea", "Euglenophyceae") ~ "Euglenozoa",
       class %in% c("Chlorophyceae", "Ulvophyceae", "Trebouxiophyceae") ~ "Chlorophyta",
+      class == "Clitellata" ~ "Annelida",
+      class == "Eurotatoria" ~ "Rotifera",
       
       TRUE ~ phylum
     ),
     
     kingdom = case_when(
+      
       # not species
       resolved.taxa.name %in% c("Pennate", "Unapertura latens", "Pica cyana") ~ NA,
       
@@ -651,7 +683,7 @@ tax_final <- tax_2gbif_cleaned %>%
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Plantae",
       phylum %in% c("Cercozoa", "Myzozoa", "Ochrophyta", "Ciliophora", "Cryptophyta") ~ "Chromista",
       phylum == "Cyanobacteria" ~ "Bacteria",
-      phylum == "Arthropoda" ~ "Animalia",
+      phylum %in% c("Annelida", "Arthropoda", "Rotifera") ~ "Animalia",
       phylum %in% c("Amoebozoa", "Euglenozoa") ~ "Protozoa",
       
       TRUE ~ kingdom
@@ -661,11 +693,21 @@ tax_final <- tax_2gbif_cleaned %>%
   )
 
 
+## Checks
+# checked through all bacteria that arent cyano
+# checked through all 
+# phylums:mollusca, Platyhelminthes, Echinodermata, Annelida, Cnidaria, Nematoda, Chordata, Gastrotricha, Actinobacteriota, Proteobacteria, Tracheophyta
+# 
+
 x <- tax_final %>% 
-  filter(
-    is.na(kingdom)
+  distinct(
+    kingdom
   )
-%>% 
+
+y <- tax_final %>% 
+  filter(
+    !(phylum %in%c("Mollusca", "Platyhelminthes", "Echinodermata", "Annelida", "Cnidaria", "Nematoda", "Chordata", "Gastrotricha", "Actinobacteriota", "Proteobacteria", "Tracheophyta"))
+  ) %>% 
   distinct(
     phylum
   )
