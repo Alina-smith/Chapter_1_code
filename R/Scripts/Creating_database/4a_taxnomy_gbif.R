@@ -342,7 +342,7 @@ saveRDS(tax_2gbif_cleaned, file = "R/data_outputs/taxonomy/gbif/tax_2gbif_cleane
 ## Final tax list ----
 # fill in missing gaps and taxa that have been resolved wrong
 
-tax_final <- tax_2gbif_cleaned %>% 
+tax_manual_changes <- tax_2gbif_cleaned %>% 
   
   ungroup() %>% 
   # don't have info for all of these so only keep species up
@@ -509,7 +509,7 @@ tax_final <- tax_2gbif_cleaned %>%
       genus == "Brachynema" ~ "Brachynematella",
       genus == "Opercularia" ~ "Operculariidae",
       genus == "Chrysodendron" ~ "Ochromonadales",
-      
+      genus == "Ceratium" ~ "Ceratiaceae",
       
       family == "Spirodinium" ~ "Gymnodiniaceae",
       family == "Microcystaceae_A" ~ "Microcystaceae",
@@ -596,6 +596,7 @@ tax_final <- tax_2gbif_cleaned %>%
       family == "Chaetophoraceae" ~ "Chaetophorales",
       family == "Sididae" ~ "Ctenopoda",
       family == "Operculariidae" ~ "Sessilida",
+      family == "Ceratiaceae" ~ "Gonyaulacales",
       
       genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae ordo incertae sedis",
       genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae ordo incertae sedis",
@@ -615,7 +616,7 @@ tax_final <- tax_2gbif_cleaned %>%
       order %in% c("Tribonematales", "Mischococcales") ~ "Xanthophyceae",
       order %in% c("Naviculales", "Bacillariales", "Surirellales") ~ "Bacillariophyceae",
       order %in% c("Chlamydomonadales", "Sphaeropleales", "Chaetophorales") ~ "Chlorophyceae",
-      order %in% c("Gymnodiniales", "Peridiniales", "Thoracosphaerales") ~ "Dinophyceae",
+      order %in% c("Gymnodiniales", "Peridiniales", "Thoracosphaerales", "Gonyaulacales") ~ "Dinophyceae",
       
       order %in% c("Ulotrichales", "Dasycladales") ~ "Ulvophyceae",
       order %in% c("Desmidiales", "Zygnematales") ~ "Zygnematophyceae",
@@ -644,6 +645,12 @@ tax_final <- tax_2gbif_cleaned %>%
       order == "Coscinodiscales" ~ "Bacillariophyceae",
       order == "Ctenopoda" ~ "Branchiopoda",
       order == "Sessilida" ~ "Oligohymenophorea",
+      class == "Gymnostomatea" ~ "Litostomatea",
+      class == "Hypotrichea" ~ "Spirotrichea",
+      class == "Insecta" ~ "Hexapoda",
+      class == "Lobosa" ~ "Tubulinea",
+      class == "Prymnesiophyceae" ~ "Coccolithophyceae",
+      class == "Zygnematophyceae" ~ "Conjugatophyceae",
       
       TRUE ~ class
     ),
@@ -687,33 +694,93 @@ tax_final <- tax_2gbif_cleaned %>%
       phylum %in% c("Amoebozoa", "Euglenozoa") ~ "Protozoa",
       
       TRUE ~ kingdom
+    ),
+    
+    # make a rank column
+    rank = case_when(
+      !(is.na(species)) ~ "Species",
+      is.na(species) & !(is.na(genus)) ~ "Genus",
+      is.na(species) & is.na(genus) & !(is.na(family)) ~ "Family",
+      is.na(species) & is.na(genus) & is.na(family) & !(is.na(order)) ~ "Order",
+      is.na(species) & is.na(genus) & is.na(family) & is.na(order) & !(is.na(class)) ~ "Class",
+      is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & !(is.na(phylum)) ~ "Phylum",
+      is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class) & is.na(phylum) & !(is.na(kingdom)) ~ "Kingdom",
+      TRUE ~ NA
+    ),
+    
+    # make another column with the most updtaed names
+    taxa.name = case_when(
+      rank == "Species" ~ species,
+      rank == "Genus" ~ genus,
+      rank == "Family" ~ family,
+      rank == "Order" ~ order,
+      rank == "Class" ~ class,
+      rank == "Phylum" ~ phylum,
+      rank == "Kingdom" ~ kingdom,
+      TRUE ~ "No rank"
     )
-    
-    
-  )
-
-
-## Checks
-# checked through all bacteria that arent cyano
-# checked through all 
-# phylums:mollusca, Platyhelminthes, Echinodermata, Annelida, Cnidaria, Nematoda, Chordata, Gastrotricha, Actinobacteriota, Proteobacteria, Tracheophyta
-# 
-
-x <- tax_final %>% 
-  distinct(
-    kingdom
-  )
-
-y <- tax_final %>% 
-  filter(
-    !(phylum %in%c("Mollusca", "Platyhelminthes", "Echinodermata", "Annelida", "Cnidaria", "Nematoda", "Chordata", "Gastrotricha", "Actinobacteriota", "Proteobacteria", "Tracheophyta"))
   ) %>% 
-  distinct(
-    phylum
+  
+  # Filter out NAs and things that aren't phyto or zoo
+  
+  filter(
+    kingdom != "Fungi",
+    !(is.na(kingdom)),
+    !(phylum %in% c("Tracheophyta", "Proteobacteria", "Actinobacteriota", "Microsporidia"))
+  ) %>% 
+  
+  mutate(
+    # Make a column for is they are phyto or zoo
+    type = case_when(
+      kingdom == "Animalia" ~ "Zooplankton",
+      phylum %in% c("Ciliophora", "Amoebozoa", "Metamonada", "Bigyra", "Radiozoa", "Cercozoa") ~ "Zooplankton",
+      TRUE ~ "Phytoplankton"
+    )
+  ) %>% 
+  relocate(
+    resolved.taxa.name, taxa.name, rank, type, species, genus, family, order, class, phylum, kingdom
   )
 
+# Add in a tax.uid column 
+z <- tax_manual_changes %>% 
+  filter(
+    type == "Zooplankton"
+  ) %>% 
+  mutate(
+    tax.uid = paste0("Z", row_number())
+  )
 
+p <- tax_manual_changes %>% 
+  filter(
+    type == "Phytoplankton"
+  ) %>% 
+  mutate(
+    tax.uid = paste0("P", row_number())
+  )
 
+tax_uid <- bind_rows(z, p)
+
+# Add to main data ----
+
+bodysize_taxonomy <-  bodysize_joined %>% 
+  left_join(
+    ., select(
+      resolved_names_2gbif_manual, original.taxa.name, resolved.taxa.name),
+    by = "original.taxa.name"
+    ) %>% 
+  left_join(
+    ., tax_uid,
+    by = "resolved.taxa.name"
+  ) %>% 
+  select(
+    uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
+    join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
+    join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
+    individual.uid, original.taxa.name, taxa.name, tax.uid, type, rank, species, genus, family, order, phylum, kingdom,
+    life.stage, sex, form, form.no,
+    min.body.size, max.body.size, body.size,
+    bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type
+  )
 
 
 
