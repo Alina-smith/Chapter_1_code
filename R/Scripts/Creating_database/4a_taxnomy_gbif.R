@@ -758,7 +758,9 @@ p <- tax_manual_changes %>%
     tax.uid = paste0("P", row_number())
   )
 
-tax_uid <- bind_rows(z, p)
+tax_list <- bind_rows(z, p)
+
+saveRDS(tax_list, file = "R/data_outputs/taxonomy/gbif/tax_list.rds")
 
 # Add to main data ----
 
@@ -769,7 +771,7 @@ bodysize_taxonomy <-  bodysize_joined %>%
     by = "original.taxa.name"
     ) %>% 
   left_join(
-    ., tax_uid,
+    ., tax_list,
     by = "resolved.taxa.name"
   ) %>% 
   select(
@@ -780,7 +782,11 @@ bodysize_taxonomy <-  bodysize_joined %>%
     life.stage, sex, form, form.no,
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type
+  ) %>% 
+  # Remove any without a taxa.name
+  filter(
+    !is.na(taxa.name)
   )
 
-
+saveRDS(bodysize_taxonomy, file = "R/data_outputs/full_database/bodysize_taxonomy.rds")
 

@@ -17,8 +17,8 @@ library(here)
 
 # Data ----
 bodysize_taxonomy <- readRDS("R/Data_outputs/full_database/bodysize_taxonomy.rds")
-db_sources_raw <- read_xlsx(here("Raw_data","master_db_traits.xlsx"), sheet = "source_list")
-wos_sources_raw <- read_xlsx(here("Raw_data","Master_WOS_data.xlsx"), sheet = "source_list")
+db_sources_raw <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "source_list")
+wos_sources_raw <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "source_list")
 
 # Join sources together ----
 
@@ -181,7 +181,7 @@ between_dupe_check <- all_source_raw %>%
 duplicate_source_list <- all_source_raw %>% 
   
   mutate(
-    ## Formatting
+    ## Formatting - make the same format as the between dupes list
     # make titles lower case incase there are any duplicates but have different caps in their title
     title = tolower(title),
     
@@ -261,25 +261,18 @@ duplicate_source_list <- all_source_raw %>%
   )
 
 # Duplicate data points ----
-# Want to remove data points if they are from duplicate sources but also have the same taxa code because some secondary data papers might have gotten data from the same source but focused on different species so want to keep those
+# Now have the sources that appear more than once in the source list want to locate the data points in the raw data that use these sources and keep just one of them
+# However want there may instances where they are from the same source but for different species so want to keep all that are for different species 
 
-
-# pivot bodysize data to get all original.source.code columns into one column
-# change the original.source.codes of duplicates to be the same using duplicate_new_code
-# make a column called duplicate.check which is the new.source.code and the original.taxa.name merged together to check for duplicates of the same source and taxa.name
-
-
-
-# Remove duplicates ----
-# get a list of all the individual.uids that have duplicated data
+# get a list of all the individual.uids that have duplicated data - probably a long winded way of doing it but only way I could visulise in my head
 duplicate_uids <- bodysize_taxonomy %>% 
   
   select(
     original.source.code.1:original.source.code.18,
     individual.uid,
-    accepted.taxa.name,
+    taxa.name,
     source.code
-  ) %>% 
+  )%>% 
   
   # Pivot to get original.source.codes columns in one column
   pivot_longer(
@@ -288,6 +281,7 @@ duplicate_uids <- bodysize_taxonomy %>%
     names_to = "source.code.column.no"
   ) %>% 
   
+  # select just ones that appear in the duplacte source list
   filter(
     original.source.code %in% duplicate_source_list$original.source.code
   ) %>% 
@@ -300,9 +294,11 @@ duplicate_uids <- bodysize_taxonomy %>%
   # Find data points that use the same original.source for the same taxa
   # merge the new.original.source.code and taxa name
   mutate(
-    duplicate.check = paste(new.original.source.code, accepted.taxa.name, sep = "-")
+    duplicate.check = paste(new.original.source.code, taxa.name, sep = "-")
   ) %>%
   
+  # make a frequency table for all the points and select ones that occur more than once
+  # group by duplicate check and then count how many sources there are for each one - will show if there are more than once source for each one
   group_by(duplicate.check) %>% 
   
   mutate(
@@ -310,16 +306,79 @@ duplicate_uids <- bodysize_taxonomy %>%
     ) %>% 
   
   filter(
-    count > 1,
-    source.type != "primary data"
+    # select only ones that occur more than once
+    count > 1, # This now gives a list of all data points where the same source for the same individual has been used
+    
+    # Prioritize primary data points - When there are duplicates and one is primary than want to keep the primary
+    # Remove primary data points
+    source.type != "primary data" 
+  ) %>% 
+  
+  # Redo count column
+  mutate(
+    count.primary = n_distinct(source.code) # This now gives a list of all the duplicates of the primary data points (count = 1) and any data points where the same source for the same individual has been used and they both came from secndary sources (count = 2)
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  # Remove secondary duplicates
+  group_by(duplicate.check, source.code) %>% 
+  
+  # want to keep the source that has the most data points so make a column which count the number of data points for each source code
+  mutate(
+    point.number = n()
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(duplicate.check) %>% 
+  
+  mutate(
+    
+    # When there are just one data point in each source point.no will be the same for both so when removing the highest point.no is wil remove both of these so want to mark out these ones
+    dupe.no = n(),
+
+    remove = if_else(
+      point.number == max(point.number) & count.primary == "2" & dupe.no > 2, # remove the one with the max point number when it is a secondary duplicate and has more than 2 data points
+      "yes",
+      "no"
+    )
+  ) %>% 
+  
+  ungroup() %>%
+  
+  # keep the ones we don't want to remove
+  filter(
+    remove == "no"
+  ) %>% 
+  
+  # Finally all the ones that are left are duplicates with just one in each so just delete any one
+  
+  group_by(duplicate.check) %>%
+  
+  # make a row number column so can just select row 1 to remove
+  mutate(
+    row.no = row_number()
   ) %>% 
   
   mutate(
-    count = n_distinct(source.code)
+    remove = if_else(
+      dupe.no == "2" & row.no == "1" & count.primary == "2", # remove the first row of all that have only have two duplicates and are secondary duplicates
+      "yes",
+      "no"
+    )
   ) %>% 
+  
+  ungroup() %>% 
+  
   filter(
-    !(count > 1 & duplicated(duplicate.check))
-  ) 
+    remove == "no"
+  )%>% 
+  
+  select(
+    individual.uid
+  )
+# This now gives a list of all uids that need to be removed from the main data
 
 ## Remove duplicates ----
 # remove duplicates when they have only one original source code
@@ -327,7 +386,7 @@ bodysize_duplicates <- bodysize_taxonomy %>%
   
   mutate(
     duplicate = if_else(
-      individual.uid %in% duplicate_uids$individual.uid & original.source.code.2 == "no.source",
+      individual.uid %in% duplicate_uids$individual.uid & original.source.code.2== "no.source",
       "yes",
       "no"
     )
@@ -337,34 +396,28 @@ bodysize_duplicates <- bodysize_taxonomy %>%
     duplicate == "no"
   )
 
-# make new source list ----
-source_list_with_dupes <- all_source_raw %>% 
+# make final source list ----
+source_without_dupes <- bodysize_duplicates %>% 
+  select(source.code:original.source.code.18) %>% 
   
-  # remove duplicate source codes as these have already been done
-  distinct(
-    source.code, .keep_all = TRUE
-  ) %>% 
-  
-  left_join(
-    select(
-      duplicate_source_list, original.source.code, new.original.source.code
-      ), by = c("source.code" = "original.source.code")
+  pivot_longer(
+    cols = source.code:original.source.code.18,
+    values_to = "source.code"
     ) %>% 
   
-  mutate(
-    row = row_number(),
-    row = as.character(row),
-    code.filler = if_else(
-      !is.na(new.original.source.code),
-      new.original.source.code,
-      row
-    )
+  distinct(
+    source.code
   ) %>% 
-  group_by(code.filler) %>% 
-  mutate(new.code = cur_group_id()) %>% 
-  ungroup()
+  filter(
+    !(source.code %in% c("unknown", "no.source"))
+  ) %>% 
+  left_join(all_source_raw, by = "source.code") %>% 
+  mutate(
+    new.source.code = row_number()
+  )
 
-## assing the new source codes to the data ----
+
+## adding the new source codes to the data ----
 bodysize_sources <- bodysize_duplicates %>% 
   
   select(
@@ -381,9 +434,10 @@ bodysize_sources <- bodysize_duplicates %>%
 
   left_join(
     select(
-      source_list_with_dupes, source.code, new.code
+      source_without_dupes, source.code, new.source.code
   ), by = c("old.source.code" = "source.code")
-  ) %>% 
+  ) 
+%>% 
   
   pivot_wider(
     id_cols = uid,
