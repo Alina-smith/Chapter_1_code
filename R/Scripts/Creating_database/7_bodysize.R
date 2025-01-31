@@ -10,8 +10,6 @@ library(data.table)
 
 # Data ----
 bodysize_location <- readRDS("R/Data_outputs/full_database/bodysize_location.rds")
-taxonomy_list <- read.csv("R/Data_outputs/full_database/taxonomy_list.rds")
-rotifer <- read_xlsx("Raw_data/master_length_weight.xlsx", sheet = "McCauley rotifers")
 b_pooled <- read_xlsx("Raw_data/master_length_weight.xlsx", sheet = "Bottrell pooled")
 
 # Removing multiple measurements ----

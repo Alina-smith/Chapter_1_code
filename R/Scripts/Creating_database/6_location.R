@@ -35,9 +35,9 @@ location_join <- location_raw %>%
     join.location = paste(source.code, join.location, sep = "-")
   )
 
-# Add codes to raw data ----
+# Update location codes in raw data ----
 # left join the new location.code for each location to the raw data by the join.location columns
-bodysize_location <- bodysize_sources %>% 
+bodysize_location_codes <- bodysize_sources %>% 
   
   mutate(
     ## Merge source.code and location.code ----
@@ -59,7 +59,7 @@ bodysize_location <- bodysize_sources %>%
   # left join location codes
   left_join(
     select(
-      location_join, join.location, location.code, longitude, latitude
+      location_join, join.location, location.code, longitude, latitude, country, continent
     ), by = "join.location"
   ) %>% 
   
@@ -67,12 +67,14 @@ bodysize_location <- bodysize_sources %>%
   # pivot back to get seperate columns for each location.code
   pivot_wider(
     id_cols = uid,
-    names_from = name,
-    values_from = c(location.code, longitude, latitude)
+    #names_from = name,
+    values_from = c(location.code, longitude, latitude, country, continent)
   ) %>% 
   rename_with(~ gsub("location.code_join.location", "location.code", .)) %>% 
   rename_with(~ gsub("longitude_join.location", "longitude", .)) %>% 
   rename_with(~ gsub("latitude_join.location", "latitude", .)) %>% 
+  rename_with(~ gsub("country_join.location", "country", .)) %>% 
+  rename_with(~ gsub("continent_join.location", "continent", .)) %>% 
   
   # Add back in the rest of the data
   left_join(
@@ -84,48 +86,210 @@ bodysize_location <- bodysize_sources %>%
   select(
     - ends_with(".old"),
     - starts_with("join.location")
-  ) 
-
-x <- bodysize_location %>%   
+  ) %>% 
+  
   # merge columns together
   mutate(
     location.code = paste(location.code.1, location.code.2, location.code.3, location.code.4, location.code.5, location.code.6, location.code.7, location.code.8, location.code.9, location.code.10,
                           location.code.11, location.code.12, location.code.13, location.code.14, location.code.15, location.code.16, location.code.17,
-                             sep = ";"),
+                          sep = ";"),
     location.code = stri_replace_all_regex(location.code, "NA;|NA|;NA", ""),
     location.code = na_if(location.code, "")
   ) %>% 
+  
+  select(
+    - starts_with("location.code.")
+  )
+
+# Latitude ranges ----
+
+latitudes <- bodysize_location_codes %>%   
 
   pivot_longer(
     cols = starts_with("latitude"),  # Select all latitude columns
-    names_to = "latitude_type",      # Temporary column name
-    values_to = "latitude_value"     # Temporary values column
+    names_to = "latitude.type",      # Temporary column name
+    values_to = "latitude.value"     # Temporary values column
   ) %>%
   group_by(location.code) %>% 
   mutate(
-    n = n_distinct(latitude_value, na.rm = TRUE)
+    n = n_distinct(latitude.value, na.rm = TRUE)
   ) %>% 
   
   ungroup() %>% 
 
   group_by(uid) %>%  
   mutate(
-    latitude_range = 
+    latitude.range = 
       if_else(
         n >1,
-        paste(range(latitude_value, na.rm = TRUE), collapse = ":"),
-        latitude_value
+        paste(range(latitude.value, na.rm = TRUE), collapse = ":"),
+        latitude.value
       )
-  )
-
-
-y <- x %>% 
+  ) %>%
+  
+  ungroup() %>% 
+  
   pivot_wider(
     id_cols = uid,
-    names_from = latitude_type,
-    values_from = latitude_range
+    names_from = latitude.type,
+    values_from = latitude.range
+  ) %>% 
+  
+  select(
+    uid, latitude.1
+  ) %>% 
+  
+  rename(
+    latitude = latitude.1
   )
+
+# Longitude ranges ----
+longitudes <- bodysize_location_codes%>%   
+  
+  pivot_longer(
+    cols = starts_with("longitude"),  # Select all latitude columns
+    names_to = "longitude.type",      # Temporary column name
+    values_to = "longitude.value"     # Temporary values column
+  ) %>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(longitude.value, na.rm = TRUE)
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(uid) %>%  
+  mutate(
+    longitude.range = 
+      if_else(
+        n >1,
+        paste(range(longitude.value, na.rm = TRUE), collapse = ":"),
+        longitude.value
+      )
+  ) %>%
+  
+  ungroup() %>% 
+  
+  pivot_wider(
+    id_cols = uid,
+    names_from = longitude.type,
+    values_from = longitude.range
+  ) %>% 
+  
+  select(
+    uid, longitude.1
+  ) %>% 
+  
+  rename(
+    longitude = longitude.1
+  )
+
+# country ranges ----
+countries <- bodysize_location_codes %>%
+  
+  pivot_longer(
+    cols = starts_with("country"),  # Select all latitude columns
+    names_to = "country.type",      # Temporary column name
+    values_to = "country"     # Temporary values column
+  ) %>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(country, na.rm = TRUE)
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(uid) %>%  
+  mutate(
+    country = 
+      if_else(
+        n >1,
+        paste(unique(country), collapse = ","),
+        country
+      ),
+    country = stri_replace_all_regex(country, ",NA|NA,", ""),
+    country = stri_replace_all_regex(country, ",", ", ")
+  ) %>%
+  
+  ungroup() %>% 
+  
+  pivot_wider(
+    id_cols = uid,
+    names_from = country.type,
+    values_from = country
+  ) %>% 
+  
+  select(
+    uid, country.1
+  ) %>% 
+  
+  rename(
+    country = country.1
+  )
+
+# continent ranges ----
+continents <- bodysize_location_codes %>%   
+  
+  pivot_longer(
+    cols = starts_with("continent"),  # Select all latitude columns
+    names_to = "continent.type",      # Temporary column name
+    values_to = "continent"     # Temporary values column
+  ) %>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(continent, na.rm = TRUE)
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(uid) %>%  
+  mutate(
+    continent = 
+      if_else(
+        n >1,
+        paste(unique(continent), collapse = ","),
+        continent
+      ),
+    continent = stri_replace_all_regex(continent, ",NA|NA,", ""),
+    continent = stri_replace_all_regex(continent, ",", ", ")
+  ) %>%
+  
+  ungroup() %>% 
+  
+  pivot_wider(
+    id_cols = uid,
+    names_from = continent.type,
+    values_from = continent
+  ) %>% 
+  
+  select(
+    uid, continent.1
+  ) %>% 
+  
+  rename(
+    continent = continent.1
+  )
+
+
+# Adding all to main data ----
+bodysize_location <- bodysize_location_codes %>% 
+  left_join(latitudes, by = "uid") %>% 
+  left_join(longitudes, by = "uid") %>% 
+  left_join(countries, by = "uid") %>% 
+  left_join(continents, by = "uid") %>% 
+  select(
+   - starts_with("longitude."),
+   - starts_with("latitude."),
+   - starts_with("country."),
+   - starts_with("continent.")
+  ) %>% 
+  filter(
+    stri_detect_regex(latitude, ":")
+  )
+
+
 
 
 # save
 saveRDS(bodysize_location, file = "R/Data_outputs/full_database/bodysize_location.rds")
+
