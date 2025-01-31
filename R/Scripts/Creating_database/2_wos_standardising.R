@@ -9,7 +9,7 @@ library(stringi)
 library(data.table)
 
 # Data ---- 
-wos_raw_body <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 40000)
+wos_raw_body <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 50000)
 wos_source_list <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "source_list")
 
 # Formatting ----

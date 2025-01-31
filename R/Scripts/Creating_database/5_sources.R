@@ -404,30 +404,35 @@ source_without_dupes <- bodysize_duplicates %>%
     cols = source.code:original.source.code.18,
     values_to = "source.code"
     ) %>% 
-  
   distinct(
-    source.code
+    source.code, .keep_all = TRUE
   ) %>% 
   filter(
     !(source.code %in% c("unknown", "no.source"))
   ) %>% 
-  left_join(all_source_raw, by = "source.code") %>% 
+  left_join(., all_source_raw, by = "source.code") %>% 
   mutate(
     new.source.code = row_number()
-  )
+  ) %>% 
+  distinct(
+    source.code, .keep_all = TRUE
+  ) 
+
+## Save
+saveRDS(source_without_dupes, file = "R/Data_outputs/full_database/source_list.rds")
 
 
 ## adding the new source codes to the data ----
 bodysize_sources <- bodysize_duplicates %>% 
   
   select(
-    original.source.code.1:original.source.code.18,
+    source.code:original.source.code.18,
     uid
   ) %>% 
   
   # Pivot to get original.source.codes columns in one column
   pivot_longer(
-    cols = original.source.code.1:original.source.code.18,
+    cols = source.code:original.source.code.18,
     values_to = "old.source.code",
     names_to = "source.code.column.no"
   ) %>% 
@@ -436,38 +441,22 @@ bodysize_sources <- bodysize_duplicates %>%
     select(
       source_without_dupes, source.code, new.source.code
   ), by = c("old.source.code" = "source.code")
-  ) 
-%>% 
+  ) %>% 
   
   pivot_wider(
     id_cols = uid,
     names_from = source.code.column.no,
-    values_from = new.code
+    values_from = new.source.code
   ) %>% 
   
   left_join(
     bodysize_taxonomy, by = "uid", suffix = c(".new", ".old")
   ) %>% 
   select(
-    -original.source.code.1.old:-original.source.code.18.old
+    -source.code.old:-original.source.code.18.old
   ) %>% 
   
-  # same thing but for source codes
-  left_join(
-    select(
-      source_list_with_dupes, source.code, new.code
-    ), by = "source.code"
-  ) %>% 
-  
-  mutate(
-    source.code = new.code
-  ) %>% 
-  
-  select(
-    - new.code
-  ) %>% 
-  
-  rename_with(~ gsub(".new", "", .)) %>% 
+  rename_with(~ gsub(".new", "", .))%>% 
   
   # merge together
   mutate(
@@ -483,31 +472,8 @@ bodysize_sources <- bodysize_duplicates %>%
   ) %>% 
   
   relocate(
-    uid, individual.uid, tax.uid, source.code, original.sources, accepted.taxa.name, form, form.no, life.stage, sex, min.body.size, max.body.size, body.size, units, bodysize.measurement, sample.size, error, error.type, sample.year, sample.month
+    uid, individual.uid, source.code, original.sources, original.taxa.name, taxa.name, tax.uid, type, rank, species, genus, family, order, class, phylum, kingdom, form, form.no, life.stage, sex, min.body.size, max.body.size, body.size, units, bodysize.measurement, bodysize.measurement.notes, reps, measurement.type, sample.size, error, error.type, sample.year, sample.month
   )
 
 ## Save
 saveRDS(bodysize_sources, file = "R/Data_outputs/full_database/bodysize_sources.rds")
-
-source_list <- source_list_with_dupes %>% 
-  mutate(
-    source.code = new.code
-  ) %>% 
-  
-  select(
-    - code.filler,
-    - new.code,
-    - citing.source,
-    - row,
-    - new.original.source.code,
-    - source.type
-  ) %>% 
-  distinct(
-    source.code, .keep_all = TRUE
-  )
-
-## Save
-write_csv(source_list, file = "R/Data_outputs/full_database/source_list.cvs")
-
-
-

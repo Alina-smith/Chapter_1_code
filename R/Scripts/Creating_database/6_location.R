@@ -11,38 +11,41 @@ library(here)
 # Data ----
 location_raw <- read_xlsx(here("Raw_data","location_data_full.xlsx"), sheet = "location_raw")
 bodysize_sources <- readRDS("R/Data_outputs/full_database/bodysize_sources.rds")
+new_sources <- readRDS("R/Data_outputs/full_database/source_list.rds")
 
 # Edit location list ----
-# need to add source.code to join.location to make it easier to left join as there are duplicate join.locations between sources
+# need to add source.code to join.location to make it easier to left join as some sources have the same join.locationeven though they are different locations
 location_join <- location_raw %>% 
+  
+  # update with new source codes
+  left_join(., select(
+    new_sources, source.code, new.source.code
+    ), by = "source.code"
+  ) %>% 
+  
+  select(
+    -source.code
+  ) %>% 
+  
+  rename(
+    source.code = new.source.code
+  ) %>% 
+  
   mutate(
-    join.location = paste(source.code, join.location, sep = "")
+    join.location = paste(source.code, join.location, sep = "-")
   )
 
 # Add codes to raw data ----
-# left join the proper location.code for each location to the raw data by the join.location columns
+# left join the new location.code for each location to the raw data by the join.location columns
 bodysize_location <- bodysize_sources %>% 
   
   mutate(
     ## Merge source.code and location.code ----
     # join source.code and join.location to avoid duplicates when there is the same join.location between sources
-    join.location.1 = paste(source.code, join.location.1, sep = ""),
-    join.location.2 = paste(source.code, join.location.2, sep = ""),
-    join.location.3 = paste(source.code, join.location.3, sep = ""),
-    join.location.4 = paste(source.code, join.location.4, sep = ""),
-    join.location.5 = paste(source.code, join.location.5, sep = ""),
-    join.location.6 = paste(source.code, join.location.6, sep = ""),
-    join.location.7 = paste(source.code, join.location.7, sep = ""),
-    join.location.8 = paste(source.code, join.location.8, sep = ""),
-    join.location.9 = paste(source.code, join.location.9, sep = ""),
-    join.location.10 = paste(source.code, join.location.10, sep = ""),
-    join.location.11 = paste(source.code, join.location.11, sep = ""),
-    join.location.12 = paste(source.code, join.location.12, sep = ""),
-    join.location.13 = paste(source.code, join.location.13, sep = ""),
-    join.location.14 = paste(source.code, join.location.14, sep = ""),
-    join.location.15 = paste(source.code, join.location.15, sep = ""),
-    join.location.16 = paste(source.code, join.location.16, sep = ""),
-    join.location.17 = paste(source.code, join.location.17, sep = "")
+    across(
+      c(join.location.1:join.location.17),
+      ~ paste(source.code, ., sep = "-")
+    )
   ) %>% 
   
   ## Pivot longer ----
@@ -56,7 +59,7 @@ bodysize_location <- bodysize_sources %>%
   # left join location codes
   left_join(
     select(
-      location_join, join.location, location.code
+      location_join, join.location, location.code, longitude, latitude
     ), by = "join.location"
   ) %>% 
   
@@ -65,59 +68,64 @@ bodysize_location <- bodysize_sources %>%
   pivot_wider(
     id_cols = uid,
     names_from = name,
-    values_from = location.code
+    values_from = c(location.code, longitude, latitude)
   ) %>% 
+  rename_with(~ gsub("location.code_join.location", "location.code", .)) %>% 
+  rename_with(~ gsub("longitude_join.location", "longitude", .)) %>% 
+  rename_with(~ gsub("latitude_join.location", "latitude", .)) %>% 
   
   # Add back in the rest of the data
   left_join(
-    ., bodysize_joined, by = "uid",
+    ., bodysize_sources, by = "uid",
     suffix = c(".new", ".old")
   ) %>% 
   
   # remove old join.location columns 
   select(
-    -join.location.1.old:-join.location.17.old
+    - ends_with(".old"),
+    - starts_with("join.location")
+  ) 
+
+x <- bodysize_location %>%   
+  # merge columns together
+  mutate(
+    location.code = paste(location.code.1, location.code.2, location.code.3, location.code.4, location.code.5, location.code.6, location.code.7, location.code.8, location.code.9, location.code.10,
+                          location.code.11, location.code.12, location.code.13, location.code.14, location.code.15, location.code.16, location.code.17,
+                             sep = ";"),
+    location.code = stri_replace_all_regex(location.code, "NA;|NA|;NA", ""),
+    location.code = na_if(location.code, "")
+  ) %>% 
+
+  pivot_longer(
+    cols = starts_with("latitude"),  # Select all latitude columns
+    names_to = "latitude_type",      # Temporary column name
+    values_to = "latitude_value"     # Temporary values column
+  ) %>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(latitude_value, na.rm = TRUE)
   ) %>% 
   
-  # rename new join.location columns to location.code
-  rename_with(~ gsub("join.location", "location.code", .)) %>% 
-  rename_with(~ gsub(".new", "", .))
+  ungroup() %>% 
+
+  group_by(uid) %>%  
+  mutate(
+    latitude_range = 
+      if_else(
+        n >1,
+        paste(range(latitude_value, na.rm = TRUE), collapse = ":"),
+        latitude_value
+      )
+  )
+
+
+y <- x %>% 
+  pivot_wider(
+    id_cols = uid,
+    names_from = latitude_type,
+    values_from = latitude_range
+  )
+
 
 # save
 saveRDS(bodysize_location, file = "R/Data_outputs/full_database/bodysize_location.rds")
-
-# Check for unused ----
-# check for any locations that are in the location_raw sheet but not used in the main data and if so remove them
-# no locations in the location sheet that aren't used in the data so don't need to remove any
-location_check <- bodysize_location %>% 
-  
-  # Select columns
-  select(
-    location.code.1:location.code.17
-  ) %>% 
-  
-  # Pivot to get location.codes on seperate lines 
-  pivot_longer(., cols = 1:17, values_to = "location.code")%>% 
-  
-  filter(
-    !is.na(location.code)
-  ) %>% 
-  
-  # get distinct ones
-  distinct(location.code) %>% 
-  
-  # anti_join to leave any that are in locations raw but not bodysize_location
-  anti_join(location_raw, ., by = "location.code")
-
-# Final location list ----
-# get final sheet by getting distinct location.codes - might need to be changed after later steps incase they remove any more data points
-location_list <- location_raw %>% 
-  distinct(location.code, .keep_all = TRUE) %>% 
-  select(
-    - join.location,
-    - source.code
-  )
-
-# save - list of all distinct locations used in the data
-saveRDS(location_list, file = "R/Data_outputs/full_database/location_list.rds")
-
