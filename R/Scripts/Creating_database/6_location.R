@@ -59,7 +59,7 @@ bodysize_location_codes <- bodysize_sources %>%
   # left join location codes
   left_join(
     select(
-      location_join, join.location, location.code, longitude, latitude, country, continent
+      location_join, join.location, location.code, longitude, latitude, country, continent, location, habitat
     ), by = "join.location"
   ) %>% 
   
@@ -68,13 +68,15 @@ bodysize_location_codes <- bodysize_sources %>%
   pivot_wider(
     id_cols = uid,
     #names_from = name,
-    values_from = c(location.code, longitude, latitude, country, continent)
+    values_from = c(location.code, longitude, latitude, country, continent, location, habitat)
   ) %>% 
   rename_with(~ gsub("location.code_join.location", "location.code", .)) %>% 
   rename_with(~ gsub("longitude_join.location", "longitude", .)) %>% 
   rename_with(~ gsub("latitude_join.location", "latitude", .)) %>% 
   rename_with(~ gsub("country_join.location", "country", .)) %>% 
   rename_with(~ gsub("continent_join.location", "continent", .)) %>% 
+  rename_with(~ gsub("location_join.location", "location", .)) %>% 
+  rename_with(~ gsub("habitat_join.location", "habitat", .)) %>% 
   
   # Add back in the rest of the data
   left_join(
@@ -270,6 +272,92 @@ continents <- bodysize_location_codes %>%
     continent = continent.1
   )
 
+# location ranges ----
+locations <- bodysize_location_codes %>%   
+  
+  pivot_longer(
+    cols = location.1:location.17,  # Select all latitude columns
+    names_to = "location.type",      # Temporary column name
+    values_to = "location"     # Temporary values column
+  )%>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(location, na.rm = TRUE)
+  ) %>% 
+  
+  ungroup()%>% 
+  
+  group_by(uid) %>%  
+  mutate(
+    location = 
+      if_else(
+        n >1,
+        paste(unique(location), collapse = ","),
+        location
+      ),
+    location = stri_replace_all_regex(location, ",NA|NA,", ""),
+    location = stri_replace_all_regex(location, ",", ", ")
+  ) %>%
+  
+  ungroup() %>% 
+  
+  pivot_wider(
+    id_cols = uid,
+    names_from = location.type,
+    values_from = location
+  ) %>% 
+  
+  select(
+    uid, location.1
+  ) %>% 
+  
+  rename(
+    location = location.1
+  )
+
+# Habitat ranges ----
+habitats <- bodysize_location_codes %>%   
+  
+  pivot_longer(
+    cols = starts_with("habitat"),  # Select all latitude columns
+    names_to = "habitat.type",      # Temporary column name
+    values_to = "habitat"     # Temporary values column
+  ) %>%
+  group_by(location.code) %>% 
+  mutate(
+    n = n_distinct(habitat, na.rm = TRUE)
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(uid) %>%  
+  mutate(
+    habitat = 
+      if_else(
+        n >1,
+        paste(unique(habitat), collapse = ","),
+        habitat
+      ),
+    habitat = stri_replace_all_regex(habitat, ",NA|NA,", ""),
+    habitat = stri_replace_all_regex(habitat, ",", ", ")
+  ) %>%
+  
+  ungroup() %>% 
+  
+  pivot_wider(
+    id_cols = uid,
+    names_from = habitat.type,
+    values_from = habitat
+  ) %>% 
+  
+  select(
+    uid, habitat.1
+  ) %>% 
+  
+  rename(
+    habitat = habitat.1
+  )
+
 
 # Adding all to main data ----
 bodysize_location <- bodysize_location_codes %>% 
@@ -277,18 +365,21 @@ bodysize_location <- bodysize_location_codes %>%
   left_join(longitudes, by = "uid") %>% 
   left_join(countries, by = "uid") %>% 
   left_join(continents, by = "uid") %>% 
+  left_join(locations, by = "uid") %>%
+  left_join(habitats, by = "uid") %>%
   select(
+    - location.1, - location.2, - location.3, - location.4, - location.5, - location.6, - location.7, - location.8, - location.9, - location.10, - location.11, - location.12, - location.13, - location.14, - location.15, - location.16, - location.17,
    - starts_with("longitude."),
    - starts_with("latitude."),
    - starts_with("country."),
-   - starts_with("continent.")
+   - starts_with("continent."),
+   - starts_with("habitat.")
   ) %>% 
-  filter(
-    stri_detect_regex(latitude, ":")
+  
+  mutate(
+    habitat = na_if(habitat, "unknown"),
+    location = na_if(location, "unknown")
   )
-
-
-
 
 # save
 saveRDS(bodysize_location, file = "R/Data_outputs/full_database/bodysize_location.rds")
