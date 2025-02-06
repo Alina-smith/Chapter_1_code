@@ -10,8 +10,8 @@ library(stringi)
 library(data.table)
 
 # Data ----
-species_raw_cell_size <- readRDS("R/Data_outputs/species_raw_cell_size.rds")
-tax_list <- readRDS("R/Data_outputs/taxonomy/gbif/tax_list.rds")
+species_raw_cell_size <- readRDS("R/Data_outputs/full_database/species_raw_cell_size.rds")
+tax_list_distinct <- readRDS("R/Data_outputs/taxonomy/gbif/tax_list_distinct.rds")
 source_list <- readRDS("R/Data_outputs/locations_sources/source_list.rds")
 location_list <- readRDS("R/Data_outputs/locations_sources/location_list.rds")
 
@@ -27,7 +27,7 @@ tax_uids <- species_raw_cell_size %>%
   pull(tax.uid)
 
 # select just ones in the tax_uids list
-taxonomy <- tax_list %>% 
+taxonomy <- tax_list_distinct %>% 
   
   filter(
     tax.uid %in% tax_uids

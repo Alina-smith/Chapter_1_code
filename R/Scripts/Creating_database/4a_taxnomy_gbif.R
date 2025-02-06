@@ -746,34 +746,46 @@ z <- tax_manual_changes %>%
   filter(
     type == "Zooplankton"
   ) %>% 
+  
+  group_by(taxa.name) %>% 
+  
   mutate(
-    tax.uid = paste0("Z", row_number())
+    tax.uid = paste0("Z", cur_group_id())
   )
 
 p <- tax_manual_changes %>% 
   filter(
     type == "Phytoplankton"
   ) %>% 
+  
+  group_by(taxa.name) %>% 
+  
   mutate(
-    tax.uid = paste0("P", row_number())
+    tax.uid = paste0("P", cur_group_id())
   )
 
-tax_list <- bind_rows(z, p)
+tax_list_multiples <- bind_rows(z, p)
 
-saveRDS(tax_list, file = "R/data_outputs/taxonomy/gbif/tax_list.rds")
+saveRDS(tax_list_multiples, file = "R/data_outputs/taxonomy/gbif/tax_list_multiples.rds")
 
 # Add to main data ----
 
 bodysize_taxonomy <-  bodysize_joined %>% 
+  
+  # join resolved names onto raw data
   left_join(
     ., select(
       resolved_names_2gbif_manual, original.taxa.name, resolved.taxa.name),
     by = "original.taxa.name"
     ) %>% 
+  
+  # join taxonomy data
   left_join(
-    ., tax_list,
+    ., tax_list_multiples,
     by = "resolved.taxa.name"
   ) %>% 
+  
+  # select and reorder
   select(
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
@@ -784,10 +796,26 @@ bodysize_taxonomy <-  bodysize_joined %>%
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type,
     sample.year, sample.month
   ) %>% 
+  
   # Remove any without a taxa.name
   filter(
     !is.na(taxa.name)
   )
 
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/full_database/bodysize_taxonomy.rds")
+
+# Make a distinct tax list
+tax_list_distinct <- tax_list_multiples %>% 
+  distinct(
+    tax.uid, .keep_all = TRUE
+  ) %>% 
+  select(
+    - resolved.taxa.name
+  )
+
+# save
+saveRDS(tax_list_distinct, file = "R/data_outputs/taxonomy/gbif/tax_list_distinct.rds")
+
+
+
 

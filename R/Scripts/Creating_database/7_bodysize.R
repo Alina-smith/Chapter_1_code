@@ -14,7 +14,7 @@ library(data.table)
 # Data ----
 bodysize_location <- readRDS("R/Data_outputs/full_database/bodysize_location.rds")
 bodysize_taxonomy <- readRDS("R/Data_outputs/full_database/bodysize_taxonomy.rds")
-tax_list <- readRDS("R/Data_outputs/taxonomy/gbif/tax_list.rds")
+tax_list_distinct <- readRDS("R/Data_outputs/taxonomy/gbif/tax_list_distinct.rds")
 source_list <- readRDS("R/Data_outputs/locations_sources/source_list.rds")
 kruk <- read_xlsx("raw_data/kruk_groups.xlsx")
 updated_spec_char <- read_xlsx(here("raw_data","manual_taxonomy.xlsx"), sheet = "special_characters")
@@ -144,7 +144,7 @@ bs_raw <- format_all_bs %>%
   ) %>% 
   
   left_join(
-    tax_list, by = "tax.uid"
+    tax_list_distinct, by = "tax.uid"
   ) %>% 
   
   left_join(
@@ -206,95 +206,8 @@ all_bodysize <- format_all_bs %>%
 ## save ----
 saveRDS(all_bodysize, file = "R/Data_outputs/full_database/all_bodysize.rds")
 
-
 # Phyto ----
-# select just the phytoplankton and add in the kruk groups
-
-## Update names in the kruk data ----
-kruk_names_list <- bodysize_taxonomy %>% # used bodysize_taxonomy because it has the original.taxa.names in
-  
-  # select just kruk data
-  filter(
-    source.code == "1313"
-  ) %>% 
-  
-  # select name columns
-  select(
-    original.taxa.name,
-    taxa.name
-  ) %>%
-  
-  # get distinct names
-  distinct(
-    original.taxa.name, .keep_all = TRUE
-  ) 
-
-kruk_groups <- kruk %>% 
-  
-  # select columns
-  select(
-    Species_name,
-    `Classification by Experts`
-  ) %>% 
-  
-  rename(
-    original.taxa.name = Species_name,
-    expert.reynolds = `Classification by Experts`
-  ) %>% 
-  
-  # Need to edit the names to remove species characters as done in join_db script so that the original.taxa.names are the same for left joining
-  mutate(
-    # remove any random capitals - set just first letter to upper case, gna_verify doesn't work with anything else
-    original.taxa.name = tolower(original.taxa.name), # set all to lower case
-    original.taxa.name = paste(
-      toupper(
-        str_sub(
-          original.taxa.name, 1,1 # select first letter and set to upper case
-        )
-      ),
-      str_sub(original.taxa.name, 2), # paste remaining word
-      sep = ""
-    ),
-    
-    # add in *SpecChar* to replace special characters
-    original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*"),
-  ) %>% 
-  
-  # Join updated names
-  left_join(
-    updated_spec_char, by = "original.taxa.name"
-  ) %>% 
-  
-  mutate(
-    # replace old with new
-    original.taxa.name = if_else(
-      !is.na(new.taxa.name), new.taxa.name, original.taxa.name
-    ),
-    
-    # Remove any white spaces if there are any
-    original.taxa.name = trimws(original.taxa.name)
-  ) %>% 
-  
-  # remove redundant columns
-  select(
-    - new.taxa.name
-  ) %>% 
-  
-  # add in the new names
-  left_join(kruk_names_list, by = "original.taxa.name") %>% 
-  
-  # remove original.taxa.name
-  select(-original.taxa.name) %>% 
-  
-  # get only distinct non NA names
-  distinct(
-    taxa.name, .keep_all = TRUE
-  ) %>% 
-  
-  filter(
-    !is.na(taxa.name)
-  )
-
+# select just phytoplankton and do minor edits
 
 phyto <- all_bodysize %>% 
   
@@ -341,10 +254,6 @@ phyto <- all_bodysize %>%
     - measurement.type, # all average now
     - bodysize.measurement.notes, # not needed
     - type # all phyto
-  ) %>% 
-  
-  left_join(
-    kruk_groups, by = "taxa.name"
   )
 
 # Cell mass ----
@@ -392,7 +301,6 @@ species_raw_cell_size <- phyto %>%
   # select columns and reorder
   select(
     individual.uid, source.code, original.sources, taxa.name,
-    expert.reynolds,
     nu, cells.per.nu, mass, biovolume, mld,
     tax.uid, rank, species, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
@@ -403,7 +311,7 @@ species_raw_cell_size <- phyto %>%
   )
 
 # save
-saveRDS(species_raw_cell_size, file = "R/Data_outputs/species_raw_cell_size.rds")
+saveRDS(species_raw_cell_size, file = "R/Data_outputs/full_database/species_raw_cell_size.rds")
 
 # Species average ----
 
@@ -440,22 +348,17 @@ species_average_cell_size <- species_raw_cell_size %>%
   
   # add back in extra data
   left_join(
-    tax_list, by = "tax.uid"
-  ) %>% 
-  
-  left_join(
-    kruk_groups, by = "taxa.name"
+    tax_list_distinct, by = "tax.uid"
   ) %>% 
   
   select(
     taxa.name, 
-    expert.reynolds,
     nu, mass.mean, biovolume.mean, mld.mean, 
     n, mass.se, 
     tax.uid, genus, family, order, class, phylum, kingdom
   )
 
 # save
-saveRDS(species_average_cell_size, file = "R/Data_outputs/species_average_cell_size.rds")
+saveRDS(species_average_cell_size, file = "R/Data_outputs/full_database/species_average_cell_size.rds")
 
 
