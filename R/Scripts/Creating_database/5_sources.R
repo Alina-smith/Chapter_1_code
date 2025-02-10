@@ -477,3 +477,4 @@ bodysize_sources <- bodysize_duplicates %>%
 
 ## Save
 saveRDS(bodysize_sources, file = "R/Data_outputs/full_database/bodysize_sources.rds")
+

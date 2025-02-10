@@ -358,7 +358,7 @@ kremer_formatted <- kremer %>%
   mutate(
     ## body.size ----
     # reverse transform body.size measurments from log10
-    body.size = body.size^10,
+    body.size = 10^body.size,
     
     ## Form ----
     # make a form column to say if it is a colony, filament or individual measurement
@@ -1442,6 +1442,13 @@ lt_formatted <- LT %>%
       cell.nu == "nu.bs" & form == "Col." ~ "colony",
       cell.nu == "nu.bs" & form == "Fil." ~ "filament",
     ),
+    
+    # change form.no for individuals
+    form.no = if_else(
+      form == "individual",
+      1,
+      form.no
+    )
   ) %>% 
   
   # remove redundant columns 

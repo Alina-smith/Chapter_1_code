@@ -733,7 +733,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
     # Make a column for is they are phyto or zoo
     type = case_when(
       kingdom == "Animalia" ~ "Zooplankton",
-      phylum %in% c("Ciliophora", "Amoebozoa", "Metamonada", "Bigyra", "Radiozoa", "Cercozoa") ~ "Zooplankton",
+      phylum %in% c("Ciliophora", "Amoebozoa", "Metamonada", "Bigyra", "Radiozoa", "Cercozoa", "Choanozoa", "Spironematellophyta") ~ "Zooplankton",
       TRUE ~ "Phytoplankton"
     )
   ) %>% 

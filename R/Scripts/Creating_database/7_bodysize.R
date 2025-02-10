@@ -16,8 +16,6 @@ bodysize_location <- readRDS("R/Data_outputs/full_database/bodysize_location.rds
 bodysize_taxonomy <- readRDS("R/Data_outputs/full_database/bodysize_taxonomy.rds")
 tax_list_distinct <- readRDS("R/Data_outputs/taxonomy/gbif/tax_list_distinct.rds")
 source_list <- readRDS("R/Data_outputs/locations_sources/source_list.rds")
-kruk <- read_xlsx("raw_data/kruk_groups.xlsx")
-updated_spec_char <- read_xlsx(here("raw_data","manual_taxonomy.xlsx"), sheet = "special_characters")
 
 # All data ----
 # Final list of all data including phyto and zooplankton
@@ -312,53 +310,5 @@ species_raw_cell_size <- phyto %>%
 
 # save
 saveRDS(species_raw_cell_size, file = "R/Data_outputs/full_database/species_raw_cell_size.rds")
-
-# Species average ----
-
-# Calculate the average size per species
-species_average_cell_size <- species_raw_cell_size %>% 
-  
-  # select just species level
-  filter(
-    rank == "Species",
-    !is.na(mass)
-  ) %>% 
-  
-  # calculate average mass, biovolume, mld
-  group_by(tax.uid, nu) %>%  # want seperate values for single and multi-cellular
-  
-  summarise(
-    mass.mean = mean(mass, na.rm = TRUE),
-    biovolume.mean = mean(biovolume, na.rm = TRUE),
-    mld.mean = mean(mld, na.rm = TRUE),
-    n = n(),
-    mass.sd = sd(mass),
-    mass.se = mass.sd/sqrt(n),
-    .groups = "drop"
-  ) %>% 
-  
-  # change NaN to NA
-  mutate(
-    across(
-      everything(), ~ ifelse(
-        is.nan(.), NA_integer_, .
-        )
-      )
-    ) %>% 
-  
-  # add back in extra data
-  left_join(
-    tax_list_distinct, by = "tax.uid"
-  ) %>% 
-  
-  select(
-    taxa.name, 
-    nu, mass.mean, biovolume.mean, mld.mean, 
-    n, mass.se, 
-    tax.uid, genus, family, order, class, phylum, kingdom
-  )
-
-# save
-saveRDS(species_average_cell_size, file = "R/Data_outputs/full_database/species_average_cell_size.rds")
 
 

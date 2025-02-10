@@ -36,7 +36,9 @@ taxonomy <- tax_list_distinct %>%
   # select and reorder - don't need type or rank as all are species and phyto, don't need resolved.taxa.name anymore
   relocate(
     tax.uid, taxa.name, species, genus, family, order, class, phylum, kingdom
-  )
+  ) %>% 
+  
+  ungroup()
 
 # save
 saveRDS(taxonomy, "R/data_outputs/taxonomy.rds")
@@ -149,3 +151,4 @@ sources <- source_list %>%
   
 # save
 saveRDS(sources, "R/data_outputs/sources.rds")
+

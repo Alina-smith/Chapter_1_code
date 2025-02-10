@@ -10,12 +10,14 @@ library(data.table)
 
 # Data ----
 bodysize_taxonomy <- readRDS("R/Data_outputs/full_database/bodysize_taxonomy.rds")
-species_average_cell_size <- readRDS("R/Data_outputs/full_database/species_average_cell_size.rds")
 species_raw_cell_size <- readRDS("R/Data_outputs/full_database/species_raw_cell_size.rds")
+
 rimmet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet")
 lt <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Laplace-Treyture")
 kruk <- read_xlsx("raw_data/kruk_groups.xlsx")
+
 updated_spec_char <- read_xlsx(here("raw_data","manual_taxonomy.xlsx"), sheet = "special_characters")
+taxonomy <- readRDS("R/Data_outputs/taxonomy.rds")
 
 
 # Kruk ----
@@ -518,27 +520,50 @@ functional_traits <- full_join(kruk_traits, rimmet_traits, by = "taxa.name", suf
     taxa.name, life.form, reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
   )
 
-# Add to main data ----
+# Add to taxonomy ----
 
-species_traits <- species_raw_cell_size %>% 
+traits <- taxonomy %>% 
   
   left_join(
     ., functional_traits, by = "taxa.name"
+  ) %>% 
+  
+  mutate(
+    group = case_when(
+      phylum %in% c("Cyanobacteria", "Glaucophyta") ~ "Blue/green",
+      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
+      phylum == "Rhodophyta" ~ "Red",
+      class == "Bacillariophyceae" ~ "Diatom",
+      class %in% c("Chrysophyceae", "Dictyochophyceae") ~ "Golden-brown",
+      class == "Dinophyceae" ~ "Dinoflagellate",
+      phylum == "Euglenozoa" ~ "Euglenoid",
+      class == "Raphidophyceae" ~ "Raphidophytes",
+      class == "Xanthophyceae" ~ "Yellow-green",
+      class == "Phaeophyceae" ~ "Brown",
+      class == "Eustigmatophyceae" ~ "Eustigmatophytes",
+      phylum == "Cryptophyta" ~ "Cryptomonads",
+      phylum == "Haptophyta" ~ "Haptophytes",
+      
+      TRUE ~ NA
+    )
+  )
+
+# save
+saveRDS(traits, file = "R/Data_outputs/traits.rds")
+
+# Add to main data ----
+
+species_traits <- species_raw_cell_size %>% 
+  left_join(select(
+    traits, tax.uid, life.form, reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall, group
+  ), by = "tax.uid") %>% 
+  
+  filter(
+    !is.na(mass)
   )
 
 # save
 saveRDS(species_traits, file = "R/Data_outputs/species_traits.rds")
-
-average_species_traits <- species_average_cell_size %>% 
-  
-  left_join(
-    ., functional_traits, by = "taxa.name"
-  )
-
-# save
-saveRDS(average_species_traits, file = "R/Data_outputs/average_species_traits.rds")
-
-
 
 
 
