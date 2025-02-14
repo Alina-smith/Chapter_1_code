@@ -17,17 +17,15 @@ traits <- readRDS("R/Data_outputs/traits.rds")
 
 x <- species_traits %>% 
   
-  filter(
-    nu == "cell",
-    !is.na(reynolds.group)
-    ) %>%
+  #filter(
+   # nu == "cell"
+   # ) %>%
   
-  group_by(reynolds.group) %>% 
+  group_by(tax.uid) %>% 
   
   summarise(
     mass.mean = mean(mass)
-  )
-%>% 
+  ) %>% 
   
   left_join(
     traits, by = "tax.uid"
@@ -37,15 +35,21 @@ x <- species_traits %>%
     blue.green = case_when(
       group == "Blue/green" ~ "blue/green",
       TRUE ~ "other"
+    ),
+    
+    new.reynolds.group = case_when(
+      !is.na(reynolds.group) ~ reynolds.group,
+      is.na(reynolds.group) & !is.na(padisak.group) ~ padisak.group,
+      TRUE ~ "Unclassified"
     )
   )
   
 
 
 ggplot(x, aes(x = log(mass.mean))) +
-  geom_histogram(binwidth = 2)
-+
-  facet_wrap(~blue.green, scales = "free_y")
+  geom_histogram(binwidth = 3) +
+  facet_wrap(~phylum, scales = "free_y")
+
 +
   theme(strip.text.x = element_text(size=0))
 

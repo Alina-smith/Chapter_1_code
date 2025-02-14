@@ -189,7 +189,7 @@ bs_raw <- format_all_bs %>%
   )
 
 ## Combine all together ----
-all_bodysize <- format_all_bs %>% 
+bodysize_formatted <- format_all_bs %>% 
   
   # remove raw data
   filter(
@@ -202,12 +202,12 @@ all_bodysize <- format_all_bs %>%
   )
 
 ## save ----
-saveRDS(all_bodysize, file = "R/Data_outputs/full_database/all_bodysize.rds")
+saveRDS(bodysize_formatted, file = "R/Data_outputs/full_database/bodysize_formatted.rds")
 
 # Phyto ----
 # select just phytoplankton and do minor edits
 
-phyto <- all_bodysize %>% 
+phyto <- bodysize_formatted %>% 
   
   mutate(
     # set depth in bodysize.measurment as height as there is no overlap between these

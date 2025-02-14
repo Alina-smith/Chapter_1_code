@@ -22,7 +22,7 @@ library(stringi)
 library(taxize)
 
 # Import data ----
-bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
+bodysize_raw <- readRDS("R/data_outputs/full_database/bodysize_raw.rds")
 
 # Finished script ----
 
@@ -32,7 +32,7 @@ bodysize_joined <- readRDS("R/data_outputs/full_database/bodysize_joined.rds")
 # run through gna_verifier to fix any spelling
 
 # get a list of all distinct names 
-distinct_names <- select(bodysize_joined, original.taxa.name) %>% 
+distinct_names <- select(bodysize_raw, original.taxa.name) %>% 
   distinct(original.taxa.name) 
 
 # convert to a string of names
@@ -770,7 +770,7 @@ saveRDS(tax_list_multiples, file = "R/data_outputs/taxonomy/gbif/tax_list_multip
 
 # Add to main data ----
 
-bodysize_taxonomy <-  bodysize_joined %>% 
+bodysize_taxonomy <-  bodysize_raw %>% 
   
   # join resolved names onto raw data
   left_join(

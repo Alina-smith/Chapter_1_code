@@ -553,7 +553,7 @@ saveRDS(traits, file = "R/Data_outputs/traits.rds")
 
 # Add to main data ----
 
-species_traits <- species_raw_cell_size %>% 
+species_raw_traits <- species_raw_cell_size %>% 
   left_join(select(
     traits, tax.uid, life.form, reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall, group
   ), by = "tax.uid") %>% 
@@ -563,7 +563,7 @@ species_traits <- species_raw_cell_size %>%
   )
 
 # save
-saveRDS(species_traits, file = "R/Data_outputs/species_traits.rds")
+saveRDS(species_raw_traits, file = "R/Data_outputs/species_raw_traits.rds")
 
 
 

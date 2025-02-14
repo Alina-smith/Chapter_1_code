@@ -71,7 +71,7 @@ bodysize_spec_char <- joined_raw %>%
 
 # Final edits ----
 
-bodysize_joined <- bodysize_spec_char %>% 
+bodysize_raw <- bodysize_spec_char %>% 
   
   mutate(
     ## UID ----
@@ -156,4 +156,4 @@ bodysize_joined <- bodysize_spec_char %>%
   )
 
 # Save ----
-saveRDS(bodysize_joined, file = "R/data_outputs/full_database/bodysize_joined.rds")
+saveRDS(bodysize_raw, file = "R/data_outputs/full_database/bodysize_raw.rds")
