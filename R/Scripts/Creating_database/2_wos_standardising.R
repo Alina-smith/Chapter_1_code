@@ -1,16 +1,14 @@
 # Aim of script: Standadizing the WOS data
 
 # Packages
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(data.table)
 
 # Data ---- 
-wos_raw_body <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "bodysize", guess_max = 50000)
-wos_source_list <- read_xlsx(here("raw_data","master_wos_data.xlsx"), sheet = "source_list")
+wos_raw_body <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "bodysize", guess_max = 50000)
+wos_source_list <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "source_list")
 
 # Formatting ----
 
@@ -21,7 +19,7 @@ wos_formatted <- wos_raw_body %>%
     !(original.taxa.name == "unknown"), # remove "unknown" taxa names
   ) %>% 
   
-  ## Select columns
+  ## Select columns ----
   # remove columns I don't need as were not present in all data
   select(
     - experimental.design,
@@ -147,7 +145,7 @@ wos_formatted <- wos_raw_body %>%
     
     ## life stage ----
     # sort out capitals
-    life.stage = stri_replace_all_regex(life.stage, "A", "a"),
+    life.stage = tolower(life.stage),
     
     # change to either adult or juvenile
     life.stage = case_when(
@@ -158,8 +156,8 @@ wos_formatted <- wos_raw_body %>%
       is.na(life.stage) ~ "adult", # assume they are adults unless specified otherwise
       
       # juvenile
-      stri_detect_regex(life.stage, "Copepodite|neonate|copepodid|juvenile|metamorphasis") ~ "juvenile",
-      source.code %in% c("61", "263") & stri_detect_regex(life.stage, "N|Instar") ~ "juvenile",
+      stri_detect_regex(life.stage, "(?i)copepodite|(?i)neonate|(?i)copepodid|(?i)juvenile|(?i)metamorphasis|(?i)nauplii|(?i)instar") ~ "juvenile",
+      source.code %in% c("61", "263") & stri_detect_regex(life.stage, "(?i)n|(?i)c") ~ "juvenile",
       source.code == "5" & life.stage != "adult" ~ "juvenile",
       source.code == "66" ~ "juvenile",
       
@@ -233,19 +231,19 @@ wos_formatted <- wos_raw_body %>%
   ) %>% 
   
   mutate(
-    ## Form ----
+    ## nu ----
     # edit weird form ones
     
-    form = if_else(
-      form == "coenobium",
+    nu = if_else(
+      nu == "coenobium",
       "colony",
-      form
+      nu
     ),
     
     ## Form no ----
-    form.no = case_when(
-      !is.na(form.no) ~ form.no,
-      form == "individual" ~ 1,
+    ind.per.nu = case_when(
+      !is.na(ind.per.nu) ~ ind.per.nu,
+      nu == "individual" ~ 1,
       TRUE ~ NA
     ),
     
@@ -291,7 +289,7 @@ wos_formatted <- wos_raw_body %>%
            sample.year, sample.month,
            join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
            join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 

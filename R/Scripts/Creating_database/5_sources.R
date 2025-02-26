@@ -11,9 +11,6 @@ library(tidyr)
 library(tidyverse)
 library(readxl)
 library(stringi)
-library(taxize)
-library(ggplot2)
-library(here)
 
 # Data ----
 bodysize_taxonomy <- readRDS("R/Data_outputs/full_database/bodysize_taxonomy.rds")
@@ -472,7 +469,13 @@ bodysize_sources <- bodysize_duplicates %>%
   ) %>% 
   
   relocate(
-    uid, individual.uid, source.code, original.sources, original.taxa.name, taxa.name, tax.uid, type, rank, species, genus, family, order, class, phylum, kingdom, form, form.no, life.stage, sex, min.body.size, max.body.size, body.size, units, bodysize.measurement, bodysize.measurement.notes, reps, measurement.type, sample.size, error, error.type, sample.year, sample.month
+    uid, individual.uid,
+    source.code, original.sources,
+    original.taxa.name, taxa.name, tax.uid, type, rank, species, genus, family, order, class, phylum, kingdom,
+    nu, ind.per.nu, life.stage, sex,
+    min.body.size, max.body.size, body.size, units, bodysize.measurement, bodysize.measurement.notes,
+    reps, measurement.type, sample.size, error, error.type,
+    sample.year, sample.month
   )
 
 ## Save

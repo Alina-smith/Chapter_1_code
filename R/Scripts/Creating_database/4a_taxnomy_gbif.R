@@ -14,7 +14,6 @@ install_github("ropensci/bold")
 install_github("ropensci/taxize")
 
 # Packages
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
@@ -22,9 +21,7 @@ library(stringi)
 library(taxize)
 
 # Import data ----
-bodysize_raw <- readRDS("R/data_outputs/full_database/bodysize_raw.rds")
-
-# Finished script ----
+bodysize_raw <- readRDS("R/data_outputs/final_products/bodysize_raw.rds")
 
 # Resolve names ----
 
@@ -510,6 +507,11 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       genus == "Opercularia" ~ "Operculariidae",
       genus == "Chrysodendron" ~ "Ochromonadales",
       genus == "Ceratium" ~ "Ceratiaceae",
+      genus == "Asterococcus" ~ "Palmellopsidaceae",
+      genus == "Xenococcus" ~ "Pleurocapsaceae",
+      genus == "Nodularia" ~ "Nodulariaceae",
+      genus == "Didymocystis" ~ "Oocystaceae",
+      genus == "Acanthosphaera" ~ "Chlorellaceae",
       
       family == "Spirodinium" ~ "Gymnodiniaceae",
       family == "Microcystaceae_A" ~ "Microcystaceae",
@@ -597,6 +599,8 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       family == "Sididae" ~ "Ctenopoda",
       family == "Operculariidae" ~ "Sessilida",
       family == "Ceratiaceae" ~ "Gonyaulacales",
+      family == "Palmellopsidaceae" ~ "Chlamydomonadales",
+      family == "Hexamitidae" ~ "Diplomonadida",
       
       genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae ordo incertae sedis",
       genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae ordo incertae sedis",
@@ -651,6 +655,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       class == "Lobosa" ~ "Tubulinea",
       class == "Prymnesiophyceae" ~ "Coccolithophyceae",
       class == "Zygnematophyceae" ~ "Conjugatophyceae",
+      order == "Diplomonadida" ~ "Eopharyngea",
       
       TRUE ~ class
     ),
@@ -677,6 +682,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       class %in% c("Chlorophyceae", "Ulvophyceae", "Trebouxiophyceae") ~ "Chlorophyta",
       class == "Clitellata" ~ "Annelida",
       class == "Eurotatoria" ~ "Rotifera",
+      class == "Eopharyngea" ~ "Loukozoa",
       
       TRUE ~ phylum
     ),
@@ -691,7 +697,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       phylum %in% c("Cercozoa", "Myzozoa", "Ochrophyta", "Ciliophora", "Cryptophyta") ~ "Chromista",
       phylum == "Cyanobacteria" ~ "Bacteria",
       phylum %in% c("Annelida", "Arthropoda", "Rotifera") ~ "Animalia",
-      phylum %in% c("Amoebozoa", "Euglenozoa") ~ "Protozoa",
+      phylum %in% c("Amoebozoa", "Euglenozoa", "Loukozoa") ~ "Protozoa",
       
       TRUE ~ kingdom
     ),
@@ -733,7 +739,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
     # Make a column for is they are phyto or zoo
     type = case_when(
       kingdom == "Animalia" ~ "Zooplankton",
-      phylum %in% c("Ciliophora", "Amoebozoa", "Metamonada", "Bigyra", "Radiozoa", "Cercozoa", "Choanozoa", "Spironematellophyta") ~ "Zooplankton",
+      phylum %in% c("Amoebozoa", "Radiozoa", "Cercozoa") ~ "Zooplankton",
       TRUE ~ "Phytoplankton"
     )
   ) %>% 
@@ -779,10 +785,9 @@ bodysize_taxonomy <-  bodysize_raw %>%
     by = "original.taxa.name"
     ) %>% 
   
-  # join taxonomy data
+  # join taxonomy uid
   left_join(
-    ., tax_list_multiples,
-    by = "resolved.taxa.name"
+      tax_list_multiples, by = "resolved.taxa.name"
   ) %>% 
   
   # select and reorder
@@ -791,7 +796,7 @@ bodysize_taxonomy <-  bodysize_raw %>%
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
     join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
     individual.uid, original.taxa.name, taxa.name, tax.uid, type, rank, species, genus, family, order, class, phylum, kingdom,
-    life.stage, sex, form, form.no,
+    life.stage, sex, nu, ind.per.nu,
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type,
     sample.year, sample.month

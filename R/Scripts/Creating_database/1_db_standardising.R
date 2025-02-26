@@ -10,30 +10,24 @@
   # Neury-Ormanni - all phyto
 
 # Packages 
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(data.table)
 
 # data ----
-#set relative file paths
-master_db_path <- here("raw_data", "master_db_data.xlsx")
-
-
-rimet <- read_xlsx(master_db_path, sheet = "Rimmet")
-kremer <- read_xlsx(master_db_path, sheet = "Kremer")
-odume <- read_xlsx(master_db_path, sheet = "Odume")
-hebert <- read_xlsx(master_db_path, sheet = "Hebert")
-Gavrilko <- read_xlsx(master_db_path, sheet = "Gavrilko")
-LT <- read_xlsx(master_db_path, sheet = "Laplace-Treyture")
-NO <- read_xlsx(master_db_path, sheet = "Neury-Ormanni")
-rimet2012 <- read_xlsx(master_db_path, sheet = "Rimet_2012")
-db_source_list <- read_xlsx(master_db_path, sheet = "source_list")
-db_location <- read_xlsx(master_db_path, sheet = "location_join") # this is different to th full location list this is just for left joining join.location stuff to so that the location.codes can be joined from the full list later on
-db_extra <- read_xlsx(master_db_path, sheet = "extra_info")
-rimet_2012_sources <- read_xlsx(master_db_path, sheet = "Rimet_2012_sources")
+rimet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet")
+kremer <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Kremer")
+odume <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Odume")
+hebert <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Hebert")
+Gavrilko <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Gavrilko")
+LT <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Laplace-Treyture")
+NO <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Neury-Ormanni")
+rimet2012 <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimet_2012")
+db_source_list <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "source_list")
+db_location <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "location_join") # this is different to th full location list this is just for left joining join.location stuff to so that the location.codes can be joined from the full list later on
+db_extra <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "extra_info")
+rimet_2012_sources <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimet_2012_sources")
 
 # Rimmet ----
 # All phyto
@@ -55,7 +49,7 @@ rimet_formatted <- rimet %>%
     cell.bs = `Cell biovolume µm3`,
     biovol.notes = `Notes on biovolumes`,
     nu.bs = `Cumulated biovolume of cells in a colony µm3`,
-    form.no = `Number of cells per colony`
+    ind.per.nu = `Number of cells per colony`
   ) %>% 
   
   mutate(
@@ -198,10 +192,10 @@ rimet_formatted <- rimet %>%
     !is.na(body.size)
   ) %>% 
   
-  ## Form -----
+  ## Nu -----
   # change 1s and 0s to words
   mutate(
-    form = case_when(
+    nu = case_when(
       cell.nu == "cell.bs" ~ "individual",
       cell.nu == "nu.bs"& Colonial == "1" & Filament == "1" ~ "multi-cell",
       cell.nu == "nu.bs"& Colonial == "0" & Filament == "0" ~ "multi-cell",
@@ -218,12 +212,12 @@ rimet_formatted <- rimet %>%
   ) %>% 
   
   mutate(
-    ## Form.no ----
-    # Change form.no to 1 for indivduals
-    form.no = if_else(
-      form == "individual",
+    ## ind.per.nu ----
+    # Change ind.per.nu to 1 for indivduals
+    ind.per.nu = if_else(
+      nu == "individual",
       1,
-      form.no
+      ind.per.nu
     ),
     
     ## Extra info ----
@@ -254,7 +248,7 @@ rimet_formatted <- rimet %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1, join.location.2,
-            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+            individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
             min.body.size, max.body.size, body.size,
             bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -270,7 +264,6 @@ kremer_formatted <- kremer %>%
   ## Select columns ----
   select(location,
          original.taxa.name,
-         nu,
          cell.biovol,
          data.source,
          sample.date,
@@ -280,12 +273,12 @@ kremer_formatted <- kremer %>%
   rename(join.location.1 = location,
          join.source = data.source,
          cell.bs = cell.biovol,
-         form.no = cells.per.nu,
+         ind.per.nu = cells.per.nu,
          nu.bs = nu.biovol) %>%
   
-  ## Filter ----
-  # Remove any with no taxa.name
+  ## Filter
   filter(
+    #  Remove any with no taxa.name
     !is.na(original.taxa.name)
     ) %>% 
   
@@ -360,28 +353,26 @@ kremer_formatted <- kremer %>%
     # reverse transform body.size measurments from log10
     body.size = 10^body.size,
     
-    ## Form ----
-    # make a form column to say if it is a colony, filament or individual measurement
-    form = case_when(
+    ## Nu ----
+    # make an nu column to say if it is multicell or individual measurement
+    nu = case_when(
       cell.nu == "cell.bs" ~ "individual",
-      cell.nu == "nu.bs" & stri_detect_regex(nu, "Colonial|palmeloid") ~ "colony",
-      cell.nu == "nu.bs" & stri_detect_regex(nu, "Filament") ~ "filament",
+      cell.nu == "nu.bs" ~ "multi-cellular",
       TRUE ~ "multi-cellular"
     ),
     
-    ## Form.no ----
-    # change form.no to 1 for individual measurements
-    form.no = if_else(
-      form == "individual",
+    ## ind.per.nu ----
+    # change ind.per.nu to 1 for individual measurements
+    ind.per.nu = if_else(
+      nu == "individual",
       1,
-      form.no
+      ind.per.nu
       )
   ) %>% 
   
   # remove redundant columns
   select(
     - cell.nu,
-    - nu
   ) %>% 
     
   mutate(
@@ -414,7 +405,7 @@ kremer_formatted <- kremer %>%
       
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-            individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+            individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
             min.body.size, max.body.size, body.size,
             bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -480,8 +471,8 @@ odume_formatted_raw <- odume %>%
     sample.year = NA,
     sample.month = NA,
     join.location.1 = "Odume et al., 2023",
-    form.no = 1,
-    form = "individual",
+    ind.per.nu = 1,
+    nu = "individual",
     units = "mm",
     sample.size = NA,
     reps = NA,
@@ -492,7 +483,7 @@ odume_formatted_raw <- odume %>%
   
   ## Order columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           original.taxa.name, life.stage, sex, form, form.no,
+           original.taxa.name, life.stage, sex, nu, ind.per.nu,
            original.body.size, units, sample.size, reps, error, error.type)
 
 # Odume - Exact measurements ----
@@ -550,7 +541,7 @@ odume_exact <- odume_formatted_raw %>%
   
   # Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -629,7 +620,7 @@ odume_ranges <- odume_formatted_raw %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -683,7 +674,7 @@ odume_approx <- odume_formatted_raw %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -735,7 +726,7 @@ odume_min <- odume_formatted_raw %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -796,7 +787,7 @@ odume_max <- odume_formatted_raw %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -882,7 +873,7 @@ odume_lwh <- odume_formatted_raw %>%
   
   ## reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -894,7 +885,7 @@ odume_formatted <- bind_rows(odume_exact, odume_ranges, odume_lwh, odume_approx,
   ) %>% 
   # reorder
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1269,8 +1260,8 @@ hebert_formatted <- hebert %>%
     source.code = 'db-4',
     sex = "female", # paper says it only looked at females in the metadata
     life.stage = "adult", # paper says it only looked at adults in the metadata
-    form = "individual", # all zoo so will be individual
-    form.no = 1,
+    nu = "individual", # all zoo so will be individual
+    ind.per.nu = 1,
     
     ## Indivudal.uid ----
     # UID for each individual for when there are multiple measurements (e.g. length and width) for one individual so they have the same UID
@@ -1287,7 +1278,7 @@ hebert_formatted <- hebert %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, sample.year, sample.month, join.location.1, join.location.2, join.location.3, join.location.4, join.location.5,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1347,8 +1338,8 @@ gavrilko_formatted <- Gavrilko %>%
     units = "mm",
     sample.month = NA, # cannot access orginal papers so set to NA
     sample.year = NA, # cannot access orginal papers so set to NA
-    form = "individual", # all zoo so will be individual
-    form.no = 1,
+    nu = "individual", # all zoo so will be individual
+    ind.per.nu = 1,
     join.location.1 = "Gavrilko et al., 2021",
     max.body.size = NA,
     min.body.size = NA,
@@ -1375,7 +1366,7 @@ gavrilko_formatted <- Gavrilko %>%
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
            sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1399,7 +1390,7 @@ lt_formatted <- LT %>%
     original.taxa.name = Taxa_Name,
     cell.bs = Cell_Biovolume,
     nu.bs = Ind_Biovolume,
-    form = Life_Form
+    nu = Life_Form
   ) %>% 
   
   mutate(
@@ -1415,9 +1406,9 @@ lt_formatted <- LT %>%
     # change "#NA" to NA
     nu.bs = as.numeric(na_if(nu.bs, "#NA")),
     
-    ## Form.no ----
+    ## ind.per.nu ----
     # no number given in database so when it is multi-cells then divide nu.cell by cell
-    form.no = case_when(
+    ind.per.nu = case_when(
       is.na(nu.bs) ~ 1,
       !is.na(nu.bs) ~ nu.bs/cell.bs
     )
@@ -1435,19 +1426,19 @@ lt_formatted <- LT %>%
   ) %>% 
   
   mutate(
-    ## Form ----
-    # make a form column and assign either individual, colony or filament
-    form = case_when(
+    ## Nu ----
+    # make an nu column and assign either individual, colony or filament
+    nu = case_when(
       cell.nu == "cell.bs" ~ "individual",
-      cell.nu == "nu.bs" & form == "Col." ~ "colony",
-      cell.nu == "nu.bs" & form == "Fil." ~ "filament",
+      cell.nu == "nu.bs" & nu == "Col." ~ "colony",
+      cell.nu == "nu.bs" & nu == "Fil." ~ "filament",
     ),
     
-    # change form.no for individuals
-    form.no = if_else(
-      form == "individual",
+    # change ind.per.nu for individuals
+    ind.per.nu = if_else(
+      nu == "individual",
       1,
-      form.no
+      ind.per.nu
     )
   ) %>% 
   
@@ -1490,7 +1481,7 @@ lt_formatted <- LT %>%
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1707,14 +1698,14 @@ no_formatted <- NO %>%
     ## Extra info ----
     source.code = 'db-7',
     units = "µm",
-    form = "individual",
-    form.no = 1,
+    nu = "individual",
+    ind.per.nu = 1,
     life.stage = "active", # change from extra info to this as checked for any dormant names but none so set to active as all are phyto
   ) %>% 
   
   ## Reorder columns ----
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1810,8 +1801,8 @@ rimet2012_formatted <- rimet2012 %>%
     min.body.size = NA,
     max.body.size = NA,
     source.code = 'db-8',
-    form = "individual", # meta data says cells were mesureed so assumed not colonies or filaments
-    form.no = 1,
+    nu = "individual", # meta data says cells were mesureed so assumed not colonies or filaments
+    ind.per.nu = 1,
     join.location.1 = "Rimet et al., 2012", # says all sources are from european sits in meta data so don't need to go through original sources
     life.stage = "active", # checked for dormant names but non so set as active as all phyto so can change from joined extra info
     sex = NA, # all phyto so no sex needed
@@ -1821,7 +1812,7 @@ rimet2012_formatted <- rimet2012 %>%
   ## Order columns ----
   # reorder
   relocate(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 
@@ -1839,7 +1830,7 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
   # reorder
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
            sample.year, sample.month, join.location.1, join.location.2, join.location.3, join.location.4, join.location.5,
-           individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+           individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
            min.body.size, max.body.size, body.size,
            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
 

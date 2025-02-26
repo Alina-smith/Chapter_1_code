@@ -1,54 +1,50 @@
 # body size spread
 
 # packages
-
-library(here)
-library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(data.table)
 library(ggplot2)
 
 # Data ----
-species_traits <- readRDS("R/Data_outputs/species_traits.rds")
-taxonomy <- readRDS("R/Data_outputs/taxonomy.rds")
-traits <- readRDS("R/Data_outputs/traits.rds")
+genus_traits <- readRDS("R/Data_outputs/final_products/phyto_traits_genus.rds")
 
-x <- species_traits %>% 
-  
-  #filter(
-   # nu == "cell"
-   # ) %>%
-  
-  group_by(tax.uid) %>% 
-  
-  summarise(
-    mass.mean = mean(mass)
+y <- genus_traits %>% 
+  select(
+    -original.sources, -source.code, individual.uid, -nu, -mass, -cells.per.nu, -biovolume, -mld, -sample.month, -sample.year, -location.code, -longitude, -latitude, -location, -habitat, -country, - continent, - individual.uid
   ) %>% 
-  
-  left_join(
-    traits, by = "tax.uid"
-  ) %>% 
+  distinct(
+    genus, .keep_all = TRUE
+  )
+
+x <- genus_traits %>% 
   
   mutate(
-    blue.green = case_when(
-      group == "Blue/green" ~ "blue/green",
-      TRUE ~ "other"
-    ),
-    
-    new.reynolds.group = case_when(
+    reynolds.group = case_when(
       !is.na(reynolds.group) ~ reynolds.group,
       is.na(reynolds.group) & !is.na(padisak.group) ~ padisak.group,
       TRUE ~ "Unclassified"
     )
+  ) %>% 
+  
+  group_by(reynolds.group) %>% 
+  
+  summarise(
+    mass.mean = mean(mass),
+    .groups = "drop"
+  ) 
+%>% 
+  
+  left_join(
+    y , by = "genus"
   )
   
 
 
 ggplot(x, aes(x = log(mass.mean))) +
-  geom_histogram(binwidth = 3) +
-  facet_wrap(~phylum, scales = "free_y")
+  geom_histogram(binwidth = 3)
++
+  facet_wrap(~reynolds.group, scales = "free_y")
 
 +
   theme(strip.text.x = element_text(size=0))
@@ -73,85 +69,3 @@ x <- traits %>%
   filter(
     x == "yes"
   )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-genus_taxonomy <- taxonomy_list %>% 
-  distinct(genus, .keep_all = TRUE) %>% 
-  select(
-    -accepted.taxa.name,
-    -tax.uid,
-    -tol.id,
-    -species
-  ) %>% 
-  filter(
-    !is.na(genus)
-  )
-
-bodysize_spread <- bodysize_data %>% 
-  # select ones with data
-  filter(
-    form == "individual",
-    !is.na(mass),
-    !is.na(genus),
-    life.stage %in% c("adult", "active")
-  ) %>% 
-  
-  # get mean mass for each taxa
-  group_by(genus) %>% 
-  
-  dplyr::summarise(
-    mean.mass = mean(mass)
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  mutate(
-    log.mean.mass = log(mean.mass)
-  ) %>% 
-  
-  # add in taxonomy info
-  left_join(
-    select(
-      genus_taxonomy, genus, group
-    ),
-    by = "genus"
-  )
-
-ggplot(bodysize_spread, aes(x = log.mean.mass, fill = group)) +
-  geom_histogram(alpha = 0.7, binwidth = 1)+
-  facet_wrap(~group, ncol = 1, scales = "free_y")+
-  theme(strip.text.x = element_text(size=0))
-
-
-
-

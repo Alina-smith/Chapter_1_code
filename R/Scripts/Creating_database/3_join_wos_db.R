@@ -3,7 +3,6 @@
 ## This will then have the taxonomy, location and source info added and filtered for duplicate sources 
 
 # Packages 
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
@@ -85,7 +84,7 @@ bodysize_raw <- bodysize_spec_char %>%
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
     join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-    individual.uid, original.taxa.name, life.stage, sex, form, form.no,
+    individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type
   ) %>% 
@@ -156,4 +155,5 @@ bodysize_raw <- bodysize_spec_char %>%
   )
 
 # Save ----
-saveRDS(bodysize_raw, file = "R/data_outputs/full_database/bodysize_raw.rds")
+saveRDS(bodysize_raw, file = "R/data_outputs/final_products/bodysize_raw.rds")
+

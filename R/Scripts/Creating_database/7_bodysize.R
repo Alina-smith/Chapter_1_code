@@ -4,12 +4,10 @@
 # all mass = ug
 
 # Packages 
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(data.table)
 
 # Data ----
 bodysize_location <- readRDS("R/Data_outputs/full_database/bodysize_location.rds")
@@ -55,12 +53,21 @@ format_all_bs <- bodysize_location %>%
       TRUE ~ units
       ),
     
-    # set form number for missing one
-    form = if_else(
+    # set nu for missing one
+    nu = if_else(
       uid == "321726",
       "individual",
-      form
-      )
+      nu
+      ), 
+    
+    # change life stage so all phyto are either active or dormant
+    life.stage = case_when(
+      type == "Phytoplankton" & life.stage == "adult" ~ "active",
+      type == "Phytoplankton" & life.stage == "juvenile" ~ "dormant",
+      type == "Zooplankton" & life.stage == "active" ~ "adult",
+      type == "Zooplankton" & life.stage == "dormant" ~ "juvenile",
+      TRUE ~ life.stage
+    )
     ) %>%
   
   # don't need units because each measurement type is the same now
@@ -69,11 +76,6 @@ format_all_bs <- bodysize_location %>%
   ) %>% 
   
   ## nu column ----
-  # rename form and form.no columns to nu and set so either individual or multi-cellular
-  rename(
-    ind.per.nu = form.no,
-    nu = form
-  ) %>% 
   
   mutate(
     nu = case_when(
@@ -139,10 +141,10 @@ bs_raw <- format_all_bs %>%
   # Join back in extra info
   left_join(
     location_info, by = "location.code"
-  ) %>% 
+  )%>% 
   
   left_join(
-    tax_list_distinct, by = "tax.uid"
+      tax_list_distinct, by = "tax.uid"
   ) %>% 
   
   left_join(
@@ -170,7 +172,6 @@ bs_raw <- format_all_bs %>%
     error.type = "se",
     measurement.type = "average",
     bodysize.measurement.notes = NA,
-    form = nu,
     
     # change tyes for later merging
     sample.size = as.character(sample.size),
@@ -199,15 +200,20 @@ bodysize_formatted <- format_all_bs %>%
   # add in the new averages of raw data
   bind_rows(
     bs_raw
+  ) %>% 
+
+  # remove columns that aren't needed
+  select(
+    - measurement.type # all average now
   )
 
 ## save ----
-saveRDS(bodysize_formatted, file = "R/Data_outputs/full_database/bodysize_formatted.rds")
+saveRDS(bodysize_formatted, file = "R/Data_outputs/final_products/bodysize_formatted.rds")
 
 # Phyto ----
 # select just phytoplankton and do minor edits
 
-phyto <- bodysize_formatted %>% 
+phyto_mass_all <- bodysize_formatted %>% 
   
   mutate(
     # set depth in bodysize.measurment as height as there is no overlap between these
@@ -218,10 +224,10 @@ phyto <- bodysize_formatted %>%
     )
   ) %>% 
   
-  # Select data I want
+  # Select adult/active phytoplankton
   filter(
     type == "Phytoplankton",
-    life.stage %in% c("adult", "active") # select just active and not dormant
+    life.stage == "active" # select just active and not dormant
   ) %>% 
   
   # Rename from body to cell
@@ -249,19 +255,11 @@ phyto <- bodysize_formatted %>%
     - reps,
     - sample.size,
     
-    - measurement.type, # all average now
     - bodysize.measurement.notes, # not needed
     - type # all phyto
-  )
-
-# Cell mass ----
-# Calculate cell mass
-
-## Separate volumes ----
-# find the mld for each individual and calculate body.mass
-
-species_raw_cell_size <- phyto %>% 
+  ) %>% 
   
+  # Calculate cell mass
   # Get all the different bodysize.measurements on one row per individual
   pivot_wider(
     id_cols = individual.uid,
@@ -270,13 +268,14 @@ species_raw_cell_size <- phyto %>%
   ) %>%
   
   rename(
-    dry.mass = `dry mass`
+    dry.mass = `dry mass`,
+    body.mass = `body mass`
   ) %>% 
   
   # join all extra data back 
   left_join(
     select(
-      phyto, - cell.size, bodysize.measurement, - uid
+      bodysize_formatted, - body.size, bodysize.measurement, - uid
       ), by = "individual.uid"
   ) %>% 
   
@@ -287,13 +286,25 @@ species_raw_cell_size <- phyto %>%
   # calculate mass from biovolume and dry mass
   mutate(
     mass = case_when(
+      !is.na(body.mass) ~ body.mass,
       !is.na(biovolume) ~ biovolume*(1*10^-6),
       is.na(biovolume) & !is.na(dry.mass) ~ dry.mass/0.2,
       TRUE ~ NA
     ),
     
+    # calculate biovolume for ones that have just body mass
+    biovolume = case_when(
+      is.na(biovolume) & !is.na(body.mass) ~ body.mass/(1*10^-6),
+      TRUE ~ biovolume
+    ),
+    
     # make a mld column
     mld = pmax(length, width, height, diameter, na.rm = TRUE)
+  ) %>% 
+  
+  # rename back after left join
+  rename(
+    cells.per.nu = ind.per.nu
   ) %>% 
   
   # select columns and reorder
@@ -304,11 +315,18 @@ species_raw_cell_size <- phyto %>%
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
   
+  # remove any without a mass measurement
   filter(
-    rank == "Species"
+    !is.na(mass)
   )
 
 # save
-saveRDS(species_raw_cell_size, file = "R/Data_outputs/full_database/species_raw_cell_size.rds")
+saveRDS(phyto_mass_all, file = "R/Data_outputs/full_database/phyto_mass_all.rds")
+
+
+
+
+
+
 
 

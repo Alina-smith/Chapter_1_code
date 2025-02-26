@@ -6,10 +6,9 @@ library(tidyr)
 library(tidyverse)
 library(readxl)
 library(stringi)
-library(here)
 
 # Data ----
-location_raw <- read_xlsx(here("Raw_data","location_data_full.xlsx"), sheet = "location_raw")
+location_raw <- read_xlsx("raw_data/location_data_full.xlsx", sheet = "location_raw")
 bodysize_sources <- readRDS("R/Data_outputs/full_database/bodysize_sources.rds")
 new_sources <- readRDS("R/Data_outputs/full_database/source_list.rds")
 
