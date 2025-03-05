@@ -366,6 +366,14 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       resolved.taxa.name == "Chlorolobium braunii" ~ "Chlorolobion braunii",
       resolved.taxa.name == "Monoraphidium arcuatum" ~ "Ankistrodesmus arcuatus",
       resolved.taxa.name == "Euglena rostrata" ~ "Euglena rostrata",
+      resolved.taxa.name == "Chodatella longiseta" ~ "Lagerheimia longiseta",
+      resolved.taxa.name == "Dictyochlorella reniformis" ~ "Dictyochloris reniformis",
+      stri_detect_regex(species, "Lepidochromonas") ~ stri_replace_all_regex(species, "Lepidochromonas", "Paraphysomonas"),
+      resolved.taxa.name == "Anacystis incerta" ~ "Aphanocapsa incerta",
+      resolved.taxa.name == "Decussata placenta" ~ "Decussata placenta",
+      resolved.taxa.name == "Komvophoron constricta" ~ "Johansenia constricta",
+      resolved.taxa.name == "Myxobaktron salinum" ~ "Dactylococcopsis salina",
+      stri_detect_regex(species, "Rhabdogloea") ~ stri_replace_all_regex(species, "Rhabdogloea", "Dactylococcopsis"),
       
       # 2) Gaps:
       # These ones have a more updated name than the resolved.taxa.name so need changing
@@ -382,6 +390,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       resolved.taxa.name == "Crucigenia rectangularis" ~ "Willea rectangularis",
       resolved.taxa.name %in% c("Crucigenia tetrapedia", "Lemmermannia tetrapedia") ~ "Lemmermannia tetrapedia",
       resolved.taxa.name %in% c("Bacillaria paxillifer", "Bacillaria paradoxa", "Bacillaria paxillifera") ~ "Bacillaria paxillifera",
+      resolved.taxa.name == "Aliichlorella chlorelloides" ~ "Brachionococcus chlorelloides",
       
       
       # These have a gap but the species exists with that as the most up to date name so just use resolved.taxa.name
@@ -399,7 +408,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       resolved.taxa.name %in% c("Pica cyana", "Pennate", "Unapertura latens") ~ NA,
       
       # 1) Assigned wrong
-      resolved.taxa.name %in% c("Sphaerastrum fockii", "Epicystis peridinearum", "Protococcus wimmeri") ~ stri_extract_first_regex(resolved.taxa.name, "\\w+"),
+      resolved.taxa.name %in% c("Sphaerastrum fockii", "Epicystis peridinearum") ~ stri_extract_first_regex(resolved.taxa.name, "\\w+"),
       resolved.taxa.name == "Diacanthos" ~ "Micractinium",
       genus == "Apodocloris" ~ "Apodochloris",
       resolved.taxa.name %in% c("Chrysopora", "Chrysopora fenestrata") ~ "Chrysopora",
@@ -415,6 +424,17 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       species == "Bacillaria paxillifera" ~ "Bacillaria",
       resolved.taxa.name == "Chrysodendron" ~ "Chrysodendron",
       species == "Euglena rostrata" ~ "Euglena",
+      resolved.taxa.name == "Chodatella" ~ "Lagerheimia",
+      resolved.taxa.name == "Chodatella longiseta" ~ "Lagerheimia",
+      resolved.taxa.name %in% c("Dictyochlorella reniformis", "Dictyochlorella") ~ "Dictyochloris",
+      genus == "Kathablepharis" ~ "Katablepharis",
+      genus == "Lepidochromonas" ~ "Paraphysomonas",
+      species == "Aphanocapsa incerta" ~ "Aphanocapsa",
+      species == "Decussata placenta" ~ "Decussata",
+      resolved.taxa.name == "Anacystis" ~ "Synechococcus",
+      species == "Johansenia constricta" ~ "Johansenia",
+      species == "Dactylococcopsis salina" ~ "Dactylococcopsis",
+      genus == "Rhabdogloea" ~ "Dactylococcopsis",
       
       # 2) Gaps
       # Genus level
@@ -430,7 +450,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
     
     # Family
     family = case_when(
-      # Not a sepcies
+      # Not a species
       resolved.taxa.name == "Unapertura latens" ~ NA,
       
       # Gaps
@@ -444,7 +464,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       genus %in% c("Limnomonas", "Ettlia") ~ "Chlamydomonadales familia incertae sedis",
       genus %in% c("Carteria", "Sphaerellopsis", "Microglena") ~ "Chlamydomonadaceae",
       genus %in% c("Chrysoxys", "Saccochrysis", "Amphichrysis") ~ "Chromulinaceae",
-      genus %in% c("Geminella", "Chlorella", "Aliichlorella", "Micractinium") ~ "Chlorellaceae",
+      genus %in% c("Geminella", "Chlorella", "Brachionococcus", "Micractinium") ~ "Chlorellaceae",
       genus %in% c("Coccomyxa", "Microglena", "Paradoxia") ~ "Coccomyxaceae",
       genus %in% c("Raphidiopsis", "Anabaena") ~ "Aphanizomenonaceae",
       genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae incertae sedis",
@@ -512,6 +532,11 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       genus == "Nodularia" ~ "Nodulariaceae",
       genus == "Didymocystis" ~ "Oocystaceae",
       genus == "Acanthosphaera" ~ "Chlorellaceae",
+      genus == "Paraphysomonas" ~ "Paraphysomonadaceae",
+      genus == "Decussata" ~ "Naviculaceae",
+      genus == "Synechococcus" ~ "Synechococcaceae",
+      genus == "Johansenia" ~ "Microcoleaceae",
+      genus == "Dactylococcopsis" ~ "Chroococcaceae",
       
       family == "Spirodinium" ~ "Gymnodiniaceae",
       family == "Microcystaceae_A" ~ "Microcystaceae",
@@ -549,7 +574,7 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       family == "Tribonemataceae" ~ "Tribonematales",
       family == "Gnesiocerotidae" ~ "Polycladida",
       family == "Trinematidae" ~ "Euglyphida",
-      family == "Sellaphoraceae" ~ "Naviculales",
+      family %in% c("Sellaphoraceae", "Naviculaceae") ~ "Naviculales",
       family == "Bacillariaceae" ~ "Bacillariales",
       family == "Surirellaceae" ~ "Surirellales",
       family == "Neogosseidae" ~ "Chaetonotida",
@@ -601,6 +626,8 @@ tax_manual_changes <- tax_2gbif_cleaned %>%
       family == "Ceratiaceae" ~ "Gonyaulacales",
       family == "Palmellopsidaceae" ~ "Chlamydomonadales",
       family == "Hexamitidae" ~ "Diplomonadida",
+      family == "Paraphysomonadaceae" ~ "Paraphysomonadales",
+      family == "Synechococcaceae" ~ "Synechococcales",
       
       genus %in% c("Lemmermannia", "Crucigenia") ~ "Trebouxiophyceae ordo incertae sedis",
       genus %in% c("Biblarium", "Microneis", "Discoplea", "Monema") ~ "Bacillariophyceae ordo incertae sedis",

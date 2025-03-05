@@ -11,67 +11,56 @@ install.packages(c("treeplyr", "BiocManager"))
 library(BiocManager)
 
 install.packages(c("ggtree","treeio"))
-BiocManager::install("ggtree")
+BiocManager::install("ggtree", force = TRUE)
 library(ggtree)
 library(ggtreeExtra)
 library(ggnewscale)
 
 
 # Data ----
-bodysize_data <- readRDS("R/Data_outputs/full_database/bodysize_data.rds")
-taxonomy_list <- read.csv("R/Data_outputs/full_database/taxonomy_list.csv")
+bodysize_data <- readRDS("R/Data_outputs/final_products/phyto_traits_genus.rds")
 
-genus_taxonomy <- taxonomy_list %>% 
+# Taxonomy ----
+
+taxonomy <- bodysize_data %>% 
+  
   distinct(genus, .keep_all = TRUE) %>% 
+  
   select(
-    -accepted.taxa.name,
-    -tax.uid,
-    -tol.id,
-    -species
-  ) %>% 
-  filter(
-    !is.na(genus)
-  )
+    genus,
+    family,
+    order,
+    class,
+    phylum,
+    kingdom
+    )
 
 phylogeny_plot_data <- bodysize_data %>% 
-  
-  # select ones with data
-  filter(
-    form == "individual",
-    !is.na(mass),
-    !is.na(genus),
-    life.stage %in% c("adult", "active"),
-    kingdom != "Fungi",
-    !is.na(genus)
-  ) %>% 
   
   # get mean mass for each taxa
   group_by(genus) %>% 
   
+  group_by(genus) %>% 
+  
   summarise(
-    mean.mass = mean(mass)
+    mass.mean = mean(mass),
+    .groups = "drop"
   ) %>% 
   
-  ungroup() %>% 
-  
-  # add in taxonomy info
   left_join(
-    select(
-      genus_taxonomy, genus, family, order, class, phylum, kingdom, group
-    ),
-    by = "genus"
-  ) 
+    taxonomy, by = "genus"
+  )
 
 
 #have a quick look at the data
 glimpse(phylogeny_plot_data)
 
 phylogeny_plot_data_subset <- phylogeny_plot_data %>% 
-  select(., mean.mass, group, genus)
+  select(., mass.mean, genus)
 
-length(unique(phylogeny_plot_data_subset$genus)) #981 genera
+length(unique(phylogeny_plot_data_subset$genus)) #944 genera
 
-hist(log(phylogeny_plot_data_subset$mean.mass))
+hist(log(phylogeny_plot_data_subset$mass.mean))
 
 #Get phylo relationships from a list of taxa: ----
 
