@@ -18,15 +18,16 @@ library(ggnewscale)
 
 
 # Data ----
-bodysize_data <- readRDS("R/Data_outputs/final_products/phyto_traits_genus.rds")
+bodysize_data <- readRDS("R/Data_outputs/final_products/phyto_traits_species.rds")
 
 # Taxonomy ----
 
 taxonomy <- bodysize_data %>% 
   
-  distinct(genus, .keep_all = TRUE) %>% 
+  distinct(species, .keep_all = TRUE) %>% 
   
   select(
+    species,
     genus,
     family,
     order,
@@ -38,9 +39,7 @@ taxonomy <- bodysize_data %>%
 phylogeny_plot_data <- bodysize_data %>% 
   
   # get mean mass for each taxa
-  group_by(genus) %>% 
-  
-  group_by(genus) %>% 
+  group_by(species) %>% 
   
   summarise(
     mass.mean = mean(mass),
@@ -48,7 +47,7 @@ phylogeny_plot_data <- bodysize_data %>%
   ) %>% 
   
   left_join(
-    taxonomy, by = "genus"
+    taxonomy, by = "species"
   )
 
 
@@ -56,16 +55,24 @@ phylogeny_plot_data <- bodysize_data %>%
 glimpse(phylogeny_plot_data)
 
 phylogeny_plot_data_subset <- phylogeny_plot_data %>% 
-  select(., mass.mean, genus)
+  select(., mass.mean, species)
 
-length(unique(phylogeny_plot_data_subset$genus)) #944 genera
+length(unique(phylogeny_plot_data_subset$species)) #4412 species
 
 hist(log(phylogeny_plot_data_subset$mass.mean))
 
 #Get phylo relationships from a list of taxa: ----
 
 #match my names with taxa names in OTT (open tree taxonomy) (first check)
-taxa <- tnrs_match_names(unique(phylogeny_plot_data_subset$genus))
+taxa <- tnrs_match_names(unique(phylogeny_plot_data_subset$species))
+
+x <- taxa %>% 
+  filter(
+    is_synonym == TRUE
+  )
+
+
+
 head(taxa)
 
 #this is where you go through the warnings
@@ -81,8 +88,8 @@ unique(is.na(taxon_map)) #if false is great and we can keep going
 in_tree <- is_in_tree(ott_id(taxa))
 in_tree
 
-sum(in_tree ==TRUE) #772 
-sum(in_tree==FALSE) #198 Genus not in tree
+sum(in_tree ==TRUE) #733 
+sum(in_tree==FALSE) #207 Genus not in tree
 
 #tree with only the taxa that are in the synthetic tree
 tr <- tol_induced_subtree(ott_id(taxa)[in_tree])
@@ -147,7 +154,7 @@ names(taxa2)[names(taxa2) == "search_string"] <- "genus"
 #match them up 
 df5 <- left_join(df4, taxa2, by = "genus")
 df6 <- df5 %>% 
-  select(., c("genus", "unique_name", "mean.mass", "group"))
+  select(., c("genus", "unique_name", "mass.mean"))
 
 df6$tip.label <- df6$genus #using old names here to make figure
 
@@ -155,7 +162,7 @@ df6$tip.label <- df6$genus #using old names here to make figure
 
 df7 <- df6 %>% 
   group_by(tip.label) %>% 
-  mutate(Mean_mass_uniq = mean(mean.mass), na.rm=TRUE)
+  mutate(Mean_mass_uniq = mean(mass.mean), na.rm=TRUE)
 
 
 
