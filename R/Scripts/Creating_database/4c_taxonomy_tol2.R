@@ -108,10 +108,10 @@ write_csv(to_clean_manually, "R/data_outputs/taxonomy/tol2/to_clean_manually.csv
 # 2) Update resolved.taxa.names with the manually resolved names
 
 # Import the manually cleaned names
-manually_cleaned <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "clean_tol")
+manually_cleaned <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "cleaned_tol")
 
 # Replace cleaned.taxa.name with manually cleaned names when ones is present
-cleaned_manual <- cleaned_gna %>% 
+cleaned <- cleaned_gna %>% 
   
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
@@ -121,7 +121,7 @@ cleaned_manual <- cleaned_gna %>%
   
   # when a name has been cleaned manually (resolved source = "manaully") then select that name else keep the current one
   mutate(
-    cleaned.taxa.name.all = if_else(
+    cleaned.taxa.name = if_else(
       !is.na(cleaned.source.manual),
       cleaned.taxa.name.manual,
       cleaned.taxa.name.gna
@@ -130,42 +130,45 @@ cleaned_manual <- cleaned_gna %>%
   
   select(
     original.taxa.name,
-    cleaned.taxa.name.all
+    cleaned.taxa.name
   ) %>% 
   
   filter(
-    !(is.na(cleaned.taxa.name.all))
-  )
-
-# remove form and variety as majority don't have this and makes the taxonomy steps more complex
-cleaned <- cleaned_manual %>% 
-  
-  mutate(
-    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "cf\\.|f\\.|var\\.", " "),
-    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "  ", "")
-  ) %>% 
-  
-  separate(cleaned.taxa.name, into = c("genus", "species", "c", "d", "e"), sep = " ") %>% 
-  
-  mutate(
-    cleaned.taxa.name.new = stri_c(genus, species, sep = " "),
-    cleaned.taxa.name.new = if_else(
-      is.na(cleaned.taxa.name.new),
-      genus,
-      cleaned.taxa.name.new
-    )
-  ) %>% 
-  
-  select(
-    original.taxa.name, cleaned.taxa.name.new, cleaned.taxa.name.all
-  ) %>% 
-  
-  rename(
-    cleaned.taxa.name = cleaned.taxa.name.new
+    !(is.na(cleaned.taxa.name))
   )
 
 # Save
 saveRDS(cleaned, file = "R/data_outputs/taxonomy/tol2/cleaned.rds")
+
+# remove form and variety as majority don't have this and makes the taxonomy steps more complex
+#cleaned <- cleaned_manual %>% 
+  
+#  mutate(
+#    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "cf\\.|f\\.|var\\.", " "),
+#    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "  ", "")
+#  ) %>% 
+#  
+#  separate(cleaned.taxa.name, into = c("genus", "species", "c", "d", "e"), sep = " ") %>% 
+#  
+#  mutate(
+#    cleaned.taxa.name.new = stri_c(genus, species, sep = " "),
+#    cleaned.taxa.name.new = if_else(
+#      is.na(cleaned.taxa.name.new),
+#      genus,
+#      cleaned.taxa.name.new
+#    )
+#  ) %>% 
+#  
+#  select(
+#    original.taxa.name, cleaned.taxa.name.new, cleaned.taxa.name.all
+#  ) %>% 
+#  
+#  rename(
+#    cleaned.taxa.name = cleaned.taxa.name.new
+#  )
+
+# Save
+#saveRDS(cleaned, file = "R/data_outputs/taxonomy/tol2/cleaned.rds")
 
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
@@ -174,7 +177,7 @@ saveRDS(cleaned, file = "R/data_outputs/taxonomy/tol2/cleaned.rds")
 # run the cleaned names through the resolver to get updated versions of names
 
 # run through tnrs_match_names to get the most up to date synonyms
-resolved_tol <- tnrs_match_names(unique(cleaned$cleaned.taxa.name))
+resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name)
 
 # Save
 saveRDS(resolved_tol, file = "R/data_outputs/taxonomy/tol2/resolved_tol.rds")
@@ -195,8 +198,11 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/tol2/to_resolve_manually
 
 # Add in the manually resolved names to the full name list
 
+x <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
+
+
 # Import the manually resolved names
-manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
+manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol_new")
 
 # add to main data
 manually_resolved <- left_join(resolved_tol, manually_resolved_subset, by = "search_string") %>% 
@@ -219,7 +225,7 @@ manually_resolved <- left_join(resolved_tol, manually_resolved_subset, by = "sea
 
 # rerun through tnrs_match_names to resolve all again
 
-resolved <- tnrs_match_names(unique(manually_resolved$resolved.taxa.name))
+resolved <- tnrs_match_names(manually_resolved$resolved.taxa.name)
 
 # Save
 saveRDS(resolved, file = "R/data_outputs/taxonomy/tol2/resolved.rds")
@@ -277,29 +283,32 @@ saveRDS(classification_raw, file = "R/data_outputs/taxonomy/tol2/classification_
 
 ## Format classification ----
 
+x <- classification_formatted %>% 
+  
+  distinct(
+    phylum
+  )
+
 classification_formatted <- classification_raw %>% 
   
   mutate(
     species = case_when(
-      varietas.1 == "Dinobryon cylindricum" ~ "Dinobryon cylindricum",
       varietas.1 == "Daphnia sinensis" ~ "Daphnia sinensis",
+      forma.1 == "Prymnesium parvum f. patelliferum" ~ "Prymnesium parvum",
       
       resolved.taxa.name %in% c("Chrysastrella furcata", "Cymbopleura cuspidata", "Cystodinium cornifax", "Mytilina mucronata", "Mytilina ventralis", "Parkeria sphaerica", "Praetriceratium inconspicuum", "Pseudopodosira kosugii",
                                 "Aulacoseira ambigua", "Navicula menisculus", "Brachysira follis", "Brachysira elliptica", "Cymbella proxima", "Cymbella diversistigmata", "Conticribra weissflogii", "Rossithidium duthiei",
-                                "Hippodonta lueneburgensis", "Delphineis surirella", "Adlafia parabryophila", "Hippodonta arkonensis", "Lenticulina muensteri", "Daphnia sinensis", "Geissleria acceptata") ~ resolved.taxa.name,
+                                "Hippodonta lueneburgensis", "Delphineis surirella", "Adlafia parabryophila", "Hippodonta arkonensis", "Lenticulina muensteri", "Daphnia sinensis", "Geissleria acceptata", "Stephanodiscus carconensis",
+                                "Dinobryon cylindricum") ~ resolved.taxa.name,
       
       TRUE ~ species.1
     ),
     
     genus = case_when(
-      varietas.1 == "Dinobryon cylindricum" ~ "Dinobryon",
-      varietas.1 == "Pia cyanea" ~ "Pia",
-      
-      resolved.taxa.name %in% c("Cryptaulax", "Cryptoglena", "Cystodinium", "Myxococcoides", "Rhaphidiopsis", "Tetralithus") ~ resolved.taxa.name,
       resolved.taxa.name == "Dinobryon (in Ochromonas sup.)" ~ "Dinobryon",
+      resolved.taxa.name == "Palaeacmea" ~ "Palaeacmaea",
       resolved.taxa.name == "Rhizosolenia (in Bacillariophytina)" ~ "Rhizosolenia",
-      
-      stri_detect_regex(species, "Euglena") ~ "Euglena",
+      resolved.taxa.name %in% c("Cryptaulax", "Cryptoglena", "Cystodinium", "Rhaphidiopsis", "Tetralithus", "Lithoperidinium", "Petersophlebia", "Proboscidoplocia", "Chrysastrella", "Gleocapsa") ~ resolved.taxa.name,
       
       !is.na(genus.2) ~ genus.2,
       
@@ -313,6 +322,7 @@ classification_formatted <- classification_raw %>%
     ),
     
     family = case_when(
+      genus == "Ammatoidea" ~ "Microcoleaceae",
       !is.na(family.2) ~ family.2,
       
       TRUE ~ family.1
@@ -332,24 +342,34 @@ classification_formatted <- classification_raw %>%
     ),
     
     phylum = case_when(
-      infraphylum.1 == "Dinoflagellata" ~ "Myzozoa",
-      class %in% c("Chrysophyceae", "Dictyochophyceae", "Raphidophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Actinophryidae") ~ "Ochrophyta",
-      class == "Coccolithophyceae" ~ "Haptophyta",
-      class == "Glaucophyceae" ~ "Glaucophyta",
+      
+      phylum.1 == "Cryptophyceae" ~ "Cryptophyta",
+      phylum.1 == "Euglenida" ~ "Euglenozoa",
+      
+      resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Chlorophyta",
+      resolved.taxa.name == "Dinoflagellata" ~ "Myzozoa",
+      
+      genus == "Palaeacmaea" ~ "Mollusca",
+      genus == "Amoeba" ~ "Amoebozoa",
+      genus == "Colpidium" ~ "Ciliophora",
+      genus %in% c("Crumenula", "Euglena") ~ "Euglenozoa",
+      genus %in% c("Oscillatoria", "Anacystis", "Schizothrix") ~ "Cyanobacteria",
+      genus %in% c("Karlodinium", "Karenia") ~ "Myzozoa",
+      
+      family == "Collodictyonidae" ~ "Apusozoa",
       
       order == "Bicosoecida" ~ "Bigyra",
       order == "Choanoflagellida" ~ "Sarcomastigophora",
       order %in% c("Eustigmatales", "Synurales", "Chrysomeridales") ~ "Ochrophyta",
       order == "Kinetoplastea" ~ "Euglenozoa",
+      order == "Noctilucales" ~ "Myzozoa",
+      order == "Centrohelida" ~ "Chlorophyta",
       
-      genus == "Amoeba" ~ "Amoebozoa",
-      genus == "Colpidium" ~ "Ciliophora",
-      genus %in% c("Crumenula", "Euglena") ~ "Euglenozoa",
-      genus %in% c("Sphaerastrum", "Diphylleia") ~ "Chlorophyta",
-      genus %in% c("Oscillatoria", "Anacystis", "Schizothrix") ~ "Cyanobacteria",
-      genus == "Schizothrix" ~ "Arthropoda",
-      
-      resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Chlorophyta",
+      class %in% c("Chrysophyceae", "Dictyochophyceae", "Raphidophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Actinophryidae") ~ "Ochrophyta",
+      class == "Coccolithophyceae" ~ "Haptophyta",
+      class == "Glaucophyceae" ~ "Glaucophyta",
+      class == "Dinophyceae" ~ "Myzozoa",
+      class %in% c("Zygnemophyceae", "Coleochaetophyceae", "Klebsormidiophyceae") ~ "Charophyta",
       
       !is.na(phylum.2) ~ phylum.2,
       
@@ -357,29 +377,34 @@ classification_formatted <- classification_raw %>%
     ),
     
     kingdom = case_when(
-      !is.na(kingdom.2) ~ kingdom.2,
       
-      TRUE ~ kingdom.1
+      phylum %in% c("Cyanobacteria") ~ "Bacteria",
+      phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta") ~ "Plantae",
+      phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Cryptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
+      phylum %in% c("Sarcomastigophora", "Euglenozoa", "Amoebozoa", "Apusozoa") ~ "Protozoa",
+      phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata") ~ "Animalia",
+      
+      TRUE ~ NA
     ),
     
-    domain = case_when(
-      resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Plantae",
+    type = case_when(
+      kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
+      kingdom == "Animalia" ~ "Zooplankton",
       
-      TRUE ~ domain.1
+      phylum %in% c("Ochrophyta", "Haptophyta", "Sarcomastigophora", "Bigyra", "Myzozoa", "Euglenozoa", "Ciliophora", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa") ~ "Zooplankton",
+      
+      TRUE ~ NA
     )
   ) %>% 
   
-  mutate(
-    type = case_when(
-      phylum %in% c("Cyanobacteria", "Chlorophyta", "Ochrophyta", "Haptophyta", "Sarcomastigophora", "Cryptophyceae", "Streptophyta", "Bigyra", "Myzozoa", "Euglenida", "Euglenozoa", "Rhodophyta", "Ciliophora", "Glaucophyta") ~ "Phytoplankton",
-      phylum %in% c("Cercozoa", "Rotifera", "Amoebozoa", "Gastrotricha") ~ "Zooplankton",
-      class %in% c("Hexanaupli", "Branchiopoda", "Ostracoda") ~ "Zooplankton",
-      TRUE ~ "Other"
-    )
+  filter(
+    !(resolved.taxa.name == "Marssoniella (genus in kingdom Archaeplastida)"),
+    !is.na(type)
   ) %>% 
   
   select(
-    resolved.taxa.name, species, genus, phylum, domain
+    resolved.taxa.name, type, species, genus, phylum, kingdom
   )
 
 # Save
