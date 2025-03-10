@@ -34,10 +34,13 @@ bodysize_raw <- readRDS("R/data_outputs/final_products/bodysize_raw.rds")
 
 # get a list of all distinct names 
 distinct_names <- select(bodysize_raw, original.taxa.name) %>% 
-  distinct(original.taxa.name) 
+  
+  distinct(original.taxa.name) %>% 
+  
+  # Convert to a string of names
+  pull(original.taxa.name)
 
-# convert to a string of names
-names_list <- paste0(distinct_names$original.taxa.name)
+# View names
 glimpse(names_list)
 
 # run string through the resolver and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
@@ -82,18 +85,12 @@ to_clean_manually <- cleaned_gna %>%
       # Ones that weren't picked up by the resolver at all - gave NA for the resolved.taxa.name
       is.na(cleaned.taxa.name.gna) ~ "na",
       
-      # ones with cf. as the resolver removes this and need to keep it
-      stri_detect_regex(original.taxa.name, " cf\\.| cf ") ~ "cf",
-      
-      # Ones that were a variety or form as the resolver removed the var. and f. and this is needed for classification steps
-      stri_detect_regex(original.taxa.name, " f\\.| var\\.") ~ "var.f",
-      
-      # Ones that were bumped up a taxonomic rank by the resolver - had two words in original.species.name (contain a space) but one word in the resolved name (no space)
+      # Ones that were bumped up a taxonomic rank by the cleaner - had two words in original.species.name (contain a space) but one word in the cleaned name (no space)
       stri_detect_regex(original.taxa.name, " ") & 
         !(stri_detect_regex(cleaned.taxa.name.gna, " ")) & 
         !(stri_detect_regex(original.taxa.name, "\\b(?i)sp\\.|\\b(?i)spp\\.|\\b(?i)sp\\b|\\b(?i)spp\\b|\\b(?i)sp(\\d+)|\\b(?i)ssp\\b")) ~ "bumped",
       
-      # Ones where the resolved.taxa.name was set to the name of the juvenile form or a common name instead of the taxa.name (e.g. nauplii or cyclops instead of copepoda)
+      # Ones where the cleaned.taxa.name was set to the name of the juvenile form or a common name instead of the taxa.name (e.g. nauplii or cyclops instead of copepoda)
       stri_detect_regex(cleaned.taxa.name.gna, "\\b(?i)cyst\\b|\\b(?i)stomatocyst\\b|\\b(?i)nauplius\\b|\\b(?i)centric\\b|\\b(?i)volvocales\\b|\\b(?i)cyclops\\b|\\b(?i)mite\\b") ~ "juvenile",
       
       # Unknown
@@ -110,19 +107,21 @@ write_csv(to_clean_manually, "R/data_outputs/taxonomy/tol2/to_clean_manually.csv
 
 # 2) Update resolved.taxa.names with the manually resolved names
 
-# Import the manually resolved names
+# Import the manually cleaned names
 manually_cleaned <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "clean_tol")
 
-# Replace resolved.taxa.name with manually resolved names when ones is present
+# Replace cleaned.taxa.name with manually cleaned names when ones is present
 cleaned_manual <- cleaned_gna %>% 
+  
   # left join all the manually resolved ones from manual_resolve spreadsheet
   left_join(
     manually_cleaned,
     by = "original.taxa.name"
   ) %>% 
+  
   # when a name has been cleaned manually (resolved source = "manaully") then select that name else keep the current one
   mutate(
-    cleaned.taxa.name = if_else(
+    cleaned.taxa.name.all = if_else(
       !is.na(cleaned.source.manual),
       cleaned.taxa.name.manual,
       cleaned.taxa.name.gna
@@ -131,19 +130,19 @@ cleaned_manual <- cleaned_gna %>%
   
   select(
     original.taxa.name,
-    cleaned.taxa.name
+    cleaned.taxa.name.all
   ) %>% 
   
   filter(
-    !(is.na(cleaned.taxa.name))
+    !(is.na(cleaned.taxa.name.all))
   )
 
 # remove form and variety as majority don't have this and makes the taxonomy steps more complex
 cleaned <- cleaned_manual %>% 
   
   mutate(
-    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name, "cf\\.|f\\.|var\\.", " "),
-    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name, "  ", "")
+    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "cf\\.|f\\.|var\\.", " "),
+    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "  ", "")
   ) %>% 
   
   separate(cleaned.taxa.name, into = c("genus", "species", "c", "d", "e"), sep = " ") %>% 
@@ -158,7 +157,7 @@ cleaned <- cleaned_manual %>%
   ) %>% 
   
   select(
-    original.taxa.name, cleaned.taxa.name.new
+    original.taxa.name, cleaned.taxa.name.new, cleaned.taxa.name.all
   ) %>% 
   
   rename(
@@ -199,7 +198,9 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/tol2/to_resolve_manually
 # Import the manually resolved names
 manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
 
+# add to main data
 manually_resolved <- left_join(resolved_tol, manually_resolved_subset, by = "search_string") %>% 
+  
   mutate(
     resolved.taxa.name = if_else(
       !is.na(new_name),
@@ -213,7 +214,7 @@ manually_resolved <- left_join(resolved_tol, manually_resolved_subset, by = "sea
   ) %>% 
   
   select(
-    resolved.taxa.name
+    resolved.taxa.name, search_string, unique_name
   )
 
 # rerun through tnrs_match_names to resolve all again
@@ -381,9 +382,69 @@ classification_formatted <- classification_raw %>%
     resolved.taxa.name, species, genus, phylum, domain
   )
 
+# Save
+saveRDS(classification_formatted, file = "R/data_outputs/taxonomy/tol2/classification_formatted.rds")
+
 # Add to main data ----
 
-x <- left_join(cleaned, resolved, by = c())
+class_to_resolve <- left_join(
+  classification_formatted,select(
+    resolved, search_string, unique_name
+    ), by = c("resolved.taxa.name" = "unique_name")
+  ) %>% 
+  
+  rename(
+    search.string.resolved = search_string
+  )
+
+resolve_to_clean_1 <- manually_resolved %>% 
+  
+  mutate(
+    resolved.taxa.name = tolower(resolved.taxa.name)
+  ) %>% 
+  
+  rename(
+    search.string.manually.resolved = search_string,
+    resolved.taxa.name.manually.resolved = resolved.taxa.name
+  ) %>% 
+  
+  select(
+    - unique_name
+  ) %>% 
+  
+  left_join(
+    ., class_to_resolve, by = c("resolved.taxa.name.manually.resolved" = "search.string.resolved")
+  ) %>% 
+  
+  select(
+    - resolved.taxa.name.manually.resolved
+  )
+
+resolved_to_clean_2 <- cleaned %>% 
+  
+  mutate(
+    cleaned.taxa.name.lower = tolower(cleaned.taxa.name)
+  ) %>% 
+  
+  select(
+    original.taxa.name,
+    cleaned.taxa.name.lower
+  ) %>% 
+  
+  left_join(
+    ., resolve_to_clean_1, by = c("cleaned.taxa.name.lower" = "search.string.manually.resolved")
+  ) %>% 
+  
+  select(
+    -cleaned.taxa.name.lower
+  )
+
+
+
+
+
+
+
 
 bodysize_taxonomy <-  bodysize_raw %>% 
   
