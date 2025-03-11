@@ -1,4 +1,4 @@
-search_string,unique_name,approximate_match,score,ott_id,is_synonym,flags,number_matches
+cleaned.taxa.name,resolved.taxa.name,approximate_match,score,ott_id,is_synonym,flags,number_matches
 coelosphaerium kutzingii,NA,NA,NA,NA,NA,NA,NA
 gloeotila spiralis,NA,NA,NA,NA,NA,NA,NA
 anabaena flos-aquae treleasii,NA,NA,NA,NA,NA,NA,NA
