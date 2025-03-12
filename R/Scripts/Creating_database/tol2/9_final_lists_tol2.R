@@ -9,8 +9,8 @@ library(stringi)
 
 # Data ----
 phyto_traits_all <- readRDS("R/Data_outputs/final_products/tol/phyto_traits_all.rds")
-source_list <- readRDS("R/Data_outputs/full_database/tol/source_list_uodate.rds")
-location_list <- readRDS("R/Data_outputs/locations_sources/tol/location_list.rds")
+sources_list <- readRDS("R/Data_outputs/full_database/tol/sources_list_update_tol2.rds")
+location_list <- readRDS("R/Data_outputs/full_database/tol/updated_locations_tol2.rds")
 
 # location list ----
 
@@ -50,7 +50,7 @@ location <- location_list %>%
   )
 
 # save
-saveRDS(location, "R/data_outputs/final_products/location.rds")
+saveRDS(location, "R/data_outputs/final_products/tol/location.rds")
 
 # Sources ----
 
@@ -96,7 +96,7 @@ source_codes <- phyto_traits_all %>%
   )
   
 # Select sources that are in source_codes
-sources <- source_list %>% 
+sources <- sources_list %>% 
   
   # rename new.source.code and source.code and remove old source.code
   select(
@@ -118,5 +118,5 @@ sources <- source_list %>%
   )
   
 # save
-saveRDS(sources, "R/data_outputs/final_products/sources.rds")
+saveRDS(sources, "R/data_outputs/final_products/tol/sources.rds")
 

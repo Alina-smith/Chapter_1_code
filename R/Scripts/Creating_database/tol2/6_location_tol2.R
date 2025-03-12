@@ -383,3 +383,44 @@ bodysize_location <- bodysize_location_codes %>%
 # save
 saveRDS(bodysize_location, file = "R/Data_outputs/full_database/tol/bodysize_location_tol2.rds")
 
+# update location list
+updated_locations <- bodysize_location %>% 
+  
+  select(
+    location.code
+  ) %>% 
+  
+  separate(
+    location.code, sep = ";", into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17")
+    ) %>%
+  
+  pivot_longer(., cols = 1:17, values_to = "location.code") %>% 
+  
+  distinct(
+    location.code
+  ) %>% 
+  
+  left_join(., location_join, by = "location.code") %>% 
+  
+  distinct(
+    location.code, .keep_all = TRUE
+  ) %>% 
+  
+  select(
+    -join.location,
+    - source.code) %>% 
+  
+  filter(
+    !is.na(location.code)
+  )
+  
+# save
+saveRDS(updated_locations, file = "R/Data_outputs/full_database/tol/updated_locations_tol2.rds")
+  
+  
+  
+  
+  
+  
+  
+  

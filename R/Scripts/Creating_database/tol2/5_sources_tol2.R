@@ -478,7 +478,7 @@ bodysize_sources <- bodysize_duplicates %>%
   relocate(
     uid, individual.uid,
     source.code, original.sources,
-    original.taxa.name, taxa.name.full, taxa.name, tax.uid, type, species, genus, phylum, kingdom,
+    original.taxa.name, taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom,
     nu, ind.per.nu, life.stage, sex,
     min.body.size, max.body.size, body.size, units, bodysize.measurement, bodysize.measurement.notes,
     reps, measurement.type, sample.size, error, error.type,

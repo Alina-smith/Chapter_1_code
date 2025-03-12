@@ -326,6 +326,46 @@ classification_formatted <- classification_raw %>%
     
     family = case_when(
       genus == "Ammatoidea" ~ "Microcoleaceae",
+      genus %in% c("Stokesiella", "Kephyriopsis") ~ "Dinobryaceae",
+      genus %in% c("Synuropsis", "Chrysodendron") ~ "Ochromonadaceae",
+      genus %in% c("Chrysoxys", "Saccochrysis", "Amphichrysis") ~ "Chromulinaceae",
+      genus == "Coccomyxa" ~ "Coccomyxaceae",
+      genus %in% c("Raphidiopsis", "Anabaena") ~ "Aphanizomenonaceae",
+      genus == "Coenocystis" ~ "Radiococcaceae",
+      genus %in% c("Rhabdoderma", "Romeria") ~ "Cymatolegaceae",
+      genus == "Fallacia" ~ "Sellaphoraceae",
+      genus %in% c("Nitzschia", "Bacillaria") ~ "Bacillariaceae",
+      genus == "Trichodina" ~ "Trichodinidae",
+      genus == "Hortobagyiella" ~ "Koliellaceae",
+      genus == "Monodus" ~ "Pleurochloridaceae",
+      genus == "Phaeobotrys" ~ "Phaeothamniaceae",
+      genus == "Pyrenomonas" ~ "Pyrenomonadaceae",
+      genus == "Schizothrix" ~ "Trichocoleusaceae",
+      genus == "Spirulina" ~ "Spirulinaceae",
+      genus == "Euplotes" ~ "Euplotidae",
+      genus == "Astasia" ~ "Astasiidae",
+      genus == "Microcystis" ~ "Microcystaceae",
+      genus == "Peridinium" ~ "Peridiniaceae",
+      genus == "Cyanobium" ~ "Prochlorococcaceae",
+      genus %in% c("Gloeocapsa", "Gloeocapsopsis") ~ "Aliterellaceae",
+      genus == "Geitlerinema" ~ "Geitlerinemataceae",
+      genus == "Chrysopora" ~ "Chrysocapsaceae",
+      genus == "Actinocyclus" ~ "Hemidiscaceae",
+      genus == "Epicystis" ~ "Chrysosphaeraceae",
+      genus == "Cryptoglena" ~ "Euglenaceae",
+      genus == "Euglena" ~ "Euglenaceae",
+      genus == "Opercularia" ~ "Operculariidae",
+      genus == "Chrysodendron" ~ "Ochromonadales",
+      genus == "Xenococcus" ~ "Pleurocapsaceae",
+      genus == "Nodularia" ~ "Nodulariaceae",
+      genus == "Acanthosphaera" ~ "Chlorellaceae",
+      genus == "Paraphysomonas" ~ "Paraphysomonadaceae",
+      genus == "Synechococcus" ~ "Synechococcaceae",
+      genus == "Johansenia" ~ "Microcoleaceae",
+      genus == "Dactylococcopsis" ~ "Chroococcaceae",
+      genus == "Amoeba" ~ "Amoebidae",
+      genus == "Chlorella" ~ "Chlorellaceae",
+      
       !is.na(family.2) ~ family.2,
       
       TRUE ~ family.1
@@ -334,12 +374,78 @@ classification_formatted <- classification_raw %>%
     order = case_when(
       resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Chlorellales",
       
+      genus == "Jaaginema" ~ "Synechococcales",
+      
+      family %in% c("Brachysiraceae", "Cavinulaceae", "Plagiotropidaceae", "Cosmioneidaceae", "Sellaphoraceae") ~ "Naviculales",
+      family %in% c("Gomphosphaeriaceae", "Stichosiphonaceae", "Entophysalidaceae", "Microcystaceae", "Chroococcaceae", "Pleurocapsaceae") ~ "Chroococcales",
+      family == "Stephanodiscaceae" ~ "Thalassiosirales",
+      family == "Tovelliaceae" ~ "Tovelliales",
+      family %in% c("Euglenaceae", "Phacaceae") ~ "Euglenales",
+      family == "Mastogloiaceae" ~ "Mastogloiales",
+      family %in% c("Suessiaceae", "Hemidiniaceae", "Auriculaceae", "Borghiellaceae") ~ "Suessiales",
+      family == "Rhoicospheniaceae" ~ "Cymbellales",
+      family == "Thoracosphaeraceae" ~ "Thoracosphaerales",
+      family == "Mesodiniidae" ~ "Cyclotrichiida",
+      family == "Orthoseiraceae" ~ "Orthoseirales",
+      family %in% c("Ammatoideaceae", "Schizotrichaceae", "Borziaceae", "Oscillatoriaceae", "Microcoleaceae") ~ "Oscillatoriales",
+      family == "Peroniaceae" ~ "Eunotiales",
+      family == "Ellobiidae" ~ "Ellobiida",
+      family == "Histiobalantiidae" ~ "Pleuronematida",
+      family %in% c("Nostocaceae", "Aphanizomenonaceae", "Nodulariaceae") ~ "Nostocales",
+      family %in% c("Gymnodiniaceae", "Kareniaceae") ~ "Gymnodiniales",
+      family == "Thalassiosiraceae" ~ "Thalassiosirales",
+      family == "Vaginulinidae" ~ "Vaginulinida",
+      family == "Hydrococcaceae" ~ "Pleurocapsales",
+      family == "Chrysosaccaceae" ~ "Chrysosaccales",
+      family == "Peranemataceae" ~ "Peranemida",
+      family == "Heteroleibleiniaceae" ~ "Pseudanabaenales",
+      family == "Actinobolinidae" ~ "Haptorida",
+      family == "Cymatolegaceae" ~ "Nodosilineales", 
+      family %in% c("Prochlorococcaceae", "Synechococcaceae") ~ "Synechococcales",
+      family == "Amoebidae" ~ "Euamoebida",
+      family == "Bacillariaceae" ~ "Bacillariales",
+      family == "Koliellaceae" ~ "Prasiolales",
+      family == "Spirulinaceae" ~ "Spirulinales",
+      family == "Euplotidae" ~ "Euplotida",
+      family == "Astasiidae" ~ "Natomonadida",
+      family == "Trichodinidae" ~ "Mobilida",
+      family == "Trichocoleusaceae" ~ "Leptolyngbyales",
+      family == "Peridiniaceae" ~ "Peridiniales",
+      family == "Aliterellaceae" ~ "Chroococcidiopsidales",
+      family == "Geitlerinemataceae" ~ "Geitlerinematales",
+      family == "Phaeothamniaceae" ~ "Phaeothamniales",
+      family == "Hemidiscaceae" ~ "Coscinodiscales",
+      family == "Chrysosphaeraceae" ~ "Chrysosphaerales",
+      family == "Operculariidae" ~ "Sessilida",
+      family == "Radiococcaceae" ~ "Sphaeropleales",
+      
       TRUE ~ order.1
     ),
     
     class = case_when(
       class.1 == "Haptophyta" ~ "Coccolithophyceae",
       class.1 == "Glaucophyta" ~ "Glaucophyceae",
+      
+      family == "Radialiplicataceae" ~ "Coscinodiscophyceae",
+      
+      order == "Choanoflagellida" ~ "Zoomastigophora",
+      order == "Eustigmatales" ~ "Eustigmatophyceae",
+      order == "Pyramimonadales" ~ "Pyramimonadophyceae",
+      order == "Cryptomonadales" ~ "Cryptophyceae",
+      order %in% c("Fragilariales", "Tabellariales", "Orthoseirales", "Coscinodiscales") ~ "Bacillariophyceae",
+      order == "Synurales" ~ "Chrysophyceae",
+      order == "Bangiales" ~ "Bangiophyceae",
+      order == "Centrohelida" ~ "Centrohelea",
+      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
+      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
+      order == "Noctilucales" ~ "Dinophyceae",
+      order == "Bicosoecida" ~ "Bicosoecophyceae",
+      order == "Heteronematales" ~ "Euglenida",
+      order == "Vaginulinida" ~ "Nodosariata",
+      order == "Euglenales" ~ "Euglenophyceae",
+      order == "Natomonadida" ~ "Peranemea",
+      order == "Euamoebida" ~ "Tubulinea",
+      
       
       TRUE ~ class.1
     ),
@@ -482,7 +588,7 @@ bodysize_taxonomy <-  bodysize_raw %>%
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
     join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-    individual.uid, original.taxa.name, taxa.name.full, taxa.name, tax.uid, type, species, genus, phylum, kingdom,
+    individual.uid, original.taxa.name, taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom,
     life.stage, sex, nu, ind.per.nu,
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type,
@@ -502,7 +608,7 @@ tax_list_raw <- bodysize_taxonomy %>%
     tax.uid, .keep_all = TRUE
   ) %>% 
   select(
-    taxa.name.full, taxa.name, tax.uid, type, species, genus, phylum, kingdom
+    taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom
   )
 
 # save

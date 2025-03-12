@@ -93,7 +93,7 @@ format_all_bs <- bodysize_location %>%
   select(
     uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name.full, taxa.name,
     nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type, measurement.type,
-    tax.uid, species, genus, phylum, kingdom,
+    tax.uid, species, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude,
     bodysize.measurement.notes
   )
@@ -184,7 +184,7 @@ bs_raw <- format_all_bs %>%
   select(
     uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name.full, taxa.name,
     nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type, measurement.type,
-    tax.uid, species, genus, phylum, kingdom,
+    tax.uid, species, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude,
     bodysize.measurement.notes
   )
@@ -311,7 +311,7 @@ phyto_mass_all <- bodysize_formatted %>%
   select(
     individual.uid, source.code, original.sources, taxa.name.full, taxa.name,
     nu, cells.per.nu, mass, biovolume, mld,
-    tax.uid, species, genus, phylum, kingdom,
+    tax.uid, species, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
   

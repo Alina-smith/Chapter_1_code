@@ -516,7 +516,7 @@ phyto_traits_all <- phyto_mass_all %>%
   select(
     individual.uid, source.code, original.sources, taxa.name.full, taxa.name,
     nu, cells.per.nu, mass, biovolume, mld, 
-    tax.uid, species, genus, phylum, kingdom,
+    tax.uid, species, genus,family, order, class, phylum, kingdom,
     sample.year, sample.month,
     location.code, habitat, location, country, continent, latitude, longitude,
     life.form,reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
@@ -559,7 +559,7 @@ phyto_traits_species <- phyto_traits_all %>%
   relocate(
     individual.uid, source.code, original.sources, taxa.name.full, species,
     nu, cells.per.nu, mass, biovolume, mld, 
-    tax.uid, genus, phylum, kingdom,
+    tax.uid, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month,
     location.code, habitat, location, country, continent, latitude, longitude,
     life.form,reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
@@ -600,7 +600,7 @@ phyto_traits_genus <- phyto_traits_all %>%
   relocate(
     individual.uid, source.code, original.sources, taxa.name.full, genus,
     nu, cells.per.nu, mass, biovolume, mld, 
-    tax.uid, phylum, kingdom,
+    tax.uid, family, order, class, phylum, kingdom,
     sample.year, sample.month,
     location.code, habitat, location, country, continent, latitude, longitude,
     life.form,reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
