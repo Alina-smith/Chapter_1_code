@@ -427,21 +427,55 @@ functional_traits <- full_join(kruk_traits, rimmet_traits, by = "taxa.name", suf
     tax_list_raw, by = "taxa.name"
   ) %>% 
   
+  mutate(
+    group = case_when(
+      phylum %in% c("Cyanobacteria", "Glaucophyta") ~ "Blue/green",
+      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
+      phylum == "Rhodophyta" ~ "Red",
+      class == "Bacillariophyceae" ~ "Diatom",
+      class %in% c("Chrysophyceae", "Dictyochophyceae") ~ "Golden-brown",
+      class == "Dinophyceae" ~ "Dinoflagellate",
+      phylum == "Euglenozoa" ~ "Euglenoid",
+      class == "Raphidophyceae" ~ "Raphidophytes",
+      class == "Xanthophyceae" ~ "Yellow-green",
+      class == "Phaeophyceae" ~ "Brown",
+      class == "Eustigmatophyceae" ~ "Eustigmatophytes",
+      phylum == "Cryptophyta" ~ "Cryptomonads",
+      phylum == "Haptophyta" ~ "Haptophytes",
+      
+      TRUE ~ NA
+    )
+  ) %>% 
+  
   select(
-    taxa.name, life.form, reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
+    taxa.name, life.form, reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall, group
   )
 
 # Add to main data ----
 
 phyto_traits_all <- phyto_mass_all %>% 
-  
   left_join(
     functional_traits, by = "taxa.name"
-    ) %>% 
+  ) %>% 
   
   left_join(
     functional_traits, by = c("genus" = "taxa.name"),
     suffix = c("", ".genus")
+  ) %>% 
+  
+  left_join(
+    functional_traits, by = c("family" = "taxa.name"),
+    suffix = c("", ".family")
+  ) %>% 
+  
+  left_join(
+    functional_traits, by = c("order" = "taxa.name"),
+    suffix = c("", ".order")
+  ) %>% 
+  
+  left_join(
+    functional_traits, by = c("class" = "taxa.name"),
+    suffix = c("", ".class")
   ) %>% 
   
   left_join(
@@ -458,56 +492,77 @@ phyto_traits_all <- phyto_mass_all %>%
     life.form = case_when(
       !is.na(life.form) ~ life.form,
       is.na(life.form) & !is.na(life.form.genus) ~ life.form.genus,
-      is.na(life.form) & is.na(life.form.genus) & !is.na(life.form.phylum) ~ life.form.phylum,
-      is.na(life.form) & is.na(life.form.genus) & is.na(life.form.phylum) & !is.na(life.form.kingdom) ~ life.form.kingdom,
+      is.na(life.form) & is.na(life.form.genus) & !is.na(life.form.family) ~ life.form.family,
+      is.na(life.form) & is.na(life.form.genus) & is.na(life.form.family) & !is.na(life.form.order) ~ life.form.order,
+      is.na(life.form) & is.na(life.form.genus) & is.na(life.form.family) & is.na(life.form.order) & !is.na(life.form.class) ~ life.form.class,
+      is.na(life.form) & is.na(life.form.genus) & is.na(life.form.family) & is.na(life.form.order) & is.na(life.form.class) & !is.na(life.form.phylum) ~ life.form.phylum,
+      is.na(life.form) & is.na(life.form.genus) & is.na(life.form.family) & is.na(life.form.order) & is.na(life.form.class) & is.na(life.form.phylum) & !is.na(life.form.kingdom) ~ life.form.kingdom,
       TRUE ~ NA
     ),
-   
+    
     reynolds.group = case_when(
       !is.na(reynolds.group) ~ reynolds.group,
       is.na(reynolds.group) & !is.na(reynolds.group.genus) ~ reynolds.group.genus,
-      is.na(reynolds.group) & is.na(reynolds.group.genus) & !is.na(reynolds.group.phylum) ~ reynolds.group.phylum,
-      is.na(reynolds.group) & is.na(reynolds.group.genus) & is.na(reynolds.group.phylum) & !is.na(reynolds.group.kingdom) ~ reynolds.group.kingdom,
+      is.na(reynolds.group) & is.na(reynolds.group.genus) & !is.na(reynolds.group.family) ~ reynolds.group.family,
+      is.na(reynolds.group) & is.na(reynolds.group.genus) & is.na(reynolds.group.family) & !is.na(reynolds.group.order) ~ reynolds.group.order,
+      is.na(reynolds.group) & is.na(reynolds.group.genus) & is.na(reynolds.group.family) & is.na(reynolds.group.order) & !is.na(reynolds.group.class) ~ reynolds.group.class,
+      is.na(reynolds.group) & is.na(reynolds.group.genus) & is.na(reynolds.group.family) & is.na(reynolds.group.order) & is.na(reynolds.group.class) & !is.na(reynolds.group.phylum) ~ reynolds.group.phylum,
+      is.na(reynolds.group) & is.na(reynolds.group.genus) & is.na(reynolds.group.family) & is.na(reynolds.group.order) & is.na(reynolds.group.class) & is.na(reynolds.group.phylum) & !is.na(reynolds.group.kingdom) ~ reynolds.group.kingdom,
       TRUE ~ NA
     ), 
     
     siliceous.wall = case_when(
       !is.na(siliceous.wall) ~ siliceous.wall,
       is.na(siliceous.wall) & !is.na(siliceous.wall.genus) ~ siliceous.wall.genus,
-      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & !is.na(siliceous.wall.phylum) ~ siliceous.wall.phylum,
-      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & is.na(siliceous.wall.phylum) & !is.na(siliceous.wall.kingdom) ~ siliceous.wall.kingdom,
+      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & !is.na(siliceous.wall.family) ~ siliceous.wall.family,
+      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & is.na(siliceous.wall.family) & !is.na(siliceous.wall.order) ~ siliceous.wall.order,
+      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & is.na(siliceous.wall.family) & is.na(siliceous.wall.order) & !is.na(siliceous.wall.class) ~ siliceous.wall.class,
+      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & is.na(siliceous.wall.family) & is.na(siliceous.wall.order) & is.na(siliceous.wall.class) & !is.na(siliceous.wall.phylum) ~ siliceous.wall.phylum,
+      is.na(siliceous.wall) & is.na(siliceous.wall.genus) & is.na(siliceous.wall.family) & is.na(siliceous.wall.order) & is.na(siliceous.wall.class) & is.na(siliceous.wall.phylum) & !is.na(siliceous.wall.kingdom) ~ siliceous.wall.kingdom,
       TRUE ~ NA
     ), 
     
     mucilage = case_when(
       !is.na(mucilage) ~ mucilage,
       is.na(mucilage) & !is.na(mucilage.genus) ~ mucilage.genus,
-      is.na(mucilage) & is.na(mucilage.genus) & !is.na(mucilage.phylum) ~ mucilage.phylum,
-      is.na(mucilage) & is.na(mucilage.genus) & is.na(mucilage.phylum) & !is.na(mucilage.kingdom) ~ mucilage.kingdom,
+      is.na(mucilage) & is.na(mucilage.genus) & !is.na(mucilage.family) ~ mucilage.family,
+      is.na(mucilage) & is.na(mucilage.genus) & is.na(mucilage.family) & !is.na(mucilage.order) ~ mucilage.order,
+      is.na(mucilage) & is.na(mucilage.genus) & is.na(mucilage.family) & is.na(mucilage.order) & !is.na(mucilage.class) ~ mucilage.class,
+      is.na(mucilage) & is.na(mucilage.genus) & is.na(mucilage.family) & is.na(mucilage.order) & is.na(mucilage.class) & !is.na(mucilage.phylum) ~ mucilage.phylum,
+      is.na(mucilage) & is.na(mucilage.genus) & is.na(mucilage.family) & is.na(mucilage.order) & is.na(mucilage.class) & is.na(mucilage.phylum) & !is.na(mucilage.kingdom) ~ mucilage.kingdom,
       TRUE ~ NA
     ), 
     
     feeding.guild = case_when(
       !is.na(feeding.guild) ~ feeding.guild,
       is.na(feeding.guild) & !is.na(feeding.guild.genus) ~ feeding.guild.genus,
-      is.na(feeding.guild) & is.na(feeding.guild.genus) & !is.na(feeding.guild.phylum) ~ feeding.guild.phylum,
-      is.na(feeding.guild) & is.na(feeding.guild.genus) & is.na(feeding.guild.phylum) & !is.na(feeding.guild.kingdom) ~ feeding.guild.kingdom,
+      is.na(feeding.guild) & is.na(feeding.guild.genus) & !is.na(feeding.guild.family) ~ feeding.guild.family,
+      is.na(feeding.guild) & is.na(feeding.guild.genus) & is.na(feeding.guild.family) & !is.na(feeding.guild.order) ~ feeding.guild.order,
+      is.na(feeding.guild) & is.na(feeding.guild.genus) & is.na(feeding.guild.family) & is.na(feeding.guild.order) & !is.na(feeding.guild.class) ~ feeding.guild.class,
+      is.na(feeding.guild) & is.na(feeding.guild.genus) & is.na(feeding.guild.family) & is.na(feeding.guild.order) & is.na(feeding.guild.class) & !is.na(feeding.guild.phylum) ~ feeding.guild.phylum,
+      is.na(feeding.guild) & is.na(feeding.guild.genus) & is.na(feeding.guild.family) & is.na(feeding.guild.order) & is.na(feeding.guild.class) & is.na(feeding.guild.phylum) & !is.na(feeding.guild.kingdom) ~ feeding.guild.kingdom,
       TRUE ~ NA
     ), 
     
     motile = case_when(
       !is.na(motile) ~ motile,
       is.na(motile) & !is.na(motile.genus) ~ motile.genus,
-      is.na(motile) & is.na(motile.genus) & !is.na(motile.phylum) ~ motile.phylum,
-      is.na(motile) & is.na(motile.genus) & is.na(motile.phylum) & !is.na(motile.kingdom) ~ motile.kingdom,
+      is.na(motile) & is.na(motile.genus) & !is.na(motile.family) ~ motile.family,
+      is.na(motile) & is.na(motile.genus) & is.na(motile.family) & !is.na(motile.order) ~ motile.order,
+      is.na(motile) & is.na(motile.genus) & is.na(motile.family) & is.na(motile.order) & !is.na(motile.class) ~ motile.class,
+      is.na(motile) & is.na(motile.genus) & is.na(motile.family) & is.na(motile.order) & is.na(motile.class) & !is.na(motile.phylum) ~ motile.phylum,
+      is.na(motile) & is.na(motile.genus) & is.na(motile.family) & is.na(motile.order) & is.na(motile.class) & is.na(motile.phylum) & !is.na(motile.kingdom) ~ motile.kingdom,
       TRUE ~ NA
     ), 
     
     mobility.apparatus = case_when(
       !is.na(mobility.apparatus) ~ mobility.apparatus,
       is.na(mobility.apparatus) & !is.na(mobility.apparatus.genus) ~ mobility.apparatus.genus,
-      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & !is.na(mobility.apparatus.phylum) ~ mobility.apparatus.phylum,
-      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & is.na(mobility.apparatus.phylum) & !is.na(mobility.apparatus.kingdom) ~ mobility.apparatus.kingdom,
+      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & !is.na(mobility.apparatus.family) ~ mobility.apparatus.family,
+      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & is.na(mobility.apparatus.family) & !is.na(mobility.apparatus.order) ~ mobility.apparatus.order,
+      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & is.na(mobility.apparatus.family) & is.na(mobility.apparatus.order) & !is.na(mobility.apparatus.class) ~ mobility.apparatus.class,
+      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & is.na(mobility.apparatus.family) & is.na(mobility.apparatus.order) & is.na(mobility.apparatus.class) & !is.na(mobility.apparatus.phylum) ~ mobility.apparatus.phylum,
+      is.na(mobility.apparatus) & is.na(mobility.apparatus.genus) & is.na(mobility.apparatus.family) & is.na(mobility.apparatus.order) & is.na(mobility.apparatus.class) & is.na(mobility.apparatus.phylum) & !is.na(mobility.apparatus.kingdom) ~ mobility.apparatus.kingdom,
       TRUE ~ NA
     )
   ) %>% 
@@ -516,26 +571,10 @@ phyto_traits_all <- phyto_mass_all %>%
   select(
     individual.uid, source.code, original.sources, taxa.name.full, taxa.name,
     nu, cells.per.nu, mass, biovolume, mld, 
-    tax.uid, species, genus,family, order, class, phylum, kingdom,
+    tax.uid, species, genus, family, order, class, phylum, kingdom,
     sample.year, sample.month,
     location.code, habitat, location, country, continent, latitude, longitude,
-    life.form,reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall
-  )
-
-x <- phyto_traits_all %>% 
-  
-  distinct(tax.uid, .keep_all = TRUE) %>% 
-  
-  mutate(
-    x = case_when(
-      !is.na(reynolds.group) ~ "yes",
-      !is.na(padisak.group) ~ "yes",
-      TRUE ~ NA
-    )
-  ) %>% 
-  
-  filter(
-    is.na(x)
+    life.form,reynolds.group, padisak.group, morpho.classification, feeding.guild, motile, mobility.apparatus, mucilage, siliceous.wall, group
   )
 
 # save

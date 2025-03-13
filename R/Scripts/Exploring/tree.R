@@ -18,7 +18,7 @@ library(ggnewscale)
 
 
 # Data ----
-bodysize_data <- readRDS("R/Data_outputs/final_products/phyto_traits_species.rds")
+bodysize_data <- readRDS("R/Data_outputs/final_products/tol/phyto_traits_species.rds")
 
 # Taxonomy ----
 
@@ -57,7 +57,7 @@ glimpse(phylogeny_plot_data)
 phylogeny_plot_data_subset <- phylogeny_plot_data %>% 
   select(., mass.mean, species)
 
-length(unique(phylogeny_plot_data_subset$species)) #4412 species
+length(unique(phylogeny_plot_data_subset$species)) #4317 species
 
 hist(log(phylogeny_plot_data_subset$mass.mean))
 
@@ -65,13 +65,6 @@ hist(log(phylogeny_plot_data_subset$mass.mean))
 
 #match my names with taxa names in OTT (open tree taxonomy) (first check)
 taxa <- tnrs_match_names(unique(phylogeny_plot_data_subset$species))
-
-x <- taxa %>% 
-  filter(
-    is_synonym == TRUE
-  )
-
-
 
 head(taxa)
 
@@ -88,8 +81,8 @@ unique(is.na(taxon_map)) #if false is great and we can keep going
 in_tree <- is_in_tree(ott_id(taxa))
 in_tree
 
-sum(in_tree ==TRUE) #733 
-sum(in_tree==FALSE) #207 Genus not in tree
+sum(in_tree == TRUE) #3613
+sum(in_tree == FALSE) #686 Genus not in tree
 
 #tree with only the taxa that are in the synthetic tree
 tr <- tol_induced_subtree(ott_id(taxa)[in_tree])
@@ -132,11 +125,11 @@ taxon_map_used <- taxon_map[taxon_map %in% tr$tip.label]
 
 #Plotting tree circular ----
 
-phylogeny_plot_data_subset$genus <- tolower(phylogeny_plot_data_subset$genus)
+phylogeny_plot_data_subset$species <- tolower(phylogeny_plot_data_subset$species)
 
 
 #think this gives the data that actually has its Genus mapped into the tree
-df4 <- phylogeny_plot_data_subset[phylogeny_plot_data_subset$genus %in% tr$tip.label, ]
+df4 <- phylogeny_plot_data_subset[phylogeny_plot_data_subset$species %in% tr$tip.label, ]
 
 
 
@@ -148,15 +141,15 @@ table(df4$group)
 
 #get the 2 columns interested
 taxa2<- taxa %>% select(., search_string, unique_name)
-names(taxa2)[names(taxa2) == "search_string"] <- "genus"
+names(taxa2)[names(taxa2) == "search_string"] <- "species"
 
 
 #match them up 
-df5 <- left_join(df4, taxa2, by = "genus")
+df5 <- left_join(df4, taxa2, by = "species")
 df6 <- df5 %>% 
-  select(., c("genus", "unique_name", "mass.mean"))
+  select(., c("species", "unique_name", "mass.mean"))
 
-df6$tip.label <- df6$genus #using old names here to make figure
+df6$tip.label <- df6$species #using old names here to make figure
 
 #table(df5$met_category)
 
@@ -172,7 +165,7 @@ df7 <- df6 %>%
 
 q <- ggtree(tr, branch.length='none', layout='circular') 
 q
-q <-  q %<+% df7 + geom_tippoint(aes(color = group), 
+q <-  q %<+% df7 + geom_tippoint(aes(color = mass.mean), 
                                  size=1, show.legend=TRUE) 
 q
 

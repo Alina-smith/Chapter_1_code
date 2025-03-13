@@ -205,7 +205,7 @@ write_csv(to_resolve_manually, "R/data_outputs/taxonomy/tol2/to_resolve_manually
 # Add in the manually resolved names to the full name list
 
 # Import the manually resolved names
-manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol_new")
+manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
 
 # add to main data
 resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "cleaned.taxa.name") %>% 
@@ -325,47 +325,6 @@ classification_formatted <- classification_raw %>%
     ),
     
     family = case_when(
-      genus == "Ammatoidea" ~ "Microcoleaceae",
-      genus %in% c("Stokesiella", "Kephyriopsis") ~ "Dinobryaceae",
-      genus %in% c("Synuropsis", "Chrysodendron") ~ "Ochromonadaceae",
-      genus %in% c("Chrysoxys", "Saccochrysis", "Amphichrysis") ~ "Chromulinaceae",
-      genus == "Coccomyxa" ~ "Coccomyxaceae",
-      genus %in% c("Raphidiopsis", "Anabaena") ~ "Aphanizomenonaceae",
-      genus == "Coenocystis" ~ "Radiococcaceae",
-      genus %in% c("Rhabdoderma", "Romeria") ~ "Cymatolegaceae",
-      genus == "Fallacia" ~ "Sellaphoraceae",
-      genus %in% c("Nitzschia", "Bacillaria") ~ "Bacillariaceae",
-      genus == "Trichodina" ~ "Trichodinidae",
-      genus == "Hortobagyiella" ~ "Koliellaceae",
-      genus == "Monodus" ~ "Pleurochloridaceae",
-      genus == "Phaeobotrys" ~ "Phaeothamniaceae",
-      genus == "Pyrenomonas" ~ "Pyrenomonadaceae",
-      genus == "Schizothrix" ~ "Trichocoleusaceae",
-      genus == "Spirulina" ~ "Spirulinaceae",
-      genus == "Euplotes" ~ "Euplotidae",
-      genus == "Astasia" ~ "Astasiidae",
-      genus == "Microcystis" ~ "Microcystaceae",
-      genus == "Peridinium" ~ "Peridiniaceae",
-      genus == "Cyanobium" ~ "Prochlorococcaceae",
-      genus %in% c("Gloeocapsa", "Gloeocapsopsis") ~ "Aliterellaceae",
-      genus == "Geitlerinema" ~ "Geitlerinemataceae",
-      genus == "Chrysopora" ~ "Chrysocapsaceae",
-      genus == "Actinocyclus" ~ "Hemidiscaceae",
-      genus == "Epicystis" ~ "Chrysosphaeraceae",
-      genus == "Cryptoglena" ~ "Euglenaceae",
-      genus == "Euglena" ~ "Euglenaceae",
-      genus == "Opercularia" ~ "Operculariidae",
-      genus == "Chrysodendron" ~ "Ochromonadales",
-      genus == "Xenococcus" ~ "Pleurocapsaceae",
-      genus == "Nodularia" ~ "Nodulariaceae",
-      genus == "Acanthosphaera" ~ "Chlorellaceae",
-      genus == "Paraphysomonas" ~ "Paraphysomonadaceae",
-      genus == "Synechococcus" ~ "Synechococcaceae",
-      genus == "Johansenia" ~ "Microcoleaceae",
-      genus == "Dactylococcopsis" ~ "Chroococcaceae",
-      genus == "Amoeba" ~ "Amoebidae",
-      genus == "Chlorella" ~ "Chlorellaceae",
-      
       !is.na(family.2) ~ family.2,
       
       TRUE ~ family.1
@@ -374,81 +333,17 @@ classification_formatted <- classification_raw %>%
     order = case_when(
       resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Chlorellales",
       
-      genus == "Jaaginema" ~ "Synechococcales",
-      
-      family %in% c("Brachysiraceae", "Cavinulaceae", "Plagiotropidaceae", "Cosmioneidaceae", "Sellaphoraceae") ~ "Naviculales",
-      family %in% c("Gomphosphaeriaceae", "Stichosiphonaceae", "Entophysalidaceae", "Microcystaceae", "Chroococcaceae", "Pleurocapsaceae") ~ "Chroococcales",
-      family == "Stephanodiscaceae" ~ "Thalassiosirales",
-      family == "Tovelliaceae" ~ "Tovelliales",
-      family %in% c("Euglenaceae", "Phacaceae") ~ "Euglenales",
-      family == "Mastogloiaceae" ~ "Mastogloiales",
-      family %in% c("Suessiaceae", "Hemidiniaceae", "Auriculaceae", "Borghiellaceae") ~ "Suessiales",
-      family == "Rhoicospheniaceae" ~ "Cymbellales",
-      family == "Thoracosphaeraceae" ~ "Thoracosphaerales",
-      family == "Mesodiniidae" ~ "Cyclotrichiida",
-      family == "Orthoseiraceae" ~ "Orthoseirales",
-      family %in% c("Ammatoideaceae", "Schizotrichaceae", "Borziaceae", "Oscillatoriaceae", "Microcoleaceae") ~ "Oscillatoriales",
-      family == "Peroniaceae" ~ "Eunotiales",
-      family == "Ellobiidae" ~ "Ellobiida",
-      family == "Histiobalantiidae" ~ "Pleuronematida",
-      family %in% c("Nostocaceae", "Aphanizomenonaceae", "Nodulariaceae") ~ "Nostocales",
-      family %in% c("Gymnodiniaceae", "Kareniaceae") ~ "Gymnodiniales",
-      family == "Thalassiosiraceae" ~ "Thalassiosirales",
-      family == "Vaginulinidae" ~ "Vaginulinida",
-      family == "Hydrococcaceae" ~ "Pleurocapsales",
-      family == "Chrysosaccaceae" ~ "Chrysosaccales",
-      family == "Peranemataceae" ~ "Peranemida",
-      family == "Heteroleibleiniaceae" ~ "Pseudanabaenales",
-      family == "Actinobolinidae" ~ "Haptorida",
-      family == "Cymatolegaceae" ~ "Nodosilineales", 
-      family %in% c("Prochlorococcaceae", "Synechococcaceae") ~ "Synechococcales",
-      family == "Amoebidae" ~ "Euamoebida",
-      family == "Bacillariaceae" ~ "Bacillariales",
-      family == "Koliellaceae" ~ "Prasiolales",
-      family == "Spirulinaceae" ~ "Spirulinales",
-      family == "Euplotidae" ~ "Euplotida",
-      family == "Astasiidae" ~ "Natomonadida",
-      family == "Trichodinidae" ~ "Mobilida",
-      family == "Trichocoleusaceae" ~ "Leptolyngbyales",
-      family == "Peridiniaceae" ~ "Peridiniales",
-      family == "Aliterellaceae" ~ "Chroococcidiopsidales",
-      family == "Geitlerinemataceae" ~ "Geitlerinematales",
-      family == "Phaeothamniaceae" ~ "Phaeothamniales",
-      family == "Hemidiscaceae" ~ "Coscinodiscales",
-      family == "Chrysosphaeraceae" ~ "Chrysosphaerales",
-      family == "Operculariidae" ~ "Sessilida",
-      family == "Radiococcaceae" ~ "Sphaeropleales",
-      
       TRUE ~ order.1
     ),
     
     class = case_when(
       class.1 == "Haptophyta" ~ "Coccolithophyceae",
       class.1 == "Glaucophyta" ~ "Glaucophyceae",
-      
-      family == "Radialiplicataceae" ~ "Coscinodiscophyceae",
-      
-      order == "Choanoflagellida" ~ "Zoomastigophora",
-      order == "Eustigmatales" ~ "Eustigmatophyceae",
-      order == "Pyramimonadales" ~ "Pyramimonadophyceae",
-      order == "Cryptomonadales" ~ "Cryptophyceae",
-      order %in% c("Fragilariales", "Tabellariales", "Orthoseirales", "Coscinodiscales") ~ "Bacillariophyceae",
-      order == "Synurales" ~ "Chrysophyceae",
-      order == "Bangiales" ~ "Bangiophyceae",
-      order == "Centrohelida" ~ "Centrohelea",
-      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
-      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
-      order == "Noctilucales" ~ "Dinophyceae",
-      order == "Bicosoecida" ~ "Bicosoecophyceae",
-      order == "Heteronematales" ~ "Euglenida",
-      order == "Vaginulinida" ~ "Nodosariata",
-      order == "Euglenales" ~ "Euglenophyceae",
-      order == "Natomonadida" ~ "Peranemea",
-      order == "Euamoebida" ~ "Tubulinea",
-      
-      
+    
       TRUE ~ class.1
     ),
+    
+    # do phylum now because I need to get the types to work out which ones to remove before later steps
     
     phylum = case_when(
       
@@ -531,15 +426,136 @@ classification_formatted <- classification_raw %>%
     tax.uid, taxa.name.full, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
+## Manually do family, order and class ----
+# want to manually input missing ranks for family as will take too long to do in a case_when
+missing_family <- classification_formatted %>% 
+  select(
+    genus,
+    family
+  ) %>% 
+  
+  filter(
+    is.na(family)
+  ) %>% 
+  
+  distinct(
+    genus
+  )
+
+# save
+write_csv(missing_family, "R/data_outputs/taxonomy/tol2/missing_family.csv")
+
+# Import the manually filled family
+manually_family <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "family_tol")
+
+# Update family
+classification_family <- classification_formatted %>% 
+  
+  left_join(manually_family, by = "genus", suffix = c(".tol", ".manual")) %>% 
+  
+  mutate(
+    family = if_else(
+      !is.na(family.manual),
+      family.manual,
+      family.tol
+    )
+  ) %>% 
+  
+  select(
+    - family.manual,
+    - family.tol
+  )
+
+# want to manually input missing ranks for order as will take too long to do in a case_when
+missing_order <- classification_family %>% 
+  select(
+    family,
+    order
+  ) %>% 
+  
+  filter(
+    is.na(order)
+  ) %>% 
+  
+  distinct(
+    family
+  )
+
+# save
+write_csv(missing_order, "R/data_outputs/taxonomy/tol2/missing_order.csv")
+
+# Import the manually filled order
+manually_order <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "order_tol")
+
+# Update order
+classification_order <- classification_family %>% 
+  
+  left_join(manually_order, by = "family", suffix = c(".tol", ".manual")) %>% 
+  
+  mutate(
+    order = if_else(
+      !is.na(order.manual),
+      order.manual,
+      order.tol
+    ),
+    
+    # do the ones with a missing family from genus with case_when
+    order = case_when(
+      genus == "Jaaginema" ~ "Synechococcales",
+      genus == "Pseudofallacia" ~ "Naviculales",
+      
+      TRUE ~ order
+    )
+  ) %>% 
+  
+  select(
+    - order.manual,
+    - order.tol
+  )
+
+# Final edits can just be done with case_when
+
+classification <- classification_order %>% 
+  
+  mutate(
+    class = case_when(
+      family == "Radialiplicataceae" ~ "Coscinodiscophyceae",
+      
+      order == "Choanoflagellida" ~ "Zoomastigophora",
+      order == "Eustigmatales" ~ "Eustigmatophyceae",
+      order == "Pyramimonadales" ~ "Pyramimonadophyceae",
+      order == "Cryptomonadales" ~ "Cryptophyceae",
+      order %in% c("Fragilariales", "Tabellariales", "Orthoseirales", "Coscinodiscales") ~ "Bacillariophyceae",
+      order == "Synurales" ~ "Chrysophyceae",
+      order == "Bangiales" ~ "Bangiophyceae",
+      order == "Centrohelida" ~ "Centrohelea",
+      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
+      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
+      order == "Noctilucales" ~ "Dinophyceae",
+      order == "Bicosoecida" ~ "Bicosoecophyceae",
+      order == "Heteronematales" ~ "Euglenida",
+      order == "Vaginulinida" ~ "Nodosariata",
+      order == "Euglenales" ~ "Euglenophyceae",
+      order == "Natomonadida" ~ "Peranemea",
+      order == "Euamoebida" ~ "Tubulinea",
+      
+      TRUE ~ class
+    )
+  ) %>% 
+  
+  relocate(
+    tax.uid, taxa.name.full, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+  )
+
 # Save
-saveRDS(classification_formatted, file = "R/data_outputs/taxonomy/tol2/classification_formatted.rds")
+saveRDS(classification, file = "R/data_outputs/taxonomy/tol2/classification.rds")
 
 # Add to main data ----
 # need to join things inn sequence because there were a couple of steps to get from the raw names to the formatted names
 
 # linking classification step to resolved step
 class_to_resolve <- left_join(
-  classification_formatted,
+  classification,
   select(
     resolved, resolved.taxa.name, resolved.taxa.name.manual
     ), by = c("taxa.name.full" = "resolved.taxa.name")
