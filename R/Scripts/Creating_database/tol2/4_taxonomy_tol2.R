@@ -292,6 +292,7 @@ saveRDS(classification_raw, file = "R/data_outputs/taxonomy/tol2/classification_
 
 ## Format classification ----
 
+# do initail manual edits
 classification_formatted <- classification_raw %>% 
   
   mutate(
@@ -530,7 +531,7 @@ classification <- classification_order %>%
       order == "Bangiales" ~ "Bangiophyceae",
       order == "Centrohelida" ~ "Centrohelea",
       order == "Chrysomeridales" ~ "Chrysomeridophyceae",
-      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
+      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanobacteria",
       order == "Noctilucales" ~ "Dinophyceae",
       order == "Bicosoecida" ~ "Bicosoecophyceae",
       order == "Heteronematales" ~ "Euglenida",
