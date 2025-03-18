@@ -1,20 +1,25 @@
-# Aim of script:
-# Join the DB and WOS data together and format anything to make the same
-## This will then have the taxonomy, location and source info added and filtered for duplicate sources 
+# Aim of script: Join the DB and WOS data together and format anything to make the same
 
-# Packages 
+# Flow of script:
+  # 1) Join the formatted db and wos together
+  # 2) Replace any invisible characters with normal characters
+  # 3) Make any final edits that weren't picked up in the previous formatting steps
+
+# Last updated: 18/03/2025
+
+# Packages ----
 library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
 
 # Data ----
-wos_raw <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
-db_raw <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
+wos_formatted <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
+db_formatted <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
 
 
 # Joining db and wos ----
-joined_raw <- bind_rows(db_raw, wos_raw) 
+joined_raw <- bind_rows(db_formatted, wos_formatted) 
 
 
 # Invisible characters ----
@@ -22,13 +27,19 @@ joined_raw <- bind_rows(db_raw, wos_raw)
 
 ## Replace with regex ----
 spec_char_to_fix <- joined_raw %>% 
+  
   mutate(
-    # Replace with an easily identifiable sequence (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
+    
+    # Replace any invisible characters with an easily identifiable regex (*SpecChar* stands for special character) to help when doing taxonomy next (don't want to do a space or remove because that could change it to a different name)
     original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*")
   ) %>% 
+  
+  # Remove duplicates of names
   distinct(
     original.taxa.name
   ) %>% 
+  
+  # Select just ones with the regex
   filter(
     stri_detect_regex(original.taxa.name, "\\*SpecChar\\*")
   )
@@ -37,14 +48,16 @@ spec_char_to_fix <- joined_raw %>%
 write_csv(spec_char_to_fix, "R/data_outputs/taxonomy/spec_char_to_fix.csv")
 
 ## Swap old for new names ----
-# read in updated names
-updated_spec_char <- read_xlsx(here("raw_data","manual_taxonomy.xlsx"), sheet = "special_characters")
 
-# replace ones with *SpecChar* with updated name
+# Read in updated names
+updated_spec_char <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "special_characters")
+
+# Replace *SpecChar* with updated name
 bodysize_spec_char <- joined_raw %>% 
   
   mutate(
-    # add in *SpecChar* again
+    
+    # Add in *SpecChar* again so can left join with updated_spec_char
     original.taxa.name = stri_replace_all_regex(original.taxa.name, "[^\\x20-\\x7E]", "*SpecChar*"),
   ) %>% 
   
@@ -54,7 +67,8 @@ bodysize_spec_char <- joined_raw %>%
   ) %>% 
   
   mutate(
-    # replace old with new
+    
+    # Replace old with new
     original.taxa.name = if_else(
       !is.na(new.taxa.name), new.taxa.name, original.taxa.name
     ),
@@ -73,13 +87,14 @@ bodysize_spec_char <- joined_raw %>%
 bodysize_raw <- bodysize_spec_char %>% 
   
   mutate(
+    
     ## UID ----
-    # make uid column so each data point has it's own uid
+    # Make uid column so each data point has it's own uid
     uid = row_number()
   ) %>% 
   
-  ## reorder ----
-  # make easier for mutating across
+  ## Reorder ----
+  # Just to make it easier for mutating across in later steps
   relocate(
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
@@ -90,16 +105,16 @@ bodysize_raw <- bodysize_spec_char %>%
   ) %>% 
   
   mutate(
+    
     ## Original.source.codes NAs ----
-    # set NA original.source.code.1 to "unknown" - because if original.source.code.1 is NA then it means there is no original source code and so it is unknown
+    # When the original.source.code.1 column is NA set to "unknown" instead - if this column is NA then it means the original source is unknown
     original.source.code.1 = if_else(
       is.na(original.source.code.1),
       "unknown",
       original.source.code.1
     ),
     
-    # set NA in the original.source.columns to no.source - because if these are NA it is because it just didn't have that many original source codes
-    # set to "no.source" instead of NA to make later steps for the sources easier
+    # When the other original.source.code columns are NA set to "no.source" - just makes later steps in the sources script easier
     across(
       .cols = original.source.code.2:original.source.code.18,
       ~ if_else(
@@ -109,48 +124,47 @@ bodysize_raw <- bodysize_spec_char %>%
         )
       ),
     
-    ## join.source NAs ----
-    # set join.source to no.source for NAs - because if these are NA it is because it just didn't have that many locations
-    # set to "no.source" instead of NA to make later steps for the location codes easier
+    ## Join.source NAs ----
+    # When join.source is NA then set to "no.source" - just makes later steps in the location script easier
     across(
-      .cols = join.location.2:join.location.17, # all join.location.1 column should have a value as the unknonws have their own location code
+      .cols = join.location.2:join.location.17, # all join.location.1 column should have a value as the unknowns have their own location code
       ~ if_else(
         is.na(.),
         "no.source",
         .)
       ),
     
-    # General edits ----
-    # make general edits that got missed in previous steps
+    ## General edits ----
+    # Make general edits that got missed in previous steps
     
-    # paper code 10.1038/s41598-022-14301-y is actually body length not body size so change that
+    # Paper code 10.1038/s41598-022-14301-y is actually body length not body size so change that
     bodysize.measurement = case_when(
       bodysize.measurement == "body size" ~ "length",
       TRUE ~ bodysize.measurement
     ),
     
-    # change units that are unicode to be the same
+    # Change units that are unicode to be the same
     units = stri_replace_all_regex(units, "[^\\x20-\\x7E]", "µ"),
     
-    # calculate min max
-    # for any that still have only min and max and not body size calculate this
+    # Remove any random capitals - Can't use toupper because gna_verify doesn't work when the second word is capitalized
+    original.taxa.name = tolower(original.taxa.name), # set all to lower case
+    original.taxa.name = paste(
+      toupper(
+        str_sub(
+          original.taxa.name, 1,1 # Select first letter and set to upper case
+          )
+        ),
+      str_sub(original.taxa.name, 2), # Paste remaining word
+      sep = ""
+    ),
+    
+    ## Calculate min max ----
+    # For any where body size is NA but there is a min and max value then use this to calculat body size
     body.size = case_when(
       is.na(body.size) & !is.na(min.body.size) & !is.na(max.body.size) ~ (min.body.size + max.body.size)/2,
       is.na(body.size) & is.na(min.body.size) & !is.na(max.body.size) ~ max.body.size,
       is.na(body.size) & !is.na(min.body.size) & is.na(max.body.size) ~ min.body.size,
       TRUE ~ body.size
-    ),
-    
-    # remove any random capitals - set just first letter to upper case, gna_verify doesn't work with anything else
-    original.taxa.name = tolower(original.taxa.name), # set all to lower case
-    original.taxa.name = paste(
-      toupper(
-        str_sub(
-          original.taxa.name, 1,1 # select first letter and set to upper case
-          )
-        ),
-      str_sub(original.taxa.name, 2), # paste remaining word
-      sep = ""
     )
   )
 

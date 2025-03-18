@@ -279,7 +279,13 @@ kremer_formatted <- kremer %>%
   ## Filter
   filter(
     #  Remove any with no taxa.name
-    !is.na(original.taxa.name)
+    !is.na(original.taxa.name),
+    
+    # remove onces from REBECCA due to inconsitenties and reported bias
+    !(join.location.1 == "REBECCA"),
+    
+    # remove ones without a cell.bs as cannot determine if these are multi-cellular or single cell measuresuement 
+    !is.na(cell.bs)
     ) %>% 
   
   mutate(

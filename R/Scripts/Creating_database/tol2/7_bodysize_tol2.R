@@ -213,7 +213,7 @@ saveRDS(bodysize_formatted, file = "R/Data_outputs/final_products/tol/bodysize_f
 # Phyto ----
 # select just phytoplankton and do minor edits
 
-phyto_mass_all <- bodysize_formatted %>% 
+phyto_mass <- bodysize_formatted %>% 
   
   mutate(
     # set depth in bodysize.measurment as height as there is no overlap between these
@@ -228,20 +228,6 @@ phyto_mass_all <- bodysize_formatted %>%
   filter(
     type == "Phytoplankton",
     life.stage == "active" # select just active and not dormant
-  ) %>% 
-  
-  # Rename from body to cell
-  rename(
-    cell.size = body.size,
-    cells.per.nu = ind.per.nu
-  ) %>% 
-  
-  mutate(
-    nu = if_else(
-      nu == "individual",
-      "cell",
-      nu
-    )
   ) %>% 
   
   select(
@@ -264,7 +250,7 @@ phyto_mass_all <- bodysize_formatted %>%
   pivot_wider(
     id_cols = individual.uid,
     names_from = bodysize.measurement,
-    values_from = cell.size
+    values_from = body.size
   ) %>%
   
   rename(
@@ -279,16 +265,46 @@ phyto_mass_all <- bodysize_formatted %>%
       ), by = "individual.uid"
   ) %>% 
   
+  # Rename from body to cell
+  rename(
+    cells.per.nu = ind.per.nu
+  ) %>% 
+  
+  mutate(
+    nu = if_else(
+      nu == "individual",
+      "cell",
+      nu
+    )
+  ) %>% 
+  
   distinct(
     individual.uid, .keep_all = TRUE
   ) %>% 
   
-  # calculate mass from biovolume and dry mass
   mutate(
+    # When biovolume is given use this over dry/wet mass
+    dry.mass = if_else(
+      !is.na(biovolume) & !is.na(dry.mass),
+      dry.mass == NA,
+      dry.mass
+    )
+  ) %>% 
+  
+  # very few dry mass so just get rid of them
+  filter(
+    is.na(dry.mass)
+  ) %>% 
+  
+  select(
+    -dry.mass
+  ) %>% 
+  
+  mutate(
+    # calculate mass from biovolume
     mass = case_when(
       !is.na(body.mass) ~ body.mass,
       !is.na(biovolume) ~ biovolume*(1*10^-6),
-      is.na(biovolume) & !is.na(dry.mass) ~ dry.mass/0.2,
       TRUE ~ NA
     ),
     
@@ -300,11 +316,6 @@ phyto_mass_all <- bodysize_formatted %>%
     
     # make a mld column
     mld = pmax(length, width, height, diameter, na.rm = TRUE)
-  ) %>% 
-  
-  # rename back after left join
-  rename(
-    cells.per.nu = ind.per.nu
   ) %>% 
   
   # select columns and reorder
@@ -321,12 +332,74 @@ phyto_mass_all <- bodysize_formatted %>%
   )
 
 # save
-saveRDS(phyto_mass_all, file = "R/Data_outputs/full_database/tol/phyto_mass_all_tol2.rds")
+saveRDS(phyto_mass, file = "R/Data_outputs/full_database/tol/phyto_mass_tol2.rds")
+
+# Find any that only have multi-cellular values but not single cell values
+
+multi_cell <- phyto_mass %>% 
+  
+  group_by(nu, taxa.name) %>% 
+  
+  distinct(taxa.name, .keep_all = TRUE) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(taxa.name) %>% 
+  
+  mutate(
+    n = n()
+  ) %>% 
+  
+  filter(
+    n == 1,
+    nu == "multi-cellular"
+  ) %>% 
+  
+  ungroup()
+
+multi_sources <- multi_cell %>% 
+  
+  distinct(
+    source.code
+  )
+
+all_multi_cell <- phyto_mass %>% 
+  
+  filter(
+    source.code %in% multi_sources$source.code,
+    individual.uid %in% x$individual.uid
+  )
+
+x <- bodysize_taxonomy %>% 
+  filter(
+    taxa.name == "Ammatoidea"
+  )
 
 
+# Select just the data that is to species/genus level
+phyto_mass_subset <- phyto_mass %>% 
+  
+  filter(
+    !is.na(genus)
+  ) %>% 
+  
+  # make a rank column to know which ones are species and which are to genus level
+  mutate(
+    rank = if_else(
+      is.na(species),
+      "Genus",
+      "Species"
+    )
+  ) %>% 
+  relocate(
+    individual.uid, source.code, original.sources, taxa.name.full, taxa.name,
+    nu, cells.per.nu, mass, biovolume, mld,
+    tax.uid, rank, species, genus, family, order, class, phylum, kingdom,
+    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+  )
 
-
-
+# save
+saveRDS(phyto_mass_subset, file = "R/Data_outputs/full_database/tol/phyto_mass_subset_tol2.rds")
 
 
 

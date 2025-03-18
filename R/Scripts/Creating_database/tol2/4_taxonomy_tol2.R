@@ -1,16 +1,15 @@
-# Adding taxonomy data to the species list 
-# data run through veryfier on 13/1/2025
-# data ran through taxize on 20/1/2025
+# Aim of script: Getting taxonomy info for all the species and adding it to the raw data
 
-# Aim of script
-# 1) Clean names - Run the names through gna_verifier to fix spelling mistakes and then manually fix any that weren't picked up
-# 2) Resolved names - Run the cleaned names through tnrs_match_names to get most up to date names and then manually fix any that weren't picked up
+# Flow of script:
+  # 1) Clean names:     Run the names through taxize::gna_verifier to fix spelling mistakes and then manually fix any that weren't picked up
+  # 2) Resolved names:  Run the cleaned names through rotl::tnrs_match_names to get most up to date names and then manually fix any that weren't picked up
+  # 3) Taxonomy:        Run cleaned names through taxize::classification with tol to get taxonomy and then manuallu fill in any gaps
 
-# Resolve names - Run the names through gna_veryfier to fix spellings and get most up to date synonyms and manually resolve any that weren't picked up
-# Taxonomy
-# 1) Run resolved names through classification with tol, then select all that weren't recognised by tol and update any synonyms and then rerun
-# 2) Run the names through classification with gbif 
-# 3) Fill in any gaps in the tol data with the gbif data
+# Last updated: 18/03/2025
+# Data run through veryfier on 18/03/2025
+# Data run through tnrs_match_names on 18/03/2025 
+# Data ran through classification on 18/03/2025
+
 
 library(devtools)
 install_github("ropensci/bold")
@@ -33,7 +32,7 @@ bodysize_raw <- readRDS("R/data_outputs/final_products/bodysize_raw.rds")
 # run through gna_verifier to fix any spelling
 
 # get a list of all distinct names 
-distinct_names <- select(bodysize_raw, original.taxa.name) %>% 
+names_list <- select(bodysize_raw, original.taxa.name) %>% 
   
   distinct(original.taxa.name) %>% 
   
@@ -43,12 +42,12 @@ distinct_names <- select(bodysize_raw, original.taxa.name) %>%
 # View names
 glimpse(names_list)
 
-# run string through the resolver and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
+# run string through the verifyer and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
 cleaned_gna <- do.call(rbind, lapply(names_list, function(name) {
   tryCatch(
     {
       # Process each name and return the result
-      gna_verifier(name) %>%
+      gna_verifier(names_list) %>%
         as.data.frame() %>%
         select(submittedName, matchedCanonicalFull, dataSourceTitleShort)
     },
@@ -58,31 +57,29 @@ cleaned_gna <- do.call(rbind, lapply(names_list, function(name) {
         submittedName = name,
         matchedCanonicalFull = NA,
         dataSourceTitleShort = NA)
-    }
+      }
+    )
+  }
   )
-})
-) %>% 
+  ) %>% 
   rename(
     original.taxa.name = submittedName,
     cleaned.taxa.name.gna = matchedCanonicalFull,
     cleaned.source.gna = dataSourceTitleShort
-  )
+    )
 
 # Save
 saveRDS(cleaned_gna, file = "R/data_outputs/taxonomy/tol2/cleaned_gna.rds")
 
 ## Manual ----
-# How manual resolving was carried out:
-# When the species name could be found then use that
-# When the species name couldn't be found on a database then keep the original.taxa.name in case it is a newly discovered species not in the databases yet
-# When the original.taxa.taxa.name has a species name but with the wrong genus the species is chosen and the genus is changed to match that species
-# When two species are stated then the closet common higher group is used
 
-# 1) Find all the taxa.names from resolved_gna to manually resolve based on the criteria in the comments
+# 1) Find all the taxa.names from clean_gna to manually resolve based on the criteria in the comments
 to_clean_manually <- cleaned_gna %>% 
+  
   mutate(
+    
     manual = case_when(
-      # Ones that weren't picked up by the resolver at all - gave NA for the resolved.taxa.name
+      # Ones that weren't picked up by gna_veryier at all - gave NA for the cleaned.taxa.name
       is.na(cleaned.taxa.name.gna) ~ "na",
       
       # Ones that were bumped up a taxonomic rank by the cleaner - had two words in original.species.name (contain a space) but one word in the cleaned name (no space)
@@ -95,9 +92,11 @@ to_clean_manually <- cleaned_gna %>%
       
       # Unknown
       stri_detect_regex(cleaned.taxa.name.gna, "\\b(?i)unknown\\b") ~ "unknown",
+      
       TRUE ~ "keep"
     )
   ) %>% 
+  
   filter(
     !(manual == "keep")
   )
@@ -105,7 +104,7 @@ to_clean_manually <- cleaned_gna %>%
 # Save
 write_csv(to_clean_manually, "R/data_outputs/taxonomy/tol2/to_clean_manually.csv")
 
-# 2) Update resolved.taxa.names with the manually resolved names
+# 2) Update cleaned.taxa.name with the manually cleaned names
 
 # Import the manually cleaned names
 manually_cleaned <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "cleaned_tol")
@@ -113,13 +112,13 @@ manually_cleaned <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "cleaned_
 # Replace cleaned.taxa.name with manually cleaned names when ones is present
 cleaned <- cleaned_gna %>% 
   
-  # left join all the manually resolved ones from manual_resolve spreadsheet
+  # left join all the manually cleaned ones from manualy_cleaned spreadsheet
   left_join(
     manually_cleaned,
     by = "original.taxa.name"
   ) %>% 
   
-  # when a name has been cleaned manually (resolved source = "manaully") then select that name else keep the current one
+  # when a name has been cleaned manually (cleaned.source = "manually") then select that name else keep the current one
   mutate(
     cleaned.taxa.name = if_else(
       !is.na(cleaned.source.manual),
@@ -133,6 +132,7 @@ cleaned <- cleaned_gna %>%
     cleaned.taxa.name
   ) %>% 
   
+  # remove any that couldn't be cleaned
   filter(
     !(is.na(cleaned.taxa.name))
   )
@@ -140,43 +140,12 @@ cleaned <- cleaned_gna %>%
 # Save
 saveRDS(cleaned, file = "R/data_outputs/taxonomy/tol2/cleaned.rds")
 
-# remove form and variety as majority don't have this and makes the taxonomy steps more complex
-#cleaned <- cleaned_manual %>% 
-  
-#  mutate(
-#    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "cf\\.|f\\.|var\\.", " "),
-#    cleaned.taxa.name = stri_replace_all_regex(cleaned.taxa.name.all, "  ", "")
-#  ) %>% 
-#  
-#  separate(cleaned.taxa.name, into = c("genus", "species", "c", "d", "e"), sep = " ") %>% 
-#  
-#  mutate(
-#    cleaned.taxa.name.new = stri_c(genus, species, sep = " "),
-#    cleaned.taxa.name.new = if_else(
-#      is.na(cleaned.taxa.name.new),
-#      genus,
-#      cleaned.taxa.name.new
-#    )
-#  ) %>% 
-#  
-#  select(
-#    original.taxa.name, cleaned.taxa.name.new, cleaned.taxa.name.all
-#  ) %>% 
-#  
-#  rename(
-#    cleaned.taxa.name = cleaned.taxa.name.new
-#  )
-
-# Save
-#saveRDS(cleaned, file = "R/data_outputs/taxonomy/tol2/cleaned.rds")
-
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 # Resolve names ----
 ## TOL ----
-# run the cleaned names through the resolver to get updated versions of names
 
-# run through tnrs_match_names to get the most up to date synonyms
+# Run the cleaned names through tnrs_match_names to get updated versions of names from open tree of life (otl)
 resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name) %>% 
   
   # rename columns to make easier
@@ -189,7 +158,7 @@ resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name) %>%
 saveRDS(resolved_tol, file = "R/data_outputs/taxonomy/tol2/resolved_tol.rds")
 
 ## Manual ----
-# Select all the ones that weren't picked up by tol and manually resolve their names
+# 1) Select all the ones that weren't picked up by tol and manually resolve their names
 
 to_resolve_manually <- resolved_tol %>% 
   
@@ -197,19 +166,18 @@ to_resolve_manually <- resolved_tol %>%
     is.na(resolved.taxa.name)
   )
 
-## need to yupdate the manually resolved
-
 # Save
 write_csv(to_resolve_manually, "R/data_outputs/taxonomy/tol2/to_resolve_manually.csv")
 
-# Add in the manually resolved names to the full name list
+# 2) Add in the manually resolved names to the full name list
 
 # Import the manually resolved names
 manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
 
-# add to main data
+# Add to main names list
 resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "cleaned.taxa.name") %>% 
   
+  # When a manually resolved name is present use this instead use the original resolved name
   mutate(
     resolved.taxa.name.manual = if_else(
       !is.na(resolved.taxa.name.manual),
@@ -218,15 +186,17 @@ resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "clean
     )
   ) %>%
   
+  # Remove any that couldn't be resolved
   filter(
     !is.na(resolved.taxa.name.manual)
   ) %>% 
   
+  # Select relevant columns
   select(
     cleaned.taxa.name, resolved.taxa.name.manual
   )
 
-# rerun through tnrs_match_names to resolve all again
+# 3) Rerun through tnrs_match_names to resolve all again
 
 resolved <- tnrs_match_names(manually_resolved$resolved.taxa.name) %>%
   
@@ -245,13 +215,16 @@ saveRDS(resolved, file = "R/data_outputs/taxonomy/tol2/resolved.rds")
 ## Initial run through classification ----
 classification_raw <- resolved %>% 
   
+  # Get disinct names
   distinct(resolved.taxa.name) %>% 
   
-  rowwise() %>% # use rowwise so it looks at each row at a time
+  # Use rowwise so it looks at each row one at a time
+  rowwise() %>%
   
   mutate(
+    
     # Run through classification
-    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for the species
+    tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for that taxa
       classification(
         resolved.taxa.name, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
       )[[1]] # select the first element of the list
@@ -292,14 +265,20 @@ saveRDS(classification_raw, file = "R/data_outputs/taxonomy/tol2/classification_
 
 ## Format classification ----
 
-# do initail manual edits
+### Initial edits ----
+# Do any edits that can easily be done within mutate
+
 classification_formatted <- classification_raw %>% 
   
   mutate(
+    
+    # Species
     species = case_when(
+      # When the species was put into the form/variety column rather than species column
       varietas.1 == "Daphnia sinensis" ~ "Daphnia sinensis",
       forma.1 == "Prymnesium parvum f. patelliferum" ~ "Prymnesium parvum",
       
+      # Where the species name was missing but resolved.taxa.name was a species
       resolved.taxa.name %in% c("Chrysastrella furcata", "Cymbopleura cuspidata", "Cystodinium cornifax", "Mytilina mucronata", "Mytilina ventralis", "Parkeria sphaerica", "Praetriceratium inconspicuum", "Pseudopodosira kosugii",
                                 "Aulacoseira ambigua", "Navicula menisculus", "Brachysira follis", "Brachysira elliptica", "Cymbella proxima", "Cymbella diversistigmata", "Conticribra weissflogii", "Rossithidium duthiei",
                                 "Hippodonta lueneburgensis", "Delphineis surirella", "Adlafia parabryophila", "Hippodonta arkonensis", "Lenticulina muensteri", "Daphnia sinensis", "Geissleria acceptata", "Stephanodiscus carconensis",
@@ -308,28 +287,44 @@ classification_formatted <- classification_raw %>%
       TRUE ~ species.1
     ),
     
+    # Genus
     genus = case_when(
+      
+      # Any minor edits to names
       resolved.taxa.name == "Dinobryon (in Ochromonas sup.)" ~ "Dinobryon",
       resolved.taxa.name == "Palaeacmea" ~ "Palaeacmaea",
       resolved.taxa.name == "Rhizosolenia (in Bacillariophytina)" ~ "Rhizosolenia",
+      
+      # Where the genus name was missing but the resolved.taxa.name was a genus
       resolved.taxa.name %in% c("Cryptaulax", "Cryptoglena", "Cystodinium", "Rhaphidiopsis", "Tetralithus", "Lithoperidinium", "Petersophlebia", "Proboscidoplocia", "Chrysastrella", "Gleocapsa") ~ resolved.taxa.name,
       
+      # Use the genus.2 column when it has a value in as these were correct
       !is.na(genus.2) ~ genus.2,
       
+      # Otherwise just select genus.1
       TRUE ~ genus.1
     ),
     
+    # When species is filled but genus is missing select just the first name in the species name
     genus = if_else(
       is.na(genus) & !is.na(species),
       stri_extract_first_regex(species, "\\w+"),
       genus
     ),
     
+    # Family
+    # Too many missing family rows to do in mutate so will do this in excel and read into R
     family = case_when(
+      
+      # Use the family.2 column when it has a value in as these were correct
       !is.na(family.2) ~ family.2,
       
+      # Otherwise use family.1
       TRUE ~ family.1
     ),
+    
+    # Order
+    # Too many missing order rows to do in mutate so will do this in excel and read into R
     
     order = case_when(
       resolved.taxa.name == "Acanthosphaera (genus in subkingdom SAR)" ~ "Chlorellales",
@@ -337,14 +332,19 @@ classification_formatted <- classification_raw %>%
       TRUE ~ order.1
     ),
     
+    # Class
+    # Will do class manually after order is done
     class = case_when(
+      
+      # Minor edits
       class.1 == "Haptophyta" ~ "Coccolithophyceae",
       class.1 == "Glaucophyta" ~ "Glaucophyceae",
     
       TRUE ~ class.1
     ),
     
-    # do phylum now because I need to get the types to work out which ones to remove before later steps
+    # Phylum
+    # do phylum now because I need to get the types to work out which ones aren't zoo or phyto to remove before later steps
     
     phylum = case_when(
       
@@ -381,6 +381,8 @@ classification_formatted <- classification_raw %>%
       TRUE ~ phylum.1
     ),
     
+    # Kingdom 
+    
     kingdom = case_when(
       
       phylum %in% c("Cyanobacteria") ~ "Bacteria",
@@ -392,25 +394,32 @@ classification_formatted <- classification_raw %>%
       TRUE ~ NA
     ),
     
+    # Type
+    # Assign either phytoplankton or zooplankton and when it is neither then NA
+    # Do have some insect larvae in there but not much so discarding it
+    
     type = case_when(
+      
       kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
       kingdom == "Animalia" ~ "Zooplankton",
       
-      phylum %in% c("Ochrophyta", "Haptophyta", "Sarcomastigophora", "Bigyra", "Myzozoa", "Euglenozoa", "Ciliophora", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
-      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa") ~ "Zooplankton",
+      phylum %in% c("Ochrophyta", "Haptophyta", "Sarcomastigophora", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa", "Ciliophora", "Sarcomastigophora") ~ "Zooplankton",
       
       TRUE ~ NA
     ),
     
+    # Make a tax.uid column
     tax.uid = paste0("tax-", row_number())
   ) %>% 
   
+  # Remove non plankton
   filter(
     !(resolved.taxa.name == "Marssoniella (genus in kingdom Archaeplastida)"),
     !is.na(type)
   ) %>% 
   
-  # want to make two taxa name columns one with the extra infor in brackets and one without
+  # want to make two taxa name columns one with the extra info in brackets and one without
   rename(
     taxa.name.full = resolved.taxa.name
   ) %>% 
@@ -423,12 +432,15 @@ classification_formatted <- classification_raw %>%
     )
   ) %>% 
   
+  # Select columns
   select(
     tax.uid, taxa.name.full, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
-## Manually do family, order and class ----
+### Family ----
 # want to manually input missing ranks for family as will take too long to do in a case_when
+
+# Make a list of missing family with thier genus
 missing_family <- classification_formatted %>% 
   select(
     genus,
@@ -467,7 +479,10 @@ classification_family <- classification_formatted %>%
     - family.tol
   )
 
-# want to manually input missing ranks for order as will take too long to do in a case_when
+### Order ----
+# Want to manually input missing ranks for order as will take too long to do in a case_when
+
+# Make a list of missing order with their family
 missing_order <- classification_family %>% 
   select(
     family,
@@ -482,7 +497,7 @@ missing_order <- classification_family %>%
     family
   )
 
-# save
+# Save
 write_csv(missing_order, "R/data_outputs/taxonomy/tol2/missing_order.csv")
 
 # Import the manually filled order
@@ -514,11 +529,16 @@ classification_order <- classification_family %>%
     - order.tol
   )
 
+### Final edits ----
 # Final edits can just be done with case_when
 
 classification <- classification_order %>% 
   
   mutate(
+    
+    # Class
+    # Fill in missing class rank
+    
     class = case_when(
       family == "Radialiplicataceae" ~ "Coscinodiscophyceae",
       
@@ -532,18 +552,20 @@ classification <- classification_order %>%
       order == "Centrohelida" ~ "Centrohelea",
       order == "Chrysomeridales" ~ "Chrysomeridophyceae",
       order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanobacteria",
-      order == "Noctilucales" ~ "Dinophyceae",
+      order %in% c("Noctilucales", "Gymnodiniales") ~ "Dinophyceae",
       order == "Bicosoecida" ~ "Bicosoecophyceae",
       order == "Heteronematales" ~ "Euglenida",
       order == "Vaginulinida" ~ "Nodosariata",
       order == "Euglenales" ~ "Euglenophyceae",
-      order == "Natomonadida" ~ "Peranemea",
+      order == "Natomonadida" ~ "Peranemea", 
       order == "Euamoebida" ~ "Tubulinea",
+      order == "Mischococcales" ~ "Xanthophyceae",
       
       TRUE ~ class
     )
   ) %>% 
   
+  # Reorder
   relocate(
     tax.uid, taxa.name.full, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
@@ -554,7 +576,8 @@ saveRDS(classification, file = "R/data_outputs/taxonomy/tol2/classification.rds"
 # Add to main data ----
 # need to join things inn sequence because there were a couple of steps to get from the raw names to the formatted names
 
-# linking classification step to resolved step
+## Linking new to original names ----
+### Classification to resolved ----
 class_to_resolve <- left_join(
   classification,
   select(
@@ -562,7 +585,9 @@ class_to_resolve <- left_join(
     ), by = c("taxa.name.full" = "resolved.taxa.name")
   ) 
 
-# Linkning resolved step to cleaned step
+### Resolved to cleaned ----
+
+# First link above to the manually resolved list
 resolved_to_clean_1 <- resolved_manual %>% 
   
   mutate(
@@ -577,6 +602,7 @@ resolved_to_clean_1 <- resolved_manual %>%
     - resolved.taxa.name.manual
   )
 
+# Next link above to the cleaned list
 resolved_to_clean_2 <- cleaned %>% 
   
   mutate(
@@ -591,16 +617,16 @@ resolved_to_clean_2 <- cleaned %>%
     -cleaned.taxa.name
   )
 
-# Add to raw data
+## Linking to raw data ----
 
 bodysize_taxonomy <-  bodysize_raw %>% 
   
-  # join resolved names onto raw data
+  # Join taxonomy info onto raw data
   left_join(
     ., resolved_to_clean_2, by = "original.taxa.name"
   ) %>% 
   
-  # select and reorder
+  # Select and reorder
   select(
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
@@ -617,9 +643,12 @@ bodysize_taxonomy <-  bodysize_raw %>%
     !is.na(taxa.name)
   )
 
+# Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/full_database/tol/bodysize_taxonomy_tol2.rds")
 
-# make final raw taxonomy list
+
+# Initial taxonomy list ----
+
 tax_list_raw <- bodysize_taxonomy %>% 
   distinct(
     tax.uid, .keep_all = TRUE
@@ -628,5 +657,6 @@ tax_list_raw <- bodysize_taxonomy %>%
     taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom
   )
 
-# save
+# Save
 saveRDS(tax_list_raw, file = "R/data_outputs/taxonomy/tol2/tax_list_raw.rds")
+

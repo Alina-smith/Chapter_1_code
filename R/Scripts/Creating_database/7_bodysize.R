@@ -213,7 +213,7 @@ saveRDS(bodysize_formatted, file = "R/Data_outputs/final_products/bodysize_forma
 # Phyto ----
 # select just phytoplankton and do minor edits
 
-phyto_mass_all <- bodysize_formatted %>% 
+phyto_mass <- bodysize_formatted %>% 
   
   mutate(
     # set depth in bodysize.measurment as height as there is no overlap between these
@@ -230,19 +230,6 @@ phyto_mass_all <- bodysize_formatted %>%
     life.stage == "active" # select just active and not dormant
   ) %>% 
   
-  # Rename from body to cell
-  rename(
-    cell.size = body.size,
-    cells.per.nu = ind.per.nu
-  ) %>% 
-  
-  mutate(
-    nu = if_else(
-      nu == "individual",
-      "cell",
-      nu
-    )
-  ) %>% 
   
   select(
     # don't need life.stage and sex for phyto as all active and don't have sex info
@@ -264,7 +251,7 @@ phyto_mass_all <- bodysize_formatted %>%
   pivot_wider(
     id_cols = individual.uid,
     names_from = bodysize.measurement,
-    values_from = cell.size
+    values_from = body.size
   ) %>%
   
   rename(
@@ -279,16 +266,46 @@ phyto_mass_all <- bodysize_formatted %>%
       ), by = "individual.uid"
   ) %>% 
   
+  # Rename from body to cell
+  rename(
+    cells.per.nu = ind.per.nu
+  ) %>% 
+  
+  mutate(
+    nu = if_else(
+      nu == "individual",
+      "cell",
+      nu
+    )
+  ) %>% 
+  
   distinct(
     individual.uid, .keep_all = TRUE
   ) %>% 
   
-  # calculate mass from biovolume and dry mass
   mutate(
+    # When biovolume is given use this over dry/wet mass
+    dry.mass = if_else(
+      !is.na(biovolume) & !is.na(dry.mass),
+      dry.mass == NA,
+      dry.mass
+    )
+  ) %>% 
+  
+  # very few dry mass so just get rid of them
+  filter(
+    is.na(dry.mass)
+  ) %>% 
+  
+  select(
+    -dry.mass
+  ) %>% 
+  
+  mutate(
+    # calculate mass from biovolume
     mass = case_when(
       !is.na(body.mass) ~ body.mass,
       !is.na(biovolume) ~ biovolume*(1*10^-6),
-      is.na(biovolume) & !is.na(dry.mass) ~ dry.mass/0.2,
       TRUE ~ NA
     ),
     
@@ -300,11 +317,6 @@ phyto_mass_all <- bodysize_formatted %>%
     
     # make a mld column
     mld = pmax(length, width, height, diameter, na.rm = TRUE)
-  ) %>% 
-  
-  # rename back after left join
-  rename(
-    cells.per.nu = ind.per.nu
   ) %>% 
   
   # select columns and reorder
@@ -321,12 +333,5 @@ phyto_mass_all <- bodysize_formatted %>%
   )
 
 # save
-saveRDS(phyto_mass_all, file = "R/Data_outputs/full_database/phyto_mass_all.rds")
-
-
-
-
-
-
-
+saveRDS(phyto_mass, file = "R/Data_outputs/full_database/phyto_mass.rds")
 
