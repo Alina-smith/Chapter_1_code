@@ -367,39 +367,22 @@ functional_groups <- tax_list_raw %>%
       
       TRUE ~ NA
     )
-  )
+  ) 
 
+# save
+saveRDS(functional_groups, "R/data_outputs/final_products/tol/functional_groups.rds")
 
-x <- functional_groups %>% 
-  filter(
-    is.na(group)
-  )
-
-%>% 
+# Add to main data ----
+phyto_traits <- phyto_mass_subset %>% 
   
-  # select columns
-  select(
-    taxa.name,
-    r.group,
-    r.group.source,
-    group
+  left_join(
+    select(
+      functional_groups, r.group, r.group.source, group, taxa.name
+    ), by = "taxa.name"
   )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# save
+saveRDS(phyto_traits, "R/data_outputs/final_products/tol/phyto_traits.rds")
 
 
 

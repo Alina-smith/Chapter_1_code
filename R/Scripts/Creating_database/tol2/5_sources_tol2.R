@@ -7,6 +7,7 @@
 # 4) Remove dupes:          Make a list of all data points that have come from a duplicated source that is also for the same taxa and remove it from the main data
 # 5) Update source codes:   Make a new source list with updated source codes and then use this to update source codes in main data
 
+# Script last updated on 18/03/2025
 
 # Packages ----
 library(tidyr)

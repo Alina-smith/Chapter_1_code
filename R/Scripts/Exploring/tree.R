@@ -18,10 +18,10 @@ library(ggnewscale)
 
 
 # Data ----
-trait_data <- readRDS("R/Data_outputs/final_products/tol/phyto_traits_species.rds") %>% 
+trait_data <- readRDS("R/Data_outputs/final_products/tol/phyto_traits.rds") %>% 
   # select just individuals for now
   filter(
-    nu == "individual"
+    nu == "cell"
   )
 
 # Format data ----
@@ -31,38 +31,24 @@ trait_data <- readRDS("R/Data_outputs/final_products/tol/phyto_traits_species.rd
 extra_data <- trait_data %>% 
   
   select(
-    species,
     genus,
     family,
     order,
     class,
     phylum,
     kingdom,
-    reynolds.group,
-    padisak.group,
+    r.group,
+    group,
     nu
   ) %>% 
   
-  distinct(species, .keep_all = TRUE) %>% 
-  
-  mutate(
-    functional.group = case_when(
-      !is.na(padisak.group) ~ padisak.group,
-      is.na(padisak.group) & !is.na(reynolds.group) ~ reynolds.group,
-      TRUE ~ "Unknown"
-    )
-  ) %>% 
-  
-  select(
-    - reynolds.group,
-    - padisak.group
-  ) 
+  distinct(genus, .keep_all = TRUE)
 
 # get mean body size for each genera
 phylo_plot_data <- trait_data %>% 
   
   # get mean mass for each taxa
-  group_by(species) %>% 
+  group_by(genus) %>% 
   
   summarise(
     mass.mean = mean(mass),
@@ -70,20 +56,20 @@ phylo_plot_data <- trait_data %>%
   ) %>% 
   
   left_join(
-    extra_data, by = "species"
+    extra_data, by = "genus"
   )
 
 # Initial explore of data
 glimpse(phylo_plot_data)
 
-length(unique(phylo_plot_data$species)) # 4317 species
+length(unique(phylo_plot_data$genus)) # 836 genera
 
 hist(log(phylo_plot_data$mass.mean))
 
 ## Get phylo relationships from a list of taxa: ----
 
 # 1) Match my names with taxa names in OTT (open tree taxonomy)
-taxa <- tnrs_match_names(unique(phylo_plot_data$species))
+taxa <- tnrs_match_names(unique(phylo_plot_data$genus))
 
 head(taxa) # view data
 
@@ -104,8 +90,8 @@ unique(is.na(taxon_map)) # false means there are no missing names so don't need 
 in_tree <- is_in_tree(ott_id(taxa))
 in_tree
 
-sum(in_tree == TRUE) # 3085 species in tree
-sum(in_tree == FALSE) # 522 species not in tree
+sum(in_tree == TRUE) # 651 genera in tree
+sum(in_tree == FALSE) # 185 genera not in tree
 
 # Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
@@ -155,23 +141,23 @@ taxa_in_tree <- phylo_plot_data %>%
   
   # make lower case to match tip.label
   mutate(
-    species = tolower(species)
+    genus = tolower(genus)
   ) %>% 
   
   filter(
-    species %in% tree_new_tips$tip.label # tip.labels were changed to the ones used in the database so can just do this
+    genus %in% tree_new_tips$tip.label # tip.labels were changed to the ones used in the database so can just do this
   ) %>% 
   
   # join in the taxa info 
   left_join(
     select(
     taxa, search_string, unique_name
-    ), by = c("species" = "search_string")
+    ), by = c("genus" = "search_string")
   ) %>% 
   
   # make new column called tip.label that is the same as genus
   mutate(
-    tip.label = species
+    tip.label = genus
   ) %>% 
   
   # group for plotting
@@ -202,7 +188,7 @@ circular_plot_groups
 setdiff(taxa_in_tree$tip.label, tree_new_tips$tip.label)
 
 # Save
-ggsave("R/Data_outputs/exploring/species_tree_groups.pdf", width = 7, height = 5, limitsize = FALSE)
+ggsave("R/Data_outputs/exploring/circular_plot_groups.pdf", width = 7, height = 5, limitsize = FALSE)
 
 ## adding in mass info ----
 
@@ -223,11 +209,8 @@ circular_plot_mass = circular_plot_groups + new_scale_fill() # so new geoms adde
 circular_plot_mass <- gheatmap(circular_plot_mass, masses, offset=2, width=0.2, colnames = F)
 circular_plot_mass
 
-
 ggsave("R/Data_outputs/exploring/circular_plot_mass.pdf", width = 7, height = 5, limitsize = FALSE)
 
-
-write_csv(bodysize_data_phylogeny_plot, "R/Data_outputs/databases/bodysize_phylogeny_plot.csv")
 
 
 

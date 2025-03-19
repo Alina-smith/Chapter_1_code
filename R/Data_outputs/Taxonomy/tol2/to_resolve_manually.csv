@@ -214,6 +214,38 @@ stauroneis legumen integra,NA,NA,NA,NA,NA,NA,NA
 staurosirella pinnata intercedens,NA,NA,NA,NA,NA,NA,NA
 stauroneis siberica siberica,NA,NA,NA,NA,NA,NA,NA
 thalassiosira hyperborea pelagica,NA,NA,NA,NA,NA,NA,NA
+actinastrum hantzschii subtile,NA,NA,NA,NA,NA,NA,NA
+aulacoseira granulata curvata,NA,NA,NA,NA,NA,NA,NA
+chromulina ettlii,NA,NA,NA,NA,NA,NA,NA
+chromulina obconica,NA,NA,NA,NA,NA,NA,NA
+ekrenia subguiciliata,NA,NA,NA,NA,NA,NA,NA
+chroococus cf pescottii,NA,NA,NA,NA,NA,NA,NA
+cosmarium contractum minutum,NA,NA,NA,NA,NA,NA,NA
+cryptochrysis pochmanni,NA,NA,NA,NA,NA,NA,NA
+desmodesmus armatus spinosus,NA,NA,NA,NA,NA,NA,NA
+dolichospermum fertilissima,NA,NA,NA,NA,NA,NA,NA
+euglena oxyuris oxyuris,NA,NA,NA,NA,NA,NA,NA
+kirchneriella contorta varelongata,NA,NA,NA,NA,NA,NA,NA
+koliella longiseta tenuis,NA,NA,NA,NA,NA,NA,NA
+lagherimia subsalsa lemm,NA,NA,NA,NA,NA,NA,NA
+melosira moniliformis octogona,NA,NA,NA,NA,NA,NA,NA
+monodus aff clavata,NA,NA,NA,NA,NA,NA,NA
+ochromonas sphaerella,NA,NA,NA,NA,NA,NA,NA
+scenedesmus acuminatus acuminatus,NA,NA,NA,NA,NA,NA,NA
+scenedesmus acuminatus minor,NA,NA,NA,NA,NA,NA,NA
+scenedesmus acuminatus tetradesmoides,NA,NA,NA,NA,NA,NA,NA
+scenedesmus intermedius chod,NA,NA,NA,NA,NA,NA,NA
+staurastrum excavatum excavatum,NA,NA,NA,NA,NA,NA,NA
+staurastrum leptocladum leptocladum,NA,NA,NA,NA,NA,NA,NA
+staurastrum leptocladum smithii,NA,NA,NA,NA,NA,NA,NA
+staurastrum quadricauda,NA,NA,NA,NA,NA,NA,NA
+staurastrum sebaldi ornatum,NA,NA,NA,NA,NA,NA,NA
+staurastrum tetracerum tortum,NA,NA,NA,NA,NA,NA,NA
+staurodesmus incus primigenius,NA,NA,NA,NA,NA,NA,NA
+tetrastrum peterfii,NA,NA,NA,NA,NA,NA,NA
+trachelomonas hispida crenulatocollis,NA,NA,NA,NA,NA,NA,NA
+trachelomonas rugulosa stein,NA,NA,NA,NA,NA,NA,NA
+urosolenia eriensis morsa,NA,NA,NA,NA,NA,NA,NA
 pennate,NA,NA,NA,NA,NA,NA,NA
 bdelodea,NA,NA,NA,NA,NA,NA,NA
 microcyclops anceps anceps,NA,NA,NA,NA,NA,NA,NA
@@ -280,7 +312,6 @@ cosmarium abbreviatum planctonicum,NA,NA,NA,NA,NA,NA,NA
 cosmarium biretum var. trigibberum,NA,NA,NA,NA,NA,NA,NA
 cosmarium botrytis subtumidum,NA,NA,NA,NA,NA,NA,NA
 cosmarium contractum ellipsoideum,NA,NA,NA,NA,NA,NA,NA
-cosmarium contractum minutum,NA,NA,NA,NA,NA,NA,NA
 cosmarium cucumis helveticum,NA,NA,NA,NA,NA,NA,NA
 cosmarium holmiense var. integrum,NA,NA,NA,NA,NA,NA,NA
 cosmarium laeve pseudooctangulare,NA,NA,NA,NA,NA,NA,NA
@@ -302,7 +333,6 @@ cosmarium venustum excavatum,NA,NA,NA,NA,NA,NA,NA
 crucigenia quadrata secta,NA,NA,NA,NA,NA,NA,NA
 desmarella sphaeroidea,NA,NA,NA,NA,NA,NA,NA
 desmodesmus armatus bicaudatus,NA,NA,NA,NA,NA,NA,NA
-desmodesmus armatus spinosus,NA,NA,NA,NA,NA,NA,NA
 desmodesmus denticulatus linearis,NA,NA,NA,NA,NA,NA,NA
 desmodesmus opoliensis carinatus,NA,NA,NA,NA,NA,NA,NA
 dichotomococcus bacillaris,NA,NA,NA,NA,NA,NA,NA
@@ -330,7 +360,6 @@ microglena subglobosa,NA,NA,NA,NA,NA,NA,NA
 nephroselmis pelagica,NA,NA,NA,NA,NA,NA,NA
 netrium digitus naegelii,NA,NA,NA,NA,NA,NA,NA
 ochromonas coronifera,NA,NA,NA,NA,NA,NA,NA
-ochromonas sphaerella,NA,NA,NA,NA,NA,NA,NA
 oocystis submarina variabilis,NA,NA,NA,NA,NA,NA,NA
 pediastrum simplex radians,NA,NA,NA,NA,NA,NA,NA
 pediastrum tetras apiculatum,NA,NA,NA,NA,NA,NA,NA
@@ -366,7 +395,6 @@ trachelomonas armata steinii,NA,NA,NA,NA,NA,NA,NA
 trachelomonas hispida acuminata,NA,NA,NA,NA,NA,NA,NA
 trachelomonas hispida caudata,NA,NA,NA,NA,NA,NA,NA
 trachelomonas hispida coronata,NA,NA,NA,NA,NA,NA,NA
-trachelomonas hispida crenulatocollis,NA,NA,NA,NA,NA,NA,NA
 trachelomonas lacustris ovalis,NA,NA,NA,NA,NA,NA,NA
 trachelomonas planctonica oblonga,NA,NA,NA,NA,NA,NA,NA
 trachelomonas scabra labiata,NA,NA,NA,NA,NA,NA,NA
@@ -467,31 +495,3 @@ scenedesmus protuberans f. danubianus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus protuberans var. minor,NA,NA,NA,NA,NA,NA,NA
 scenedesmus pseudoquadricauda,NA,NA,NA,NA,NA,NA,NA
 scenedesmus similagineus,NA,NA,NA,NA,NA,NA,NA
-actinastrum hantzschii subtile,NA,NA,NA,NA,NA,NA,NA
-aulacoseira granulata curvata,NA,NA,NA,NA,NA,NA,NA
-chromulina ettlii,NA,NA,NA,NA,NA,NA,NA
-chromulina obconica,NA,NA,NA,NA,NA,NA,NA
-ekrenia subguiciliata,NA,NA,NA,NA,NA,NA,NA
-chroococus cf pescottii,NA,NA,NA,NA,NA,NA,NA
-cryptochrysis pochmanni,NA,NA,NA,NA,NA,NA,NA
-dolichospermum fertilissima,NA,NA,NA,NA,NA,NA,NA
-euglena oxyuris oxyuris,NA,NA,NA,NA,NA,NA,NA
-kirchneriella contorta varelongata,NA,NA,NA,NA,NA,NA,NA
-koliella longiseta tenuis,NA,NA,NA,NA,NA,NA,NA
-lagherimia subsalsa lemm,NA,NA,NA,NA,NA,NA,NA
-melosira moniliformis octogona,NA,NA,NA,NA,NA,NA,NA
-monodus aff clavata,NA,NA,NA,NA,NA,NA,NA
-scenedesmus acuminatus acuminatus,NA,NA,NA,NA,NA,NA,NA
-scenedesmus acuminatus minor,NA,NA,NA,NA,NA,NA,NA
-scenedesmus acuminatus tetradesmoides,NA,NA,NA,NA,NA,NA,NA
-scenedesmus intermedius chod,NA,NA,NA,NA,NA,NA,NA
-staurastrum excavatum excavatum,NA,NA,NA,NA,NA,NA,NA
-staurastrum leptocladum leptocladum,NA,NA,NA,NA,NA,NA,NA
-staurastrum leptocladum smithii,NA,NA,NA,NA,NA,NA,NA
-staurastrum quadricauda,NA,NA,NA,NA,NA,NA,NA
-staurastrum sebaldi ornatum,NA,NA,NA,NA,NA,NA,NA
-staurastrum tetracerum tortum,NA,NA,NA,NA,NA,NA,NA
-staurodesmus incus primigenius,NA,NA,NA,NA,NA,NA,NA
-tetrastrum peterfii,NA,NA,NA,NA,NA,NA,NA
-trachelomonas rugulosa stein,NA,NA,NA,NA,NA,NA,NA
-urosolenia eriensis morsa,NA,NA,NA,NA,NA,NA,NA

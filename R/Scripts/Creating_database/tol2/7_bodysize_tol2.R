@@ -331,11 +331,7 @@ phyto_mass <- bodysize_formatted %>%
     !is.na(mass)
   )
 
-# save
-saveRDS(phyto_mass, file = "R/Data_outputs/full_database/tol/phyto_mass_tol2.rds")
-
 # Find any that only have multi-cellular values but not single cell values
-
 multi_cell <- phyto_mass %>% 
   
   group_by(nu, taxa.name) %>% 
@@ -357,24 +353,15 @@ multi_cell <- phyto_mass %>%
   
   ungroup()
 
-multi_sources <- multi_cell %>% 
-  
-  distinct(
-    source.code
-  )
-
-all_multi_cell <- phyto_mass %>% 
+# remove the ones with no single cell values
+phyto_mass <- phyto_mass %>% 
   
   filter(
-    source.code %in% multi_sources$source.code,
-    individual.uid %in% x$individual.uid
+    !(individual.uid %in% multi_cell$individual.uid)
   )
 
-x <- bodysize_taxonomy %>% 
-  filter(
-    taxa.name == "Ammatoidea"
-  )
-
+# save
+saveRDS(phyto_mass, file = "R/Data_outputs/full_database/tol/phyto_mass_tol2.rds")
 
 # Select just the data that is to species/genus level
 phyto_mass_subset <- phyto_mass %>% 

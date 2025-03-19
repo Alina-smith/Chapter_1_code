@@ -6,9 +6,9 @@
   # 3) Taxonomy:        Run cleaned names through taxize::classification with tol to get taxonomy and then manuallu fill in any gaps
 
 # Last updated: 18/03/2025
-# Data run through veryfier on 18/03/2025
-# Data run through tnrs_match_names on 18/03/2025 
-# Data ran through classification on 18/03/2025
+# Data run through veryfier on 19/01/2025
+# Data run through tnrs_match_names on 19/03/2025 
+# Data ran through classification on 19/03/2025
 
 
 library(devtools)
@@ -198,7 +198,7 @@ resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "clean
 
 # 3) Rerun through tnrs_match_names to resolve all again
 
-resolved <- tnrs_match_names(manually_resolved$resolved.taxa.name) %>%
+resolved <- tnrs_match_names(resolved_manual$resolved.taxa.name) %>%
   
   # rename columns to make easier
   rename(
@@ -274,15 +274,13 @@ classification_formatted <- classification_raw %>%
     
     # Species
     species = case_when(
-      # When the species was put into the form/variety column rather than species column
-      varietas.1 == "Daphnia sinensis" ~ "Daphnia sinensis",
-      forma.1 == "Prymnesium parvum f. patelliferum" ~ "Prymnesium parvum",
+      # When it was to a lower level than species but the species was missing
+      resolved.taxa.name == "Prymnesium parvum f. patelliferum" ~ "Prymnesium parvum",
       
       # Where the species name was missing but resolved.taxa.name was a species
       resolved.taxa.name %in% c("Chrysastrella furcata", "Cymbopleura cuspidata", "Cystodinium cornifax", "Mytilina mucronata", "Mytilina ventralis", "Parkeria sphaerica", "Praetriceratium inconspicuum", "Pseudopodosira kosugii",
-                                "Aulacoseira ambigua", "Navicula menisculus", "Brachysira follis", "Brachysira elliptica", "Cymbella proxima", "Cymbella diversistigmata", "Conticribra weissflogii", "Rossithidium duthiei",
-                                "Hippodonta lueneburgensis", "Delphineis surirella", "Adlafia parabryophila", "Hippodonta arkonensis", "Lenticulina muensteri", "Daphnia sinensis", "Geissleria acceptata", "Stephanodiscus carconensis",
-                                "Dinobryon cylindricum") ~ resolved.taxa.name,
+                                "Aulacoseira ambigua", "Navicula menisculus", "Cymbella proxima", "Conticribra weissflogii", "Hippodonta lueneburgensis", "Adlafia parabryophila", "Hippodonta arkonensis", "Lenticulina muensteri",
+                                "Daphnia sinensis", "Geissleria acceptata", "Stephanodiscus carconensis", "Dinobryon cylindricum") ~ resolved.taxa.name,
       
       TRUE ~ species.1
     ),
@@ -311,6 +309,27 @@ classification_formatted <- classification_raw %>%
       stri_extract_first_regex(species, "\\w+"),
       genus
     ),
+    
+    # Some species have been assigned to a genus that is different to the genus in their species name so change these
+    # Extract genus name from species
+    g = stri_extract_all_regex(species, "\\w+ ")) %>% 
+  unnest_wider(g, names_sep = "") %>% 
+  mutate(
+    g1 = case_when(
+      is.na(g1) & !is.na(genus) ~ genus,
+      is.na(g1) & is.na(genus) ~ NA,
+      
+      TRUE ~ g1
+    ),
+    
+    # Change genus to the one in g column when it is different
+    genus = if_else(
+      genus != g1,
+      g1,
+      genus
+    ),
+     # remove white spaces
+    genus = stri_replace_all_regex(genus, " ", ""),
     
     # Family
     # Too many missing family rows to do in mutate so will do this in excel and read into R
@@ -374,7 +393,7 @@ classification_formatted <- classification_raw %>%
       class == "Coccolithophyceae" ~ "Haptophyta",
       class == "Glaucophyceae" ~ "Glaucophyta",
       class == "Dinophyceae" ~ "Myzozoa",
-      class %in% c("Zygnemophyceae", "Coleochaetophyceae", "Klebsormidiophyceae") ~ "Charophyta",
+      class %in% c("Zygnemophyceae", "Klebsormidiophyceae") ~ "Charophyta",
       
       !is.na(phylum.2) ~ phylum.2,
       
@@ -403,7 +422,7 @@ classification_formatted <- classification_raw %>%
       kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
       kingdom == "Animalia" ~ "Zooplankton",
       
-      phylum %in% c("Ochrophyta", "Haptophyta", "Sarcomastigophora", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+      phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
       phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa", "Ciliophora", "Sarcomastigophora") ~ "Zooplankton",
       
       TRUE ~ NA
@@ -440,7 +459,7 @@ classification_formatted <- classification_raw %>%
 ### Family ----
 # want to manually input missing ranks for family as will take too long to do in a case_when
 
-# Make a list of missing family with thier genus
+# Make a list of missing family with their genus
 missing_family <- classification_formatted %>% 
   select(
     genus,
