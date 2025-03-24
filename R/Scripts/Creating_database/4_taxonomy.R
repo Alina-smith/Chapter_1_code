@@ -208,11 +208,15 @@ multi_tnrs_full <- tnrs_match_names(resolved_manual$resolved.taxa.name)
 saveRDS(multi_tnrs_full, file = "R/data_outputs/database_products/taxonomy/multi_tnrs_full.rds")
 
 # 2) get any that have more than one match
-multis <- multi_tnrs_full %>% 
+multi <- multi_tnrs_full %>% 
+  
   filter(
     number_matches >1
   ) %>% 
+  
   mutate(
+    # want to make a column that act as a uid for later steps
+    uid = paste0(search_string, ott_id),
     original = "yes"
   )
 
@@ -222,16 +226,16 @@ multis <- multi_tnrs_full %>%
 multi_list <- list()
 
 # Loop through the indices of search_string
-for (i in 1:length(multis$search_string)) {
-  multi_list[[i]] <- inspect(multi_tnrs_full, taxon_name = multis$search_string[i])
+for (i in 1:length(multi$search_string)) {
+  multi_list[[i]] <- inspect(multi_tnrs_full, taxon_name = multi$search_string[i])
 }
 
 # make into a data frame
-multis_all <- bind_rows(multi_list)
+multi_all <- bind_rows(multi_list)
 
 # 4) Run the otts through classification with tol to get the taxonomy info
 
-multi_tax_raw <- multis_all %>% 
+multi_tax_raw <- multi_all %>% 
   
   rowwise() %>% # need to do rowwise so the name goes through classification one at a time
   
@@ -251,16 +255,8 @@ multi_tax_raw <- multis_all %>%
   # Pivot so the ranks are now columns
   pivot_wider(
     names_from = rank,
-    values_from = name) %>% 
-  
-  # Remove unwanted columns
-  select(
-    search_string,
-    unique_name,
-    ott_id,
-    phylum,
-    domain
-  ) 
+    values_from = name) 
+
 
 # Save
 saveRDS(multi_tax_raw, file = "R/data_outputs/database_products/taxonomy/multi_tax_raw.rds")
@@ -268,21 +264,51 @@ saveRDS(multi_tax_raw, file = "R/data_outputs/database_products/taxonomy/multi_t
 # Lots to go through so to cut down time want to find any that have been put into different phylums and just look at these
 multi_tax_filtered <- multi_tax_raw %>% 
   
-group_by(search_string) %>% 
+  group_by(search_string) %>% 
   
   mutate(
     n = n_distinct(phylum)
   ) %>% 
   
-  filter(n>1) %>% 
+  filter(n>1) %>% # Gives 187 original taxa's and 726 total points (the original taxa and all the multi matches)
 
-# Gives 187 original taxa's and 726 total points (the original taxa and all the multi matches)
+  # make one column that has the highest rank to make it easier
+  mutate(
+    highest = case_when(
+      phylum != "NULL" ~ phylum,
+      phylum == "NULL" & class != "NULL" ~ class,
+      phylum == "NULL" & class == "NULL" & order != "NULL" ~ order,
+      phylum == "NULL" & class == "NULL" & order == "NULL" & family != "NULL" ~ family,
+      TRUE ~ NA
+    ),
+    
+    rank = case_when(
+      phylum != "NULL" ~ "phylum",
+      phylum == "NULL" & class != "NULL" ~ "class",
+      phylum == "NULL" & class == "NULL" & order != "NULL" ~ "order",
+      phylum == "NULL" & class == "NULL" & order == "NULL" & family != "NULL" ~ "family",
+      TRUE ~ NA
+    )
+  ) %>% 
+  
+  select(
+    search_string,
+    unique_name,
+    ott_id,
+    highest,
+    rank
+  ) %>% 
   
   # Left join in info on which ott_id was used in the origional list
+  # remake the uid made above to left join which ones are the originally used ott_ids
+  mutate(
+    uid = paste0(search_string, ott_id)
+  ) %>% 
+  
   left_join(
-    select(
-      multis, ott_id, original
-    ), by = "ott_id"
+    ., select(
+      multi, uid, original
+    ), by = "uid"
   ) %>% 
   
   mutate(
@@ -291,23 +317,56 @@ group_by(search_string) %>%
       "no",
       original
     )
+  ) %>% 
+  
+  select(
+    -uid
   )
-    
 
-
+originals <- multi_tax_filtered %>%
+  filter(
+    original == "yes"
+  )
 
 ### Manually fix ----
 # check through list and fix any that have been assigned wrong
+resolved <- multi_tnrs_full %>% 
+  
+  mutate(
+    ott_id = case_when(
+      search_string == "bicoeca cylindrica" ~ 5385268,
+      search_string == "bicoeca campanulata" ~ 5385258,
+      search_string == "oscillatoria amphibia" ~ 707845,
+      search_string == "anacystis incerta" ~ 4016649,
+      search_string == "gaarderia compressa" ~ 5409388,
+      search_string == "microglena" ~ 5362912,
+      search_string == "sphaerellopsis" ~ 28980,
+      search_string == "colpidium campylum" ~ 427000,
+      search_string == "cryptoglena" ~ 312183,
+      search_string == "entosiphon sulcatus" ~ 598957,
+      search_string == "euglena charkowiensis" ~ 150267,
+      search_string == "gloeochloris" ~ 4735204,
+      search_string == "na" ~ NA,
+      search_string == "planktonema" ~ 307972,
+      
+      TRUE ~ ott_id
+    )
+  ) %>% 
+  
+  filter(
+    !is.na(ott_id)
+  )
 
-
+# Save
+saveRDS(resolved, file = "R/data_outputs/database_products/taxonomy/resolved.rds")
 
 # Taxonomy: ----
 
 ## Initial run through classification ----
 classification_raw <- resolved %>% 
-  
+
   # Get disinct names
-  distinct(resolved.taxa.name) %>% 
+  distinct(ott_id) %>% 
   
   # Use rowwise so it looks at each row one at a time
   rowwise() %>%
@@ -317,7 +376,7 @@ classification_raw <- resolved %>%
     # Run through classification
     tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for that taxa
       classification(
-        resolved.taxa.name, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
+        ott_id, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
       )[[1]] # select the first element of the list
     ),
     
@@ -346,7 +405,7 @@ classification_raw <- resolved %>%
   ) %>% 
   
   rename(
-    resolved.taxa.name = resolved.taxa.name.1
+    ott_id = ott_id.1
   ) %>% 
   
   ungroup() # ungroup to remove rowwise 
