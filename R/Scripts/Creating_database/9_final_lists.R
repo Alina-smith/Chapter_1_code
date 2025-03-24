@@ -8,14 +8,14 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-phyto_traits_all <- readRDS("R/Data_outputs/final_products/phyto_traits_all.rds")
-source_list <- readRDS("R/Data_outputs/locations_sources/source_list.rds")
-location_list <- readRDS("R/Data_outputs/locations_sources/location_list.rds")
+phyto_mass <- readRDS("R/data_outputs/database_products/final_products/phyto_mass.rds")
+sources_list <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
+location_list <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- phyto_traits_all %>% 
+location_codes <- phyto_mass %>% 
   
   # select column
   select(
@@ -50,12 +50,12 @@ location <- location_list %>%
   )
 
 # save
-saveRDS(location, "R/data_outputs/final_products/location.rds")
+saveRDS(location, "R/data_outputs/database_products/final_products/location.rds")
 
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- phyto_traits_all %>% 
+source_codes <- phyto_mass %>% 
   
   # select columns
   select(
@@ -96,7 +96,7 @@ source_codes <- phyto_traits_all %>%
   )
   
 # Select sources that are in source_codes
-sources <- source_list %>% 
+sources <- sources_list %>% 
   
   # rename new.source.code and source.code and remove old source.code
   select(
@@ -118,5 +118,5 @@ sources <- source_list %>%
   )
   
 # save
-saveRDS(sources, "R/data_outputs/final_products/sources.rds")
+saveRDS(sources, "R/data_outputs/database_products/final_products/sources.rds")
 

@@ -338,4 +338,4 @@ wos_formatted <- wos_raw_body %>%
            bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type)
 
 # Save
-saveRDS(wos_formatted, file = "R/data_outputs/full_database/wos_formatted.rds")
+saveRDS(wos_formatted, file = "R/data_outputs/database_products/wos_formatted.rds")

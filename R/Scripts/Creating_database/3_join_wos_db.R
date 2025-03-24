@@ -45,7 +45,7 @@ spec_char_to_fix <- joined_raw %>%
   )
 
 # save
-write_csv(spec_char_to_fix, "R/data_outputs/taxonomy/spec_char_to_fix.csv")
+write_csv(spec_char_to_fix, "R/data_outputs/database_products/spec_char_to_fix.csv")
 
 ## Swap old for new names ----
 
@@ -169,5 +169,5 @@ bodysize_raw <- bodysize_spec_char %>%
   )
 
 # Save ----
-saveRDS(bodysize_raw, file = "R/data_outputs/final_products/bodysize_raw.rds")
+saveRDS(bodysize_raw, file = "R/data_outputs/database_products/final_products/bodysize_raw.rds")
 
