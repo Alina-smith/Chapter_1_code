@@ -22,6 +22,17 @@ library(tidyverse)
 library(stringi)
 library(taxize)
 library(rotl)
+library(ape)
+library(ggplot2)
+
+install.packages(c("treeplyr", "BiocManager"))
+library(BiocManager)
+
+install.packages(c("ggtree","treeio"))
+BiocManager::install("ggtree", force = TRUE)
+library(ggtree)
+library(ggtreeExtra)
+library(ggnewscale)
 
 # Import data ----
 bodysize_raw <- readRDS("R/data_outputs/database_products/final_products/bodysize_raw.rds")
@@ -146,13 +157,7 @@ saveRDS(cleaned, file = "R/data_outputs/database_products/taxonomy/cleaned.rds")
 ## TOL ----
 
 # Run the cleaned names through tnrs_match_names to get updated versions of names from open tree of life (otl)
-resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name, ) %>% 
-  
-  # rename columns to make easier
-  rename(
-    cleaned.taxa.name = search_string,
-    resolved.taxa.name = unique_name
-  )
+resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name)
 
 # Save
 saveRDS(resolved_tol, file = "R/data_outputs/database_products/taxonomy/resolved_tol.rds")
@@ -163,7 +168,7 @@ saveRDS(resolved_tol, file = "R/data_outputs/database_products/taxonomy/resolved
 to_resolve_manually <- resolved_tol %>% 
   
   filter(
-    is.na(resolved.taxa.name)
+    is.na(unique_name)
   )
 
 # Save
@@ -175,43 +180,43 @@ write_csv(to_resolve_manually, "R/data_outputs/database_products/taxonomy/to_res
 manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
 
 # Add to main names list
-resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "cleaned.taxa.name") %>% 
+resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "search_string") %>% 
   
   # When a manually resolved name is present use this instead use the original resolved name
   mutate(
-    resolved.taxa.name.manual = if_else(
-      !is.na(resolved.taxa.name.manual),
-      resolved.taxa.name.manual,
-      resolved.taxa.name
+    resolved.taxa.name = if_else(
+      !is.na(unique_name_manual),
+      unique_name_manual,
+      unique_name
     ),
     
     # Manual changes from extra ones
-    resolved.taxa.name.manual = case_when(
+    resolved.taxa.name = case_when(
       resolved.taxa.name == "Cymbella cuspidata" ~ "Cymbopleura cuspidata",
       resolved.taxa.name == "Pseudopodosira kosugii" ~ "Pseudopodosira echinus",
       resolved.taxa.name == "Hippodonta lueneburgensis" ~ "Hippodonta luneburgensis",
       resolved.taxa.name == "Gleocapsa" ~ "Gloeocapsa",
       
-      TRUE ~ resolved.taxa.name.manual
+      TRUE ~ resolved.taxa.name
       
     ),
     
     # remove variety and forms just to make things easier 
-    resolved.taxa.name.manual = case_when(
-      stri_detect_regex(resolved.taxa.name.manual, "var\\.|f\\.") ~ stri_extract_first_regex(resolved.taxa.name.manual, "\\w+ \\w+"),
+    resolved.taxa.name = case_when(
+      stri_detect_regex(resolved.taxa.name, "var\\.|f\\.") ~ stri_extract_first_regex(resolved.taxa.name, "\\w+ \\w+"),
       
-      TRUE ~ resolved.taxa.name.manual
+      TRUE ~ resolved.taxa.name
     )
   ) %>%
   
   # Remove any that couldn't be resolved
   filter(
-    !is.na(resolved.taxa.name.manual)
+    !is.na(resolved.taxa.name)
   ) %>% 
   
   # Select relevant columns
   select(
-    cleaned.taxa.name, resolved.taxa.name, resolved.taxa.name.manual
+    search_string, unique_name, resolved.taxa.name
   )
 
 ## Fix multiple hits ----
@@ -220,7 +225,7 @@ resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "clean
 ### Make list of multis ----
 
 # 1) Rerun through tnrs_match_names to resolve all again
-multi_tnrs_full <- tnrs_match_names(resolved_manual$resolved.taxa.name.manual)
+multi_tnrs_full <- tnrs_match_names(resolved_manual$resolved.taxa.name)
 
 # Save
 saveRDS(multi_tnrs_full, file = "R/data_outputs/database_products/taxonomy/multi_tnrs_full.rds")
@@ -569,6 +574,7 @@ classification_formatted <- classification_raw %>%
       class == "Coccolithophyceae" ~ "Haptophyta",
       class == "Glaucophyceae" ~ "Glaucophyta",
       class == "Dinophyceae" ~ "Myzozoa",
+      class %in% c("Zygnemophyceae", "Klebsormidiaceae") ~ "Charophyta",
       
       !is.na(phylum.2) ~ phylum.2, # Phylum.2 is more accurate than 1 so use this when it is not NA
       
@@ -592,6 +598,7 @@ classification_formatted <- classification_raw %>%
     # Do have some insect larvae in there but not much so discarding it
     
     type = case_when(
+      class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Insecta") ~ "remove",
       
       kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
       kingdom == "Animalia" ~ "Zooplankton",
@@ -599,25 +606,24 @@ classification_formatted <- classification_raw %>%
       phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
       phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa", "Ciliophora", "Sarcomastigophora") ~ "Zooplankton",
       
-      TRUE ~ NA
+      TRUE ~ "remove"
     )
   ) %>% 
   
   # Remove non plankton
   filter(
     !(resolved.taxa.name == "Marssoniella (genus in kingdom Archaeplastida)"),
-    !is.na(type)
+    type != "remove"
   ) %>% 
   
   # Rename ott_id column - just cus there used to be tax.uid but has been changed to this so keep name as tax.uid to make it run with the rest of the code
   rename(
-    tax.uid = ott_id,
     taxa.name = resolved.taxa.name
   ) %>% 
   
   # Select columns
   select(
-    tax.uid, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
 ### Family ----
@@ -711,7 +717,7 @@ classification_order <- classification_family %>%
   ) %>% 
   
   relocate(
-    tax.uid, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
 ### Final edits ----
@@ -768,7 +774,12 @@ classification <- classification_order %>%
   
   # Reorder
   relocate(
-    tax.uid, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+  ) %>% 
+  
+  # get distinct taxa
+  distinct(
+    ott_id, .keep_all = TRUE
   )
 
 # Save
@@ -781,11 +792,6 @@ saveRDS(classification, file = "R/data_outputs/database_products/taxonomy/classi
 # Get a taxonomy list to add in in later steps
 
 phylo_plot_data <- classification %>% 
-  
-  filter(
-    !is.na(species),
-    type == "Phytoplankton",
-  ) %>% 
   
   select(
     tax.uid,
@@ -807,12 +813,28 @@ phylo_plot_data <- classification %>%
 taxa <- tnrs_match_names(unique(phylo_plot_data$tol.taxa.name))
 
 # 2) Update ott_ids with ones that were changed above
-taxa2 <- taxa %>% 
+# Find ones to change
+classification2 <- classification %>% 
+  mutate(
+    tol.taxa.name = tolower(tol.taxa.name)
+  )
+
+to_change <- taxa %>% 
+  left_join(
+    select(
+      classification2, tol.taxa.name, tax.uid
+    ), by = c("search_string" = "tol.taxa.name")
+  ) %>% 
+  filter(
+    ott_id != tax.uid
+  )
   
+# Change them
+taxa2 <- taxa %>% 
   mutate(
     ott_id = case_when(
-      ott_id == 2813413 ~ 6388726,
-      
+      ott_id == 4004663 ~ 6001434,
+      ott_id == 4922332 ~ 4016510,
       TRUE ~ ott_id
     ),
     ott_id = as.integer(ott_id)
@@ -831,10 +853,14 @@ unique(is.na(taxon_map)) # false means there are no missing names so don't need 
 
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
 in_tree <- is_in_tree(ott_ids = taxa2$ott_id)
+
+# Save
+saveRDS(in_tree, "R/data_outputs/database_products/taxonomy/in_tree.rds")
+
 in_tree
 
-sum(in_tree == TRUE) # 4031
-sum(in_tree == FALSE) # 592
+sum(in_tree == TRUE) # 4811
+sum(in_tree == FALSE) # 805
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
@@ -886,7 +912,7 @@ taxa_update_in_tree <- taxa_in_tree %>%
   
   left_join(
     select(
-      phylo_plot_data2, tol.taxa.name, phylum
+      phylo_plot_data2, tol.taxa.name, phylum, kingdom
     ), by = c("search_string" = "tol.taxa.name")
   ) %>% 
   
@@ -920,52 +946,29 @@ taxa_update_in_tree_edit <- taxa_update_in_tree %>%
     phylum_label = paste0("Phylum: ", phylum)
   )
 
-circular_plot_phylum <- circular_plot %<+% taxa_update_in_tree +
-  
-  geom_tippoint(aes(x = x + 1.5, color = phylum), size = 2, show.legend = TRUE) 
-
-circular_plot_phylum
-
-
-+
-  
-  geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 2, show.legend = TRUE)
-+
+circular_plot <- circular_plot %<+% taxa_update_in_tree_edit +
+  geom_tippoint(aes(x = x + 1.5, color = phylum_label), size = 5, show.legend = TRUE) +
+  geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 5, show.legend = TRUE) +
   
   scale_color_manual(values = c(
-    setNames(viridis::viridis(length(unique(taxa_update_in_tree_edit$phylum_label))), paste0("r.group: ", unique(taxa_update_in_tree_edit$phylum_label))),
-    setNames(viridis::magma(length(unique(taxa_update_in_tree_edit$kingdom_label))), paste0("Phylum: ", unique(taxa_update_in_tree_edit$kingdom_label)))
+    setNames(viridis::magma(length(unique(taxa_update_in_tree_edit$phylum))), paste0("Phylum: ", unique(taxa_update_in_tree_edit$phylum))),
+    setNames(viridis::plasma(length(unique(taxa_update_in_tree_edit$kingdom))), paste0("Kingdom: ", unique(taxa_update_in_tree_edit$kingdom)))
   )
   )
 
-circular_plot_phylum
+circular_plot
 
-# Check for any that look like they have been missasigned and edit them
+# Final tax list ----
+# All good so can use classification as tax_list
 
+tax_list_raw <- classification %>% 
+  
+  rename(
+    ott.id = ott_id
+  )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Save
+saveRDS(tax_list_raw, file = "R/data_outputs/database_products/taxonomy/tax_list_raw.rds")
 
 # Add to main data ----
 # need to join things inn sequence because there were a couple of steps to get from the raw names to the formatted names
@@ -973,62 +976,97 @@ circular_plot_phylum
 ## Linking new to original names ----
 ### Classification to resolved ----
 
-# 
-
-class_to_resolve <- left_join(
-  classification,
+class_to_resolved <- left_join(
   select(
-    resolved, resolved.taxa.name, resolved.taxa.name.manual
-    ), by = c("taxa.name.full" = "resolved.taxa.name")
-  ) 
+    resolved, search_string, ott_id
+    ), select(
+      classification, ott_id, taxa.name
+      ), by = "ott_id"
+  ) %>% 
+  
+  # Remove ones that were renoved in the classification step
+  filter(
+    !is.na(taxa.name)
+  )
 
 ### Resolved to cleaned ----
 
-# First link above to the manually resolved list
-resolved_to_clean_1 <- resolved_manual %>% 
-  
-  mutate(
-    resolved.taxa.name.manual = tolower(resolved.taxa.name.manual)
-  ) %>% 
-  
-  left_join(
-    ., class_to_resolve, by = "resolved.taxa.name.manual"
-  ) %>% 
-  
+# 1) Resolved to multi
+resolved_to_multi <- left_join(
   select(
-    - resolved.taxa.name.manual
+    multi_tnrs_full, search_string
+    ), select(
+      class_to_resolved, search_string, ott_id
+      ), by = "search_string") %>% 
+  
+  # Remove ones that were renoved in the classification step
+  filter(
+    !is.na(ott_id)
   )
 
-# Next link above to the cleaned list
-resolved_to_clean_2 <- cleaned %>% 
+# 2) multi to resolved.manual
+multi_to_rm <- resolved_manual %>% 
   
+  select(
+    resolved.taxa.name,
+    search_string
+  ) %>% 
+  
+  # need to make lower case to match
+  mutate(
+    resolved.taxa.name = tolower(resolved.taxa.name)
+  ) %>% 
+  
+  left_join(., resolved_to_multi, by = c("resolved.taxa.name" = "search_string")) %>% 
+  
+  # Remove ones that were renoved in the classification step
+  filter(
+    !is.na(ott_id)
+  )
+
+# 3) resolved.manual to cleaned
+multi_to_cleaned <- cleaned %>% 
+  
+  # need to make lower case to match
   mutate(
     cleaned.taxa.name = tolower(cleaned.taxa.name)
   ) %>% 
   
   left_join(
-    ., resolved_to_clean_1, by = "cleaned.taxa.name"
-  ) %>% 
+    ., select(
+      multi_to_rm, search_string, ott_id
+      ), by = c("cleaned.taxa.name" = "search_string")
+    ) %>% 
   
-  select(
-    -cleaned.taxa.name
+  # Remove ones that were renoved in the classification step
+  filter(
+    !is.na(ott_id)
   )
 
 ## Linking to raw data ----
 
 bodysize_taxonomy <-  bodysize_raw %>% 
   
-  # Join taxonomy info onto raw data
+  # Join ott_id onto raw data
   left_join(
-    ., resolved_to_clean_2, by = "original.taxa.name"
+    ., multi_to_cleaned, by = "original.taxa.name"
   ) %>% 
   
+  rename(
+    ott.id = ott_id
+  ) %>% 
+  
+  # add in taxonomy data
+  left_join(
+    ., tax_list_raw, by = "ott.id"
+  ) %>% 
+
   # Select and reorder
   select(
     uid, source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
     join.location.1, join.location.2, join.location.3, join.location.4, join.location.5, join.location.6, join.location.7, join.location.8, join.location.9, join.location.10,
     join.location.11, join.location.12, join.location.13, join.location.14, join.location.15, join.location.16, join.location.17,
-    individual.uid, original.taxa.name, taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom,
+    individual.uid, original.taxa.name, taxa.name, ott.id, type, species, genus, family, order, class, phylum, kingdom,
     life.stage, sex, nu, ind.per.nu,
     min.body.size, max.body.size, body.size,
     bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type,
@@ -1043,17 +1081,4 @@ bodysize_taxonomy <-  bodysize_raw %>%
 # Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/database_products/bodysize_taxonomy.rds")
 
-
-# Initial taxonomy list ----
-
-tax_list_raw <- bodysize_taxonomy %>% 
-  distinct(
-    tax.uid, .keep_all = TRUE
-  ) %>% 
-  select(
-    taxa.name.full, taxa.name, tax.uid, type, species, genus, family, order, class, phylum, kingdom
-  )
-
-# Save
-saveRDS(tax_list_raw, file = "R/data_outputs/database_products/taxonomy/tax_list_raw.rds")
 

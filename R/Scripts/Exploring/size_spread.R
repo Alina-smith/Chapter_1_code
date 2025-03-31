@@ -8,7 +8,6 @@ library(ggplot2)
 
 # Data ----
 genus_traits <- readRDS("R/Data_outputs/final_products/phyto_traits_genus.rds")
-species_traits <- readRDS("R/Data_outputs/final_products/phyto_traits_species.rds")
 
 traits <- species_traits %>% 
   select(

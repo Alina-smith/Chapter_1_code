@@ -14,8 +14,8 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-wos_formatted <- readRDS("R/Data_outputs/full_database/wos_formatted.rds")
-db_formatted <- readRDS("R/Data_outputs/full_database/db_formatted.rds")
+wos_formatted <- readRDS("R/Data_outputs/database_products/wos_formatted.rds")
+db_formatted <- readRDS("R/Data_outputs/database_products/db_formatted.rds")
 
 
 # Joining db and wos ----

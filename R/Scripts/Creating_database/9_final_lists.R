@@ -8,14 +8,14 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-phyto_mass <- readRDS("R/data_outputs/database_products/final_products/phyto_mass.rds")
+phyto_subset <- readRDS("R/data_outputs/database_products/final_products/phyto_subset.rds")
 sources_list <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
 location_list <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- phyto_mass %>% 
+location_codes <- phyto_subset %>% 
   
   # select column
   select(
@@ -55,7 +55,7 @@ saveRDS(location, "R/data_outputs/database_products/final_products/location.rds"
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- phyto_mass %>% 
+source_codes <- phyto_subset %>% 
   
   # select columns
   select(

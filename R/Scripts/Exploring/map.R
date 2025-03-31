@@ -1,8 +1,5 @@
 ## map
 
-
-
-library(here)
 library(readxl)
 library(tidyr)
 library(tidyverse)
@@ -12,23 +9,25 @@ library(ggplot2)
 library(rnaturalearth)
 library(ggmap)
 
-location_list <- read_csv("R/Data_outputs/full_database/location_list.csv")
-source_list <- read_csv("R/Data_outputs/full_database/source_list.csv") 
-
-map_plot <- bodysize_data %>% 
+location_list <- read_rds("R/Data_outputs/database_products/final_products/location.rds")
+source_list <- read_rds("R/Data_outputs/database_products/final_products/sources.rds")
+phyto_all <- readRDS("R/Data_outputs/database_products/final_products/phyto_all.rds") %>% 
+  # select just individuals for now
   filter(
-    form == "individual",
-    !is.na(mass),
-    !is.na(genus),
-    life.stage %in% c("adult", "active")
-  ) %>% 
+    nu == "individual"
+  )
+
+map_plot <- phyto_all %>% 
+  
+  separate(location.code, into = c("1", "2", "3", "4", "5", "6"), sep = ";") %>% 
   
   select(
-    -location.code.2:-location.code.17
+    `1`,
+    species
   ) %>% 
   
   rename(
-    location.code = location.code.1
+    location.code = `1`
   ) %>% 
   
   left_join(
@@ -37,24 +36,22 @@ map_plot <- bodysize_data %>%
     ), by = "location.code"
   ) %>% 
   
-  select(
-    genus, latitude, longitude, group, location.code
-  ) %>% 
-  
   filter(
-    !is.na(latitude)
+    !is.na(latitude),
+    !is.na(species)
   ) %>% 
   
   group_by(
-    location.code, group
+    location.code, species
   ) %>% 
   
   summarise(
     diversity = n()
   ) %>% 
+  
   left_join(
     select(
-      location_list, location.code, longitude, latitude
+      location_list, location.code, longitude, latitude, country
     ), by = "location.code"
   )
 
@@ -63,38 +60,7 @@ world <- ne_countries(scale = "small", returnclass = "sf")
 ggplot(world)+
   geom_sf(fill = "grey90", colour = "black")+
   coord_sf(ylim = c(-50, 80), xlim = c(-135, 180), expand = FALSE) +
-  geom_point(data = map_plot, aes(x = longitude, y = latitude, , colour = group, size = diversity, alpha = 5))
-
-
-old_map_plot <- bodysize_data %>% 
-  filter(
-    source.code %in% c("1", "109", "217", "313", "415", "519", "573", "618"),
-    form == "individual",
-    !is.na(mass),
-    !is.na(genus),
-    life.stage %in% c("adult", "active")
-  )%>% 
-  
-  select(
-    -location.code.2:-location.code.17
-  ) %>% 
-  
-  rename(
-    location.code = location.code.1
-  ) %>% 
-  
-  left_join(
-    select(
-      location_list, location.code, longitude, latitude
-    ), by = "location.code"
-  )
-
-world <- ne_countries(scale = "small", returnclass = "sf")
-ggplot(world)+
-  geom_sf(fill = "grey90", colour = "black")+
-  coord_sf(ylim = c(-50, 80), xlim = c(-135, 180), expand = FALSE) +
-  geom_point(data = old_map_plot, aes(x = longitude, y = latitude, colour = group))
-
+  geom_point(data = map_plot, aes(x = longitude, y = latitude, size = diversity, alpha = 5))
 
 
 # Define your countries
