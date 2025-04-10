@@ -1,0 +1,620 @@
+uid,species,Note
+4,Cyclotella rhomboideo-elliptica,might fit due to the size
+11,Cyclotella stylorum,might fit due to the size
+12,Cyclotella comta,to  B
+13,Cyclotella,taxonomic resolution does not allow sorting into coda
+14,Cyclotella,taxonomic resolution does not allow sorting into coda
+14,Stephanodiscus,taxonomic resolution does not allow sorting into coda
+15,Cyclotella stelligera,to  B
+16,non-identified Centrales,might fit if small celled species
+17,Cyclotella bodanica,to  B
+18,Cyclotella kützingiana,to  B
+18,Cyclotella ocellata,to  B
+19,Mallomonas spp.,to  E
+20,small Cyclotella spp.,to B
+24,Aulacoseira,might fit due to the habitat
+25,Aulacoseira,taxonomic resolution does not allow sorting into coda
+26,Stephanodiscus meyerii,A. baicalensis  would deserve a new codon
+26,Aulacoseira baicalensis,A. baicalensis  would deserve a new codon
+27,Fragilaria crotonensis,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Aulacoseira italica,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Cyclotella operculata,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,dinoflagellates,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Ceratium hirundinella,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Peridinium willei,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Cryptomonas,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+27,Rhodomonas minuta,"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y"
+28,Centrales spp. (5–20 µm),taxonomic resolution does not allow sorting into coda
+29,Cyclotella,taxonomic resolution does not allow sorting into coda
+29,Aulacoseira,taxonomic resolution does not allow sorting into coda
+30,Cyclotella meneghiniana,To be moved to codon C
+31,Synedra,to D
+32,Erkenia,to E
+33,Aulacoseira granulata,to P
+34,Cyclotella meneghiniana,To be moved to codon C
+35,Cyclostephanus dubius,Cyclostephanos to A
+36,Aulacoseira islandica,"Aulacoseira,Cyclotella to B, , Stephanodiscus to B"
+36,Stephanodiscus minutulus,"Aulacoseira,Cyclotella to B, , Stephanodiscus to B"
+36,Cyclotella operculata,"Aulacoseira,Cyclotella to B, , Stephanodiscus to B"
+37,Aulacoseira,taxonomic resolution does not allow sorting into coda
+37,Asterionella,taxonomic resolution does not allow sorting into coda
+39,Asterionella formosa,C. stelligera to B
+39,Aulacoseira ambigua,C. stelligera to B
+39,Stephanodiscus neoastrea,C. stelligera to B
+39,Cyclotella meneghiniana,C. stelligera to B
+39,Cyclotella stelligera,C. stelligera to B
+40,Aulacoseira,taxonomic resolution does not allow sorting into coda
+41,Stephanodiscus,Ciclostephanos to A
+41,Cyclostesphanos,Ciclostephanos to A
+42,Small centrics,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+42,Actinocyclus normanii,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+42,Cyclotella meneghiniana,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+42,Melosira lineata,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+42,Nitzschia acicularis,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+42,Nitzschia sp.,"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P"
+50,Fragilaria crotonensis,"F. crotonensis, A. granulata to P; A. islandica to B"
+50,Aulacoseira granulata,"F. crotonensis, A. granulata to P; A. islandica to B"
+50,Aulacoseira islandica,"F. crotonensis, A. granulata to P; A. islandica to B"
+50,Asterionella formosa,"F. crotonensis, A. granulata to P; A. islandica to B"
+50,Stephanodiscus spp.,"F. crotonensis, A. granulata to P; A. islandica to B"
+52,Centrales spp. 5–20 µm,taxonomic resolution does not allow sorting into coda
+53,Cyclotella sp.,taxonomic resolution does not allow sorting into coda
+54,Nitzschia acicularis,to D
+55,Stephanodiscus minutulus,"C. wuetrichiana  to A, Stephanodiscus to B"
+55,Cyclotela wuethrichiana,"C. wuetrichiana  to A, Stephanodiscus to B"
+56,Nitzschia acicularis,to D
+59,Synedra acus,N. sigmoidea  to MP
+59,Nitzschia sigmoidea,N. sigmoidea  to MP
+60,Synedra acus,"C, meneghiniana toC"
+60,Cyclotella meneghiniana,"C, meneghiniana toC"
+63,Aulacoseira granulata,A. granulata to P
+63,Stephanodiscus hantzschii,A. granulata to P
+63,Nitzschia acicularis,A. granulata to P
+63,Synedra sp.,A. granulata to P
+64,Cocconeis sp.,Species not in bold have to move to codon MP
+64,Gomphonema angustatum,Species not in bold have to move to codon MP
+64,Navicula cuspidata,Species not in bold have to move to codon MP
+64,Nitzschia sp.,Species not in bold have to move to codon MP
+64,,Species not in bold have to move to codon MP
+65,Pleurosigmasp.,Species not in bold have to move to codon MP
+65,Synedra rumpens,Species not in bold have to move to codon MP
+66,Synedra acus,Cyclotella to C
+66,Nitzschia spp.,Cyclotella to C
+66,Stephanodiscus hantzschii,Cyclotella to C
+66,Cyclotella ocellata,Cyclotella to C
+66,Cyclotella pseudostelligera,Cyclotella to C
+68,Aulacoseira distans,A. distansto C
+68,Skeletonema potamos,A. distansto C
+68,Skeletonema cf. subsalsum,A. distansto C
+73,Centrales,C. comta to A; Navicula to MP
+73,Navicula,C. comta to A; Navicula to MP
+73,Nitszchia,C. comta to A; Navicula to MP
+73,Cyclotella comta,C. comta to A; Navicula to MP
+73,Stephanodiscus hantzschii,C. comta to A; Navicula to MP
+76,Aulacoseira distans,A. distans to C
+77,Pennalessp.,"Cyclotella to A, others to TB"
+77,Cyclotella sp.,"Cyclotella to A, others to TB"
+77,Gomphonema parvulum,"Cyclotella to A, others to TB"
+78,Diatoma,"If Diatoma is D. tenuis, it goes to P; if not, to MP"
+79,Achnanthes microcephala,Achnanthes microcephala to MP
+80,Aulacoseira distans,A. distansto C
+88,Eunotia incisa,"Eunotia to MP,Synedra to D"
+88,Synedra nana,"Eunotia to MP,Synedra to D"
+89,Tabellaria,to N
+90,Carteria,to G
+93,Closteriopsis acicularis,Desmidium to MP
+93,Desmidium laticeps var. quadrangulare,Desmidium to MP
+96,Aulacoseira,sorting of both Fragilaria and Aulacoseira to coda depends on species.
+96,Fragilaria,sorting of both Fragilaria and Aulacoseira to coda depends on species.
+100,Closterium parvulum,Melosira to P
+100,Aulacoseira granulata,Melosira to P
+100,Aulacoseira granulata var. angustissima,Melosira to P
+100,Melosira sp.,Melosira to P
+102,Fragilaria crotonensis,Pediastrum spp. and Coelastrum spp. to J
+102,Aulacoseira granulata,Pediastrum spp. and Coelastrum spp. to J
+102,Staurastrum pingue,Pediastrum spp. and Coelastrum spp. to J
+102,Staurastrum chaetoceras,Pediastrum spp. and Coelastrum spp. to J
+102,,Pediastrum spp. and Coelastrum spp. to J
+103,Pediastrum duplex,Pediastrum spp. and Coelastrum spp. to J
+103,Pediastrum simplex,Pediastrum spp. and Coelastrum spp. to J
+103,Coelastrum spp.,Pediastrum spp. and Coelastrum spp. to J
+104,Aulacoseira granulata,A. herzogii and A. italica to B
+104,Aulacoseira herzogii,A. herzogii and A. italica to B
+104,Aulacoseira italica,A. herzogii and A. italica to B
+105,Closterium acutum var. variabile,S. leptocladum to N
+105,Staurastrum leptocladum,S. leptocladum to N
+105,Aulacoseira granulata,S. leptocladum to N
+105,Aulacoseira granulata f. curvata,S. leptocladum to N
+105,Aulacoseira granulata var. angustissima,S. leptocladum to N
+109,Aulacoseira granulata,sorting of  Aulacoseira to coda depends on species.
+109,Aulacoseira spp.,sorting of  Aulacoseira to coda depends on species.
+117,Aulacoseira granulata,Cyclotella ocellata to B
+117,Cyclotella ocellata,Cyclotella ocellata to B
+122,Navicula spp.,to MP
+123,Melosira varians,Melosira to TB and Cosmarium to N
+123,Cosmarium sp.,Melosira to TB and Cosmarium to N
+123,Closterium navicula,Melosira to TB and Cosmarium to N
+123,Spirotaenia condensata,Melosira to TB and Cosmarium to N
+124,Ulothrix,to MP
+126,Aulacoseira ambigua var. ambigua f. spiralis,Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P
+126,Aulacoseira granulata var. granulata,Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P
+126,Aulacoseira granulata var. angustissima,Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P
+126,Urosolenia eriensis,Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P
+127,Aulacoseira granulata,to P
+128,Aulacoseira ambigua,A. ambigua and A. distans to C; A. granulata to P
+128,Aulacoseira distans,A. ambigua and A. distans to C; A. granulata to P
+128,Aulacoseira granulata,A. ambigua and A. distans to C; A. granulata to P
+128,Ulnaria ulna,A. ambigua and A. distans to C; A. granulata to P
+131,Geminella,Closterium spp. to P
+131,Mougeotia,Closterium spp. to P
+131,Tribonema,Closterium spp. to P
+131,Planctonema,Closterium spp. to P
+131,Closterium aciculare,Closterium spp. to P
+131,Closterium acutum var. variabile,Closterium spp. to P
+133,Planctonema lauterbornii,Tabellaria to N
+133,Tabellaria sp.,Tabellaria to N
+139,Mougeotia," Ulothrix, Ulothrichales to MP"
+139,Ulothrix," Ulothrix, Ulothrichales to MP"
+139,Ulothrichales," Ulothrix, Ulothrichales to MP"
+143,Nitzschia spp.,only non-planktonic Nitzschia spp.
+143,Navicula,only non-planktonic Nitzschia spp.
+143,Gomphonema,only non-planktonic Nitzschia spp.
+143,Didymosphaenia,only non-planktonic Nitzschia spp.
+143,Fragilaria,only non-planktonic Nitzschia spp.
+143,Achnanthes,only non-planktonic Nitzschia spp.
+143,Surirella,only non-planktonic Nitzschia spp.
+144,Raphidiopsis/Cylindrospermopsis,Raphidiopsis/Cylindrospermopsis to SN; others to S1
+144,Geitlerinema unigranulatum,Raphidiopsis/Cylindrospermopsis to SN; others to S1
+144,Planktothrix agardhii,Raphidiopsis/Cylindrospermopsis to SN; others to S1
+146,Oscillatoria spp.,"if really Oscillatoria, to MP"
+147,Arthrospira platensis,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Jaaginema subtilissimum,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Limnothrix redekei,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Lyngbya sp.,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Oscillatoria sp.,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Planktolyngbya circumcreta,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Planktolyngbya limnetica,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+147,Pseudanabaena sp.,"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1"
+148,Raphidiopsis,Raphidiopsis to SN
+149,Oscillatoria sp.,"if really Oscillatoria, to MP"
+150,Planktothrix agardhii,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1"
+150,Limnothrix planctonica,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1"
+150,Pseudanabaena galeata,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1"
+150,,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1"
+151,Oscillatoria spp.,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S2"
+151,Raphidiopsis mediterranea,"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S2"
+152,Limnotrichoideae,to S1
+153,Geitlerinema sp.,to S1
+154,Jaaginema subtilissimum,to S1
+155,Phormidium sp.,to S1
+156,Oscillatoria quadripunctulata,O. quadripunctulata = Jaaginema quadripunctulatum  to S1; O. limnetica (Pseudanabaena limnetica) to S1
+156,Oscillatoria limnetica,O. quadripunctulata = Jaaginema quadripunctulatum  to S1; O. limnetica (Pseudanabaena limnetica) to S1
+159,Pseudanabaena,Position of Pseudanabaena depends on species.
+160,Planktothrix agardhii,Pseudanabaena galeata  to MP
+160,Pseudanabaena galeata,Pseudanabaena galeata  to MP
+160,Geitlerinema unigranulatum,Pseudanabaena galeata  to MP
+166,Geitlerinema amphibium,Pseudanabaena catenata to MP
+166,Pseudanabaena catenata,Pseudanabaena catenata to MP
+167,Limnothrix planctonica,Oscillatoria sp. to TC
+167,Oscillatoria sp.,Oscillatoria sp. to TC
+171,Pseudanabaena,Position of Pseudanabaena depends on species.
+172,Oscillatoria group,"Oscillatoria group, as order, cannot be attributed to any codon"
+172,Planktolyngbya,"Oscillatoria group, as order, cannot be attributed to any codon"
+173,Pseudanabaena galeata,Pseudanabaena galeata to MP
+173,Planktolyngbya limnetica,Pseudanabaena galeata to MP
+173,Geitlerinema sp.,Pseudanabaena galeata to MP
+175,Planktothrix agardhii,Position of Pseudanabaena depends on species.
+175,Limnothrix redekei,Position of Pseudanabaena depends on species.
+175,Pseudanabaena,Position of Pseudanabaena depends on species.
+180,Pseudanabaena limnetica,"Oscillatoriales, as order, cannot be attributed to any codon"
+180,Planktolyngbya limnetica,"Oscillatoriales, as order, cannot be attributed to any codon"
+180,Oscillatoriales,"Oscillatoriales, as order, cannot be attributed to any codon"
+181,Lyngbya sp.,both to S1; Lyngbya is accepted as S1 because of the description in the original paper
+181,Planktolyngbya sp.,both to S1; Lyngbya is accepted as S1 because of the description in the original paper
+182,Raphidiopsis,to SN
+183,Raphidiopsis mediterranea,Raphidiopsis to SN
+183,Spirulina sp.,Raphidiopsis to SN
+184,Planktolyngbya limnetica,to S1
+185,Leptolynbgya cf. notata,both to TC
+185,Oscillatoria sp.,both to TC
+186,Oscillatoria,Oscillatoria to MP
+186,Spirulina,Oscillatoria to MP
+187,Leptolyngbya fragilis,Planktolyngbya sp. to S1; others to MP
+187,Oscillatoria sancta,Planktolyngbya sp. to S1; others to MP
+187,Planktolyngbya sp.,Planktolyngbya sp. to S1; others to MP
+193,Cylindrospermopsis raciborskii,A.     gracile to H1
+193,Aphanizomenon gracile,A.     gracile to H1
+196,Anabaena,Anabaena to H1 unless it is A. minutissima
+196,Cylindrospermopsis,Anabaena to H1 unless it is A. minutissima
+214,Cylindrospermum cf. muscicola,to MP
+215,Aphanizomenon gracile,to H1
+216,Planktolyngbya,"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species"
+216,Ankistrodesmus,"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species"
+216,Pseudanabaena,"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species"
+217,Picoplankton,accepted because of the habitat
+218,Cyanobacterial autotrophic picoplankton,accepted because of the habitat
+219,Synechococcus,accepted because of the habitat
+219,Chroococcus,accepted because of the habitat
+220,Synechococcus aff. nidulans,accepted because of the habitat
+220,Chroococcus minor,accepted because of the habitat
+221,Synechococcus nidulans,to K
+222,Chroococcus minor,both to Lo
+222,Chroococcus sp.,both to Lo
+223,Picocyanobacteria,to K
+223,Synechococcus - like,to K
+224,Chroococcus limneticus,to Lo
+224,Chroococcus minutus,to Lo
+224,Chroococcus turgidus,to Lo
+225,Synechococcus sp.,to K
+226,Chroococcus sp.,Synechococcus and picoplankton to K; Chroococcus is dubious
+226,Synechococcus spp.,Synechococcus and picoplankton to K; Chroococcus is dubious
+226,Picoplanktonic cells,Synechococcus and picoplankton to K; Chroococcus is dubious
+227,pico-phytoplankton,to K
+227,Synechococcus nidulans,to K
+227,Synechocystis spp.,to K
+228,Picoplankton,to K
+229,Chlorella minutissima,to K
+230,Synechococcus spp.,"Synechococcus to Z, Ceratium to Lo"
+230,Ceratium hirundinella,"Synechococcus to Z, Ceratium to Lo"
+238,Chlorella minutissima,Choricystis minor  to X1; Chlorella minutissima to K
+238,Choricystis minor,Choricystis minor  to X1; Chlorella minutissima to K
+239,Aphanocapsa,both to K
+239,Aphanothece,both to K
+247,Carteria complanata,silica scaled flagellates to E
+247,Chlamydomonas depressa,silica scaled flagellates to E
+247,Chlamydomonas microsphera,silica scaled flagellates to E
+247,Chlamydomonas passiva,silica scaled flagellates to E
+247,Chlamydomonas cf. muriella,silica scaled flagellates to E
+247,Chlamydomonas spp.,silica scaled flagellates to E
+247,Chloromonas minima,silica scaled flagellates to E
+247,Pedimonas sp.,silica scaled flagellates to E
+247,Pteromonas variabilis,silica scaled flagellates to E
+247,Pyramimonas tetrarhynchus,silica scaled flagellates to E
+247,Spermatozoopsis exultans,silica scaled flagellates to E
+247,siliceousChrysophyceae,silica scaled flagellates to E
+247,Rhodomonas minuta,silica scaled flagellates to E
+248,Glenodinium spp.,Glenodinium to Y
+248,Rhodomonas pusilla,Glenodinium to Y
+248,Rhodomonas sp.,Glenodinium to Y
+256,Monoraphidium contornum,to X1
+258,Ankistrodesmus gracilis,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Chlorella vulgaris,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Chlorococcum infusionum,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Crucigenia tetrapedia,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Micractinium pusillum,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Monoraphidium contortum,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Pseudodidymocystis fina,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+258,Scenedesmus ecornis,"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J"
+261,Chorella vulgaris,Closteriopsis acicularis to P
+261,Closteriopsis acicularis,Closteriopsis acicularis to P
+261,Monoraphidium arcuatum,Closteriopsis acicularis to P
+261,Monoraphidium circinale,Closteriopsis acicularis to P
+261,Monoraphidium contortum,Closteriopsis acicularis to P
+261,Monoraphidium griffthii,Closteriopsis acicularis to P
+261,Monoraphidium pusillum,Closteriopsis acicularis to P
+264,Chlorella spp.,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Chlorolobium sp.,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Coccomonas sp.,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Monoraphidium contortum,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Monoraphidium convolutum,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Monoraphidium griffithi,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Monoraphidium minutum,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Schroederia antillarum,Coccomonassp. to X2;  Schroederia spp. to X3
+264,Schroederia setigera,Coccomonassp. to X2;  Schroederia spp. to X3
+268,Chroococcus spp.,Chroococcus spp. to Lo
+268,Chlorella sp.,Chroococcus spp. to Lo
+268,Monoraphidium minutum,Chroococcus spp. to Lo
+268,Monoraphidium contortum,Chroococcus spp. to Lo
+268,Keryochlamys styriaca,Chroococcus spp. to Lo
+270,Crucigenia quadrata,Crucigenia quadrata to J
+270,Didymocystis bicellularis,Crucigenia quadrata to J
+270,Monoraphidium circinale,Crucigenia quadrata to J
+270,Monoraphidium contortum,Crucigenia quadrata to J
+270,Monoraphidium minutum,Crucigenia quadrata to J
+272,Synechocystis aquatilis,Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K
+272,Chlorella vulgaris var. autotrophica,Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K
+272,Oocystis submarina,Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K
+272,Chlorella minutíssima,Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K
+273,Synechocystis aquatilis,to Lo
+274,Chlorella sp.,to X3
+275,Synechocystis aquatilis,Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2
+275,Cosmarium regnesii,Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2
+275,Chlamydomonas sp.,Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2
+276,Synechocystis aquatilis,to Lo
+277,Synechococcus elongatus,Synechococcus to K;  Chroococcus to Lo
+277,Synechococcus elegans,Synechococcus to K;  Chroococcus to Lo
+277,Chlorella homosphaera,Synechococcus to K;  Chroococcus to Lo
+277,Chroococcus minor,Synechococcus to K;  Chroococcus to Lo
+277,Scenedesmus ellipticus,Synechococcus to K;  Chroococcus to Lo
+277,Choricystis cylindracea,Synechococcus to K;  Chroococcus to Lo
+278,Monoraphidium,"for typesetting error, i should be read as 1"
+279,Ochromonas spp.,"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2"
+279,Ankyra judayi,"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2"
+279,small cryptophytes,"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2"
+280,Phacotus,"codon was renamed, see the text"
+283,Dinobryon,we suggested to move Synura to the recently established Ws codon
+283,Mallomonas,we suggested to move Synura to the recently established Ws codon
+283,Synura,we suggested to move Synura to the recently established Ws codon
+295,Dinobryon sociale,small sized chrysoflagellates to X2
+295,small sized chrysoflagellates,small sized chrysoflagellates to X2
+296,Dinobryon sp.,"non identified flagellates are probably small, therefore to X2"
+296,Epipyxis sp.,"non identified flagellates are probably small, therefore to X2"
+296,Mallomonas sp.,"non identified flagellates are probably small, therefore to X2"
+296,Flagellates non-identified,"non identified flagellates are probably small, therefore to X2"
+297,Mallomonas,Ochromonas to X2
+297,Ochromonas,Ochromonas to X2
+298,Flagellata,to  E
+298,small (Chrysophyceae),to  E
+298,Dynobrioncylindricum,to  E
+299,Ochromonas cf. viridis; Chrysophyceae,"Ochromonas cf. viridis to X1; ""Chrysophyceae"" taxonomic resolution does not allow sorting into coda"
+306,Cryptomonas,Rhodomonas to X2
+306,Rhodomonas,Rhodomonas to X2
+307,Chroomonas,to X2
+312,Cryptomonas cf. brasiliensis; Cryptomonas pyrenoidifera,to X2
+313,aff. Teleaulax sp.,C. brasiliensis to X2
+313,Cryptomonas brasiliensis,C. brasiliensis to X2
+314,Cryptomonas acuta,C. brasiliensis to X2
+314,Cryptomonas brasiliensis,C. brasiliensis to X2
+314,Cryptomonas curvata,C. brasiliensis to X2
+314,Cryptomonas erosa,C. brasiliensis to X2
+315,Cryptopmonas,Rhodomonas to X2
+315,Rhodomonas,Rhodomonas to X2
+325,Cryptomonas ovata,Rhodomonas to X2
+325,Cryptomonas marssonii,Rhodomonas to X2
+325,Rhodomonas,Rhodomonas to X2
+330,Cryptomonas sp.,to X2
+330,Chroomonas sp.,to X2
+335,Cryptomonas pyrenoidifera,to X2
+336,Cryptophytes,this taxonomic resolution does not allow sorting into coda
+360,Coelastrum microporum,Coelastrum microporum to J
+360,Botryococcus braunii,Coelastrum microporum to J
+361,Kirchneriella,"Glenodinium to Y, Ketablepharis and Kephyrion to X2"
+361,Glenodinium,"Glenodinium to Y, Ketablepharis and Kephyrion to X2"
+361,Ketablepharis,"Glenodinium to Y, Ketablepharis and Kephyrion to X2"
+361,Kephyrion,"Glenodinium to Y, Ketablepharis and Kephyrion to X2"
+368,Tetraedron,to J
+382,Colonial green algae,"""colonial green algae"" taxonomic resolution does not allow sorting into coda"
+382,Pediastrum,"""colonial green algae"" taxonomic resolution does not allow sorting into coda"
+382,Scenedesmus,"""colonial green algae"" taxonomic resolution does not allow sorting into coda"
+382,Coelastrum,"""colonial green algae"" taxonomic resolution does not allow sorting into coda"
+383,Chlorophytes,"""Chlorophytes"" taxonomic resolution does not allow sorting into coda"
+384,Scenedesmus,Micratinium to F
+384,Golenkinia,Micratinium to F
+384,Tetrastrum,Micratinium to F
+384,Crucigenia,Micratinium to F
+384,Actinastrum,Micratinium to F
+384,Micratinium,Micratinium to F
+385,Actinastrum hantzschi,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Ankistrodesmus gracilis,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Coelastrum microporum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Coelastrum pseudomicroporum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Crucigenia quadrata,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Dictyosphaerium ehrenbergianum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Dictyosphaerium pulchellum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Golenkinia radiata,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Micractinium pusillum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Pediastrum tetras,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus acuminatum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus acuminatum var. bernardii,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus acutus,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus arcuatum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus bicaudatus,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus ecornis,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Scenedesmus quadricauda var. parvus,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron caudatum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron gracilis,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron incus,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron mediocris,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron minimum,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron triangulare,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetraedron victoriae,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+385,Tetrastrum elegans,"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F"
+386,Actinastrum hantzschii,Micractinium pusillum to F
+386,Coelastrum microporum,Micractinium pusillum to F
+386,Coelastrum pseudomicroporum,Micractinium pusillum to F
+386,Crucigenia tetrapedia,Micractinium pusillum to F
+386,Crucigenia fenestrata,Micractinium pusillum to F
+386,Micractinium pusillum,Micractinium pusillum to F
+386,Scenedesmus acuminatus,Micractinium pusillum to F
+386,Scenedesmus ecornis,Micractinium pusillum to F
+386,Scenedesmus intermedius,Micractinium pusillum to F
+386,Scenedesmus protuberans,Micractinium pusillum to F
+387,Dictyosphaerium,Dictyosphaerium and Oocystis to F
+387,Oocystis,Dictyosphaerium and Oocystis to F
+387,Scenedesmus,Dictyosphaerium and Oocystis to F
+387,Tetraedron,Dictyosphaerium and Oocystis to F
+388,Goniochlorys mutica,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Coelastrum astroideum,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Coelastrum pseudomicroporum,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Treubaria triappendiculata,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Scenedesmus obliquus,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Scenedesmus quadricauda,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Crucigenia tetrapedia,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Tetraedron trigonium,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Tetraedron minimun,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Oocystis marina,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Lobocystis planctonica,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+388,Tetrastrum glabrum.,"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F"
+389,Pediastrum duplex,Oocystis lacustris and Treubaria triappendiculata to F
+389,Coelastrum reticulatum,Oocystis lacustris and Treubaria triappendiculata to F
+389,Coelastrum microporum,Oocystis lacustris and Treubaria triappendiculata to F
+389,Oocystis lacustris,Oocystis lacustris and Treubaria triappendiculata to F
+389,Treubaria triappendiculata,Oocystis lacustris and Treubaria triappendiculata to F
+389,Scenedesmus spp.,Oocystis lacustris and Treubaria triappendiculata to F
+390,Coelastrum spp.,"""coccal green algae"" taxonomic resolution does not allow sorting into coda"
+390,coccal green algae,"""coccal green algae"" taxonomic resolution does not allow sorting into coda"
+391,Ankistrodesmus fusiformis,to X1
+392,Ankistrodesmus/Monoraphidium,accepted as X1
+408,Coelosphaerium evidenter-marginatum,to Lo
+409,Gloeocapsa punctata,to TC
+410,Aphanothece,Phacotus to XPh
+410,Phacotus,Phacotus to XPh
+411,Coelosphaerium kuetzingianum,Coelosphaerium spp. to Lo
+412,Eucapsis minuta,Eucapsis minuta and Chroococcus minutus to Lo
+412,Chroococcus minutus,Eucapsis minuta and Chroococcus minutus to Lo
+412,Aphanocapsa elachista,Eucapsis minuta and Chroococcus minutus to Lo
+413,Coelosphaerium sp.,Coelosphaerium spp. to Lo
+413,Aphanocapsa nubilum,Coelosphaerium spp. to Lo
+413,Aphanocapsa delicatissima,Coelosphaerium spp. to Lo
+413,Aphanocapsa elachista,Coelosphaerium spp. to Lo
+413,Aphanothece minutissima,Coelosphaerium spp. to Lo
+414,Anabaena crassa,to H1
+415,Aphanizomenon flos-aquae,to H1
+415,Anabaena spp.,to H1
+416,Anabaena,to H1
+417,Anabaena affinis,Anabaena lemmermannii to H2; others to H1
+417,Anabaena aphanizomenoides,Anabaena lemmermannii to H2; others to H1
+417,Anabaena cf. circinalis,Anabaena lemmermannii to H2; others to H1
+417,Anabaena cf. scheremetievi,Anabaena lemmermannii to H2; others to H1
+417,Anabaena cf. solitaria,Anabaena lemmermannii to H2; others to H1
+417,Anabaena circinalis,Anabaena lemmermannii to H2; others to H1
+417,Anabaena flos-aquae,Anabaena lemmermannii to H2; others to H1
+417,Anabaena lemmermannii,Anabaena lemmermannii to H2; others to H1
+417,Anabaena perturbata,Anabaena lemmermannii to H2; others to H1
+417,Anabaena spiroides,Anabaena lemmermannii to H2; others to H1
+417,Anabaena viguieri,Anabaena lemmermannii to H2; others to H1
+417,Anabaena sp.,Anabaena lemmermannii to H2; others to H1
+417,Anabaenopsis cunningtonii,Anabaena lemmermannii to H2; others to H1
+417,Anabaena elenkinii,Anabaena lemmermannii to H2; others to H1
+417,Anabaena tanganyikae,Anabaena lemmermannii to H2; others to H1
+417,Aphanizomenon cf. flos-aquae,Anabaena lemmermannii to H2; others to H1
+417,Aphanizomenon flos-aquae,Anabaena lemmermannii to H2; others to H1
+417,Aphanizomenon issatschenkoi,Anabaena lemmermannii to H2; others to H1
+418,Aulosira sp.,to H1
+419,Aphanizomenon gracile,to H1
+420,Anabaena spiroides,To H1
+421,Anabaena planctonica,to H1
+421,Anabaena spiroides,to H1
+421,Aphanizomenon flos-aquae,to H1
+421,Aphanizomenon gracile,to H1
+421,Anabaenopsis sp.,to H1
+422,Anabaena lemmermannii,to H2
+423,Anabaena spiroides,to H1
+424,Anabaenopsis elenkinii,to H1
+425,Aphanizomenon gracile,accepted as H1
+450,Anabaena planctonica,to H1
+451,Anabaena sp.,to H1
+452,Anabaena solitaria,to H1
+453,Anabaena solitaria,to H1
+454,Anabaena solitaria,to H1
+455,Aphanizomenon,"for typesetting error, i should be read as 1"
+458,Uroglena,To X2
+458,Monas,To X2
+461,Merismopedia glauca,Gymnodinium sp. to Y
+461,Merismopedia tenuissima,Gymnodinium sp. to Y
+461,Gymnodinium sp.,Gymnodinium sp. to Y
+480,Planktolyngbya limnetica,Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1
+480,Ceratium hirundinella,Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1
+480,Peridinium spp.,Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1
+480,Aphanizomenon klebahnii,Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1
+480,Snowella lacustris,Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1
+481,Gymnodinium,Gymnodinium sp. to Y
+482,Peridinium inconspicuum,Gymnodinium sp. to Y
+482,Gymnodinium sp.,Gymnodinium sp. to Y
+483,Merismopedia minima,Gymnodinium sp. to Y
+483,Merismopedia punctata,Gymnodinium sp. to Y
+483,Gymnodinium,Gymnodinium sp. to Y
+485,Dinoflagelate,"""Dinoflagellate"" taxonomic resolution does not allow sorting into coda"
+486,Gymnodinium sp.,Gymnodinium sp. to Y
+486,Merismopedia tenuissima,Gymnodinium sp. to Y
+486,Merismopedia punctata,Gymnodinium sp. to Y
+487,Ceratium hirundinella,all to Lo but Glenodinium sp. to Y
+487,Peridinium willei,all to Lo but Glenodinium sp. to Y
+487,Gymnodinium helveticum,all to Lo but Glenodinium sp. to Y
+487,Glenodinium sp.,all to Lo but Glenodinium sp. to Y
+490,Ceratium hirudinella,Microcystis is also present
+490,Ceratium furcoides,Microcystis is also present
+492,Microcystis aeruginosa,to M
+493,Gymnodinium sp.,"Peridinium spp. to Lo, Gymnodinium to Y"
+493,Peridinium cinctum,"Peridinium spp. to Lo, Gymnodinium to Y"
+493,Peridinium willei,"Peridinium spp. to Lo, Gymnodinium to Y"
+494,Peridinium cinctum,"to Lo,"
+494,Peridinium willei,"to Lo,"
+495,Ceratium,"to Lo, cause Microcystis is not present"
+496,Ceratium hirundinella,Microcystis is also present
+497,Microcystis  flos-aquae,to M
+497,Microcystis panniformis,to M
+497,Microcystis wesenbergii,to M
+498,Cyanodictyon,to M
+498,Microcystis,to M
+499,Microcystis aeruginosa,to M
+500,Ceratium,to Lo
+501,Microcystis,to M
+502,Ceratium hirundinella,to Lo
+503,Ceratium hirundinella,to Lo
+504,Ceratium hirundinella,to Lo
+505,Ceratium,Microcystis is also present
+506,Microcystis aeruginosa,to M
+506,Microcystis wesenbergii,to M
+507,Microcystis spp.,to M
+508,Aphanothece clathrata,to K
+509,Peridinium spp.,to Lo
+510,Peridinium volzii,to Lo
+511,Ceratium hirundinella,to Lo
+512,Dinoflagellate,"""Dinoflagellate"" taxonomic resolution does not allow sorting into coda"
+533,Radiocystis fernandoi,to Lo
+534,Microcystis,to M
+536,Planktothrix,if it is P. rubescens
+538,Lyngbya sp.,Lyngbya sp. to S1 and  Spirulina sp. to S2
+538,Spirulina sp.,Lyngbya sp. to S1 and  Spirulina sp. to S2
+539,Oscillatoria,"if it is really Oscillatoria,  to MP"
+540,Pseudopedinella,to X2
+540,Chrysochromulina,to X2
+541,Chrysolykos,to X2
+542,Gymnodinium,to Y
+543,Achnanthes,to MP
+544,Planktotrhix rubescens,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+544,Tabellaria flocculosa var. fenestrata,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+544,Ceratium hirundinella,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+544,Ceratium cornutum,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+544,Peridinium willei,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+544,Fragilaria spp.,"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P"
+545,Isocystis pallida,Pseudanabaena catenata  to MP; others to S1
+545,Leptolyngbya tenue,Pseudanabaena catenata  to MP; others to S1
+545,Leptolyngbya antartica,Pseudanabaena catenata  to MP; others to S1
+545,Pseudanabaena catenata,Pseudanabaena catenata  to MP; others to S1
+546,Planktotrhix rubescens,"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM"
+546,Planktotrhix agardhii,"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM"
+546,Planktolyngbya limnetica,"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM"
+547,Microcystis flos-aquae,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Planktotrhixrubescens,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Gomphosphaeria lacustris,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Dinobryon sociale,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Dinobryon divergens,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Cryptomonas spp.,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+547,Rhodomonas minuta,"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2"
+549,Lepocinclis salina,to W1
+550,Chlamydomonas,Spermatozoopsis to X2
+550,Spermatozopsis,Spermatozoopsis to X2
+550,Pyrobotrys,Spermatozoopsis to X2
+550,Chlorella,Spermatozoopsis to X2
+550,Polytoma,Spermatozoopsis to X2
+550,Oscillatoria chlorina,Spermatozoopsis to X2
+550,Beggiatoa alba,Spermatozoopsis to X2
+559,Euglenoids,"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda"
+559,Synura,"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda"
+559,Gonium,"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda"
+560,Euglena,Pandorina morum to G
+560,Phacus,Pandorina morum to G
+560,Lepocinclis,Pandorina morum to G
+560,Gonium pectorale,Pandorina morum to G
+560,Gonium sociale,Pandorina morum to G
+560,Pandorina morum,Pandorina morum to G
+562,Pandorina,Pandorina to G; “Euglenophyceae” taxonomic resolution does not allow sorting into coda
+562,Euglenophyceae,Pandorina to G; “Euglenophyceae” taxonomic resolution does not allow sorting into coda
+563,Strombomonas sp.,to W2
+564,Euglena proxima,to Ws
+564,Euglena texta,to Ws
+564,Euglena acus,to Ws
+564,Synura,to Ws
+565,Synura,Synura to Ws; Peridinium to Lo
+565,Gonium,Synura to Ws; Peridinium to Lo
+565,Euglena spp.,Synura to Ws; Peridinium to Lo
+565,Peridinium sp.,Synura to Ws; Peridinium to Lo
+570,Trachelomonas,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,Strombomonas,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,Dimorphococcus spp.,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,Small dinoflagellates Peridinium,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,Glenodinium,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,Gymnodinium,Dimorphococcus spp. to F; others remain here but only if metaphytic.
+570,other metaphytic species,Dimorphococcus spp. to F; others remain here but only if metaphytic.

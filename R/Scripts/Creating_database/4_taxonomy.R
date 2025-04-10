@@ -36,6 +36,7 @@ library(ggnewscale)
 
 # Import data ----
 bodysize_raw <- readRDS("R/data_outputs/database_products/final_products/bodysize_raw.rds")
+not_genus <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "not_genus")
 
 # Clean names ----
 
@@ -240,8 +241,8 @@ multi <- multi_tnrs_full %>%
   mutate(
     # want to make a column that act as a uid for later steps
     uid = paste0(search_string, ott_id),
-    original = "yes"
-  )
+    original = "yes",
+  ) 
 
 # 3) Loop through all the names in the multi list to get a list of all the hits
 
@@ -260,26 +261,36 @@ multi_all <- bind_rows(multi_list)
 
 multi_tax <- multi_all %>% 
   
-  rowwise() %>% # need to do rowwise so the name goes through classification one at a time
-  
   mutate(
     tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for that taxa
-      classification(
-        ott_id, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
-      )[[1]] # select the first element of the list
-    )
+      tax_lineage(taxonomy_taxon_info(ott_id, include_lineage = TRUE))# rows = 1 so that is only takes the first one and doesn't require you select options for each one
+    )[[1]] # select the first element of the list
   ) %>% 
   
   # take the info out of the list column so now it has multiple of the same search_string
   unnest(
-    col = everything()
+    col = everything(), names_sep = "."
+  ) %>% 
+  
+  filter(
+    tax.rank != "no rank"
+  ) %>% 
+  
+  select(
+    unique_name,
+    ott_id,
+    tax.unique_name,
+    tax.rank
   ) %>% 
   
   # Pivot so the ranks are now columns
   pivot_wider(
-    names_from = rank,
-    values_from = name) 
-
+    names_from = tax.rank,
+    values_from = tax.unique_name) %>% 
+  
+  unnest_wider(
+    col = everything(), names_sep = "."
+  )
 
 # Save
 saveRDS(multi_tax, file = "R/data_outputs/database_products/taxonomy/multi_tax.rds")
@@ -318,11 +329,16 @@ resolved <- multi_tnrs_full %>%
       search_string == "crucigeniella neglecta" ~ 5153022,
       search_string == "synechocystis minima" ~ 4016583,
       search_string == "chrysococcus rufescens" ~ 4016510,
+      search_string == "diphylleia rotans" ~ 6000826,
+      search_string == "ophiothrix" ~ 25914, 
+      search_string == "johansenia constricta" ~ 5419180,
       
       # Random ones that were found that were not multis but just assigned wrong 
       search_string == "acanthosphaera (genus in subkingdom sar)" ~ 6001434,
-      search_string == "amoeba (genus in opisthokonta)" ~ 244302,
       search_string %in% c("schizothrix lacustris (species in domain eukaryota)", "schizothrix pulvinata (species in domain eukaryota)") ~ 7563454,
+      search_string == "agmenellum elegans" ~ 4016804,
+      search_string == "spirocoleus tenuis" ~ 447081,
+      search_string == "Neobodo curvifilus" ~ 606326,
       
       TRUE ~ ott_id
     ),
@@ -355,11 +371,14 @@ resolved <- multi_tnrs_full %>%
       ott_id == "5153022" ~ "Willea neglecta",
       ott_id == "4016583" ~ "Synechocystis bourrellyi",
       ott_id == "6388726" ~ "Achnanthidium microcephalum",
+      ott_id == "6000826" ~ "Aulacomonas submarina",
+      ott_id == "25914" ~ "Ophiocytium",
       
       # Random ones that were found that were not multis but just assigned wrong 
       ott_id == "6001434" ~ "Acanthosphaera",
       ott_id == "7563454" ~ "Schizothrix",
-      unique_name == "Amoeba (genus in Opisthokonta)" ~ "Amoeba",
+      ott_id == "4016804" ~ "Merismopedia elegans",
+      ott_id == "447081" ~ "Leptolyngbya tenuis",
     
       TRUE ~ unique_name
     )
@@ -369,8 +388,13 @@ resolved <- multi_tnrs_full %>%
   # Remove the NA one that was changed from "na"
   filter(
     !is.na(ott_id),
-    unique_name != "Nitzschia palea var. debilis"
-  ) %>% 
+    unique_name != "Nitzschia palea var. debilis",
+    
+    # remove weird ones
+    !(unique_name %in% c("Poria chlorina", "Erinella subtilissima", "Cothurniopsis valvata", "Pyramidomonas", "Vorticellides aquadulcis", "Parkeria sphaerica", "Bromeliothrix metopoides",
+                         "Praestephanos carconensis", "Sphaerastrum fockii", "Marssoniella", "Paramecium tetraurelia", "Palaeacmea", "Glaucomides bromelicola")
+      )
+    ) %>% 
   
   select(
     search_string,
@@ -383,75 +407,53 @@ saveRDS(resolved, file = "R/data_outputs/database_products/taxonomy/resolved.rds
 
 # Taxonomy: ----
 
-## Initial run through classification ----
-classification_raw <- resolved %>% 
-
-  # Get disinct otts - use ott as this will give the exact taxa and won't mess up the duplicates changes done earlier
-  distinct(ott_id) %>%
-  
-  # Use rowwise so it looks at each row one at a time - otherwise it will just use the first name and use this for all the rows
-  rowwise() %>%
+## Initially retrieve taxonomy info ----
+taxonomy_raw <- resolved %>% 
   
   mutate(
-    
-    # Run through classification
     tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for that taxa
-      classification(
-        ott_id, db = "tol", return_id = FALSE, rows = 1 # rows = 1 so that is only takes the first one and doesn't require you select options for each one
-      )[[1]] # select the first element of the list
-    ),
-    
-    # Change ones that didn't get classified from just NA to a dataframe of NAs
-    tax = ifelse(
-      is.data.frame(tax),
-      list(tax),
-      list(data.frame(name = NA, rank = "no rank"))
-    ),
-    
-    # Pivot tax so that it makes columns for each rank
-    pivot_wider(tax,
-                names_from = rank,
-                values_from = name)
+      tax_lineage(taxonomy_taxon_info(ott_id, include_lineage = TRUE))# rows = 1 so that is only takes the first one and doesn't require you select options for each one
+    )[[1]] # select the first element of the list
   ) %>% 
   
-  # remove unnecessary columns
-  select(
-    - tax,
-    - `no rank`
-  ) %>% 
-  
-  # Separate columns that have multiple names for a rank into multiple columns
-  unnest_wider(
+  # take the info out of the list column so now it has multiple of the same search_string
+  unnest(
     col = everything(), names_sep = "."
   ) %>% 
   
-  rename(
-    ott_id = ott_id.1
+  filter(
+    tax.rank != "no rank"
   ) %>% 
   
-  ungroup() # ungroup to remove rowwise 
+  select(
+    unique_name,
+    ott_id,
+    tax.unique_name,
+    tax.rank
+  ) %>% 
+  
+  # Pivot so the ranks are now columns
+  pivot_wider(
+    names_from = tax.rank,
+    values_from = tax.unique_name) %>% 
+  
+  unnest_wider(
+    col = everything(), names_sep = "."
+  )
 
 # Save
-saveRDS(classification_raw, file = "R/data_outputs/database_products/taxonomy/classification_raw.rds")
+saveRDS(taxonomy_raw, file = "R/data_outputs/database_products/taxonomy/taxonomy_raw.rds")
 
-## Format classification ----
+## Format taxonomy ----
 
 ### Initial edits ----
 # Do any edits that can easily be done within mutate
 
-classification_formatted <- classification_raw %>% 
-  
-  #### Join in resolved.taxa.name ----
-  # Because it was run with the ott_ids it doesn't have the taxa.name so left join these on from resolved
-  left_join(
-    select(
-      resolved, ott_id, unique_name
-    ),
-    by = "ott_id"
-  ) %>% 
+taxonomy_formatted <- taxonomy_raw %>% 
   
   rename(
-    tol.taxa.name = unique_name
+    tol.taxa.name = unique_name.1,
+    ott.id = ott_id.1
   ) %>% 
   
   mutate(
@@ -466,7 +468,6 @@ classification_formatted <- classification_raw %>%
       # Update these - can keep the same ott_id as it is in the right genus but just need the name updated
       
       tol.taxa.name == "Eolimna minima" ~ "Sellaphora nigri",
-      tol.taxa.name == "Spirocoleus tenuis" ~ "Leptolyngbya tenuis",
       tol.taxa.name == "Brebissonia lanceolata" ~ "Gomphonema lanceolatum",
       tol.taxa.name == "Diaptomus oregonensis" ~ "Skistodiaptomus oregonensis",
       tol.taxa.name == "Schizonema seminoides" ~ "Navicula seminoides",
@@ -474,40 +475,40 @@ classification_formatted <- classification_raw %>%
       tol.taxa.name == "Sphaerellopsis mucosa" ~ "Vitreochlamys mucosa",
       tol.taxa.name == "Sphaerellopsis velata" ~ "Vitreochlamys velata",
       tol.taxa.name == "Sphaerellopsis ampla" ~ "Vitreochlamys ampla",
+      tol.taxa.name == "Crumenula texta" ~ "Euglena texta",
       
       TRUE ~ tol.taxa.name
     ),
     
     # Species
-    species = case_when(
-      
-      # Where the species name was missing but resolved.taxa.name was a species - these are generally ones that are in the OTL database but not in the synthetic tree
-      resolved.taxa.name %in% c("Chrysastrella furcata", "Cystodinium cornifax", "Mytilina mucronata", "Mytilina ventralis", "Parkeria sphaerica", "Praetriceratium inconspicuum",
-                                "Aulacoseira ambigua", "Navicula menisculus", "Cymbella proxima", "Conticribra weissflogii", "Adlafia parabryophila", "Hippodonta arkonensis",
-                                "Daphnia sinensis", "Geissleria acceptata", "Dinobryon cylindricum", "Lenticulina muensteri", "Cymbopleura cuspidata", "Hippodonta lueneburgensis",
-                                "Pseudopodosira echinus", "Stephanodiscus carconensis", "Sellaphora nigri", "Leptolyngbya tenuis", "Gomphonema lanceolatum", "Skistodiaptomus oregonensis",
-                                "Navicula seminoides", "Vitreochlamys lateralis", "Vitreochlamys mucosa", "Vitreochlamys velata", "Vitreochlamys ampla") ~ resolved.taxa.name,
-      
-      TRUE ~ species.1
+    # It doesn't have the species in the lineage info so need to find all that are at species level (has a space) some have a space because they have brackets so need to remove brackets first
+    name.crop = if_else(
+      stri_detect_regex(resolved.taxa.name, "\\("),
+      stri_extract_first_regex(resolved.taxa.name, ("\\w+ \\w*")),
+      resolved.taxa.name
     ),
     
-    # Genus
+    name.crop = stri_trim(name.crop),
+    
+    species = if_else(
+      stri_detect_regex(name.crop, " "),
+      name.crop,
+      NA
+    ),
+    
+    # genus
+    # First just do ones I have
     genus = case_when(
-      # Weird ones
-      resolved.taxa.name == "Dinobryon (in Ochromonas sup.)" ~ "Dinobryon",
-      resolved.taxa.name == "Rhizosolenia (in Bacillariophytina)" ~ "Rhizosolenia",
-      resolved.taxa.name == "Palaeacmea" ~ "Palaeacmea",
+      stri_detect_regex(name.crop, "Euglena") ~ "Euglena", 
+      stri_detect_regex(name.crop, "Cryptaulax") ~ "Cryptaulax",
+      stri_detect_regex(name.crop, "Amoeba") ~ "Amoeba", 
+      stri_detect_regex(name.crop, "Karlodinium") ~ "Karlodinium",
+      stri_detect_regex(name.crop, "Karenia") ~ "Karenia",
       
-      # Where the genus name was missing but the resolved.taxa.name was a genus - these are generally ones that are in the OTL database but not in the synthetic tree
-      resolved.taxa.name %in% c("Cystodinium", "Tetralithus", "Lithoperidinium", "Petersophlebia", "Chrysastrella") ~ resolved.taxa.name,
-      
-      # Use the genus.2 column when it has a value in as these were correct
-      !is.na(genus.2) ~ genus.2,
-      
-      # Otherwise just select genus.1
-      TRUE ~ genus.1
+      TRUE ~ genus.1,
     ),
     
+    # Now select any that have a species and use the genus name
     # When species is filled but genus is missing select just the first name in the species name
     genus = if_else(
       is.na(genus) & !is.na(species),
@@ -515,122 +516,135 @@ classification_formatted <- classification_raw %>%
       genus
     ),
     
-    # Family
-    # Too many missing family rows to do in mutate so will do this in excel and read into R
+    # Finally just take the resolved.taxa.name and then if it is a higher rank can change it later on
+    genus = if_else(
+      is.na(genus),
+      resolved.taxa.name,
+      genus
+    ),
     
+    genus = if_else(
+      genus %in% not_genus$name,
+      NA,
+      genus
+    ),
+    
+    # family
     family = case_when(
-      # Use the family.2 column when it has a value in as these were correct
-      !is.na(family.2) ~ family.2,
+      family.1 == "Bicosoecidae" ~ "Bicosoecaceae",
       
-      # Otherwise use family.1
+      genus == "Euglena" ~ "Euglenaceae",
+      genus == "Cryptaulax" ~ "Cryptomonadaceae",
+      genus == "Amoeba" ~ "Amoebidae",
+      genus %in% c("Karlodinium", "Karenia") ~ "Kareniaceae",
+      
       TRUE ~ family.1
     ),
     
-    # Order
-    # Too many missing order rows to do in mutate so will do this in excel and read into R
-    
+    # order
     order = case_when(
+      order.1 == "Bicosoecida" ~ "Bicosoecales",
+      
+      family == "Cryptomonadaceae" ~ "Cryptomonadales",
+      family == "Euglenaceae" ~ "Euglenales",
+      family == "Amoebidae" ~ "Euamoebida",
+      family == "Kareniaceae" ~ "Gymnodiniales",
+      
+      resolved.taxa.name == "Euglenida" ~ "Euglenida",
+      
       TRUE ~ order.1
     ),
     
-    # Class
-    # Will do class manually after order is done
+    # class
     class = case_when(
-      
-      # Minor edits - these are phylums so changing to class and then will fill the phylum column with them
-      class.1 == "Haptophyta" ~ "Coccolithophyceae",
+      class.1 == "Haptophyta" ~ "Pavlovophyceae",
       class.1 == "Glaucophyta" ~ "Glaucophyceae",
-    
+      
+      order == "Euglenales" ~ "Euglenophyceae",
+      order == "Cryptomonadales" ~ "Cryptophyceae",
+      order == "Euglenida" ~ "Euglenoidea",
+      order == "Euamoebida" ~ "Tubulinea",
+      order == "Gymnodiniales" ~ "Dinophyceae",
+      
+      resolved.taxa.name %in% c("Cryptophyceae", "Dinophyceae", "Raphidophyceae", "Chrysophyceae") ~ resolved.taxa.name,
+      
       TRUE ~ class.1
     ),
     
     # Phylum
-    # Fill in phylum now because I need to get the types to work out which ones aren't zoo or phyto to remove before later steps
-    
     phylum = case_when(
-      
-      # These are classes so change to the corresponding phylum
+      phylum.1 == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliophora",
+      phylum.1 == "Streptophyta" ~ "Charophyta",
       phylum.1 == "Cryptophyceae" ~ "Cryptophyta",
       phylum.1 == "Euglenida" ~ "Euglenozoa",
       
-      infraphylum.1 == "Dinoflagellata" ~ "Myzozoa",
-      
-      genus == "Acanthosphaera" ~ "Chlorophyta",
-      genus == "Amoeba" ~ "Amoebozoa",
-      genus %in% c("Crumenula", "Euglena") ~ "Euglenozoa",
-      genus %in% c("Oscillatoria", "Schizothrix") ~ "Cyanobacteria",
-      genus %in% c("Karlodinium", "Karenia") ~ "Myzozoa",
-      
-      family == "Collodictyonidae" ~ "Apusozoa",
-      
-      order == "Bicosoecida" ~ "Bigyra",
-      order == "Choanoflagellida" ~ "Sarcomastigophora",
-      order %in% c("Eustigmatales", "Synurales", "Chrysomeridales") ~ "Ochrophyta",
-      order == "Kinetoplastea" ~ "Euglenozoa",
-      order == "Noctilucales" ~ "Myzozoa",
-      order == "Centrohelida" ~ "Chlorophyta",
-      
-      class %in% c("Chrysophyceae", "Dictyochophyceae", "Raphidophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Actinophryidae") ~ "Ochrophyta",
-      class == "Coccolithophyceae" ~ "Haptophyta",
-      class == "Glaucophyceae" ~ "Glaucophyta",
+      class %in% c("Dictyochophyceae", "Chrysophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Actinophryidae") ~ "Ochrophyta",
+      class %in% c("Prymnesiophyceae", "Pavlovophyceae") ~ "Haptophyta",
       class == "Dinophyceae" ~ "Myzozoa",
-      class %in% c("Zygnemophyceae", "Klebsormidiaceae") ~ "Charophyta",
+      class == "Glaucophyceae" ~ "Glaucophyta",
+      class %in% c("Euglenophyceae", "Euglenoidea") ~ "Euglenozoa",
+      class == "Cryptophyceae" ~ "Cryptophyta",
+      class == "Tubulinea" ~ "Amoebozoa",
       
-      !is.na(phylum.2) ~ phylum.2, # Phylum.2 is more accurate than 1 so use this when it is not NA
+      order == "Bicosoecales" ~ "Bigyra",
+      order == "Craspedida" ~ "Choanozoa",
+      order %in% c("Eubodonida", "Neobodonida", "Trypanosomatida") ~ "Euglenozoa",
+      order %in% c("Eustigmatales", "Synurales") ~ "Ochrophyta",
+      order == "Cryptomonadales" ~ "Cryptophyta",
+      order == "Noctilucales" ~ "Myzozoa",
+      
+      resolved.taxa.name %in% c("Cyanobacteria","Chlorophyta", "Rotifera", "Haptophyta") ~ resolved.taxa.name,
+      resolved.taxa.name == "Dinoflagellata" ~ "Myzozoa",
+      resolved.taxa.name == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliophora",
+      resolved.taxa.name == "Chrysomeridales" ~ "Ochrophyta",
+      
+      
       
       TRUE ~ phylum.1
-    ),
+    )
+  ,
+  
+  kingdom = case_when(
+    phylum %in% c("Cyanobacteria") ~ "Bacteria",
+    phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta") ~ "Plantae",
+    phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Cryptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
+    phylum %in% c("Choanozoa", "Euglenozoa", "Amoebozoa") ~ "Protozoa",
+    phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata") ~ "Animalia",
+  ),
+  
+  type = case_when(
+    class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Insecta") ~ "remove",
     
-    # Kingdom 
-    kingdom = case_when(
-      
-      phylum %in% c("Cyanobacteria") ~ "Bacteria",
-      phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta") ~ "Plantae",
-      phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Cryptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
-      phylum %in% c("Sarcomastigophora", "Euglenozoa", "Amoebozoa", "Apusozoa") ~ "Protozoa",
-      phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata") ~ "Animalia",
-      
-      TRUE ~ NA
-    ),
+    kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
+    kingdom == "Animalia" ~ "Zooplankton",
     
-    # Type
-    # Assign either phytoplankton or zooplankton and when it is neither then NA
-    # Do have some insect larvae in there but not much so discarding it
+    phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+    phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa", "Ciliophora", "Sarcomastigophora") ~ "Zooplankton",
     
-    type = case_when(
-      class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Insecta") ~ "remove",
-      
-      kingdom %in% c("Bacteria", "Plantae") ~ "Phytoplankton",
-      kingdom == "Animalia" ~ "Zooplankton",
-      
-      phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
-      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Apusozoa", "Ciliophora", "Sarcomastigophora") ~ "Zooplankton",
-      
-      TRUE ~ "remove"
+    TRUE ~ "remove"
     )
   ) %>% 
   
   # Remove non plankton
   filter(
-    !(resolved.taxa.name == "Marssoniella (genus in kingdom Archaeplastida)"),
     type != "remove"
   ) %>% 
   
-  # Rename ott_id column - just cus there used to be tax.uid but has been changed to this so keep name as tax.uid to make it run with the rest of the code
+  # Rename
   rename(
     taxa.name = resolved.taxa.name
   ) %>% 
   
   # Select columns
   select(
-    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott.id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
 ### Family ----
 # want to manually input missing ranks for family as will take too long to do in a case_when
 
 # Make a list of missing family with their genus
-missing_family <- classification_formatted %>% 
+missing_family <- taxonomy_formatted %>% 
   select(
     genus,
     family
@@ -648,10 +662,10 @@ missing_family <- classification_formatted %>%
 write_csv(missing_family, "R/data_outputs/database_products/taxonomy/missing_family.csv")
 
 # Import the manually filled family
-manually_family <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "family_tol")
+manually_family <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "family")
 
 # Update family
-classification_family <- classification_formatted %>% 
+taxonomy_family <- taxonomy_formatted %>% 
   
   left_join(manually_family, by = "genus", suffix = c(".tol", ".manual")) %>% 
   
@@ -660,7 +674,15 @@ classification_family <- classification_formatted %>%
       !is.na(family.manual),
       family.manual,
       family.tol
-    )
+    ),
+    
+    family = case_when(
+      taxa.name %in% c("Potamididae", "Bithyniidae", "Littorinidae", "Bosminidae", "Daphniidae", "Desmidiaceae", "Chlorellaceae", "Stephanodiscaceae", "Characiaceae", "Chlamydomonadaceae",
+                       "Palmellaceae","Microcystaceae", "Closteriaceae", "Fragilariaceae", "Aphanizomenonaceae", "Tetrasporaceae", "Nostocaceae", "Oscillatoriaceae", "Gymnodiniaceae",
+                       "Thalassiosiraceae", "Chromulinaceae") ~ taxa.name,
+      
+      TRUE ~ family
+      )
   ) %>% 
   
   select(
@@ -672,7 +694,7 @@ classification_family <- classification_formatted %>%
 # Want to manually input missing ranks for order as will take too long to do in a case_when
 
 # Make a list of missing order with their family
-missing_order <- classification_family %>% 
+missing_order <- taxonomy_family %>% 
   select(
     family,
     order
@@ -690,10 +712,10 @@ missing_order <- classification_family %>%
 write_csv(missing_order, "R/data_outputs/database_products/taxonomy/missing_order.csv")
 
 # Import the manually filled order
-manually_order <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "order_tol")
+manually_order <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "order")
 
 # Update order
-classification_order <- classification_family %>% 
+taxonomy_order <- taxonomy_family %>% 
   
   left_join(manually_order, by = "family", suffix = c(".tol", ".manual")) %>% 
   
@@ -705,7 +727,7 @@ classification_order <- classification_family %>%
     ),
     
     order = case_when(
-      taxa.name == "Euglenida" ~ "Euglenida",
+      taxa.name %in% c("Chromulinales", "Gymnodiniales", "Ochromonadales", "Oscillatoriales", "Peridiniales", "Chrysomeridales", "Chroococcales", "Chlamydomonadales") ~ taxa.name,
       
       TRUE ~ order
     )
@@ -717,13 +739,13 @@ classification_order <- classification_family %>%
   ) %>% 
   
   relocate(
-    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott.id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   )
 
 ### Final edits ----
 # Final edits can just be done with case_when
 
-classification <- classification_order %>% 
+taxonomy <- taxonomy_order %>% 
   
   mutate(
     
@@ -731,20 +753,14 @@ classification <- classification_order %>%
     # Fill in missing class rank
     
     class = case_when(
-      order == "Kinetoplastea" ~ "Kinetoplastea",
-      
-      order == "Choanoflagellida" ~ "Zoomastigophora",
       order == "Eustigmatales" ~ "Eustigmatophyceae",
       order == "Pyramimonadales" ~ "Pyramimonadophyceae",
-      order == "Cryptomonadales" ~ "Cryptophyceae",
       order %in% c("Fragilariales", "Tabellariales", "Coscinodiscales", "Aulacoseirales", "Melosirales", "Thalassiosirales", "Leptocylindrales", "Paraliales") ~ "Bacillariophyceae",
       order == "Synurales" ~ "Chrysophyceae",
       order == "Bangiales" ~ "Bangiophyceae",
-      order == "Centrohelida" ~ "Centrohelea",
       order == "Chrysomeridales" ~ "Chrysomeridophyceae",
-      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanobacteria",
-      order %in% c("Noctilucales", "Gymnodiniales") ~ "Dinophyceae",
-      order == "Bicosoecida" ~ "Bicosoecophyceae",
+      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
+      order == "Noctilucales" ~ "Dinophyceae",
       order == "Heteronematales" ~ "Euglenida",
       order == "Vaginulinida" ~ "Nodosariata",
       order %in% c("Euglenales", "Eutreptiales") ~ "Euglenophyceae",
@@ -754,36 +770,29 @@ classification <- classification_order %>%
       order == "Spironematellales" ~ "Spironematellophyceae",
       order == "Goniomonadales" ~ "Goniomonadophyceae",
       order == "Petalomonadida" ~ "Stavomonadea",
-      order == "Amphilepidida" ~ "Ophiuroidea",
       order == "Picocystales" ~ "Picocystophyceae",
-      order == "Enteropneusta incertae sedis" ~ "Enteropneusta",
-      order == "Euglenida" ~ "Euglenoidea",
+      order == "Bicosoecales" ~ "Bicoecidea",
+      order == "Chaetonotida" ~ "Gastrotricha incertae sedis",
+      order %in% c("Eubodonida", "Neobodonida", "Trypanosomatida") ~ "Kinetoplastea",
       
-      taxa.name == "Cryptophyceae" ~ "Cryptophyceae",
+      taxa.name %in% c("Arachnida", "Bacillariophyceae", "Bdelloidea (class in Lophotrochozoa)", "Chlorophyceae", "Euglenophyceae", "Ostracoda", "Trebouxiophyceae", "Zygnemophyceae") ~ taxa.name,
       
       TRUE ~ class
-    ),
-    
-    # Change order Kinetoplastea
-    order = case_when(
-      order == "Kinetoplastea" ~ NA,
-      TRUE ~ order
     )
-    
   ) %>% 
   
   # Reorder
   relocate(
-    ott_id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
+    ott.id, tol.taxa.name, taxa.name, type, species, genus, family, order, class, phylum, kingdom
   ) %>% 
   
   # get distinct taxa
   distinct(
-    ott_id, .keep_all = TRUE
+    ott.id, .keep_all = TRUE
   )
 
 # Save
-saveRDS(classification, file = "R/data_outputs/database_products/taxonomy/classification.rds")
+saveRDS(taxonomy, file = "R/data_outputs/database_products/taxonomy/taxonomy.rds")
 
 # Plot phylogeny ----
 # plot the phylogeny to check that all groups are plotted into the right places
@@ -791,10 +800,10 @@ saveRDS(classification, file = "R/data_outputs/database_products/taxonomy/classi
 ## Select relevant data ----
 # Get a taxonomy list to add in in later steps
 
-phylo_plot_data <- classification %>% 
+phylo_plot_data <- taxonomy %>% 
   
   select(
-    tax.uid,
+    ott.id,
     tol.taxa.name,
     species,
     genus,
@@ -805,16 +814,16 @@ phylo_plot_data <- classification %>%
     kingdom
   ) %>% 
 
-  distinct(tax.uid, .keep_all = TRUE)
+  distinct(ott.id, .keep_all = TRUE)
 
-## Get phylo relationships from a list of taxa: ----
+## Get phylo relatitaxonomy## Get phylo relationships from a list of taxa: ----
 
 # 1) Match my names with taxa names in OTT (open tree taxonomy)
 taxa <- tnrs_match_names(unique(phylo_plot_data$tol.taxa.name))
 
 # 2) Update ott_ids with ones that were changed above
 # Find ones to change
-classification2 <- classification %>% 
+taxonomy2 <- taxonomy %>% 
   mutate(
     tol.taxa.name = tolower(tol.taxa.name)
   )
@@ -822,11 +831,11 @@ classification2 <- classification %>%
 to_change <- taxa %>% 
   left_join(
     select(
-      classification2, tol.taxa.name, tax.uid
+      taxonomy2, tol.taxa.name, ott.id
     ), by = c("search_string" = "tol.taxa.name")
   ) %>% 
   filter(
-    ott_id != tax.uid
+    ott_id != ott.id
   )
   
 # Change them
@@ -838,7 +847,7 @@ taxa2 <- taxa %>%
       TRUE ~ ott_id
     ),
     ott_id = as.integer(ott_id)
-  )
+  ) 
 
 # Map the search_string and unique_name columns 
 taxon_map <- structure(
@@ -852,21 +861,21 @@ unique(is.na(taxon_map)) # false means there are no missing names so don't need 
 # Some taxa aren't in the OTL synthetic tree so need to find which ones aren't and remove them from my list
 
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
-in_tree <- is_in_tree(ott_ids = taxa2$ott_id)
+in_tree_tax <- is_in_tree(ott_ids = taxa2$ott_id)
 
 # Save
-saveRDS(in_tree, "R/data_outputs/database_products/taxonomy/in_tree.rds")
+saveRDS(in_tree_tax, "R/data_outputs/database_products/taxonomy/in_tree_tax.rds")
 
-in_tree
+in_tree_tax
 
-sum(in_tree == TRUE) # 4811
-sum(in_tree == FALSE) # 805
+sum(in_tree_tax == TRUE) # 4956
+sum(in_tree_tax == FALSE) # 814
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 # tips = end of the tree branches aka the genera in this case
 # internal nodes = the inner links in the tree
-taxa_in_tree <- taxa2[in_tree, ] # get list of just species in the tree
+taxa_in_tree <- taxa2[in_tree_tax, ] # get list of just species in the tree
 
 tree <- tol_induced_subtree(ott_ids = taxa_in_tree$ott_id) # Make tree
 
@@ -899,6 +908,8 @@ plot(tree_new_tips, show.tip.label = FALSE)
 
 # taxon map
 taxon_map_in_tree <- taxon_map[taxon_map %in% tree_new_tips$tip.label]
+
+x <- as.data.frame(taxon_map_in_tree)
 
 # taxa
 # add in extra info
@@ -947,14 +958,16 @@ taxa_update_in_tree_edit <- taxa_update_in_tree %>%
   )
 
 circular_plot <- circular_plot %<+% taxa_update_in_tree_edit +
-  geom_tippoint(aes(x = x + 1.5, color = phylum_label), size = 5, show.legend = TRUE) +
-  geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 5, show.legend = TRUE) +
+  geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 3, show.legend = TRUE)
+
+circular_plot
+
++
   
   scale_color_manual(values = c(
     setNames(viridis::magma(length(unique(taxa_update_in_tree_edit$phylum))), paste0("Phylum: ", unique(taxa_update_in_tree_edit$phylum))),
     setNames(viridis::plasma(length(unique(taxa_update_in_tree_edit$kingdom))), paste0("Kingdom: ", unique(taxa_update_in_tree_edit$kingdom)))
-  )
-  )
+  ))
 
 circular_plot
 

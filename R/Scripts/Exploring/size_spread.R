@@ -7,75 +7,105 @@ library(stringi)
 library(ggplot2)
 
 # Data ----
-genus_traits <- readRDS("R/Data_outputs/final_products/phyto_traits_genus.rds")
+bodysize <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
+tax_list <- readRDS("R/data_outputs/database_products/taxonomy/tax_list_raw.rds")
 
-traits <- species_traits %>% 
-  select(
-    -original.sources, -source.code, individual.uid, -nu, -mass, -cells.per.nu, -biovolume, -mld, -sample.month, -sample.year, -location.code, -longitude, -latitude, -location, -habitat, -country, - continent, - individual.uid
-  ) %>% 
-  distinct(
-    species, .keep_all = TRUE
-  )
+# Specis ----
 
-# species plot
-species_plot <- species_traits %>% 
+bodysize_format <- bodysize %>% 
   
-  group_by(species) %>% 
+  mutate(
+    mass.all = case_when(
+      !is.na(mass.d) ~ mass.d,
+      !is.na(mass) ~ mass,
+      
+      TRUE ~ NA
+    )
+  ) %>% 
+  
+  filter(
+    !is.na(mass.all),
+    !is.na(species)
+  ) %>% 
+  
+  # get mean mass for each species
+  group_by(ott.id) %>% 
   
   summarise(
-    mass.mean = mean(mass),
+    mean.mass = mean(mass.all),
     .groups = "drop"
   ) %>% 
   
   left_join(
-    traits, by = "species"
+    ., tax_list, by = "ott.id"
+  )
+
+
+size_spread <- ggplot(bodysize_format, aes(x = log(mean.mass), fill = type)) +
+  geom_histogram(binwidth = 2) +
+  facet_wrap(~type, scales = "free_y", ncol = 1) +
+  scale_fill_manual(values = c("Phytoplankton" = "#FF8FA3", "Zooplankton" = "#B19CD9"))
+
+size_spread
+
+ggsave("R/data_outputs/database_products/plots/size_spread.png", plot = size_spread, width = 10, height = 6, dpi = 600)
+
+# Genus ---
+
+tax_genus <- tax_list %>% 
+  
+  select(
+    genus,
+    type
+    ) %>% 
+  
+  distinct(genus, .keep_all = TRUE)
+
+bodysize_format_genus <- bodysize %>% 
+  
+  filter(
+    !(taxa.name %in% c("Calanus", "Moina", "Neodiaptomus", "Asplanchna", "Paracyclopina")),
+    !(individual.uid %in% c("10.1007/s11356-022-23696-0-436", "10.1007/s11356-022-23696-0-172", "10.1007/s11356-022-23696-0-84", "10.1007/s11356-022-23696-0-524", "10.1007/s11356-022-23696-0-348", "10.1007/s11356-022-23696-0-260"))
   ) %>% 
   
   mutate(
-    reynolds.group = case_when(
-      !is.na(reynolds.group) ~ reynolds.group,
-      is.na(reynolds.group) & !is.na(padisak.group) ~ padisak.group,
-      TRUE ~ "Unclassified"
+    mass.all = case_when(
+      !is.na(mass.d) ~ mass.d,
+      !is.na(mass) ~ mass,
+      
+      TRUE ~ NA
     )
-  )
-
-x <- species_plot %>% 
-  filter(
-    !(reynolds.group == "Unclassified")
-  )
-
-ggplot(species_plot, aes(x = log(mass.mean))) +
-  geom_histogram(binwidth = 2)+
-  facet_wrap(~reynolds.group, scales = "free_y")
-
-+
-  theme(strip.text.x = element_text(size=0))
-
-# Genus plot
-
-genus_plot <- genus_traits %>% 
+  ) %>% 
   
+  filter(
+    nu == "individual",
+    !is.na(mass.all),
+    !is.na(genus)
+  ) %>% 
+  
+  # get mean mass for each species
   group_by(genus) %>% 
   
   summarise(
-    mass.mean = mean(mass),
+    mean.mass = mean(mass.all),
     .groups = "drop"
   ) %>% 
   
   left_join(
-    traits, by = "genus"
-  ) %>% 
-  
-  mutate(
-    reynolds.group = case_when(
-      !is.na(reynolds.group) ~ reynolds.group,
-      is.na(reynolds.group) & !is.na(padisak.group) ~ padisak.group,
-      TRUE ~ "Unclassified"
-    )
+    ., tax_genus, by = "genus"
   )
 
-ggplot(genus_plot, aes(x = log(mass.mean))) +
-  geom_histogram(binwidth = 3)+
-  facet_wrap(~reynolds.group, scales = "free_y")
+
+size_spread_genus <- ggplot(bodysize_format_genus, aes(x = log10(mean.mass), fill = type)) +
+  geom_histogram(binwidth = 1) +
+  facet_wrap(~type, scales = "free_y", ncol = 1) +
+  scale_fill_manual(values = c("Phytoplankton" = "#FF8FA3", "Zooplankton" = "#B19CD9"))
+
+size_spread_genus
+
+ggsave("R/data_outputs/database_products/plots/size_spread_genus.png", plot = size_spread, width = 10, height = 6, dpi = 600)
+
+
+
 
 

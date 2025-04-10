@@ -234,6 +234,147 @@ saveRDS(bodysize_formatted, file = "R/Data_outputs/database_products/final_produ
 # Only have phyto functional groups but need to groups to calulate phyto mass so do it now and then can have one data set of masses
 
 ## Import data ----
+padisak <- read_xlsx("raw_data/functional_groups_padisak.xlsx", sheet = "groups")
+
+## Format data ----
+
+padisak_format <- padisak %>% 
+  
+  separate(Species, sep = ",", into = c("species.1", "species.2", "species.3", "species.4", "species.5", "species.6", "species.7", "species.8", "species.9", "species.10", "species.11", "species.12", "species.13", "species.14", "species.15", "species.16", "species.17", "species.18", "species.19", "species.20", "species.21", "species.22", "species.23", "species.24", "species.25")) %>% 
+  
+  pivot_longer(
+    cols = species.1:species.25,
+    values_to = "species"
+  ) %>% 
+  
+  filter(
+    !is.na(species)
+  ) %>% 
+  
+  mutate(
+    species = str_trim(species)
+  ) %>% 
+  
+  select(
+    - name
+  ) %>% 
+  
+  relocate(
+    uid, species
+  )
+
+padisak_edits <- padisak_format %>% 
+  
+  select(
+    uid, species, Note
+  ) %>% 
+  
+  filter(
+    !is.na(Note)
+  )
+
+write_csv(padisak_edits, "R/data_outputs/database_products/padisak_edits.csv")
+  
+  mutate(
+    # when the new code is NA make it the old code
+    # redo sources
+    new.codon.sources = if_else(
+      is.na(new.codon),
+      sources,
+      "Padisak (2009)"
+    ),
+    
+    new.codon = if_else(
+      is.na(new.codon),
+      old.codon,
+      new.codon
+    )
+  ) %>% 
+  
+  str_c(Species)
+    
+    
+    
+    ,
+    species.spec = stri_replace_all_regex(species, "[^\\x20-\\x7E]", "*SpecChar*")
+  )
+
+%>% 
+  
+  select(
+    - old.codon,
+    - sources
+  )
+
+x <- padisak_format %>% 
+  group_by(
+    species
+  ) %>% 
+  
+  mutate(
+    n = n()
+  ) %>% 
+  filter(
+    n>1
+  )
+
+Ceratium hirundinella
+Chlorella sp.
+Chroococcus minor
+Cosmarium sp.
+Cyanodictyon
+Cyclotella comta
+Cyclotella ocellata
+Fragilaria
+Glenodinium
+Gymnodinium
+Microcystis
+Microcystis flos-aquae
+
+Microcystis wesenbergii
+Navicula
+Nitzschia sp.
+Ochromonas
+Oscillatoria
+Oscillatoria sp.
+Phacotus
+Picoplankton
+Planktolyngbya
+Planktothrix
+Planktothrix agardhii
+Pseudanabaena
+Scenedesmus ellipticus
+Staurodesmus
+Stephanodiscus rotula
+Synechococcus spp.
+Synura
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Import data ----
 rimmet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet")
 lt <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Laplace-Treyture")
 kruk <- read_xlsx("raw_data/kruk_groups.xlsx")
@@ -501,7 +642,7 @@ r_groups <- bind_rows(kruk_group, rimmet_group, lt_group) %>%
     # make source column
     r.group.source = case_when(
       !is.na(padisak.group) ~ "1",
-      is.na(padisak.group) & !is.na(r.group.kruk) ~ "152",
+      is.na(padisak.group) & !is.na(r.group.kruk) ~ "153",
       is.na(padisak.group) & is.na(r.group.kruk) & !is.na(r.group.rimmet) ~ "1",
       is.na(padisak.group) & is.na(r.group.kruk) & is.na(r.group.rimmet) & !is.na(r.group.lt) ~ "80",
       
@@ -520,7 +661,7 @@ r_groups <- bind_rows(kruk_group, rimmet_group, lt_group) %>%
 # Make a list of all taxa in the data and add in the functional group info
 # When there isn't functional group info for that data put unnasinged
 
-functional_groups <- tax_list_raw %>% 
+functional_groups_raw <- tax_list_raw %>% 
   
   left_join(
     r_groups, by = "taxa.name"
@@ -606,6 +747,17 @@ functional_groups <- tax_list_raw %>%
       TRUE ~ NA
     )
   ) 
+
+## Find missing ----
+# Find any that are missing an R group but have been assigned elsewhere
+functional_groups <- functional_groups_raw %>% 
+  
+  r.group = case_when(
+    genus == "Acanthoceras" ~ "A",
+    genus == "Achnanthidium" ~ "Tb",
+    
+  )
+  
 
 # save
 saveRDS(functional_groups, "R/data_outputs/database_products/final_products/functional_groups.rds")

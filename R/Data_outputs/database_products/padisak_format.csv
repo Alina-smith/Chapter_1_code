@@ -1,0 +1,1228 @@
+uid,species,Codon,Ecosytem,Habitat,Reference,Note,name
+1,Urosolenia longiseta,A,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),NA,species.1
+2,Thalassiosira sp.,A,Faxinal Reservoir (Brazil),"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.1
+3,Urosolenia,A,Hungarian Rivers,NA,Borics et al. (2007),NA,species.1
+3,Rhizosolenia,A,Hungarian Rivers,NA,Borics et al. (2007),NA,species.2
+3,Cyclotella comensis,A,Hungarian Rivers,NA,Borics et al. (2007),NA,species.3
+3,Cyclotella glomerata,A,Hungarian Rivers,NA,Borics et al. (2007),NA,species.4
+4,Cyclotella rhomboideo-elliptica,A,Lake Fuxian; Lake Xingyun (China),deep oligotrophic; shallow eutrophic,Zhang et al. (2007),might fit due to the size,species.1
+5,Acanthoceras,A,Mary River (Australia),floodplain lake,Townsend (2006),NA,species.1
+6,Urosolenia,A,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.1
+7,Urosolenia,A,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+8,Cyclotella baicalensis,A,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+8,Cyclotella ornata,A,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.2
+8,Cyclotella minuta,A,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.3
+9,Urosolenia spp.,A,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+10,Brachysira vitrea,A,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.1
+10,Urosolenia eriensis var. morsa,A,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.2
+11,Cyclotella stylorum,A,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),might fit due to the size,species.1
+12,Cyclotella comta,A,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),to  B,species.1
+13,Cyclotella,A,"Lake Geneva, Lake Constance","monomictic, peri-alpine",Anneville et al. (2005),taxonomic resolution does not allow sorting into coda,species.1
+14,Cyclotella,A,"Upper and Lower Lake Zurich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),taxonomic resolution does not allow sorting into coda,species.1
+14,Stephanodiscus,A,"Upper and Lower Lake Zurich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),taxonomic resolution does not allow sorting into coda,species.2
+15,Cyclotella stelligera,A,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),to  B,species.1
+16,non-identified Centrales,A,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),might fit if small celled species,species.1
+17,Cyclotella bodanica,A,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),to  B,species.1
+18,Cyclotella kützingiana,A,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),to  B,species.1
+18,Cyclotella ocellata,A,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),to  B,species.2
+19,Mallomonas spp.,A,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),to  E,species.1
+20,small Cyclotella spp.,A,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),to B,species.1
+21,Discostella stelligera,B,Capivari Reservoir (Brazil),dam reservoir,Borges et al. (2008),NA,species.1
+22,Aulacoseira subartica,B,Hungarian Rivers,NA,Borics et al. (2007),NA,species.1
+22,Aulacoseira islandica,B,Hungarian Rivers,NA,Borics et al. (2007),NA,species.2
+22,Stephanodiscus neoastraea,B,Hungarian Rivers,NA,Borics et al. (2007),NA,species.3
+22,Stephanodiscus rotula,B,Hungarian Rivers,NA,Borics et al. (2007),NA,species.4
+22,Cyclotella comta,B,Hungarian Rivers,NA,Borics et al. (2007),NA,species.5
+23,Aulacoseira italica,B,Paraná River (Argentina),NA,Devercelli (2006),NA,species.1
+24,Aulacoseira,B,Lake Constance,"monomictic, peri-alpine",Anneville et al. (2005),might fit due to the habitat,species.1
+25,Aulacoseira,B,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),taxonomic resolution does not allow sorting into coda,species.1
+26,Stephanodiscus meyerii,B,Lake Baikal (Russia),Deep,Fietz et al. (2005),A. baicalensis  would deserve a new codon,species.1
+26,Aulacoseira baicalensis,B,Lake Baikal (Russia),Deep,Fietz et al. (2005),A. baicalensis  would deserve a new codon,species.2
+27,Fragilaria crotonensis,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.1
+27,Aulacoseira italica,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.2
+27,Cyclotella operculata,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.3
+27,dinoflagellates,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.4
+27,Ceratium hirundinella,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.5
+27,Peridinium willei,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.6
+27,Cryptomonas,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.7
+27,Rhodomonas minuta,B,Lake Mondsee (Austria),"deep, oligo-mesotrophic period of the lake",Dokulil & Teubner (2003),"Fragilaria to  P, Ceratium and Peridinium to Lo, Rhodomonas to X2, Cryptomonas to Y",species.8
+28,Centrales spp. (5–20 µm),B,Lake Balaton (Hungary),Shallow,Hajnal & Padisák (2008),taxonomic resolution does not allow sorting into coda,species.1
+29,Cyclotella,B,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),taxonomic resolution does not allow sorting into coda,species.1
+29,Aulacoseira,B,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),taxonomic resolution does not allow sorting into coda,species.2
+30,Cyclotella meneghiniana,B,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),To be moved to codon C,species.1
+31,Synedra,B,"Lake Geneva, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),to D,species.1
+32,Erkenia,B,"Lake Constance, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),to E,species.1
+33,Aulacoseira granulata,B,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),to P,species.1
+34,Cyclotella meneghiniana,B,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),To be moved to codon C,species.1
+35,Cyclostephanus dubius,B - C,Lake Baikal (Russia),Deep,Fietz et al. (2005),Cyclostephanos to A,species.1
+36,Aulacoseira islandica,B - C,Lake Mondsee (Austria),"deep, meso-eutrophic period of the lake",Dokulil & Teubner (2003),"Aulacoseira,Cyclotella to B, , Stephanodiscus to B",species.1
+36,Stephanodiscus minutulus,B - C,Lake Mondsee (Austria),"deep, meso-eutrophic period of the lake",Dokulil & Teubner (2003),"Aulacoseira,Cyclotella to B, , Stephanodiscus to B",species.2
+36,Cyclotella operculata,B - C,Lake Mondsee (Austria),"deep, meso-eutrophic period of the lake",Dokulil & Teubner (2003),"Aulacoseira,Cyclotella to B, , Stephanodiscus to B",species.3
+37,Aulacoseira,C,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),taxonomic resolution does not allow sorting into coda,species.1
+37,Asterionella,C,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),taxonomic resolution does not allow sorting into coda,species.2
+38,Aulacoseira ambigua,C,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+39,Asterionella formosa,C,Hungarian rivers,NA,Borics et al. (2007),C. stelligera to B,species.1
+39,Aulacoseira ambigua,C,Hungarian rivers,NA,Borics et al. (2007),C. stelligera to B,species.2
+39,Stephanodiscus neoastrea,C,Hungarian rivers,NA,Borics et al. (2007),C. stelligera to B,species.3
+39,Cyclotella meneghiniana,C,Hungarian rivers,NA,Borics et al. (2007),C. stelligera to B,species.4
+39,Cyclotella stelligera,C,Hungarian rivers,NA,Borics et al. (2007),C. stelligera to B,species.5
+40,Aulacoseira,C,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),taxonomic resolution does not allow sorting into coda,species.1
+41,Stephanodiscus,C,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),Ciclostephanos to A,species.1
+41,Cyclostesphanos,C,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),Ciclostephanos to A,species.2
+42,Small centrics,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.1
+42,Actinocyclus normanii,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.2
+42,Cyclotella meneghiniana,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.3
+42,Melosira lineata,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.4
+42,Nitzschia acicularis,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.5
+42,Nitzschia sp.,C,Paraná river (Argentina),NA,Devercelli (2006),"Actinocyclusnormanni,Nitzschia spp. to D, small centrics cannot be accepted in any codon because of too low taxonomic resolution, M. lineata to P",species.6
+43,Stephanodiscus,C,"L. Geneva, L.Constance, Upper Lake Zürich","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+44,Asterionella,C,"Lake Geneva, Lake Constance","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+45,Aulacoseira ambigua,C,Chodikee lake (USA),"shallow, eutrophic, discont. cold polymictic",Huszar et al. (2003),NA,species.1
+46,Asterionella sp.,C,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),NA,species.1
+47,Asterionella formosa,C,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.1
+47,Aulacoseira ambigua,C,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.2
+47,Stephanodiscus rotula,C,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.3
+48,Asterionella formosa,C,Ömerli Reservoir (Istanbul),drinkind water,Albay & Akçaalan (2003),NA,species.1
+49,Asterionella formosa,C,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),NA,species.1
+50,Fragilaria crotonensis,C,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"F. crotonensis, A. granulata to P; A. islandica to B",species.1
+50,Aulacoseira granulata,C,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"F. crotonensis, A. granulata to P; A. islandica to B",species.2
+50,Aulacoseira islandica,C,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"F. crotonensis, A. granulata to P; A. islandica to B",species.3
+50,Asterionella formosa,C,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"F. crotonensis, A. granulata to P; A. islandica to B",species.4
+50,Stephanodiscus spp.,C,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"F. crotonensis, A. granulata to P; A. islandica to B",species.5
+51,Stephanodiscus,C,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),NA,species.1
+52,Centrales spp. 5–20 µm,C,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),taxonomic resolution does not allow sorting into coda,species.1
+53,Cyclotella sp.,C,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),taxonomic resolution does not allow sorting into coda,species.1
+54,Nitzschia acicularis,C,Lake Baikal (Russia),deep,Fietz et al. (2005),to D,species.1
+55,Stephanodiscus minutulus,C,Vouglans reservoir,"deep dam reservoir, early stratification period",Leitão et al. (2003),"C. wuetrichiana  to A, Stephanodiscus to B",species.1
+55,Cyclotela wuethrichiana,C,Vouglans reservoir,"deep dam reservoir, early stratification period",Leitão et al. (2003),"C. wuetrichiana  to A, Stephanodiscus to B",species.2
+56,Nitzschia acicularis,C,Wononscopomuc lake,"deep, mesotrophic, dimictic",Huszar et al. (2003),to D,species.1
+57,Ulnaria acus,D,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+57,Fragilaria rumpens,D,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+58,Synedra sp.,D,Peñuelas Reservoir (Chile),"polimictic, water supply, temperate, enriched mesocosms",Acuña et al. (2008),NA,species.1
+59,Synedra acus,D,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),N. sigmoidea  to MP,species.1
+59,Nitzschia sigmoidea,D,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),N. sigmoidea  to MP,species.2
+60,Synedra acus,D,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),"C, meneghiniana toC",species.1
+60,Cyclotella meneghiniana,D,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),"C, meneghiniana toC",species.2
+61,Nitzschia,D,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),NA,species.1
+62,Encyonema silesiacum,D,Pomba river (Brazil),eutrophic,Soares et al. (2007),NA,species.1
+62,Synedra ulna,D,Pomba river (Brazil),eutrophic,Soares et al. (2007),NA,species.2
+63,Aulacoseira granulata,D,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A. granulata to P,species.1
+63,Stephanodiscus hantzschii,D,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A. granulata to P,species.2
+63,Nitzschia acicularis,D,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A. granulata to P,species.3
+63,Synedra sp.,D,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A. granulata to P,species.4
+64,Cocconeis sp.,D,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Species not in bold have to move to codon MP,species.1
+64,Gomphonema angustatum,D,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Species not in bold have to move to codon MP,species.2
+64,Navicula cuspidata,D,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Species not in bold have to move to codon MP,species.3
+64,Nitzschia sp.,D,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Species not in bold have to move to codon MP,species.4
+64,,D,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Species not in bold have to move to codon MP,species.5
+65,Pleurosigmasp.,D,Mundaú Reservoir (Brazil),NA,NA,Species not in bold have to move to codon MP,species.1
+65,Synedra rumpens,D,Mundaú Reservoir (Brazil),NA,NA,Species not in bold have to move to codon MP,species.2
+66,Synedra acus,D,Hungarian Rivers,NA,Borics et al. (2007),Cyclotella to C,species.1
+66,Nitzschia spp.,D,Hungarian Rivers,NA,Borics et al. (2007),Cyclotella to C,species.2
+66,Stephanodiscus hantzschii,D,Hungarian Rivers,NA,Borics et al. (2007),Cyclotella to C,species.3
+66,Cyclotella ocellata,D,Hungarian Rivers,NA,Borics et al. (2007),Cyclotella to C,species.4
+66,Cyclotella pseudostelligera,D,Hungarian Rivers,NA,Borics et al. (2007),Cyclotella to C,species.5
+67,Nitzschia agnita,D,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.1
+67,Synedra ulna,D,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.2
+68,Aulacoseira distans,D,Paraná river (Argentina),NA,Devercelli (2006),A. distansto C,species.1
+68,Skeletonema potamos,D,Paraná river (Argentina),NA,Devercelli (2006),A. distansto C,species.2
+68,Skeletonema cf. subsalsum,D,Paraná river (Argentina),NA,Devercelli (2006),A. distansto C,species.3
+69,Nitzschia spp.,D,Lake Walen,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+70,Synedra,D,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+71,Synedra acus,D,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+72,Nitzschia spp.,D,Ömerli Reservoir (Istanbul),NA,Albay & Akçaalan (2003),NA,species.1
+73,Centrales,D,Hungarian shallow lakes,NA,Padisák et al. (2003a),C. comta to A; Navicula to MP,species.1
+73,Navicula,D,Hungarian shallow lakes,NA,Padisák et al. (2003a),C. comta to A; Navicula to MP,species.2
+73,Nitszchia,D,Hungarian shallow lakes,NA,Padisák et al. (2003a),C. comta to A; Navicula to MP,species.3
+73,Cyclotella comta,D,Hungarian shallow lakes,NA,Padisák et al. (2003a),C. comta to A; Navicula to MP,species.4
+73,Stephanodiscus hantzschii,D,Hungarian shallow lakes,NA,Padisák et al. (2003a),C. comta to A; Navicula to MP,species.5
+74,Synedra delicatissima,D,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),NA,species.1
+75,Synedra acus,D,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.1
+76,Aulacoseira distans,D,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),A. distans to C,species.1
+77,Pennalessp.,D,Pomba river (Brazil),eutrophic,Soares et al. (2007),"Cyclotella to A, others to TB",species.1
+77,Cyclotella sp.,D,Pomba river (Brazil),eutrophic,Soares et al. (2007),"Cyclotella to A, others to TB",species.2
+77,Gomphonema parvulum,D,Pomba river (Brazil),eutrophic,Soares et al. (2007),"Cyclotella to A, others to TB",species.3
+78,Diatoma,D,"Lake Walen, Lake Geneva, Lake Constance","monomictic, peri-alpine",Anneville et al. (2005),"If Diatoma is D. tenuis, it goes to P; if not, to MP",species.1
+79,Achnanthes microcephala,D,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),Achnanthes microcephala to MP,species.1
+80,Aulacoseira distans,D,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),A. distansto C,species.1
+81,Tabellaria,N,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+81,Cosmarium,N,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.2
+81,Staurodesmus,N,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.3
+82,Tabellaria,N,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+82,Cosmarium,N,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+82,Staurodesmus,N,Hungarian rivers,NA,Borics et al. (2007),NA,species.3
+82,Xanthidium,N,Hungarian rivers,NA,Borics et al. (2007),NA,species.4
+83,Tabellaria,N,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.1
+84,Cosmarium,N,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+85,Cosmarium,N,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+86,Tabellaria fenestrata,N,Mohonk lake,"deep, oligotrophic, dimictic",Huszar et al. (2003),NA,species.1
+87,Cosmarium spp.,N,Lake Rodó (Uruguay),"shallow, polimictic, hypertrophic",Kruk et al. (2002),NA,species.1
+88,Eunotia incisa,N,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),"Eunotia to MP,Synedra to D",species.1
+88,Synedra nana,N,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),"Eunotia to MP,Synedra to D",species.2
+89,Tabellaria,N - E,"L.Constance, Upper and Lower Lake Zürich","monomictic, peri-alpine",Anneville et al. (2005),to N,species.1
+90,Carteria,N - E,Upper and Lower Lake Zürich,"monomictic, peri-alpine",Anneville et al. (2005),to G,species.1
+91,Staurastrum smithii,NA,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),NA,species.1
+91,Cosmarium spp.,NA,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),NA,species.2
+91,Staurodesmus incus,NA,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),NA,species.3
+92,Aulacoseira granulata,P,Faxinal Reservoir (Brazil),"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.1
+93,Closteriopsis acicularis,P,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),Desmidium to MP,species.1
+93,Desmidium laticeps var. quadrangulare,P,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),Desmidium to MP,species.2
+94,Closteriopsis acicularis,P,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+94,Closterium gracile,P,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+95,Fragilaria crotonensis,P,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+95,Aulacoseira granulata,P,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.2
+95,Closterium aciculare,P,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.3
+95,Staurastrum pingue,P,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.4
+96,Aulacoseira,P,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),sorting of both Fragilaria and Aulacoseira to coda depends on species.,species.1
+96,Fragilaria,P,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),sorting of both Fragilaria and Aulacoseira to coda depends on species.,species.2
+97,Fragilaria crotonensis,P,Lake Fuxian (China),deep oligotrophic,Zhang et al. (2007),NA,species.1
+98,Aulacoseira granulata,P,Lake Xingyun (China),shallow eutrophic,Zhang et al. (2007),NA,species.1
+98,Fragilaria crotonensis,P,Lake Xingyun (China),shallow eutrophic,Zhang et al. (2007),NA,species.2
+99,Cosmarium sp.,P,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),NA,species.1
+99,Closterium sp.,P,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),NA,species.2
+100,Closterium parvulum,P,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Melosira to P,species.1
+100,Aulacoseira granulata,P,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Melosira to P,species.2
+100,Aulacoseira granulata var. angustissima,P,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Melosira to P,species.3
+100,Melosira sp.,P,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Melosira to P,species.4
+101,Closterium acutum,P,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+101,Staurastrum cf. chaetoceras,P,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+101,Staurastrum sp.,P,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+102,Fragilaria crotonensis,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.1
+102,Aulacoseira granulata,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.2
+102,Staurastrum pingue,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.3
+102,Staurastrum chaetoceras,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.4
+102,,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.5
+103,Pediastrum duplex,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.1
+103,Pediastrum simplex,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.2
+103,Coelastrum spp.,P,Hungarian Rivers,NA,Borics et al. (2007),Pediastrum spp. and Coelastrum spp. to J,species.3
+104,Aulacoseira granulata,P,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),A. herzogii and A. italica to B,species.1
+104,Aulacoseira herzogii,P,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),A. herzogii and A. italica to B,species.2
+104,Aulacoseira italica,P,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),A. herzogii and A. italica to B,species.3
+105,Closterium acutum var. variabile,P,Paraná river (Argentina),NA,Devercelli (2006),S. leptocladum to N,species.1
+105,Staurastrum leptocladum,P,Paraná river (Argentina),NA,Devercelli (2006),S. leptocladum to N,species.2
+105,Aulacoseira granulata,P,Paraná river (Argentina),NA,Devercelli (2006),S. leptocladum to N,species.3
+105,Aulacoseira granulata f. curvata,P,Paraná river (Argentina),NA,Devercelli (2006),S. leptocladum to N,species.4
+105,Aulacoseira granulata var. angustissima,P,Paraná river (Argentina),NA,Devercelli (2006),S. leptocladum to N,species.5
+106,Fragilaria,P,"Lake Geneva, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+107,Staurastrum,P,"L. Geneva, Lower Lake Zürich, Lake Waken","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+108,Staurastrum,P,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+109,Aulacoseira granulata,P,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),sorting of  Aulacoseira to coda depends on species.,species.1
+109,Aulacoseira spp.,P,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),sorting of  Aulacoseira to coda depends on species.,species.2
+110,Fragilaria crotonensis,P,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.1
+110,Aulacoseira granulata,P,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.2
+110,Closterium aciculare,P,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.3
+111,Fragilaria sp.,P,Vouglans reservoir,"deep dam reservoir, (early) stratification period",Leitão et al. (2003),NA,species.1
+111,Fragilaria crotonensis,P,Vouglans reservoir,"deep dam reservoir, (early) stratification period",Leitão et al. (2003),NA,species.2
+112,Fragilaria crotonensis,P,Chodikee lake,"shallow, eutrophic",Huszar et al. (2003),NA,species.1
+113,Fragilaria crotonensis,P,Stissing lake,"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),NA,species.1
+114,Fragilaria crotonensis,P,Wononscopomuc lake,"deep, mesotrophic, dimictic",Huszar et al. (2003),NA,species.1
+115,Fragilaria crotonensis,P,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.1
+115,Aulacoseira granulata,P,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.2
+115,Closterium aciculare,P,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.3
+116,Fragilaria crotonensis,P,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.1
+116,Staurastrum cf. gracile,P,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.2
+116,Staurastrum planctonicum,P,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.3
+117,Aulacoseira granulata,P,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),Cyclotella ocellata to B,species.1
+117,Cyclotella ocellata,P,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),Cyclotella ocellata to B,species.2
+118,Fragilaria crototensis,P,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),NA,species.1
+119,Aulacoseira granulata,P,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),NA,species.1
+119,Closterium gracile,P,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),NA,species.2
+120,Closterium aciculare,P,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.1
+120,Closterium pronum,P,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.2
+120,Fragilaria crotonensis,P,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.3
+121,Aulacoseira granulata,P,Poço da Cruz Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+122,Navicula spp.,P,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),to MP,species.1
+123,Melosira varians,P,Pomba river (Brazil),eutrophic,Soares et al. (2007),Melosira to TB and Cosmarium to N,species.1
+123,Cosmarium sp.,P,Pomba river (Brazil),eutrophic,Soares et al. (2007),Melosira to TB and Cosmarium to N,species.2
+123,Closterium navicula,P,Pomba river (Brazil),eutrophic,Soares et al. (2007),Melosira to TB and Cosmarium to N,species.3
+123,Spirotaenia condensata,P,Pomba river (Brazil),eutrophic,Soares et al. (2007),Melosira to TB and Cosmarium to N,species.4
+124,Ulothrix,P,"L. Constance, Lower and Upper Lake Zürich","monomictic, peri-alpine",Anneville et al. (2005),to MP,species.1
+125,Surirella peisonis,MP,Lake Fertó,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.1
+125,Campylodiscus clypeus,MP,Lake Fertó,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.2
+125,Fragilaria construens,MP,Lake Fertó,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.3
+126,Aulacoseira ambigua var. ambigua f. spiralis,MP,Segredo Reservoir (Brazil),dam reservoir,Borges et al. (2008),Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P,species.1
+126,Aulacoseira granulata var. granulata,MP,Segredo Reservoir (Brazil),dam reservoir,Borges et al. (2008),Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P,species.2
+126,Aulacoseira granulata var. angustissima,MP,Segredo Reservoir (Brazil),dam reservoir,Borges et al. (2008),Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P,species.3
+126,Urosolenia eriensis,MP,Segredo Reservoir (Brazil),dam reservoir,Borges et al. (2008),Urosolenia eriensis to A;Aulacoaseira ambigua  to codon C; Aulacoseira spp. to P,species.4
+127,Aulacoseira granulata,MP,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),to P,species.1
+128,Aulacoseira ambigua,MP,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),A. ambigua and A. distans to C; A. granulata to P,species.1
+128,Aulacoseira distans,MP,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),A. ambigua and A. distans to C; A. granulata to P,species.2
+128,Aulacoseira granulata,MP,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),A. ambigua and A. distans to C; A. granulata to P,species.3
+128,Ulnaria ulna,MP,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),A. ambigua and A. distans to C; A. granulata to P,species.4
+129,Mougeotia spp.,T,Lake Fuxian (China),deep oligotrophic,Zhang et al. (2007),NA,species.1
+130,Mougeotia,T,Crater Lake (USA),"deep, ultra-oligotrophic",McIntire et al. (2007),NA,species.1
+130,Tribonema,T,Crater Lake (USA),"deep, ultra-oligotrophic",McIntire et al. (2007),NA,species.2
+131,Geminella,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.1
+131,Mougeotia,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.2
+131,Tribonema,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.3
+131,Planctonema,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.4
+131,Closterium aciculare,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.5
+131,Closterium acutum var. variabile,T,Hungarian rivers,NA,Borics et al. (2007),Closterium spp. to P,species.6
+132,Mougeotia,T,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.1
+133,Planctonema lauterbornii,T,Paraná river (Argentina),NA,Devercelli (2006),Tabellaria to N,species.1
+133,Tabellaria sp.,T,Paraná river (Argentina),NA,Devercelli (2006),Tabellaria to N,species.2
+134,Mougeotia,T,"Lake Geneva, Lake Zürich, Lake Constance","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+135,Tribonema,T,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+136,Mougeotia sp.,T,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.1
+137,Planctonema lauterbornii,T,Vouglans reservoir,"deep dam reservoir,  stratification period",Leitão et al. (2003),NA,species.1
+138,Geminella,T,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.1
+138,Mougeotia,T,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.2
+138,Tribonema,T,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.3
+139,Mougeotia,T,Lake Garda (Italy),"deep, subalpine",Salmaso (2002)," Ulothrix, Ulothrichales to MP",species.1
+139,Ulothrix,T,Lake Garda (Italy),"deep, subalpine",Salmaso (2002)," Ulothrix, Ulothrichales to MP",species.2
+139,Ulothrichales,T,Lake Garda (Italy),"deep, subalpine",Salmaso (2002)," Ulothrix, Ulothrichales to MP",species.3
+140,Mougeotia delicata,T,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.1
+140,Mesotaenium chlamydosporum,T,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.2
+140,Mesotaenium sp.,T,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.3
+141,Epiphytic cyanobacteria,TC,Hungarian rivers,"enriched standing waters, or slow-flowing rivers  with emergent macrophytes",Borics et al. (2007),NA,species.1
+141,Oscillatoria,TC,Hungarian rivers,"enriched standing waters, or slow-flowing rivers  with emergent macrophytes",Borics et al. (2007),NA,species.2
+141,Phormidium,TC,Hungarian rivers,"enriched standing waters, or slow-flowing rivers  with emergent macrophytes",Borics et al. (2007),NA,species.3
+141,Lyngbya,TC,Hungarian rivers,"enriched standing waters, or slow-flowing rivers  with emergent macrophytes",Borics et al. (2007),NA,species.4
+141,Rivularia,TC,Hungarian rivers,"enriched standing waters, or slow-flowing rivers  with emergent macrophytes",Borics et al. (2007),NA,species.5
+142,Benthic (epiphytic) desmids and filamentous green algae,TD,Hungarian rivers,"enriched standing waters, or slow-flowing rivers with emergent macrophytes",Borics et al. (2007),NA,species.1
+142,benthic diatoms,TD,Hungarian rivers,"enriched standing waters, or slow-flowing rivers with emergent macrophytes",Borics et al. (2007),NA,species.2
+143,Nitzschia spp.,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.1
+143,Navicula,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.2
+143,Gomphonema,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.3
+143,Didymosphaenia,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.4
+143,Fragilaria,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.5
+143,Achnanthes,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.6
+143,Surirella,TB,Hungarian rivers,highly lotic environments including rivers and rivulats,Borics et al. (2007),only non-planktonic Nitzschia spp.,species.7
+144,Raphidiopsis/Cylindrospermopsis,S,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),Raphidiopsis/Cylindrospermopsis to SN; others to S1,species.1
+144,Geitlerinema unigranulatum,S,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),Raphidiopsis/Cylindrospermopsis to SN; others to S1,species.2
+144,Planktothrix agardhii,S,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),Raphidiopsis/Cylindrospermopsis to SN; others to S1,species.3
+146,Oscillatoria spp.,S,Lake Fuxian; Lake Xingyun (China),deep oligotrophic; shallow eutrophic,Zhang et al. (2007),"if really Oscillatoria, to MP",species.1
+147,Arthrospira platensis,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.1
+147,Jaaginema subtilissimum,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.2
+147,Limnothrix redekei,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.3
+147,Lyngbya sp.,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.4
+147,Oscillatoria sp.,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.5
+147,Planktolyngbya circumcreta,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.6
+147,Planktolyngbya limnetica,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.7
+147,Pseudanabaena sp.,S,9 Greek lakes,"shallow - deep, oligo-hypertrophic",Vardaka et al. (2005),"Arthrospira platensis to S2, Oscillatoria sp.  to MP; Lyngbya to MP or S1, others to S1",species.8
+148,Raphidiopsis,S,Tapacurá Reservoir (Brazil),dam reservoir,Bouvy et al. (2003),Raphidiopsis to SN,species.1
+149,Oscillatoria sp.,S,Wononscopomuc lake,"deep, mesotrophic, dimictic",Huszar et al. (2003),"if really Oscillatoria, to MP",species.1
+150,Planktothrix agardhii,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1",species.1
+150,Limnothrix planctonica,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1",species.2
+150,Pseudanabaena galeata,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1",species.3
+150,,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S1",species.4
+151,Oscillatoria spp.,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S2",species.1
+151,Raphidiopsis mediterranea,S,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),"if really Oscillatoria sp., to MP;P. galeata to MP; R. mediterranea to SN; others to S2",species.2
+152,Limnotrichoideae,S,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),to S1,species.1
+153,Geitlerinema sp.,S,Garças Reservoir (Brazil),productive lake,Huszar et al. (2000),to S1,species.1
+154,Jaaginema subtilissimum,S,Barra Lake (Brazil),productive lake,Huszar et al. (2000),to S1,species.1
+155,Phormidium sp.,S,Chapéu Lake (Brazil),productive lake,Huszar et al. (2000),to S1,species.1
+156,Oscillatoria quadripunctulata,S,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),O. quadripunctulata = Jaaginema quadripunctulatum  to S1; O. limnetica (Pseudanabaena limnetica) to S1,species.1
+156,Oscillatoria limnetica,S,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),O. quadripunctulata = Jaaginema quadripunctulatum  to S1; O. limnetica (Pseudanabaena limnetica) to S1,species.2
+157,Planktothrix,S1,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),NA,species.1
+158,Planktothrix agardhii,S1,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+159,Pseudanabaena,S1,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),Position of Pseudanabaena depends on species.,species.1
+160,Planktothrix agardhii,S1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",Pseudanabaena galeata  to MP,species.1
+160,Pseudanabaena galeata,S1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",Pseudanabaena galeata  to MP,species.2
+160,Geitlerinema unigranulatum,S1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",Pseudanabaena galeata  to MP,species.3
+161,Pseudanabaena limnetica,S1,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+161,Limnothrix redekei,S1,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.2
+161,Planktothrix agardhii,S1,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.3
+161,Lyngbya limnetica,S1,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.4
+162,Planktothrix agardhii,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+162,Limnothrix redekeii,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+162,Limnothrix planctonica,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.3
+162,Pseudanabaena limnetica,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.4
+162,Planktolyngbya limnetica,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.5
+162,Planktolyngbya contorta,S1,Hungarian rivers,NA,Borics et al. (2007),NA,species.6
+163,Limnothrix redekei,S1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+164,Planktothrix agardhii,S1,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+165,Planktothrix agardhii,S1,Viry-Châtillon’s Lake (France),shallow,Yéprémian et a. (2007),NA,species.1
+166,Geitlerinema amphibium,S1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Pseudanabaena catenata to MP,species.1
+166,Pseudanabaena catenata,S1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Pseudanabaena catenata to MP,species.2
+167,Limnothrix planctonica,S1,Paraná river (Argentina),NA,Devercelli (2006),Oscillatoria sp. to TC,species.1
+167,Oscillatoria sp.,S1,Paraná river (Argentina),NA,Devercelli (2006),Oscillatoria sp. to TC,species.2
+168,Planktolyngbya limnetica,S1,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),NA,species.1
+169,Limnothrix-Planktothrix agardhii,S1,Lake Balaton (Hungary),shallow,Padisák & Reynolds (1998); Padisák et al. (2006),NA,species.1
+170,Planktothrix agardhii,S1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),NA,species.1
+171,Pseudanabaena,S1,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),Position of Pseudanabaena depends on species.,species.1
+172,Oscillatoria group,S1,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),"Oscillatoria group, as order, cannot be attributed to any codon",species.1
+172,Planktolyngbya,S1,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),"Oscillatoria group, as order, cannot be attributed to any codon",species.2
+173,Pseudanabaena galeata,S1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Pseudanabaena galeata to MP,species.1
+173,Planktolyngbya limnetica,S1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Pseudanabaena galeata to MP,species.2
+173,Geitlerinema sp.,S1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Pseudanabaena galeata to MP,species.3
+174,Planktothrix sp.,S1,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+175,Planktothrix agardhii,S1,Lago Maggiore (Italy),NA,Morabito et al. (2003),Position of Pseudanabaena depends on species.,species.1
+175,Limnothrix redekei,S1,Lago Maggiore (Italy),NA,Morabito et al. (2003),Position of Pseudanabaena depends on species.,species.2
+175,Pseudanabaena,S1,Lago Maggiore (Italy),NA,Morabito et al. (2003),Position of Pseudanabaena depends on species.,species.3
+176,Planktothrix agardhii,S1,Lake Scharmützelsee (Germany),"deep, dimictic, eutrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.1
+176,Pseudanabaena limnetica,S1,Lake Scharmützelsee (Germany),"deep, dimictic, eutrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.2
+176,Limnothrix amphigranulata,S1,Lake Scharmützelsee (Germany),"deep, dimictic, eutrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.3
+177,Planktothrix agardhii,S1,"Langer See, Melangsee (Germany)","shallow, hypertrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.1
+177,Limnothrix redekei,S1,"Langer See, Melangsee (Germany)","shallow, hypertrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.2
+177,Pseudanabaena limnetica,S1,"Langer See, Melangsee (Germany)","shallow, hypertrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.3
+177,,S1,"Langer See, Melangsee (Germany)","shallow, hypertrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.4
+178,Limnothrix amphigranulata,S1,"Langer See, Melangsee (Germany)","shallow, hypertrophic",Nixdorf et al. (2003); Mischke & Nixdorf (2003),NA,species.1
+179,Planktothrix agardhii,S1,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.1
+180,Pseudanabaena limnetica,S1,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Oscillatoriales, as order, cannot be attributed to any codon",species.1
+180,Planktolyngbya limnetica,S1,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Oscillatoriales, as order, cannot be attributed to any codon",species.2
+180,Oscillatoriales,S1,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Oscillatoriales, as order, cannot be attributed to any codon",species.3
+181,Lyngbya sp.,S2,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),both to S1; Lyngbya is accepted as S1 because of the description in the original paper,species.1
+181,Planktolyngbya sp.,S2,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),both to S1; Lyngbya is accepted as S1 because of the description in the original paper,species.2
+182,Raphidiopsis,S2,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),to SN,species.1
+183,Raphidiopsis mediterranea,S2,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Raphidiopsis to SN,species.1
+183,Spirulina sp.,S2,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Raphidiopsis to SN,species.2
+184,Planktolyngbya limnetica,S2,Laguna Grande (Argentina),fiel mesocosms with free floating plants,Pinto et al. (2007),to S1,species.1
+185,Leptolynbgya cf. notata,S2,Pomba river (Brazil),eutrophic,Soares et al. (2007),both to TC,species.1
+185,Oscillatoria sp.,S2,Pomba river (Brazil),eutrophic,Soares et al. (2007),both to TC,species.2
+186,Oscillatoria,S2,Los Coipos Lake (Argentina),wetland,Fazio & O'Farrell (2005),Oscillatoria to MP,species.1
+186,Spirulina,S2,Los Coipos Lake (Argentina),wetland,Fazio & O'Farrell (2005),Oscillatoria to MP,species.2
+187,Leptolyngbya fragilis,S1-S2,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),Planktolyngbya sp. to S1; others to MP,species.1
+187,Oscillatoria sancta,S1-S2,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),Planktolyngbya sp. to S1; others to MP,species.2
+187,Planktolyngbya sp.,S1-S2,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),Planktolyngbya sp. to S1; others to MP,species.3
+188,Cylindrospermopsis raciborskii,SN,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+189,Cylindrospermopsis raciborskii,SN,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+190,Cylindrospermopsis raciborskii,SN,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),NA,species.1
+191,Cylindrospermopsis,SN,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+191,Anabaena minutissima,SN,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+192,Cylindrospermopsis raciborskii,SN,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+193,Cylindrospermopsis raciborskii,SN,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A.     gracile to H1,species.1
+193,Aphanizomenon gracile,SN,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),A.     gracile to H1,species.2
+194,Cylindrospermopsis raciborskii,SN,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+195,Cylindrospermopsis raciborskii,SN,Lake Balaton (Hungary),shallow,Padisák & Reynolds (1998); Padisák et al. (2006),NA,species.1
+196,Anabaena,SN,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),Anabaena to H1 unless it is A. minutissima,species.1
+196,Cylindrospermopsis,SN,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),Anabaena to H1 unless it is A. minutissima,species.2
+197,Cylindrospermopsis raciborskii,SN,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),NA,species.1
+198,Cylindrospermopsis,SN,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+199,Cylindrospermopsis raciborskii,SN,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+200,Cylindrospermopsis raciborskii,SN,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.1
+201,Cylindrospermopsis raciborskii,SN,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),NA,species.1
+202,Cylindrospermopsis raciborskii,SN,Lake Scharmützelsee (Germany),"deep, dimictic, eutrophic",Nixdorf et al. (2003),NA,species.1
+203,Cylindrospermopsis raciborskii,SN,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+204,Cylindrospermopsis raciborskii,SN,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),NA,species.1
+205,Cylindrospermopsis catemaco; Cylindrospermopsis philippinensis,SN,Lake Catemaco (Mexico),"shallow, permanent mixing water column",Komárková & Tavera (2003),NA,species.1
+206,Cylindrospermopsis,SN,Tapacurá Reservoir (Brazil),dam reservoir,Bouvy et al. (2003),NA,species.1
+207,Cylindrospermopsis raciborskii,SN,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),NA,species.1
+208,Cylindrospermopsis phillippinensis,SN,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+209,Cylindrospermopsis raciborskii,SN,Chapéu Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+209,Cylindrospermopsis phillipinensis,SN,Chapéu Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.2
+209,Cylindrospermopsis catemaco,SN,Chapéu Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.3
+210,Cylindrospermopsis phillipinensis,SN,Algodões Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+210,Cylindrospermopsis catemaco,SN,Algodões Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.2
+211,Cylindrospermopsis raciborskii,SN,Poço da Cruz Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+212,Cylindrospermopsis raciborskii,SN,Pão de Açúcar Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+213,Cylindrospermopsis raciborskii,SN,Ingazeiras Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+213,Cylindrospermopsis phillipinensis,SN,Ingazeiras Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.2
+213,Cylindrospermopsis catemaco,SN,Ingazeiras Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.3
+214,Cylindrospermum cf. muscicola,SN,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),to MP,species.1
+215,Aphanizomenon gracile,SN,Langer see Melangse (Germany),NA,Mischke & Nixdorf (2003),to H1,species.1
+216,Planktolyngbya,Si,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species",species.1
+216,Ankistrodesmus,Si,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species",species.2
+216,Pseudanabaena,Si,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),"for typesetting error, i should be read as 1; Ankistrodesmus to X1; position of Pseudanabaena depends on the species",species.3
+217,Picoplankton,Z,Crater Lake (USA),"deep, ultra-oligotrophic",McIntire et al. (2007),accepted because of the habitat,species.1
+218,Cyanobacterial autotrophic picoplankton,Z,Lake Baikal (Russia),deep,Fietz et al. (2005),accepted because of the habitat,species.1
+219,Synechococcus,Z,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),accepted because of the habitat,species.1
+219,Chroococcus,Z,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),accepted because of the habitat,species.2
+220,Synechococcus aff. nidulans,Z,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),accepted because of the habitat,species.1
+220,Chroococcus minor,Z,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),accepted because of the habitat,species.2
+221,Synechococcus nidulans,Z,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),to K,species.1
+222,Chroococcus minor,Z,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),both to Lo,species.1
+222,Chroococcus sp.,Z,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),both to Lo,species.2
+223,Picocyanobacteria,Z,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),to K,species.1
+223,Synechococcus - like,Z,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),to K,species.2
+224,Chroococcus limneticus,Z,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to Lo,species.1
+224,Chroococcus minutus,Z,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to Lo,species.2
+224,Chroococcus turgidus,Z,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to Lo,species.3
+225,Synechococcus sp.,Z,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),to K,species.1
+226,Chroococcus sp.,Z,Paraná river (Argentina),NA,Devercelli (2006),Synechococcus and picoplankton to K; Chroococcus is dubious,species.1
+226,Synechococcus spp.,Z,Paraná river (Argentina),NA,Devercelli (2006),Synechococcus and picoplankton to K; Chroococcus is dubious,species.2
+226,Picoplanktonic cells,Z,Paraná river (Argentina),NA,Devercelli (2006),Synechococcus and picoplankton to K; Chroococcus is dubious,species.3
+227,pico-phytoplankton,Z,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),to K,species.1
+227,Synechococcus nidulans,Z,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),to K,species.2
+227,Synechocystis spp.,Z,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),to K,species.3
+228,Picoplankton,Z,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),to K,species.1
+229,Chlorella minutissima,Z,Lake Rodó (Uruguay),"shallow,  polimictic",Kruk et al. (2002),to K,species.1
+230,Synechococcus spp.,ZMX,Lago Maggiore (Italy),"deep, subalpine, oligotrophic",Callieri et al. (2006),"Synechococcus to Z, Ceratium to Lo",species.1
+230,Ceratium hirundinella,ZMX,Lago Maggiore (Italy),"deep, subalpine, oligotrophic",Callieri et al. (2006),"Synechococcus to Z, Ceratium to Lo",species.2
+231,small chlorelloid cells,X3,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+231,Chrysococcusspp.,X3,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.2
+232,Eukaryotic picoplankton,X3,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+233,Pico-sized green algae,X3,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+234,Koliella,X3,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+234,Chrysococcus,X3,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+234,eukaryotic picoplankton,X3,Hungarian rivers,NA,Borics et al. (2007),NA,species.3
+235,Koliella spp.,X3,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.1
+236,Koliella longiseta,X3,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+236,Koliella sp.,X3,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.2
+236,Chrysococcus sp.,X3,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.3
+236,eukaryotic autotrophic picoplankton,X3,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.4
+237,Chromulina spp.,X3,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),NA,species.1
+237,Chrysidalis,X3,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),NA,species.2
+237,Ochromonas,X3,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),NA,species.3
+238,Chlorella minutissima,X3,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),Choricystis minor  to X1; Chlorella minutissima to K,species.1
+238,Choricystis minor,X3,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),Choricystis minor  to X1; Chlorella minutissima to K,species.2
+239,Aphanocapsa,X3,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),both to K,species.1
+239,Aphanothece,X3,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),both to K,species.2
+240,Rhodomonas minuta,X2,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+241,Plagioselmis,X2,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+241,Chrysochromulina,X2,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.2
+242,Chrysochromulina,X2,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),NA,species.1
+243,Chlamydomonas spp.,X2,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+244,Plagioselmis (Rhodomonas),X2,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+244,Chrysochromulina,X2,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+245,Rhodomonas minuta,X2,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+245,Chrysochromulina parva,X2,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+246,Scourfieldia cordiformis,X2,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),NA,species.1
+247,Carteria complanata,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.1
+247,Chlamydomonas depressa,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.2
+247,Chlamydomonas microsphera,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.3
+247,Chlamydomonas passiva,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.4
+247,Chlamydomonas cf. muriella,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.5
+247,Chlamydomonas spp.,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.6
+247,Chloromonas minima,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.7
+247,Pedimonas sp.,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.8
+247,Pteromonas variabilis,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.9
+247,Pyramimonas tetrarhynchus,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.10
+247,Spermatozoopsis exultans,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.11
+247,siliceousChrysophyceae,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.12
+247,Rhodomonas minuta,X2,Paraná river (Argentina),NA,Devercelli (2006),silica scaled flagellates to E,species.13
+248,Glenodinium spp.,X2,Lake Baikal (Russia),deep,Fietz et al. (2005),Glenodinium to Y,species.1
+248,Rhodomonas pusilla,X2,Lake Baikal (Russia),deep,Fietz et al. (2005),Glenodinium to Y,species.2
+248,Rhodomonas sp.,X2,Lake Baikal (Russia),deep,Fietz et al. (2005),Glenodinium to Y,species.3
+249,Rhodomonas minuta,X2,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.1
+250,Chlamydomonas planctogloea,X2,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.1
+250,Chlamydomonas sordida,X2,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.2
+250,Chlamydomonas sp.,X2,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.3
+250,Coccomonas,X2,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.4
+251,Plagioselmis spp.,X2,Sicilian water bodies,NA,Barone & Naselli-Flores (2003),NA,species.1
+252,Chlamydomonas sp.,X2,Vouglans reservoir,"deep dam reservoir, early stratification period",Leitão et al. (2003),NA,species.1
+252,Rhodomonas lacustris,X2,Vouglans reservoir,"deep dam reservoir, early stratification period",Leitão et al. (2003),NA,species.2
+253,Chlamydomonas sp.,X2,Lake Boeckella (Antartic),"antarctic lakes, meso-eutrophic",Allende & Izaguirre (2003),NA,species.1
+253,Ochromonas sp.,X2,Lake Boeckella (Antartic),"antarctic lakes, meso-eutrophic",Allende & Izaguirre (2003),NA,species.2
+254,Plagioselmis (Rhodomonas),X2,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+254,Chrysochromulina parva,X2,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.2
+254,Rhodomonas sp.,X2,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.3
+255,Chlamydomonas spp.,X2,Lake Rodó (Uruguay),"shallow,  polimictic",Kruk et al. (2002),NA,species.1
+255,nanoplankton,X2,Lake Rodó (Uruguay),"shallow,  polimictic",Kruk et al. (2002),NA,species.2
+255,Haptophyta,X2,Lake Rodó (Uruguay),"shallow,  polimictic",Kruk et al. (2002),NA,species.3
+256,Monoraphidium contornum,X2,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),to X1,species.1
+257,Ankistrodesmus spp.,X1,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+258,Ankistrodesmus gracilis,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.1
+258,Chlorella vulgaris,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.2
+258,Chlorococcum infusionum,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.3
+258,Crucigenia tetrapedia,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.4
+258,Micractinium pusillum,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.5
+258,Monoraphidium contortum,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.6
+258,Pseudodidymocystis fina,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.7
+258,Scenedesmus ecornis,X1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Chlorococcum to MP; Micractinium to F; Scenedesmus, Crucigenia to J",species.8
+259,Ankyra,X1,Hungarian rivers,"shallow, well mixed layers in enriched conditions",Borics et al. (2007),NA,species.1
+259,Monoraphidium,X1,Hungarian rivers,"shallow, well mixed layers in enriched conditions",Borics et al. (2007),NA,species.2
+260,Monoraphidium cf. nanum,X1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+260,Monoraphidium arcuatum,X1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+260,Monoraphidium griffithii,X1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+261,Chorella vulgaris,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.1
+261,Closteriopsis acicularis,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.2
+261,Monoraphidium arcuatum,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.3
+261,Monoraphidium circinale,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.4
+261,Monoraphidium contortum,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.5
+261,Monoraphidium griffthii,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.6
+261,Monoraphidium pusillum,X1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Closteriopsis acicularis to P,species.7
+262,Chlorella spp.,X1,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+262,Monoraphidium circinale,X1,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.2
+262,Monoraphidium komarkovae,X1,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.3
+263,Monoraphidium spp.,X1,Lake Fertó,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.1
+264,Chlorella spp.,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.1
+264,Chlorolobium sp.,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.2
+264,Coccomonas sp.,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.3
+264,Monoraphidium contortum,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.4
+264,Monoraphidium convolutum,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.5
+264,Monoraphidium griffithi,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.6
+264,Monoraphidium minutum,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.7
+264,Schroederia antillarum,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.8
+264,Schroederia setigera,X1,Paraná river (Argentina),NA,Devercelli (2006),Coccomonassp. to X2;  Schroederia spp. to X3,species.9
+265,Schroederia,X1,Los Coipos Lake (Argentina),wetland,Fazio & O'Farrell (2005),NA,species.1
+266,Monoraphidium pseudobraunii,X1,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.1
+266,Monoraphidium tortile,X1,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.2
+266,Monoraphidium arcuatum,X1,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.3
+266,Monoraphidium dybowskii,X1,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.4
+266,,X1,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.5
+267,Monoraphidium pseudomirabile,X1,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+268,Chroococcus spp.,X1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Chroococcus spp. to Lo,species.1
+268,Chlorella sp.,X1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Chroococcus spp. to Lo,species.2
+268,Monoraphidium minutum,X1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Chroococcus spp. to Lo,species.3
+268,Monoraphidium contortum,X1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Chroococcus spp. to Lo,species.4
+268,Keryochlamys styriaca,X1,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Chroococcus spp. to Lo,species.5
+269,Ankyra judayi,X1,Vouglans reservoir,"deep dam reservoir, early stratification period",Leitão et al. (2003),NA,species.1
+270,Crucigenia quadrata,X1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Crucigenia quadrata to J,species.1
+270,Didymocystis bicellularis,X1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Crucigenia quadrata to J,species.2
+270,Monoraphidium circinale,X1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Crucigenia quadrata to J,species.3
+270,Monoraphidium contortum,X1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Crucigenia quadrata to J,species.4
+270,Monoraphidium minutum,X1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Crucigenia quadrata to J,species.5
+271,Chlorella vulgaris,X1,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.1
+271,Monoraphidium spp.,X1,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.2
+271,Schroedriella setigera,X1,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.3
+272,Synechocystis aquatilis,X1,Barra Lake (Brazil),productive lake,Huszar et al. (2000),Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K,species.1
+272,Chlorella vulgaris var. autotrophica,X1,Barra Lake (Brazil),productive lake,Huszar et al. (2000),Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K,species.2
+272,Oocystis submarina,X1,Barra Lake (Brazil),productive lake,Huszar et al. (2000),Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K,species.3
+272,Chlorella minutíssima,X1,Barra Lake (Brazil),productive lake,Huszar et al. (2000),Synechocystis aquatilisLo; Oocystis to F; Chlorellaminutissima to K,species.4
+273,Synechocystis aquatilis,X1,Capivari and Segredo Reservoirs (Brazil),dam reservoir,Borges et al. (2008),to Lo,species.1
+274,Chlorella sp.,X1,Dom Helvécio Lake (Brazil),"deep,  oligotrophic, atelomixis",Souza et al. (2008),to X3,species.1
+275,Synechocystis aquatilis,X1,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2,species.1
+275,Cosmarium regnesii,X1,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2,species.2
+275,Chlamydomonas sp.,X1,Paraibuna river (Brazil),eutrophic,Soares et al. (2007),Synechocystis aquatilis to Lo; Cosmarium regnesii to N;  Chlamydomonas sp. to X2,species.3
+276,Synechocystis aquatilis,X1,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),to Lo,species.1
+277,Synechococcus elongatus,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.1
+277,Synechococcus elegans,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.2
+277,Chlorella homosphaera,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.3
+277,Chroococcus minor,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.4
+277,Scenedesmus ellipticus,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.5
+277,Choricystis cylindracea,X1,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),Synechococcus to K;  Chroococcus to Lo,species.6
+278,Monoraphidium,Xi,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),"for typesetting error, i should be read as 1",species.1
+279,Ochromonas spp.,X,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2",species.1
+279,Ankyra judayi,X,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2",species.2
+279,small cryptophytes,X,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Ochromonas spp. to X3, Ankyra judayi to X1, small cryptophytes to X2",species.3
+280,Phacotus,YPh,Hungarian rivers,NA,Borics et al. (2007),"codon was renamed, see the text",species.1
+281,Phacotus lenticularis,XPH,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+282,Phacotus lenticularis,NA,Lake Balaton (Hungary), shallow,Hajnal & Padisák (2008),NA,species.1
+283,Dinobryon,E,Hungarian rivers,NA,Borics et al. (2007),we suggested to move Synura to the recently established Ws codon,species.1
+283,Mallomonas,E,Hungarian rivers,NA,Borics et al. (2007),we suggested to move Synura to the recently established Ws codon,species.2
+283,Synura,E,Hungarian rivers,NA,Borics et al. (2007),we suggested to move Synura to the recently established Ws codon,species.3
+284,Dinobryon divergens,E,Lake Fuxian (China),deep oligotrophic,Zhang et al. (2007),NA,species.1
+285,Mallomonas sp.,E,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+286,Dinobryon,E,Crater Lake (USA),"deep, ultra-oligotrophic",McIntire et al. (2007),NA,species.1
+287,Dinobryon,E,"Lake Geneva, Lake Constance, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+288,Dinobryon sertularia,E,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),NA,species.1
+289,Mallomonas,E,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+290,Mallomonas sp.,E,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.1
+291,Dinobryon divergens,E,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),NA,species.1
+292,Dinobryon cylindricum,E,Mohonk lake (USA),"deep, oligotrophic, dimictic",Huszar et al. (2003),NA,species.1
+293,Dinobryon divergens,E,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+293,Dinobryon sociale,E,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.2
+293,Salpingoeca sp.,E,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.3
+294,Dinobryon sociale,E,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.1
+294,Dinobryon divergens,E,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.2
+295,Dinobryon sociale,E,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),small sized chrysoflagellates to X2,species.1
+295,small sized chrysoflagellates,E,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),small sized chrysoflagellates to X2,species.2
+296,Dinobryon sp.,E,Paraná river (Argentina),NA,Devercelli (2006),"non identified flagellates are probably small, therefore to X2",species.1
+296,Epipyxis sp.,E,Paraná river (Argentina),NA,Devercelli (2006),"non identified flagellates are probably small, therefore to X2",species.2
+296,Mallomonas sp.,E,Paraná river (Argentina),NA,Devercelli (2006),"non identified flagellates are probably small, therefore to X2",species.3
+296,Flagellates non-identified,E,Paraná river (Argentina),NA,Devercelli (2006),"non identified flagellates are probably small, therefore to X2",species.4
+297,Mallomonas,E,"Lake Constance, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),Ochromonas to X2,species.1
+297,Ochromonas,E,"Lake Constance, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),Ochromonas to X2,species.2
+298,Flagellata,E,Lake Baikal (Russia),deep,Fietz et al. (2005),to  E,species.1
+298,small (Chrysophyceae),E,Lake Baikal (Russia),deep,Fietz et al. (2005),to  E,species.2
+298,Dynobrioncylindricum,E,Lake Baikal (Russia),deep,Fietz et al. (2005),to  E,species.3
+299,Ochromonas cf. viridis; Chrysophyceae,E - W,Los Coipos Lake (Argentina),wetland,Fazio & O'Farrell (2005),"Ochromonas cf. viridis to X1; ""Chrysophyceae"" taxonomic resolution does not allow sorting into coda",species.1
+300,Cryptomonas,Y,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+301,Cryptomonas erosa,Y,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+301,Cryptomonas reflexa,Y,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.2
+301,Gymnodinium spp.,Y,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.3
+302,Cryptomonas marssonii,Y,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),NA,species.1
+302,Cryptomonas sp.,Y,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),NA,species.2
+303,Cryptomonas curvata,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+303,Cryptomonas erosa,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.2
+303,Cryptomonas marsonii,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.3
+304,Cryptomonas sp.,Y,Capivari Reservoir (Brazil),dam reservoir,Borges et al. (2008),NA,species.1
+305,Cryptomonas curvata,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+305,Cryptomonas erosa,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+305,Cryptomonas marssonii,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.3
+306,Cryptomonas,Y,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),Rhodomonas to X2,species.1
+306,Rhodomonas,Y,Müggelsee (Germany),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),Rhodomonas to X2,species.2
+307,Chroomonas,Y,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),to X2,species.1
+308,Cryptomonas erosa,Y,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.1
+308,Cryptomonas marssonii,Y,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.2
+308,Cryptomonas obovata,Y,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.3
+309,Large microflagellates (Cryptomonas),Y,Hungarian Rivers,NA,Borics et al. (2007),NA,species.1
+310,Cryptomonas ovata,Y,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+311,Cryptomonas curvata,Y,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.1
+311,Cryptomonas sp.,Y,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.2
+312,Cryptomonas cf. brasiliensis; Cryptomonas pyrenoidifera,Y,Paraibuna and Pomba river (Brazil),eutrophic,Soares et al. (2007),to X2,species.1
+313,aff. Teleaulax sp.,Y,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),C. brasiliensis to X2,species.1
+313,Cryptomonas brasiliensis,Y,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),C. brasiliensis to X2,species.2
+314,Cryptomonas acuta,Y,Paraná river (Argentina),NA,Devercelli (2006),C. brasiliensis to X2,species.1
+314,Cryptomonas brasiliensis,Y,Paraná river (Argentina),NA,Devercelli (2006),C. brasiliensis to X2,species.2
+314,Cryptomonas curvata,Y,Paraná river (Argentina),NA,Devercelli (2006),C. brasiliensis to X2,species.3
+314,Cryptomonas erosa,Y,Paraná river (Argentina),NA,Devercelli (2006),C. brasiliensis to X2,species.4
+315,Cryptopmonas,Y,Mary river (Australia),floodplain lake,Townsend (2006),Rhodomonas to X2,species.1
+315,Rhodomonas,Y,Mary river (Australia),floodplain lake,Townsend (2006),Rhodomonas to X2,species.2
+316,Cryptomonas,Y,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+317,Cryptomonas erosa,Y,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.1
+318,Cryptomonas spp.,Y,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),NA,species.1
+319,Cryptophyceae,Y,Los Coipos Lake (Argentina),wetland,Fazio & O'Farrell (2005),NA,species.1
+320,Cryptomonas sp.,Y,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+321,Cryptomonas spp.,Y,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+322,Cryptomonas curvata,Y,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),NA,species.1
+322,Cryptomonas marsonii,Y,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),NA,species.2
+323,Cryptomonas curvata,Y,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),NA,species.1
+324,Cryptomonas spp.,Y,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.1
+325,Cryptomonas ovata,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),Rhodomonas to X2,species.1
+325,Cryptomonas marssonii,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),Rhodomonas to X2,species.2
+325,Rhodomonas,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),Rhodomonas to X2,species.3
+326,Cryptomonas spp.,Y,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.1
+327,Cryptomonas spp.,Y,Sicilian water bodies,NA,Barone & Naselli-Flores (2003),NA,species.1
+328,Cryptomonas erosa,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+328,Cryptomonas marsonii,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.2
+328,Cryptomonas ovata,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.3
+328,Cryptomonas reflexa Gymnodinium spp.,Y,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.4
+329,Cryptomonassp.,Y,Vouglans reservoir,"deep dam reservoir, mixing and eutrophication, respectively",Leitão et al. (2003),NA,species.1
+330,Cryptomonas sp.,Y,Lake Rodó (Uruguay),"shallow , polimictic",Kruk et al. (2002),to X2,species.1
+330,Chroomonas sp.,Y,Lake Rodó (Uruguay),"shallow , polimictic",Kruk et al. (2002),to X2,species.2
+331,Komma caudata,Y,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),NA,species.1
+331,Cryptomonas marsonii,Y,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),NA,species.2
+331,Cryptomonas sp.,Y,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),NA,species.3
+332,Cryptomonas sp.,Y,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+333,Cryptomonas sp.,Y,Garças Reservoir (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+334,Cryptomonas cf. marssonii,Y,Poço da Cruz Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+335,Cryptomonas pyrenoidifera,Y,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),to X2,species.1
+336,Cryptophytes,Y,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),this taxonomic resolution does not allow sorting into coda,species.1
+337,Botryococcus braunii,F,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),NA,species.1
+338,Nephrocytium sp.,F,Faxinal Reservoir,"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.1
+338,Eutetramorus fotii,F,Faxinal Reservoir,"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.2
+339,Botryococcus braunii,F,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic,",Fonseca & Bicudo (2008),NA,species.1
+340,Colonial Chlorococcaleans (Botryococcus,F,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+340,Pseudosphaerocystis,F,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+340,Coenochlorys,F,Hungarian rivers,NA,Borics et al. (2007),NA,species.3
+340,Oocystis),F,Hungarian rivers,NA,Borics et al. (2007),NA,species.4
+340,Elakatothrix,F,Hungarian rivers,NA,Borics et al. (2007),NA,species.5
+341,Botryococcus protuberans,F,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+341,Kirchneriella lunaris,F,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.2
+341,Kirchneriella obesa,F,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.3
+341,Oocystis lacustris,F,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.4
+342,Botryococcus braunii,F,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.1
+342,Oocystis sp.,F,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.2
+343,Oocystis lacustris,F,Lake Tanganyika (Africa),"deep, meromictic",Stoyneva et al. (2007),NA,species.1
+343,Lobocystis planctonica var. mucosa,F,Lake Tanganyika (Africa),"deep, meromictic",Stoyneva et al. (2007),NA,species.2
+343,Eremosphaera tanganyikae,F,Lake Tanganyika (Africa),"deep, meromictic",Stoyneva et al. (2007),NA,species.3
+343,Sphaerocystis-like,F,Lake Tanganyika (Africa),"deep, meromictic",Stoyneva et al. (2007),NA,species.4
+344,Oocystis spp.,F,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.1
+344,Planktosphaeria gelatinosa,F,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.2
+344,Coenochlorys sp.,F,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.3
+344,Lobocystis planctonica,F,Lake Fertő,"shallow, temperate, saline, mesotrophic",Padisák et al. (2006),NA,species.4
+345,Coenochloris planconvexa,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.1
+345,Dictyosphaerium ehrenbergianum,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.2
+345,Eutetramorus fotti,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.3
+345,Eutetramorus tetrasporus,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.4
+345,Fusola viridis,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.5
+345,Nephroclamys subsolitaria,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.6
+345,Oocystis parva,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.7
+345,Oocystis spp.,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.8
+345,,F,Paraná river (Argentina),NA,Devercelli (2006),NA,species.9
+346,Lobocystis,F,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.1
+346,Coenococcus,F,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.2
+346,Strombidium,F,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.3
+346,Dictyosphaerium,F,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.4
+346,Oocystis,F,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.5
+347,Sphaerocystis,F,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+347,Dictyosphaerium,F,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.2
+348,Oocystis,F,"Lake Geneva, Lake Zürich","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+349,Botryococcus,F,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+349,Elakatothrix,F,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.2
+349,Sphaerocystis,F,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.3
+350,Elakatothrix genevensis,F,Lake Baikal (Russia),deep,Fietz et al. (2005),NA,species.1
+351,Oocystis lacustris,F,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.1
+351,Kirchneriella pseudoaperta,F,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.2
+351,Kirchneriella pinguis,F,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.3
+351,Elakatothrix gelatinosa,F,IAG Reservoir (Brazil),"shallow,  oligotrophic",Lopes et al. (2005),NA,species.4
+352,Sphaerocystis planctonica,F,Vouglans reservoir,"deep dam reservoir, stratification period, storm events",Leitão et al. (2003),NA,species.1
+353,Botryococcus braunii,F,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),NA,species.1
+354,Botryococcus braunii,F,Mohonk Lake (USA),"deep, oligotrophic, dimictic, clear epilimnia, low nutrient",Huszar et al. (2003),NA,species.1
+354,Willea wilhelmii,F,Mohonk Lake (USA),"deep, oligotrophic, dimictic, clear epilimnia, low nutrient",Huszar et al. (2003),NA,species.2
+354,Eutetramorus planctonicus,F,Mohonk Lake (USA),"deep, oligotrophic, dimictic, clear epilimnia, low nutrient",Huszar et al. (2003),NA,species.3
+354,Oocystis borgei,F,Mohonk Lake (USA),"deep, oligotrophic, dimictic, clear epilimnia, low nutrient",Huszar et al. (2003),NA,species.4
+355,Botryococcus braunii,F,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.1
+355,Botryococcus terribilis,F,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.2
+355,Pseudosphaerocystis lacustris,F,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.3
+356,Botriococcus braunii,F,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbows lakes,O'Farrell et al. (2003),NA,species.1
+357,Oocytis borgei,F,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),NA,species.1
+358,Oocystis lacustris,F,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.1
+358,Oocystis borgei,F,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.2
+359,Sphaerocystis schroeteri,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.1
+359,Sphaerocystis planctonicus,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.2
+359,Botryococcus neglectus,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.3
+359,Botryococcus terribilis,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.4
+359,Eutetramorus fotii,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.5
+359,Eutetramorus planctonicus,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.6
+359,Planktosphaeria gelatinosa,F,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),NA,species.7
+360,Coelastrum microporum,F,Lake Balaton (Hungary),Shallow,Hajnal & Padisák (2008),Coelastrum microporum to J,species.1
+360,Botryococcus braunii,F,Lake Balaton (Hungary),Shallow,Hajnal & Padisák (2008),Coelastrum microporum to J,species.2
+361,Kirchneriella,F,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),"Glenodinium to Y, Ketablepharis and Kephyrion to X2",species.1
+361,Glenodinium,F,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),"Glenodinium to Y, Ketablepharis and Kephyrion to X2",species.2
+361,Ketablepharis,F,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),"Glenodinium to Y, Ketablepharis and Kephyrion to X2",species.3
+361,Kephyrion,F,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),"Glenodinium to Y, Ketablepharis and Kephyrion to X2",species.4
+362,Oocystis parva,F,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),NA,species.1
+363,Volvox,G,Hungarian rivers,"Short, nutriet-rich water columns, small pools among macrophytes",Borics et al. (2007),NA,species.1
+363,Eudorina,G,Hungarian rivers,"Short, nutriet-rich water columns, small pools among macrophytes",Borics et al. (2007),NA,species.2
+364,Eudorina,G,"Lake Geneva, Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+365,Pandorina,G,"Lake Constance, lake Walen","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+366,Pandorina morum,G,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),NA,species.1
+367,Pandorina morum,G,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+368,Tetraedron,G,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),to J,species.1
+369,Coelastrum reticulatum,J,Faxinal Reservoir,"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.1
+370,Pediastrum boryanum,J,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),NA,species.1
+371,Scenedesmus communis,J,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+372,Coelastrum microporum,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+372,Coelastrum astroideum,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+372,Pediastrum boryanum,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+372,Pediastrum duplex,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.4
+372,Pediastrum simplex,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.5
+372,Pediastrum tetras,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.6
+372,Scenedesmus acuminatus,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.7
+372,Scenedesmus sp.,J,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.8
+373,Scenedesmus ellipticus,J,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.1
+373,Tetrastrum komarekii,J,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.2
+373,Tetrastrum triangulare,J,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.3
+374,Pediastrum simplex,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.1
+374,Pediastrum duplex,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.2
+374,Pediastrum boryanum,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.3
+374,Pediastrum biwae,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.4
+374,Coelastrum microporum,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.5
+374,Coelastrum pseudomicroporum,J,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.6
+375,Scenedesmus ecornis,J,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.1
+375,Scenedesmus obliquus,J,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.2
+375,Scenedesmus dimorphus,J,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.3
+375,Scenedesmus quadricauda,J,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.4
+376,Pediastrum,J,"Lake Geneva, Lake Zürich","monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+377,Scenedesmus spp.,J,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),NA,species.1
+378,Tetraedron minimum,J,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.1
+378,Tetraedron caudatum,J,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.2
+378,Crucigenia tetrapedia,J,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.3
+378,,J,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.4
+379,Coelastrum reticulatum,J,Lake Fuxian; Lake Xingyun (China),deep oligotrophic;  shallow eutrophic,Zhang et al. (2007),NA,species.1
+379,Tetraedron tumidulum,J,Lake Fuxian; Lake Xingyun (China),deep oligotrophic;  shallow eutrophic,Zhang et al. (2007),NA,species.2
+380,Scenedesmus quadricauda,J,Pomba river (Brazil),Eutrophic,Soares et al. (2007),NA,species.1
+381,Pediastrum boryanum,J,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.1
+381,Scenedesmus quadricauda,J,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.2
+381,Coelastrum microporum,J,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.3
+382,Colonial green algae,J,12 Belgian lakes,NA,Sarmento & Descy (2008),"""colonial green algae"" taxonomic resolution does not allow sorting into coda",species.1
+382,Pediastrum,J,12 Belgian lakes,NA,Sarmento & Descy (2008),"""colonial green algae"" taxonomic resolution does not allow sorting into coda",species.2
+382,Scenedesmus,J,12 Belgian lakes,NA,Sarmento & Descy (2008),"""colonial green algae"" taxonomic resolution does not allow sorting into coda",species.3
+382,Coelastrum,J,12 Belgian lakes,NA,Sarmento & Descy (2008),"""colonial green algae"" taxonomic resolution does not allow sorting into coda",species.4
+383,Chlorophytes,J,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),"""Chlorophytes"" taxonomic resolution does not allow sorting into coda",species.1
+384,Scenedesmus,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.1
+384,Golenkinia,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.2
+384,Tetrastrum,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.3
+384,Crucigenia,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.4
+384,Actinastrum,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.5
+384,Micratinium,J,Hungarian rivers,NA,Borics et al. (2007),Micratinium to F,species.6
+385,Actinastrum hantzschi,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.1
+385,Ankistrodesmus gracilis,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.2
+385,Coelastrum microporum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.3
+385,Coelastrum pseudomicroporum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.4
+385,Crucigenia quadrata,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.5
+385,Dictyosphaerium ehrenbergianum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.6
+385,Dictyosphaerium pulchellum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.7
+385,Golenkinia radiata,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.8
+385,Micractinium pusillum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.9
+385,Pediastrum tetras,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.10
+385,Scenedesmus acuminatum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.11
+385,Scenedesmus acuminatum var. bernardii,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.12
+385,Scenedesmus acutus,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.13
+385,Scenedesmus arcuatum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.14
+385,Scenedesmus bicaudatus,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.15
+385,Scenedesmus ecornis,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.16
+385,Scenedesmus quadricauda var. parvus,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.17
+385,Tetraedron caudatum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.18
+385,Tetraedron gracilis,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.19
+385,Tetraedron incus,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.20
+385,Tetraedron mediocris,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.21
+385,Tetraedron minimum,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.22
+385,Tetraedron triangulare,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.23
+385,Tetraedron victoriae,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.24
+385,Tetrastrum elegans,J,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),"Ankistrodesmus gracilis to X1; Dictyosphaerium ehrenbergianum, D. pulchellum and Micractinium pusillum to F",species.25
+386,Actinastrum hantzschii,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.1
+386,Coelastrum microporum,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.2
+386,Coelastrum pseudomicroporum,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.3
+386,Crucigenia tetrapedia,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.4
+386,Crucigenia fenestrata,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.5
+386,Micractinium pusillum,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.6
+386,Scenedesmus acuminatus,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.7
+386,Scenedesmus ecornis,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.8
+386,Scenedesmus intermedius,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.9
+386,Scenedesmus protuberans,J,Paraná river (Argentina),NA,Devercelli (2006),Micractinium pusillum to F,species.10
+387,Dictyosphaerium,J,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),Dictyosphaerium and Oocystis to F,species.1
+387,Oocystis,J,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),Dictyosphaerium and Oocystis to F,species.2
+387,Scenedesmus,J,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),Dictyosphaerium and Oocystis to F,species.3
+387,Tetraedron,J,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),Dictyosphaerium and Oocystis to F,species.4
+388,Goniochlorys mutica,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.1
+388,Coelastrum astroideum,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.2
+388,Coelastrum pseudomicroporum,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.3
+388,Treubaria triappendiculata,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.4
+388,Scenedesmus obliquus,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.5
+388,Scenedesmus quadricauda,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.6
+388,Crucigenia tetrapedia,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.7
+388,Tetraedron trigonium,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.8
+388,Tetraedron minimun,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.9
+388,Oocystis marina,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.10
+388,Lobocystis planctonica,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.11
+388,Tetrastrum glabrum.,J,Hungarian shallow lakes,NA,Padisák et al. (2003a),"Treubaria triappendiculata, Oocystis marina, Lobocystis planctonica to F",species.12
+389,Pediastrum duplex,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.1
+389,Coelastrum reticulatum,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.2
+389,Coelastrum microporum,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.3
+389,Oocystis lacustris,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.4
+389,Treubaria triappendiculata,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.5
+389,Scenedesmus spp.,J,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Oocystis lacustris and Treubaria triappendiculata to F,species.6
+390,Coelastrum spp.,J,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"""coccal green algae"" taxonomic resolution does not allow sorting into coda",species.1
+390,coccal green algae,J,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"""coccal green algae"" taxonomic resolution does not allow sorting into coda",species.2
+391,Ankistrodesmus fusiformis,J,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),to X1,species.1
+392,Ankistrodesmus/Monoraphidium,J - X1,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),accepted as X1,species.1
+393,Aphanocapsa delicatissima,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+393,Aphanocapsa elachista,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.2
+393,Aphanothece smithii,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.3
+393,Aphanocapsa incerta,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.4
+394,Aphanocapsa elachista,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+394,Aphanocapsa incerta,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+394,Cyanodictyon,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.3
+395,Aphanocapsa,K,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+395,Aphanothece,K,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.2
+396,Aphanothece stagnina,K,Pomba river (Brazil),Eutrophic,Soares et al. (2007),NA,species.1
+396,Aphanocapsa sp.,K,Pomba river (Brazil),Eutrophic,Soares et al. (2007),NA,species.2
+397,Aphanothece,K,Hungarian rivers,"Short, nutrient-rich columns",Borics et al. (2007),NA,species.1
+397,Aphanocapsa,K,Hungarian rivers,"Short, nutrient-rich columns",Borics et al. (2007),NA,species.2
+398,Aphanocapsa elachista,K,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.1
+398,Aphanothece,K,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Goun et al. (2007),NA,species.2
+399,Aphanocapsa sp.,K,Paraná river (Argentina),NA,Devercelli (2006),NA,species.1
+399,Aphanocapsa delicatissima,K,Paraná river (Argentina),NA,Devercelli (2006),NA,species.2
+400,Aphanocapsa,K,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),NA,species.1
+400,Aphanothece,K,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),NA,species.2
+401,Aphanocapsa sp.,K,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+402,Aphanothece,K,Los Coipos Lake (Argentina),Wetland,Fazio & O'Farrell (2005),NA,species.1
+403,Aphanocapsa elachista,K,Vouglans reservoir,"deep dam reservoir,  stratification period",Leitão et al. (2003),NA,species.1
+404,Aphanothece nidulans,K,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),NA,species.1
+404,Aphanocapsa elachista,K,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),NA,species.2
+405,Aphanocapsa sp.,K,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+406,small-celled colonial Chroococcales,K,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.1
+407,Aphanothece spp.,K,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),NA,species.1
+408,Coelosphaerium evidenter-marginatum,K,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),to Lo,species.1
+409,Gloeocapsa punctata,K,Pomba river (Brazil),Eutrophic,Soares et al. (2007),to TC,species.1
+410,Aphanothece,K,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),Phacotus to XPh,species.1
+410,Phacotus,K,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),Phacotus to XPh,species.2
+411,Coelosphaerium kuetzingianum,K,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),Coelosphaerium spp. to Lo,species.1
+412,Eucapsis minuta,K,"Lake Boeckella, Lake Chico (Antartic)","Antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Eucapsis minuta and Chroococcus minutus to Lo,species.1
+412,Chroococcus minutus,K,"Lake Boeckella, Lake Chico (Antartic)","Antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Eucapsis minuta and Chroococcus minutus to Lo,species.2
+412,Aphanocapsa elachista,K,"Lake Boeckella, Lake Chico (Antartic)","Antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Eucapsis minuta and Chroococcus minutus to Lo,species.3
+413,Coelosphaerium sp.,K,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Coelosphaerium spp. to Lo,species.1
+413,Aphanocapsa nubilum,K,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Coelosphaerium spp. to Lo,species.2
+413,Aphanocapsa delicatissima,K,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Coelosphaerium spp. to Lo,species.3
+413,Aphanocapsa elachista,K,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Coelosphaerium spp. to Lo,species.4
+413,Aphanothece minutissima,K,Lake Rodó (Uruguay),"shallow, polimictic",Kruk et al. (2002),Coelosphaerium spp. to Lo,species.5
+414,Anabaena crassa,H,Faxinal Reservoir,"deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),to H1,species.1
+415,Aphanizomenon flos-aquae,H,Lake Xingyun (China),shallow eutrophic,Zhang et al. (2007),to H1,species.1
+415,Anabaena spp.,H,Lake Xingyun (China),shallow eutrophic,Zhang et al. (2007),to H1,species.2
+416,Anabaena,H,Lower Lake Zürich,"monomictic, peri-alpine",Anneville et al. (2005),to H1,species.1
+417,Anabaena affinis,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.1
+417,Anabaena aphanizomenoides,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.2
+417,Anabaena cf. circinalis,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.3
+417,Anabaena cf. scheremetievi,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.4
+417,Anabaena cf. solitaria,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.5
+417,Anabaena circinalis,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.6
+417,Anabaena flos-aquae,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.7
+417,Anabaena lemmermannii,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.8
+417,Anabaena perturbata,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.9
+417,Anabaena spiroides,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.10
+417,Anabaena viguieri,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.11
+417,Anabaena sp.,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.12
+417,Anabaenopsis cunningtonii,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.13
+417,Anabaena elenkinii,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.14
+417,Anabaena tanganyikae,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.15
+417,Aphanizomenon cf. flos-aquae,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.16
+417,Aphanizomenon flos-aquae,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.17
+417,Aphanizomenon issatschenkoi,H,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),Anabaena lemmermannii to H2; others to H1,species.18
+418,Aulosira sp.,H,Lake Baikal (Russia),Deep,Fietz et al. (2005),to H1,species.1
+419,Aphanizomenon gracile,H,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),to H1,species.1
+420,Anabaena spiroides,H,Juturnaíba Reservoir (Brazil),"water supply, shallow",Marinho & Huszar (2002),To H1,species.1
+421,Anabaena planctonica,H,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to H1,species.1
+421,Anabaena spiroides,H,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to H1,species.2
+421,Aphanizomenon flos-aquae,H,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to H1,species.3
+421,Aphanizomenon gracile,H,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to H1,species.4
+421,Anabaenopsis sp.,H,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to H1,species.5
+422,Anabaena lemmermannii,H,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),to H2,species.1
+423,Anabaena spiroides,H,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),to H1,species.1
+424,Anabaenopsis elenkinii,H,Barra Lake (Brazil),productive lake,Huszar et al. (2000),to H1,species.1
+425,Aphanizomenon gracile,H1 - SN,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),accepted as H1,species.1
+426,Aphanizomenon flos-aquae,H1,Lake Balaton (Hungary),Shallow,Hajnal & Padisák (2008),NA,species.1
+427,Anabaena spiroides,H1,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),NA,species.1
+428,Anabaena planctonica,H1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+428,Aphanizomenon gracile,H1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.2
+429,Anabaena circinalis,H1,Segredo Reservoir (Brazil),dam reservoir,Borges et al. (2008),NA,species.1
+430,Anabaena circinalis,H1,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),NA,species.1
+431,Anabaena,H1,Sardis Reservoir (USA),water level changes,Sthapit et al. (2008),NA,species.1
+432,Aphanizomenon,H1,Müggelsee (German),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),NA,species.1
+433,Anabaena planctonica,H1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+434,Anabaena flos-aquae,H1,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+434,Aphanizomenon flos-aquae,H1,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+435,Anabaena cf. aphanizomenoides,H1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+435,Anabaena flos-aquae,H1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+435,Anabaena viguieri,H1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+435,Aphanizomenon issatschenkoi,H1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.4
+435,Aphanizomenon gracile,H1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.5
+436,Aphanizomenon flos-aquae,H1,Lake Fuxian (China),deep oligotrophic,Zhang et al. (2007),NA,species.1
+437,Aphanizomenon gracile,H1,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+438,Aphanizomenon aphanizomenoides,H1,Paraná river (Argentina),NA,Devercelli (2006),NA,species.1
+439,Aphanizomenon spp.,H1,Lake Balaton (Hungary),Shallow,Padisák & Reynolds (1998); Padisák et al. (2006),NA,species.1
+439,Anabaena spp.,H1,Lake Balaton (Hungary),Shallow,Padisák & Reynolds (1998); Padisák et al. (2006),NA,species.2
+440,Anabaena group,H1,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+441,Anabaena spp.,H1,"Foz do Areia, Segredo, Salto Santiago, Salto Osório, Salto Caxias reservoirs (Brazil)",cascading reservoir,Silva et al. (2005),NA,species.1
+442,Anabaena spiroides,H1,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),NA,species.1
+442,Aphanizomenon gracile,H1,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),NA,species.2
+443,Anabaena flos-aquae,H1,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),NA,species.1
+444,Aphanizomenon gracile,H1,Lake Scharmützelsee (Germany),"deep, dimictic, eutrophic",Nixdorf et al. (2003),NA,species.1
+445,Aphanizomenon ovalisporum,H1,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+445,Aphanizomenon issatschenkoi,H1,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.2
+445,Anabaenopsis arnoldii,H1,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.3
+446,Anabaena spiroides,H1,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),NA,species.1
+446,Aphanizomenon gracile,H1,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),NA,species.2
+446,Aphanizomenon flos-aquae,H1,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),NA,species.3
+446,Anabaenopsis arnoldii,H1,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),NA,species.4
+447,Anabaena sphaerica,H1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.1
+448,Anabaena lemmermannii,H2,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+448,Gloeotrichia echinulata,H2,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+449,Gloeotrichia echinulata,H2,Lake Nero (Russia),"shallow, highly eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+450,Anabaena planctonica,H2,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),to H1,species.1
+451,Anabaena sp.,H2,Paraibuna river (Brazil),Eutrophic,Soares et al. (2007),to H1,species.1
+452,Anabaena solitaria,H2,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),to H1,species.1
+453,Anabaena solitaria,H2,Stissing lake (USA),"shallow, meso-eutrophic, dimictic",Huszar et al. (2003),to H1,species.1
+454,Anabaena solitaria,H2,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),to H1,species.1
+455,Aphanizomenon,Hi,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),"for typesetting error, i should be read as 1",species.1
+456,Uroglena,U,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+457,Uroglena,U,Hungarian rivers,Summer epilimnia,Borics et al. (2007),NA,species.1
+458,Uroglena,U,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),To X2,species.1
+458,Monas,U,"Upper and Lower Lake Zürich, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),To X2,species.2
+459,Merismopedia glauca,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+459,Merismopedia tenuissima,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+460,Peridinium spp.,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008a),NA,species.1
+460,Merismopedia spp.,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008a),NA,species.2
+461,Merismopedia glauca,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),Gymnodinium sp. to Y,species.1
+461,Merismopedia tenuissima,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),Gymnodinium sp. to Y,species.2
+461,Gymnodinium sp.,LO,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),Gymnodinium sp. to Y,species.3
+462,Peridinium,LO,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+462,Woronichinia,LO,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+462,Merismopedia,LO,Hungarian rivers,NA,Borics et al. (2007),NA,species.3
+463,Peridinium,LO,Crater Lake (USA),"deep, ultra-oligotrophic",McIntire et al. (2007),NA,species.1
+464,Snowella lacustris,LO,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+464,Woronichinia naegeliana,LO,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+464,Peridiniopsis elpatiewskyi,LO,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+464,Peridinium sp.,LO,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.4
+465,Gymnodinium uberrimum,LO,24 German reservoirs,drinking-water,Niesel et al. (2007),NA,species.1
+465,Peridinium willei,LO,24 German reservoirs,drinking-water,Niesel et al. (2007),NA,species.2
+466,Merismopedia minima,LO,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.1
+466,Merismopedia tenuissima,LO,Laguna Grande (Argentina),field mesocosms with free floating plants,Pinto et al. (2007),NA,species.2
+467,Peridinium inconspicuum,LO,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.1
+468,Merismopedia,LO,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),NA,species.1
+469,Merismopedia tenuissima,LO,Paraná river (Argentina),NA,Devercelli (2006),NA,species.1
+470,Ceratium-Snowella,LO,Lake Balaton (Hungary),shallow,Padisák & Reynolds (1998); Padisák et al. (2006),NA,species.1
+471,Peridinium,LO,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),NA,species.1
+472,Peridinium,LO,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+473,Peridinium gatunense,LO,IAG Reservoir (Brazil),"shallow, oligotrophic",Lopes et al. (2005),NA,species.1
+474,Peridiniopsis durandi,LO,Vouglans reservoir,"deep dam reservoir,  stratification period",Leitão et al. (2003),NA,species.1
+475,Woronichinia sp.,LO,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),NA,species.1
+476,Woronichinia sp.,LO,Stissing Lake (USA),"shallow, meso-eutrophic, dimictic",Huszar et al. (2003),NA,species.1
+477,Woronichinia elorantae,LO,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.1
+477,Peridinium,LO,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.2
+477,Merismopedia,LO,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),NA,species.3
+478,Peridinium cinctum,LO,Kuzgun Dam Reservoir (Turkey),oligo-mesotrophic,Gurbuz et al. (2003),NA,species.1
+479,Merismopedia tenuissima,LO,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),NA,species.1
+480,Planktolyngbya limnetica,LO,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1,species.1
+480,Ceratium hirundinella,LO,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1,species.2
+480,Peridinium spp.,LO,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1,species.3
+480,Aphanizomenon klebahnii,LO,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1,species.4
+480,Snowella lacustris,LO,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),Planktolyngbya limnetica to S1; Aphanizomenon klebahnii to H1,species.5
+481,Gymnodinium,LO,12 Belgian lakes,NA,Sarmento & Descy (2008),Gymnodinium sp. to Y,species.1
+482,Peridinium inconspicuum,LO,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),Gymnodinium sp. to Y,species.1
+482,Gymnodinium sp.,LO,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),Gymnodinium sp. to Y,species.2
+483,Merismopedia minima,LO,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Gymnodinium sp. to Y,species.1
+483,Merismopedia punctata,LO,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Gymnodinium sp. to Y,species.2
+483,Gymnodinium,LO,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),Gymnodinium sp. to Y,species.3
+484,Peridinium umbonatum,LO,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.1
+484,Merismopedia tenuissima,LO,Lake Xeresa (Spain),"shallow lake, experimental approach",Romo & Villena (2005),NA,species.2
+485,Dinoflagelate,LO,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),"""Dinoflagellate"" taxonomic resolution does not allow sorting into coda",species.1
+486,Gymnodinium sp.,LO,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),Gymnodinium sp. to Y,species.1
+486,Merismopedia tenuissima,LO,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),Gymnodinium sp. to Y,species.2
+486,Merismopedia punctata,LO,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),Gymnodinium sp. to Y,species.3
+487,Ceratium hirundinella,LO -LM,Lake Mondsee (Austria),"deep, meso-oligotrophic period of the lake",Dokulil & Teubner (2003),all to Lo but Glenodinium sp. to Y,species.1
+487,Peridinium willei,LO -LM,Lake Mondsee (Austria),"deep, meso-oligotrophic period of the lake",Dokulil & Teubner (2003),all to Lo but Glenodinium sp. to Y,species.2
+487,Gymnodinium helveticum,LO -LM,Lake Mondsee (Austria),"deep, meso-oligotrophic period of the lake",Dokulil & Teubner (2003),all to Lo but Glenodinium sp. to Y,species.3
+487,Glenodinium sp.,LO -LM,Lake Mondsee (Austria),"deep, meso-oligotrophic period of the lake",Dokulil & Teubner (2003),all to Lo but Glenodinium sp. to Y,species.4
+488,Ceratium,LM,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.1
+488,Microcystis,LM,12 Belgian lakes,NA,Sarmento & Descy (2008),NA,species.2
+489,Ceratium,LM,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+489,Microcystis,LM,Hungarian rivers,NA,Borics et al. (2007),NA,species.2
+490,Ceratium hirudinella,LM,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations","Naselli-Flores & Barone (2003, 2005)",Microcystis is also present,species.1
+490,Ceratium furcoides,LM,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations","Naselli-Flores & Barone (2003, 2005)",Microcystis is also present,species.2
+491,Peridinium cf. cinctum,LM,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.1
+491,Gomphosphaeria sp.,LM,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.2
+491,Microcystis flos-aquae,LM,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.3
+491,Microcystis wesenbergii,LM,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.4
+491,Coelomoron tropicalis,LM,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.5
+492,Microcystis aeruginosa,LM,Capivari and Segredo Reservoirs (Brazil),dam reservoir,Borges et al. (2008),to M,species.1
+493,Gymnodinium sp.,LM,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Peridinium spp. to Lo, Gymnodinium to Y",species.1
+493,Peridinium cinctum,LM,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Peridinium spp. to Lo, Gymnodinium to Y",species.2
+493,Peridinium willei,LM,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),"Peridinium spp. to Lo, Gymnodinium to Y",species.3
+494,Peridinium cinctum,LM,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),"to Lo,",species.1
+494,Peridinium willei,LM,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),"to Lo,",species.2
+495,Ceratium,LM,Müggelsee (German),"polymictic, eutrophic, shallow",Wilhelm & Adrian (2008),"to Lo, cause Microcystis is not present",species.1
+496,Ceratium hirundinella,LM,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),Microcystis is also present,species.1
+497,Microcystis  flos-aquae,LM,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to M,species.1
+497,Microcystis panniformis,LM,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to M,species.2
+497,Microcystis wesenbergii,LM,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),to M,species.3
+498,Cyanodictyon,LM,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),to M,species.1
+498,Microcystis,LM,"Reservoirs North Pine, Somerset, Wivenhoe (Australia)",drinking water reservoirs,Burford & O'Donohue (2006),to M,species.2
+499,Microcystis aeruginosa,LM,Paraná river (Argentina),NA,Devercelli (2006),to M,species.1
+500,Ceratium,LM,"Lake Geneva, Lake Walen, Lake Constance","monomictic, peri-alpine",Anneville et al. (2005),to Lo,species.1
+501,Microcystis,LM,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),to M,species.1
+502,Ceratium hirundinella,LM,Stissing lake (USA),"shallow, mesoeutrophic, dimictic",Huszar et al. (2003),to Lo,species.1
+503,Ceratium hirundinella,LM,Wononscopomuc lake (USA),"deep, mesotrophic, dimictic",Huszar et al. (2003),to Lo,species.1
+504,Ceratium hirundinella,LM,Chodikee lake (USA),"shallow, eutrophic",Huszar et al. (2003),to Lo,species.1
+505,Ceratium,LM,Hungarian shallow lakes,NA,Padisák et al. (2003a),Microcystis is also present,species.1
+506,Microcystis aeruginosa,LM,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),to M,species.1
+506,Microcystis wesenbergii,LM,Bulgarian natural wetlands,"shallow, 18 water bodies, mesotrophic to hypertrophic",Stoyneva (2003),to M,species.2
+507,Microcystis spp.,LM,Lake Blanca (Uruguay),yellow-brownish shallow,Mazzeo et al. (2003),to M,species.1
+508,Aphanothece clathrata,LM,Lake Batata (Brazil),Amazonian flood-plain,Melo & Huszar (2000); Huszar & Reynolds (1997),to K,species.1
+509,Peridinium spp.,L,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),to Lo,species.1
+510,Peridinium volzii,L,Garças Reservoir (Brazil),productive lake,Huszar et al. (2000),to Lo,species.1
+511,Ceratium hirundinella,L,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),to Lo,species.1
+512,Dinoflagellate,L,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),"""Dinoflagellate"" taxonomic resolution does not allow sorting into coda",species.1
+513,Microcystis aeruginosa,M,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),NA,species.1
+514,Sphaerocavum brasiliense,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+514,Microcystis aeruginosa,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.2
+514,Microcystis panniformis,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.3
+515,Microcystis aeruginosa,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+515,Microcystis panniformis,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+515,Sphaerocavum brasiliense,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.3
+516,Microcystis aeruginosa,M,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+517,Microcystis aeruginosa,M,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+518,Microcystis,M,Hungarian rivers,"Daily mixed layers of small, eutrophic, low latitude lakes",Borics et al. (2007),NA,species.1
+518,Sphaerocavum,M,Hungarian rivers,"Daily mixed layers of small, eutrophic, low latitude lakes",Borics et al. (2007),NA,species.2
+519,Microcystis aeruginosa,M,Lake Nero (Russia),"shallow, eutrophic",Babanazarova & Lyashenko (2007),NA,species.1
+520,Microcystis aeruginosa,M,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+520,Microcystis flos-aquae,M,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.2
+520,Microcystis ichthyoblabe,M,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.3
+520,Microcystis novacekii,M,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.4
+520,Microcystis wesenbergii,M,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.5
+521,Microcystis aeruginosa,M,Lake Fuxian; Lake Xingyun (China),deep oligotrophic; shallow eutrophic,Zhang et al. (2007),NA,species.1
+522,Microcystis,M,Lake Kivu (Africa),"deep, meromictic",Sarmento et al. (2006),NA,species.1
+523,Microcystis aeruginosa,M,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2005),NA,species.1
+524,Microcystis aeruginosa,M,Lake Arancio (Italy),"hypertrophic reservoir, water level fluctuations",Naselli-Flores & Barone (2005),NA,species.1
+525,Microcystis aeruginosa,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.1
+525,Microcystis flos-aquae,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.2
+525,Microcystis ichthyoblabe,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.3
+525,Microcystis viridis,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.4
+525,Microcystis novacekii,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.5
+525,Microcystis wesenbergii,M,9 Greek lakes,"shallow and deep, oligo- to hypertrophic",Vardaka et al. (2005),NA,species.6
+526,Microcystis aeruginosa,M,Ömerli Reservoir (Istanbul),drinking water,Albay & Akçaalan (2003),NA,species.1
+527,Microcystis aeruginosa,M,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.1
+527,Microcystis pannniformis,M,Lake Arancio (Italy),"hypertrophic, very dynamic, water level fluctuations",Naselli-Flores & Barone (2003),NA,species.2
+528,Microcystis spp.,M,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+529,Microcystis aeruginosa,M,Juturnaíba Reservoir (Brazil),"Water supply, shallow",Marinho & Huszar (2002),NA,species.1
+530,Microcystis aeruginosa,M,Lake Rodó (Uruguay),"shallow, polymictic",Kruk et al. (2002),NA,species.1
+531,Microcystis aeruginosa,M,Juturnaíba Lake (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+532,Microcystis aeruginosa,M,Garças Reservoir (Brazil),productive lake,Huszar et al. (2000),NA,species.1
+532,Microcystis lamelliformis,M,Garças Reservoir (Brazil),productive lake,Huszar et al. (2000),NA,species.2
+533,Radiocystis fernandoi,M,Ventura Lagoon (Brazil),"shallow, eutrophic, floodplain lake",Bovo-Scoparin & Train (2008),to Lo,species.1
+534,Microcystis,LM - M,Lake Constance,"monomictic, peri-alpine",Anneville et al. (2005),to M,species.1
+535,Planktothrix rubescens,R,Hungarian rivers,"Metalimnia of mesotrophic, stratified lakes",Borics et al. (2007),NA,species.1
+535,Planktothrix mougeotii,R,Hungarian rivers,"Metalimnia of mesotrophic, stratified lakes",Borics et al. (2007),NA,species.2
+536,Planktothrix,R,Lower Lake Zürich,"monomictic, peri-alpine",Anneville et al. (2005),if it is P. rubescens,species.1
+537,Planktotrhix rubescens,R,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.1
+537,Planktothrix mougeotii,R,Lago Maggiore (Italy),NA,Morabito et al. (2003),NA,species.2
+538,Lyngbya sp.,R,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),Lyngbya sp. to S1 and  Spirulina sp. to S2,species.1
+538,Spirulina sp.,R,Dom Helvécio Lake (Brazil),"deep, oligotrophic, atelomixis",Souza et al. (2008),Lyngbya sp. to S1 and  Spirulina sp. to S2,species.2
+539,Oscillatoria,R,Lake Geneva,"monomictic, peri-alpine",Anneville et al. (2005),"if it is really Oscillatoria,  to MP",species.1
+540,Pseudopedinella,R,Lake Constance,"monomictic, peri-alpine",Anneville et al. (2005),to X2,species.1
+540,Chrysochromulina,R,Lake Constance,"monomictic, peri-alpine",Anneville et al. (2005),to X2,species.2
+541,Chrysolykos,R,Lake Walen,"monomictic, peri-alpine",Anneville et al. (2005),to X2,species.1
+542,Gymnodinium,R,Lake Constance,"monomictic, peri-alpine",Anneville et al. (2005),to Y,species.1
+543,Achnanthes,R,"Lake Constance, Lake Walen","monomictic, peri-alpine",Anneville et al. (2005),to MP,species.1
+544,Planktotrhix rubescens,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.1
+544,Tabellaria flocculosa var. fenestrata,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.2
+544,Ceratium hirundinella,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.3
+544,Ceratium cornutum,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.4
+544,Peridinium willei,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.5
+544,Fragilaria spp.,R,Lake Mondsee (Austria),"deep, eu-hypertrophic period of the lake",Dokulil & Teubner (2003),"Tabellaria flocculosa var. fenestrata to N, Ceratium hirundinella, C. cornutum and Peridinium willei to Lo; Fragilaria spp.to P",species.6
+545,Isocystis pallida,R,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Pseudanabaena catenata  to MP; others to S1,species.1
+545,Leptolyngbya tenue,R,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Pseudanabaena catenata  to MP; others to S1,species.2
+545,Leptolyngbya antartica,R,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Pseudanabaena catenata  to MP; others to S1,species.3
+545,Pseudanabaena catenata,R,"Lake Boeckella, Lake Chico (Antartic)","antarctic lakes, oligotrophic, meso-eutrophic",Allende & Izaguirre (2003),Pseudanabaena catenata  to MP; others to S1,species.4
+546,Planktotrhix rubescens,R,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM",species.1
+546,Planktotrhix agardhii,R,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM",species.2
+546,Planktolyngbya limnetica,R,Lake Garda (Italy),"deep, subalpine",Salmaso (2002),"Planktothrix agardhii, Planktolyngbya limnetica to S1, unless they occurred in the DCM",species.3
+547,Microcystis flos-aquae,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.1
+547,Planktotrhixrubescens,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.2
+547,Gomphosphaeria lacustris,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.3
+547,Dinobryon sociale,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.4
+547,Dinobryon divergens,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.5
+547,Cryptomonas spp.,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.6
+547,Rhodomonas minuta,R - LM,Lake Mondsee (Austria),"deep, eutrophic period of the lake",Dokulil & Teubner (2003),"P. rubescens to R; Microcystis flos-aquae to M;Gomphosphaeria lacustris to Lo;Dinobryon spp. to E; Cryptomonas spp. to Y, Rhodomonas minuta to X2",species.7
+548,Chromatium,V,NA,NA,"Reynolds et al., (2002)",NA,species.1
+548,Chlorolobium,V,NA,NA,"Reynolds et al., (2002)",NA,species.2
+549,Lepocinclis salina,W,Lake Rodó (Uruguay),"shallow,  polymictic",Kruk et al. (2002),to W1,species.1
+550,Chlamydomonas,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.1
+550,Spermatozopsis,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.2
+550,Pyrobotrys,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.3
+550,Chlorella,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.4
+550,Polytoma,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.5
+550,Oscillatoria chlorina,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.6
+550,Beggiatoa alba,W0,Hungarian rivers,NA,Borics et al. (2007),Spermatozoopsis to X2,species.7
+551,Euglena acus,W1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+551,Euglena proxima,W1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+551,Euglena splendens,W1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.3
+552,Phacus pusillus,W1,Lake Manyas (Turkey),"shallow, hypertrophic",Çelik & Ongun (2008),NA,species.1
+553,Euglena oxyuris,W1,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.1
+553,Euglena spp.,W1,Lake Balaton (Hungary),shallow,Hajnal & Padisák (2008),NA,species.2
+554,Vacuolaria tropicalis,W1,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Crossetti & Bicudo (2008b),NA,species.1
+555,Euglena oxyuris,W1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+555,Euglena sp.,W1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.2
+555,Lepocinclis sp.,W1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.3
+555,Phacus sp.,W1,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.4
+556,Euglena sp.,W1,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+557,Euglena sp.,W1,Paraná river (Argentina),NA,Devercelli (2006),NA,species.1
+558,Phacus triqueter,W1,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.1
+558,Euglena sp.,W1,21 floodplain lakes (Araguaia river) (Brazil),NA,Nabout et al. (2006),NA,species.2
+559,Euglenoids,W1,12 Belgian lakes,NA,Sarmento & Descy (2008),"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda",species.1
+559,Synura,W1,12 Belgian lakes,NA,Sarmento & Descy (2008),"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda",species.2
+559,Gonium,W1,12 Belgian lakes,NA,Sarmento & Descy (2008),"Synura to Ws; ""Euglenoids"" taxonomic resolution does not allow sorting into coda",species.3
+560,Euglena,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.1
+560,Phacus,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.2
+560,Lepocinclis,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.3
+560,Gonium pectorale,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.4
+560,Gonium sociale,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.5
+560,Pandorina morum,W1,Hungarian rivers,NA,Borics et al. (2007),Pandorina morum to G,species.6
+561,Euglena,W1,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.1
+561,Phacus,W1,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.2
+562,Pandorina,W1,Los Coipos Lake (Argentina),NA,Fazio & O'Farrell (2005),Pandorina to G; “Euglenophyceae” taxonomic resolution does not allow sorting into coda,species.1
+562,Euglenophyceae,W1,Los Coipos Lake (Argentina),NA,Fazio & O'Farrell (2005),Pandorina to G; “Euglenophyceae” taxonomic resolution does not allow sorting into coda,species.2
+563,Strombomonas sp.,W1,Chodikee lake,"shallow, eutrophic",Huszar et al. (2003),to W2,species.1
+564,Euglena proxima,W1,Hungarian shallow lakes,NA,Padisák et al. (2003a),to Ws,species.1
+564,Euglena texta,W1,Hungarian shallow lakes,NA,Padisák et al. (2003a),to Ws,species.2
+564,Euglena acus,W1,Hungarian shallow lakes,NA,Padisák et al. (2003a),to Ws,species.3
+564,Synura,W1,Hungarian shallow lakes,NA,Padisák et al. (2003a),to Ws,species.4
+565,Synura,W1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Synura to Ws; Peridinium to Lo,species.1
+565,Gonium,W1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Synura to Ws; Peridinium to Lo,species.2
+565,Euglena spp.,W1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Synura to Ws; Peridinium to Lo,species.3
+565,Peridinium sp.,W1,Lower Paraná river wetland (Argentina),shallow lake and three relict oxbow lakes,O'Farrell et al. (2003),Synura to Ws; Peridinium to Lo,species.4
+566,Trachelomonas sculpta,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.1
+566,Trachelomonas volvocinopsis,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.2
+566,Trachelomonas hispida var. hispida,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.3
+566,Trachelomonas kellogii,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic","Crossetti & Bicudo (2008a, 2008b)",NA,species.4
+567,Trachelomonas bacillifera,W2,Faxinal Reservoir,"deep, meso-eutrophic, warm deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.1
+567,Trachelomonas volvocina,W2,Faxinal Reservoir,"deep, meso-eutrophic, warm deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.2
+567,Trachelomonas volvocinopsis,W2,Faxinal Reservoir,"deep, meso-eutrophic, warm deep, meso-eutrophic, warm monomictic, atelomictic, water  supply",Becker et al. (2008),NA,species.3
+568,Trachelomonas hispida,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.1
+568,Trachelomonas kellogii,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.2
+568,Trachelomonas volvocinopsis,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polimictic",Fonseca & Bicudo (2008),NA,species.3
+569,Trachelomonas reticollis,W2,Paraibuna river (Brazil),Eutrophic,Soares et al. (2007),NA,species.1
+570,Trachelomonas,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.1
+570,Strombomonas,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.2
+570,Dimorphococcus spp.,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.3
+570,Small dinoflagellates Peridinium,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.4
+570,Glenodinium,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.5
+570,Gymnodinium,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.6
+570,other metaphytic species,W2,Hungarian rivers,"Shallow, mesotrophic, well mixed lakes",Borics et al. (2007),Dimorphococcus spp. to F; others remain here but only if metaphytic.,species.7
+571,Trachelomonas volvocinopsis,W2,Lake Kastoria (Greece),"higly eutrophic, shallow",Moustaka-Gouni et al. (2007),NA,species.1
+572,Trachelomonas oblonga,W2,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.1
+572,Trachelomonas volvocina,W2,Mundaú Reservoir (Brazil),"water supply, shallow",Moura et al. (2007),NA,species.2
+573,Trachelmonas,W2,Mary river (Australia),floodplain lake,Townsend (2006),NA,species.1
+574,Trachelomonas,W2,Lake Samsonvale (Australia),dam reservoir,Antenucci et al. (2005),NA,species.1
+575,Trachelomonas spp.,W2,Garças Reservoir (Brazil),"shallow, eutrophic, polymictic",Crossetti & Bicudo (2005),NA,species.1
+576,Trachelomonas,W2,Hungarian shallow lakes,NA,Padisák et al. (2003a),NA,species.1
+577,Synura,WS,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+578,Synura,WS,Hungarian shallow lakes,"humic lakes, natural organic richness of the water",Padisák et al. (2003a),NA,species.1
+579,Gonynostomum,Q,Hungarian rivers,NA,Borics et al. (2007),NA,species.1
+580,Gonyostomum semen,Q,Lake 979 (Canada),brown-water lake,Findlay et al. (2005),NA,species.1
+581,Heterosigma cf. akashiwo,Q,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),NA,species.1
+581,Gonyostomum semem,Q,Comprida Lagoon (Brazil),"shallow, humic, acidic coastal lagoon",Alves de Souza et al. (2006),NA,species.2
+582,Gonyostomum semen,Q,15 Swedish forest lakes,"shallow-deep, oligo-mesotrophic",Willén (2003),NA,species.1
