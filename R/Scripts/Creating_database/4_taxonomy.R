@@ -178,7 +178,7 @@ write_csv(to_resolve_manually, "R/data_outputs/database_products/taxonomy/to_res
 # 2) Add in the manually resolved names to the full name list
 
 # Import the manually resolved names
-manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve_tol")
+manually_resolved_subset <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "resolve")
 
 # Add to main names list
 resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "search_string") %>% 
@@ -329,9 +329,7 @@ resolved <- multi_tnrs_full %>%
       search_string == "crucigeniella neglecta" ~ 5153022,
       search_string == "synechocystis minima" ~ 4016583,
       search_string == "chrysococcus rufescens" ~ 4016510,
-      search_string == "diphylleia rotans" ~ 6000826,
-      search_string == "ophiothrix" ~ 25914, 
-      search_string == "johansenia constricta" ~ 5419180,
+      search_string == "ophiothrix" ~ 25914,
       
       # Random ones that were found that were not multis but just assigned wrong 
       search_string == "acanthosphaera (genus in subkingdom sar)" ~ 6001434,
@@ -371,7 +369,6 @@ resolved <- multi_tnrs_full %>%
       ott_id == "5153022" ~ "Willea neglecta",
       ott_id == "4016583" ~ "Synechocystis bourrellyi",
       ott_id == "6388726" ~ "Achnanthidium microcephalum",
-      ott_id == "6000826" ~ "Aulacomonas submarina",
       ott_id == "25914" ~ "Ophiocytium",
       
       # Random ones that were found that were not multis but just assigned wrong 
@@ -392,7 +389,7 @@ resolved <- multi_tnrs_full %>%
     
     # remove weird ones
     !(unique_name %in% c("Poria chlorina", "Erinella subtilissima", "Cothurniopsis valvata", "Pyramidomonas", "Vorticellides aquadulcis", "Parkeria sphaerica", "Bromeliothrix metopoides",
-                         "Praestephanos carconensis", "Sphaerastrum fockii", "Marssoniella", "Paramecium tetraurelia", "Palaeacmea", "Glaucomides bromelicola")
+                         "Praestephanos carconensis", "Sphaerastrum fockii", "Marssoniella", "Paramecium tetraurelia", "Palaeacmea", "Glaucomides bromelicola", "Actinophrys sol")
       )
     ) %>% 
   
@@ -606,9 +603,9 @@ taxonomy_formatted <- taxonomy_raw %>%
   
   kingdom = case_when(
     phylum %in% c("Cyanobacteria") ~ "Bacteria",
-    phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta") ~ "Plantae",
-    phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Cryptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
-    phylum %in% c("Choanozoa", "Euglenozoa", "Amoebozoa") ~ "Protozoa",
+    phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta") ~ "Plantae",
+    phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
+    phylum %in% c("Euglenozoa", "Amoebozoa") ~ "Protozoa",
     phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata") ~ "Animalia",
   ),
   
@@ -868,7 +865,7 @@ saveRDS(in_tree_tax, "R/data_outputs/database_products/taxonomy/in_tree_tax.rds"
 
 in_tree_tax
 
-sum(in_tree_tax == TRUE) # 4956
+sum(in_tree_tax == TRUE) # 4955
 sum(in_tree_tax == FALSE) # 814
 
 ## Get tree ----
@@ -909,8 +906,6 @@ plot(tree_new_tips, show.tip.label = FALSE)
 # taxon map
 taxon_map_in_tree <- taxon_map[taxon_map %in% tree_new_tips$tip.label]
 
-x <- as.data.frame(taxon_map_in_tree)
-
 # taxa
 # add in extra info
 
@@ -935,10 +930,6 @@ taxa_update_in_tree <- taxa_in_tree %>%
   # group for plotting
   group_by(tip.label)
 
-# Check if there are any differences between the tip labels in the tree and in the list
-setdiff(taxa_update_in_tree$tip.label, tree_new_tips$tip.label)
-setdiff(tree_new_tips$tip.label, taxa_update_in_tree$tip.label)
-
 # explore data a bit
 length(unique(taxa_update_in_tree$tip.label)) # check that there are still the same number of species - shhould be same as sum(in_tree == TRUE) (3081)
 table(taxa_update_in_tree$phylum)
@@ -958,27 +949,25 @@ taxa_update_in_tree_edit <- taxa_update_in_tree %>%
   )
 
 circular_plot <- circular_plot %<+% taxa_update_in_tree_edit +
-  geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 3, show.legend = TRUE)
-
-circular_plot
-
-+
+  geom_tippoint(aes(x = x + 5, color = phylum_label), size = 3, show.legend = TRUE)+
+  geom_tippoint(aes(x = x + 7, color = kingdom_label), size = 3, show.legend = TRUE)+
   
-  scale_color_manual(values = c(
-    setNames(viridis::magma(length(unique(taxa_update_in_tree_edit$phylum))), paste0("Phylum: ", unique(taxa_update_in_tree_edit$phylum))),
-    setNames(viridis::plasma(length(unique(taxa_update_in_tree_edit$kingdom))), paste0("Kingdom: ", unique(taxa_update_in_tree_edit$kingdom)))
-  ))
+  scale_color_manual(values =
+                       c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#CC5500", "Kingdom: Chromista" = "#00008B", "Kingdom: Animalia" = "#8B0000",
+                         "Phylum: Chlorophyta" = "#e5f5e0", "Phylum: Charophyta" = "#a1d99b", "Phylum: Glaucophyta" = "#74c476", "Phylum: Rhodophyta" = "#238b45", "Phylum: Cryptophyta" = "#41ab5d",
+                         "Phylum: Cyanobacteria" = "#B57EDC",
+                         "Phylum: Euglenozoa" = "#FFD8A8", "Phylum: Amoebozoa" = "#FFA500",
+                         "Phylum: Myzozoa" = "#6495ED", "Phylum: Bacillariophyta"= "#CFE2F3", "Phylum: Ochrophyta" = "#87CEEB", "Phylum: Haptophyta" = "#ADD8E6", "Phylum: Bigyra"= "#003366", "Phylum: Ciliophora" = "#1E3A5F", "Phylum: Cercozoa" = "#4682B4",
+                         "Phylum: Cnidaria" = "#FFCCCB", "Phylum: Mollusca" = "#F08080", "Phylum: Arthropoda" = "#FF6347", "Phylum: Rotifera" = "#D32F2F", "Phylum: Gastrotricha" = "#B71C1C"
+                       )
+  )
 
 circular_plot
 
 # Final tax list ----
 # All good so can use classification as tax_list
 
-tax_list_raw <- classification %>% 
-  
-  rename(
-    ott.id = ott_id
-  )
+tax_list_raw <- taxonomy
 
 # Save
 saveRDS(tax_list_raw, file = "R/data_outputs/database_products/taxonomy/tax_list_raw.rds")
@@ -993,8 +982,8 @@ class_to_resolved <- left_join(
   select(
     resolved, search_string, ott_id
     ), select(
-      classification, ott_id, taxa.name
-      ), by = "ott_id"
+      taxonomy, ott.id, taxa.name
+      ), by = c("ott_id" = "ott.id")
   ) %>% 
   
   # Remove ones that were renoved in the classification step
