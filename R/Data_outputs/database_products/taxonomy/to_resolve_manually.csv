@@ -1,4 +1,4 @@
-cleaned.taxa.name,resolved.taxa.name,approximate_match,score,ott_id,is_synonym,flags,number_matches
+search_string,unique_name,approximate_match,score,ott_id,is_synonym,flags,number_matches
 coelosphaerium kutzingii,NA,NA,NA,NA,NA,NA,NA
 gloeotila spiralis,NA,NA,NA,NA,NA,NA,NA
 anabaena flos-aquae treleasii,NA,NA,NA,NA,NA,NA,NA
@@ -57,7 +57,6 @@ cymbella helvetica curta,NA,NA,NA,NA,NA,NA,NA
 cosmarium subprotumidum gregorii,NA,NA,NA,NA,NA,NA,NA
 aulacoseira islandica helvetica,NA,NA,NA,NA,NA,NA,NA
 cosmarium undulatum minutum,NA,NA,NA,NA,NA,NA,NA
-peridinium inconspicuum var. contactum,NA,NA,NA,NA,NA,NA,NA
 stephanodiscus hantzschii tenuis,NA,NA,NA,NA,NA,NA,NA
 cosmarium subcostatum subcostatum,NA,NA,NA,NA,NA,NA,NA
 phacus pleuronectes pleuronectes,NA,NA,NA,NA,NA,NA,NA
@@ -91,9 +90,9 @@ dictyosphaerium pulchellum minutum,NA,NA,NA,NA,NA,NA,NA
 pseudopediastrum boryanum longicorne,NA,NA,NA,NA,NA,NA,NA
 scenedesmus armatus boglariensis,NA,NA,NA,NA,NA,NA,NA
 scenedesmus denticulatus brevispinus,NA,NA,NA,NA,NA,NA,NA
-scenedesmus granulatus f. spinosus,NA,NA,NA,NA,NA,NA,NA
+scenedesmus granulatus spinosus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus quadricauda longispina,NA,NA,NA,NA,NA,NA,NA
-dinobryon divergens var. schauinslandii,NA,NA,NA,NA,NA,NA,NA
+dinobryon divergens schauinslandii,NA,NA,NA,NA,NA,NA,NA
 dinobryon suecicum longispinum,NA,NA,NA,NA,NA,NA,NA
 kephyrion welshii,NA,NA,NA,NA,NA,NA,NA
 aulacoseira ambigua japonica,NA,NA,NA,NA,NA,NA,NA
@@ -114,7 +113,7 @@ cymbopleura kuelbsii kuelbsii,NA,NA,NA,NA,NA,NA,NA
 cymbopleura naviculiformis naviculiformis,NA,NA,NA,NA,NA,NA,NA
 cavinula cocconeiformis elliptica,NA,NA,NA,NA,NA,NA,NA
 cyclotella distinguenda distinguenda,NA,NA,NA,NA,NA,NA,NA
-cyclotella distinguenda var. unipunctata,NA,NA,NA,NA,NA,NA,NA
+cyclotella distinguenda unipunctata,NA,NA,NA,NA,NA,NA,NA
 cymbella excisa angusta,NA,NA,NA,NA,NA,NA,NA
 cymatopleura elliptica elliptica,NA,NA,NA,NA,NA,NA,NA
 cymbella excisiformis nonprotracta,NA,NA,NA,NA,NA,NA,NA
@@ -170,6 +169,7 @@ meridion circulare circulare,NA,NA,NA,NA,NA,NA,NA
 mayamaea fossalis obsidialis,NA,NA,NA,NA,NA,NA,NA
 nitzschia amphibia amphibia,NA,NA,NA,NA,NA,NA,NA
 nitzschia dissipata dissipata,NA,NA,NA,NA,NA,NA,NA
+nitzschia dissipata media,NA,NA,NA,NA,NA,NA,NA
 nitzschia filiformis conferta,NA,NA,NA,NA,NA,NA,NA
 nitzschia filiformis filiformis,NA,NA,NA,NA,NA,NA,NA
 nitzschia fonticola pelagica,NA,NA,NA,NA,NA,NA,NA
@@ -179,17 +179,16 @@ navicula minuscula muralis,NA,NA,NA,NA,NA,NA,NA
 nitzschia palea debilis,NA,NA,NA,NA,NA,NA,NA
 nitzschia palea tenuirostris,NA,NA,NA,NA,NA,NA,NA
 navicula reichardtiana reichardtiana,NA,NA,NA,NA,NA,NA,NA
-navicula salinarum var. salinarum,NA,NA,NA,NA,NA,NA,NA
-navicula salinarum var. rostrata,NA,NA,NA,NA,NA,NA,NA
+navicula salinarum salinarum,NA,NA,NA,NA,NA,NA,NA
+navicula salinarum rostrata,NA,NA,NA,NA,NA,NA,NA
 navicula schroeteri schroeteri,NA,NA,NA,NA,NA,NA,NA
 nitzschia sinuata sinuata,NA,NA,NA,NA,NA,NA,NA
 nitzschia sinuata tabellaria,NA,NA,NA,NA,NA,NA,NA
 navicula trivialis trivialis,NA,NA,NA,NA,NA,NA,NA
 nupela lapidosa lapidosa,NA,NA,NA,NA,NA,NA,NA
-navicula vandamii var. vandamii,NA,NA,NA,NA,NA,NA,NA
-navicula vandamii var. mertensiae,NA,NA,NA,NA,NA,NA,NA
+navicula vandamii vandamii,NA,NA,NA,NA,NA,NA,NA
+navicula vandamii mertensiae,NA,NA,NA,NA,NA,NA,NA
 naviculadicta seminulum,NA,NA,NA,NA,NA,NA,NA
-navicula viridula var. germainii,NA,NA,NA,NA,NA,NA,NA
 pinnularia borealis borealis,NA,NA,NA,NA,NA,NA,NA
 pinnularia brebissonii brebissonii,NA,NA,NA,NA,NA,NA,NA
 pinnularia dubitabilis dubitabilis,NA,NA,NA,NA,NA,NA,NA
@@ -216,6 +215,7 @@ stauroneis siberica siberica,NA,NA,NA,NA,NA,NA,NA
 thalassiosira hyperborea pelagica,NA,NA,NA,NA,NA,NA,NA
 actinastrum hantzschii subtile,NA,NA,NA,NA,NA,NA,NA
 aulacoseira granulata curvata,NA,NA,NA,NA,NA,NA,NA
+chaetoceros subtilis abnormis,NA,NA,NA,NA,NA,NA,NA
 chromulina ettlii,NA,NA,NA,NA,NA,NA,NA
 chromulina obconica,NA,NA,NA,NA,NA,NA,NA
 ekrenia subguiciliata,NA,NA,NA,NA,NA,NA,NA
@@ -260,7 +260,7 @@ tropodiaptomus processifer friedae,NA,NA,NA,NA,NA,NA,NA
 trichodina diaptomi,NA,NA,NA,NA,NA,NA,NA
 planctonema lacustris,NA,NA,NA,NA,NA,NA,NA
 chlamydocapsa cingulata,NA,NA,NA,NA,NA,NA,NA
-keratella cochlearis var. hispida,NA,NA,NA,NA,NA,NA,NA
+keratella cochlearis hispida,NA,NA,NA,NA,NA,NA,NA
 schroederia ecsediensis,NA,NA,NA,NA,NA,NA,NA
 caloneis ventricosa minuta,NA,NA,NA,NA,NA,NA,NA
 stephanodiscus astraea minutula,NA,NA,NA,NA,NA,NA,NA
@@ -286,7 +286,7 @@ characiopsis spina,NA,NA,NA,NA,NA,NA,NA
 characium sikangense,NA,NA,NA,NA,NA,NA,NA
 chroostipes linearis,NA,NA,NA,NA,NA,NA,NA
 chrysococcus rufescens tripora,NA,NA,NA,NA,NA,NA,NA
-chrysolykos angulatus f. bicornis,NA,NA,NA,NA,NA,NA,NA
+chrysolykos angulatus bicornis,NA,NA,NA,NA,NA,NA,NA
 chrysosphaerella setifera,NA,NA,NA,NA,NA,NA,NA
 chrysoxys rhizopodica,NA,NA,NA,NA,NA,NA,NA
 closterium calosporum brasiliense,NA,NA,NA,NA,NA,NA,NA
@@ -309,17 +309,17 @@ colacium vesiculosum arbuscula,NA,NA,NA,NA,NA,NA,NA
 cosmarium abbreviatum germanicum,NA,NA,NA,NA,NA,NA,NA
 cosmarium abbreviatum minus,NA,NA,NA,NA,NA,NA,NA
 cosmarium abbreviatum planctonicum,NA,NA,NA,NA,NA,NA,NA
-cosmarium biretum var. trigibberum,NA,NA,NA,NA,NA,NA,NA
+cosmarium biretum trigibberum,NA,NA,NA,NA,NA,NA,NA
 cosmarium botrytis subtumidum,NA,NA,NA,NA,NA,NA,NA
 cosmarium contractum ellipsoideum,NA,NA,NA,NA,NA,NA,NA
 cosmarium cucumis helveticum,NA,NA,NA,NA,NA,NA,NA
-cosmarium holmiense var. integrum,NA,NA,NA,NA,NA,NA,NA
+cosmarium holmiense integrum,NA,NA,NA,NA,NA,NA,NA
 cosmarium laeve pseudooctangulare,NA,NA,NA,NA,NA,NA,NA
 cosmarium ornatulum depressum,NA,NA,NA,NA,NA,NA,NA
 cosmarium pachydermum aethiopicum,NA,NA,NA,NA,NA,NA,NA
 cosmarium phaseolus minor,NA,NA,NA,NA,NA,NA,NA
 cosmarium polygonum acutius,NA,NA,NA,NA,NA,NA,NA
-cosmarium punctulatum var. subpunctulatum,NA,NA,NA,NA,NA,NA,NA
+cosmarium punctulatum subpunctulatum,NA,NA,NA,NA,NA,NA,NA
 cosmarium pygmaeum apertum,NA,NA,NA,NA,NA,NA,NA
 cosmarium pygmaeum perornatum,NA,NA,NA,NA,NA,NA,NA
 cosmarium regnesi montanum,NA,NA,NA,NA,NA,NA,NA
@@ -379,7 +379,7 @@ scenedesmus arcuatus platydisca,NA,NA,NA,NA,NA,NA,NA
 scenedesmus armatus bicaudatus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus armatus platydiscus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus denticulatus linearis,NA,NA,NA,NA,NA,NA,NA
-scenedesmus intermedius var. acutispinus,NA,NA,NA,NA,NA,NA,NA
+scenedesmus intermedius acutispinus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus intermedius balatonicus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus pseudogranulatus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus pseudohelveticus,NA,NA,NA,NA,NA,NA,NA
@@ -405,12 +405,12 @@ unapertura latens,NA,NA,NA,NA,NA,NA,NA
 closterium cornu upsaliense,NA,NA,NA,NA,NA,NA,NA
 cosmarium blyttii novae-sylvae,NA,NA,NA,NA,NA,NA,NA
 cosmarium botrytis tumidum,NA,NA,NA,NA,NA,NA,NA
-cosmarium conspersum var. latum,NA,NA,NA,NA,NA,NA,NA
+cosmarium conspersum latum,NA,NA,NA,NA,NA,NA,NA
 cosmarium laeve octangulare,NA,NA,NA,NA,NA,NA,NA
 cosmarium monomazum polymazum,NA,NA,NA,NA,NA,NA,NA
-cosmarium pseudonitidulum var. validum,NA,NA,NA,NA,NA,NA,NA
-cosmarium quadratulum var. boldtii,NA,NA,NA,NA,NA,NA,NA
-cosmarium subtumidum var. groenbladii,NA,NA,NA,NA,NA,NA,NA
+cosmarium pseudonitidulum validum,NA,NA,NA,NA,NA,NA,NA
+cosmarium quadratulum boldtii,NA,NA,NA,NA,NA,NA,NA
+cosmarium subtumidum groenbladii,NA,NA,NA,NA,NA,NA,NA
 euastrum ansatum ansatum,NA,NA,NA,NA,NA,NA,NA
 euastrum ansatum rhomboidale,NA,NA,NA,NA,NA,NA,NA
 euastrum binale gutwinskii,NA,NA,NA,NA,NA,NA,NA
@@ -427,7 +427,6 @@ staurodesmus dejectus brevispinus,NA,NA,NA,NA,NA,NA,NA
 xanthidium antilopaeum leve,NA,NA,NA,NA,NA,NA,NA
 ankistrodesmus falcatus spirilliformis,NA,NA,NA,NA,NA,NA,NA
 daphnia coregoni,NA,NA,NA,NA,NA,NA,NA
-collotheca ornata var. cornuta,NA,NA,NA,NA,NA,NA,NA
 pseudencentrum diglandula,NA,NA,NA,NA,NA,NA,NA
 pseudencentrum sutor,NA,NA,NA,NA,NA,NA,NA
 ptygura melicerta ctenoida,NA,NA,NA,NA,NA,NA,NA
@@ -436,8 +435,7 @@ achnanthes flexella alpestris,NA,NA,NA,NA,NA,NA,NA
 coccoid,NA,NA,NA,NA,NA,NA,NA
 cyclotella operculata unipunctata,NA,NA,NA,NA,NA,NA,NA
 dinobryon bavaricum vanhoeffenii,NA,NA,NA,NA,NA,NA,NA
-navicula radiosa var. tenella,NA,NA,NA,NA,NA,NA,NA
-oocystis gigas var. incrassata,NA,NA,NA,NA,NA,NA,NA
+oocystis gigas incrassata,NA,NA,NA,NA,NA,NA,NA
 stephanodiscus hantzschii hantzschii,NA,NA,NA,NA,NA,NA,NA
 synedra delicatissima angustissima,NA,NA,NA,NA,NA,NA,NA
 synedra filiformis exilis,NA,NA,NA,NA,NA,NA,NA
@@ -445,15 +443,11 @@ synedra ulna biceps,NA,NA,NA,NA,NA,NA,NA
 synedra ulna chaseana,NA,NA,NA,NA,NA,NA,NA
 tabellaria flocculosa geniculata,NA,NA,NA,NA,NA,NA,NA
 achnanthes clevei rostrata,NA,NA,NA,NA,NA,NA,NA
-achnanthes lanceolata var. rostrata,NA,NA,NA,NA,NA,NA,NA
 achnanthes lapponica ninckei,NA,NA,NA,NA,NA,NA,NA
 actinocyclus normanii subsalsa,NA,NA,NA,NA,NA,NA,NA
 fragilaria leptostauron dubia,NA,NA,NA,NA,NA,NA,NA
 fragilaria pinnata lancettula,NA,NA,NA,NA,NA,NA,NA
 fragilaria vaucheriae capitellata,NA,NA,NA,NA,NA,NA,NA
-navicula menisculus var. upsaliensis,NA,NA,NA,NA,NA,NA,NA
-navicula rhynchocephala var. amphiceros,NA,NA,NA,NA,NA,NA,NA
-navicula salinarum var. intermedia,NA,NA,NA,NA,NA,NA,NA
 stephanodiscus carconensis pusilla,NA,NA,NA,NA,NA,NA,NA
 synedra parasitica subconstricta,NA,NA,NA,NA,NA,NA,NA
 diaphanosoma edmondsoni,NA,NA,NA,NA,NA,NA,NA
@@ -465,17 +459,17 @@ lepocinclis fusiformis amphirhynchus,NA,NA,NA,NA,NA,NA,NA
 lepocinclis ovum angustatum,NA,NA,NA,NA,NA,NA,NA
 lepocinclis ovum dimidio-minor,NA,NA,NA,NA,NA,NA,NA
 lepocinclis teres parvula,NA,NA,NA,NA,NA,NA,NA
-menoidium semilunare var. regulare,NA,NA,NA,NA,NA,NA,NA
-phacus agilis var. inversus,NA,NA,NA,NA,NA,NA,NA
+menoidium semilunare regulare,NA,NA,NA,NA,NA,NA,NA
+phacus agilis inversus,NA,NA,NA,NA,NA,NA,NA
 strombomonas acuminata amphora,NA,NA,NA,NA,NA,NA,NA
 strombomonas acuminata deflandreana,NA,NA,NA,NA,NA,NA,NA
 strombomonas praeliaris nana,NA,NA,NA,NA,NA,NA,NA
-strombomonas subcurvata var. africana,NA,NA,NA,NA,NA,NA,NA
+strombomonas subcurvata africana,NA,NA,NA,NA,NA,NA,NA
 trachelomonas abrupta angustata,NA,NA,NA,NA,NA,NA,NA
 trachelomonas curta minima,NA,NA,NA,NA,NA,NA,NA
 trachelomonas dangeardii glabra,NA,NA,NA,NA,NA,NA,NA
 trachelomonas granulosa subglobosa,NA,NA,NA,NA,NA,NA,NA
-trachelomonas hexangulata var. hexagona,NA,NA,NA,NA,NA,NA,NA
+trachelomonas hexangulata hexagona,NA,NA,NA,NA,NA,NA,NA
 trachelomonas kellogii nana,NA,NA,NA,NA,NA,NA,NA
 trachelomonas lismorensis inermis,NA,NA,NA,NA,NA,NA,NA
 trachelomonas obovata klebsiana,NA,NA,NA,NA,NA,NA,NA
@@ -483,7 +477,7 @@ trachelomonas sydneyensis minima,NA,NA,NA,NA,NA,NA,NA
 trachelomonas sydneyensis obesa,NA,NA,NA,NA,NA,NA,NA
 trachelomonas varians globosa,NA,NA,NA,NA,NA,NA,NA
 trachelomonas verrucosa irregularis,NA,NA,NA,NA,NA,NA,NA
-trachelomonas verrucosa f. sparseornata,NA,NA,NA,NA,NA,NA,NA
+trachelomonas verrucosa sparseornata,NA,NA,NA,NA,NA,NA,NA
 trachelomonas volvocina derephora,NA,NA,NA,NA,NA,NA,NA
 gloeomonas tecta,NA,NA,NA,NA,NA,NA,NA
 microspora amoena gracilis,NA,NA,NA,NA,NA,NA,NA
@@ -491,7 +485,7 @@ pediastrum simplex clathratum,NA,NA,NA,NA,NA,NA,NA
 pseudopediastrum subgranulatum,NA,NA,NA,NA,NA,NA,NA
 scenedesmus formidolosus,NA,NA,NA,NA,NA,NA,NA
 scenedesmus opoliensis bicaudatus,NA,NA,NA,NA,NA,NA,NA
-scenedesmus protuberans f. danubianus,NA,NA,NA,NA,NA,NA,NA
-scenedesmus protuberans var. minor,NA,NA,NA,NA,NA,NA,NA
+scenedesmus protuberans danubianus,NA,NA,NA,NA,NA,NA,NA
+scenedesmus protuberans minor,NA,NA,NA,NA,NA,NA,NA
 scenedesmus pseudoquadricauda,NA,NA,NA,NA,NA,NA,NA
 scenedesmus similagineus,NA,NA,NA,NA,NA,NA,NA

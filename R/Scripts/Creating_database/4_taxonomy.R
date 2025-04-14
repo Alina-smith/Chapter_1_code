@@ -23,13 +23,12 @@ library(stringi)
 library(taxize)
 library(rotl)
 library(ape)
-library(ggplot2)
 
 install.packages(c("treeplyr", "BiocManager"))
 library(BiocManager)
-
-install.packages(c("ggtree","treeio"))
-BiocManager::install("ggtree", force = TRUE)
+# 
+# install.packages(c("ggtree","treeio"))
+# BiocManager::install("ggtree", force = TRUE)
 library(ggtree)
 library(ggtreeExtra)
 library(ggnewscale)
@@ -152,10 +151,15 @@ cleaned <- cleaned_gna %>%
 # Save
 saveRDS(cleaned, file = "R/data_outputs/database_products/taxonomy/cleaned.rds")
 
+cleaned <- readRDS("R/data_outputs/database_products/taxonomy/cleaned.rds")
+
 # Don't want to get distinct resolved names yet as this will be used to left join onto data by original.taxa.name so need to keep all of them
 
 # Resolve names ----
 ## TOL ----
+
+# Import cleaned data
+cleaned <- readRDS("R/data_outputs/database_products/taxonomy/cleaned.rds")
 
 # Run the cleaned names through tnrs_match_names to get updated versions of names from open tree of life (otl)
 resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name)
@@ -220,10 +224,36 @@ resolved_manual <- left_join(resolved_tol, manually_resolved_subset, by = "searc
     search_string, unique_name, resolved.taxa.name
   )
 
+# Save
+saveRDS(resolved_manual, "R/data_outputs/database_products/taxonomy/resolved_manual.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Fix multiple hits ----
 # Some taxa have the same name as others so want to check that any that have more than one hit the correct one was chosen
 
 ### Make list of multis ----
+
 
 # 1) Rerun through tnrs_match_names to resolve all again
 multi_tnrs_full <- tnrs_match_names(resolved_manual$resolved.taxa.name)
@@ -576,12 +606,7 @@ taxonomy_formatted <- taxonomy_raw %>%
       phylum.1 == "Euglenida" ~ "Euglenozoa",
       
       class %in% c("Dictyochophyceae", "Chrysophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Actinophryidae") ~ "Ochrophyta",
-      class %in% c("Prymnesiophyceae", "Pavlovophyceae") ~ "Haptophyta",
       class == "Dinophyceae" ~ "Myzozoa",
-      class == "Glaucophyceae" ~ "Glaucophyta",
-      class %in% c("Euglenophyceae", "Euglenoidea") ~ "Euglenozoa",
-      class == "Cryptophyceae" ~ "Cryptophyta",
-      class == "Tubulinea" ~ "Amoebozoa",
       
       order == "Bicosoecales" ~ "Bigyra",
       order == "Craspedida" ~ "Choanozoa",
@@ -592,7 +617,7 @@ taxonomy_formatted <- taxonomy_raw %>%
       
       resolved.taxa.name %in% c("Cyanobacteria","Chlorophyta", "Rotifera", "Haptophyta") ~ resolved.taxa.name,
       resolved.taxa.name == "Dinoflagellata" ~ "Myzozoa",
-      resolved.taxa.name == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliophora",
+      resolved.taxa.name == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliophora (phylum in subkingdom SAR)",
       resolved.taxa.name == "Chrysomeridales" ~ "Ochrophyta",
       
       
@@ -602,11 +627,12 @@ taxonomy_formatted <- taxonomy_raw %>%
   ,
   
   kingdom = case_when(
-    phylum %in% c("Cyanobacteria") ~ "Bacteria",
-    phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta") ~ "Plantae",
-    phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Bigyra", "Myzozoa", "Ciliophora", "Cercozoa", "Foraminifera", "Bacillariophyta") ~ "Chromista",
-    phylum %in% c("Euglenozoa", "Amoebozoa") ~ "Protozoa",
-    phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata") ~ "Animalia",
+    phylum %in% c("Cyanobacteria", "Actinobacteria", "Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria") ~ "Bacteria",
+    phylum %in% c("Chlorophyta", "Charophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Streptophyta") ~ "Plantae",
+    phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Bigyra", "Myzozoa", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera") ~ "Chromista",
+    phylum %in% c("Euglenozoa", "Amoebozoa", "Choanozoa") ~ "Protozoa",
+    phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Bryozoa", "Chordata", "Annelida", "Platyhelminthes", "Nematoda") ~ "Animalia",
+    phylum %in% c("Ascomycota", "Basidiomycota") ~ "Fungi",
   ),
   
   type = case_when(

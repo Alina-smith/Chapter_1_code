@@ -40,6 +40,7 @@ Pseudococcomyxa
 Mantellum
 Cylindrospermum
 Chrysochromulina
+Aulomonas
 Pseudokephyrion
 Uroglena
 Gloeocapsa
@@ -98,12 +99,14 @@ Tetraedriella
 Craticula (genus in subkingdom SAR)
 Gymnodinium
 Aulacoseira
+Monosiga
 Lobocystis
 Chrysococcus
 Elakatothrix
 Asterionella
 Discostella
 Haslea
+Cladomonas
 Sciadium
 Stokesiella (genus in subkingdom SAR)
 Chromulina
@@ -116,6 +119,7 @@ Karayevia
 Melosira
 Himantidium
 Chrysastrella
+Palaeacmea
 Diatoma
 Ulnaria
 Korshikoviella
@@ -124,10 +128,12 @@ Isthmochloron
 Oestrupia
 Hannaea
 Cocconeis
+Acanthosphaera (genus in subkingdom SAR)
 Cymbopleura
 Pinnularia
 Surirella
 Limnococcus
+Codosiga
 Meridion
 Chaetoceros
 Gyrosigma
@@ -183,8 +189,10 @@ Tabularia
 Coscinodiscus
 Bacillaria
 Amphiprora
+Anacystis
 Grunowia
 Gloeobacter
+Marssoniella (genus in kingdom Archaeplastida)
 Chrysamoeba (genus in subkingdom SAR)
 Attheya
 Actinoptychus
@@ -238,6 +246,7 @@ Vacuolaria
 Planctococcus
 Chrysostephanosphaera
 Kephyriopsis
+Cryptaulax
 Tyrannodinium
 Glochidinium
 Platymonas (genus in subkingdom SAR)
@@ -254,8 +263,10 @@ Kobayasiella
 Fistulifera
 Halamphora
 Picochlorum
+Amphipoda
 Tetrahymena (genus in subkingdom SAR)
 Rotaria
+Pyramidomonas
 Cyanobacterium
 Dolichospermum (inconsistent in FamilyI (in SubsectionIV))
 Glaucospira
@@ -266,7 +277,9 @@ Pantocsekiella
 Stauroforma
 Chimonodinium
 Trachydiscus
+Amoeba
 Saccamoeba
+Actinophrys
 Codonella
 Aspidisca
 Cinetochilum
@@ -335,6 +348,7 @@ Tetraktis
 Tetraplektron
 Phaeodactylum
 Euplotoides
+Euglenida
 Epistylis
 Paramecium (genus in subkingdom SAR)
 Strobilidium
@@ -342,6 +356,7 @@ Strombidium
 Tintinnidium (genus in subkingdom SAR)
 Brachionus (genus in subkingdom SAR)
 Nannochloropsis
+Syracosphaera
 Frankophila
 Trichodina
 Limnostrombidium
@@ -352,9 +367,11 @@ Halteria
 Cyclidium (genus in subkingdom SAR)
 Rimostrombidium
 Lacrymaria (genus in subkingdom SAR)
+Vorticellides
 Pelagostrombidium
 Colpoda
 Ellipsoidion
+Codonosigopsis
 Plectonema
 Rhabdomonas (merged with Aphagea)
 Actidesmium
@@ -371,12 +388,15 @@ Astasia
 Aulosira
 Bacularia
 Blennothrix
+Parabodo
 Neobodo
 Botrydium (genus in subkingdom SAR)
 Botryochloris
+Brachynema (genus in kingdom Archaeplastida)
 Brasilonema
 Pseudobumilleriopsis
 Camptylonemopsis
+Parkeria
 Chakia
 Chamaecalyx
 Characiellopsis
@@ -401,6 +421,7 @@ Coleochlamys
 Coleodesmium (genus in domain Bacteria) (merged with uncultured (silva:AB177177/#4))
 Conradocystis
 Crinalium
+Cryptoglena
 Leptomonas
 Cyanokybus
 Cyanotetras
@@ -421,6 +442,7 @@ Dinococcus
 Distigma (merged with Aphagea)
 Distigma
 Epicystis (genus in subkingdom SAR)
+Crumenula (genus in infrakingdom Excavata)
 Fortiea
 Glenodiniopsis
 Kryptoperidinium
@@ -429,7 +451,9 @@ Gloeochrysis
 Gloeococcus
 Lepidodinium
 Levanderina
+Karlodinium
 Woloszynskia
+Karenia
 Hassallia (genus in domain Bacteria)
 Helicopedinella
 Heterochromonas
@@ -478,11 +502,13 @@ Pseudoncobyrsa
 Pseudophormidium
 Radiofilum
 Raphidosphaera
+Rhaphidiopsis
 Rhodostichus
 Rivularia (genus in domain Bacteria)
 Saccochrysis
 Schizochlamydella
 Hypheothrix
+Schizothrix
 Scytonema (genus in domain Bacteria)
 Sphaeraspis (genus in subkingdom SAR)
 Spirodinium (merged with Trichostomatia)
@@ -506,10 +532,15 @@ Xenotholos
 Opercularia (genus in subkingdom SAR)
 Frontonia
 Euplotes
+Gleocapsa
+Bromeliothrix
+Colpidium (genus in Opisthokonta)
 Colpidium
 Didinium
+Glaucomides
 Meseres (genus in subkingdom SAR)
 Pauliella (genus in subkingdom SAR)
+Cothurniopsis
 Pyxicola
 Stokesia (genus in subkingdom SAR)
 Urocentrum
@@ -526,5 +557,6 @@ Condylostoma
 Dileptus
 Celsinotum
 Stephanocostis
+Praestephanos
 Tintinnopsis
 Pulvinularia

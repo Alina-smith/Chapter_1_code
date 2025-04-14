@@ -6,11 +6,21 @@ library(stringi)
 library(taxize)
 library(rotl)
 library(ape)
-library(ggplot2)
+library(ggnewscale)
+
+# Bioconductor packages
+if (!require("BiocManager", quietly = TRUE))
+  BiocManager::install(version = "3.20")
+
+BiocManager::install(c("ggtree","treeio","ggreeExtra"), force = TRUE)
+BiocManager::install("ggtreeExtra")
+BiocManager::install("treeio", force = TRUE)
+BiocManager::install("ggtree", force = TRUE)
 
 library(ggtree)
+library(treeio)
 library(ggtreeExtra)
-library(ggnewscale)
+
 
 
 # Import data ----
@@ -78,10 +88,15 @@ unique(is.na(taxon_map)) # false means there are no missing names so don't need 
 # Some taxa aren't in the OTL synthetic tree so need to find which ones aren't and remove them from my list
 
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
-in_tree <- is_in_tree(ott_ids = taxa2$ott_id)
+
+# in_tree saved elsewhere...
+#in_tree <- is_in_tree(ott_ids = taxa2$ott_id)
+in_tree_tax <- readRDS("~/Documents/PhD/Chapter_1_code/R/data_outputs/database_products/taxonomy/in_tree_tax.rds")
 in_tree <- in_tree_tax
 in_tree
-saveRDS(in_tree, file = "R/in_tree.rds")
+
+# save for later if needed
+#saveRDS(in_tree, file = "R/in_tree.rds")
 
 sum(in_tree == TRUE) # 4956
 sum(in_tree == FALSE) # 814
@@ -103,21 +118,28 @@ taxa_in_tree_all <- taxa_in_tree %>%
   ) 
 
 taxa_in_tree_subset <- taxa_in_tree_all %>% 
-  
   filter(
-    genus != "Actinophrys"
-    #!(class %in% c("Klebsormidiophyceae")),
-    #!(phylum %in% c("Cryptophyta")),
-    #!(kingdom %in% c("Animalia", "Bacteria")),
-    #family == "Closteriaceae",
-    #order == "Chlamydomonadales",
-    #class == "Zygnemophyceae",
-    #phylum %in% c("Ochrophyta")
-    #kingdom %in% c("Protozoa")
+    !is.na(search_string)
+    #!(search_string %in% c("sphaerellopsis ampla", "palmococcus hercynicus")
   )
+  
+# filter(
+#     genus != "Actinophrys"
+#     #!(class %in% c("Klebsormidiophyceae")),
+#     #!(phylum %in% c("Cryptophyta")),
+#     #!(kingdom %in% c("Animalia", "Bacteria")),
+#     #family == "Closteriaceae",
+#     #order == "Chlamydomonadales",
+#     #class == "Zygnemophyceae",
+#     #phylum %in% c("Ochrophyta")
+#     #kingdom %in% c("Protozoa")
+#   )
 
-# get tree
-tree <- tol_induced_subtree(ott_ids = taxa_in_tree_subset$ott_id) # Make tree
+# get tree - looks like anything with a flag is being dumped 
+noHiddenSub <- subset(taxa_in_tree_subset, flags!="hidden"&flags!="unplaced_inherited")
+
+tree_noHide <- (tol_induced_subtree(ott_ids = noHiddenSub$ott_id)) # Make tree
+#tree <- (tol_induced_subtree(ott_ids = taxa_in_tree_subset$ott_id[1:2023])) # Make tree
 
 ## Plot tree square ----
 plot(tree, show.tip.label = FALSE)
