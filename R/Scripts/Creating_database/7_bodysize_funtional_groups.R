@@ -230,6 +230,182 @@ bodysize_formatted <- format_all_bs %>%
 saveRDS(bodysize_formatted, file = "R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
 
 
+# temp bodysizes ----
+
+temp_bodysize_1 <- bodysize_formatted %>% 
+  
+  filter(
+    type == "Phytoplankton"
+  ) %>% 
+  
+  mutate(
+    group = if_else(
+      phylum == "Bacillariophyta",
+      "Diatom",
+      "Not diatom"
+    )
+  )
+
+temp_bodysize <- temp_bodysize_1 %>% 
+  
+  # Get all the different bodysize.measurements on one row per individual
+  pivot_wider(
+    id_cols = individual.uid,
+    names_from = bodysize.measurement,
+    values_from = body.size
+  ) %>%
+  
+  rename(
+    dry.mass = `dry mass`,
+    body.mass = `body mass`
+  ) %>% 
+  
+  # join all extra data back 
+  left_join(
+    select(
+      temp_bodysize_1, - body.size, bodysize.measurement, - uid
+    ), by = "individual.uid"
+  ) %>% 
+  
+  distinct(
+    individual.uid, .keep_all = TRUE
+  ) %>% 
+  
+  mutate(
+    # very few dry mass for phyto so just get rid of them
+    # When biovolume is given use this over dry/wet mass
+    dry.mass = if_else(
+      type == "Phytoplankton",
+      NA,
+      dry.mass
+    ),
+    
+    # calculate biovolume for ones that have just body mass
+    biovolume = case_when(
+      is.na(biovolume) & !is.na(body.mass) & type == "Phytoplankton" ~ body.mass/(1*10^-6),
+      TRUE ~ biovolume
+    ),
+    
+    # calculate mass from biovolume
+    
+    # 1) go through pg c
+    # first convert to pg C
+    pg.c = case_when(
+      group == "Diatom" ~ 0.288*biovolume^0.811, # diatom specific one
+      type == "Phytoplankton" ~ 0.216*biovolume^0.939, # general phytoplankton one
+      TRUE ~ NA
+    ),
+    
+    # Next convert to mass
+    mass.c = case_when(
+      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
+      is.na(body.mass) & type == "Phytoplankton" ~ 1e-12*0.07*pg.c,
+      
+      TRUE ~ NA
+    ),
+    
+    # 2) assume density of 1
+    mass.d = case_when(
+      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
+      is.na(body.mass) & type == "Phytoplankton" ~ biovolume*(1*10^-6),
+      TRUE ~ NA
+    ),
+    
+    # make a mld column
+    mld = pmax(length, width, height, diameter, na.rm = TRUE)
+  ) %>% 
+  
+  # select columns and reorder
+  select(
+    individual.uid, source.code, original.sources, taxa.name,
+    nu, ind.per.nu, pg.c, mass.c, mass.d, biovolume, mld,
+    ott.id, type, species, genus, family, order, class, phylum, kingdom,
+    group,
+    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+  ) %>% 
+  
+  # remove any without a mass measurement (mass.c and mass.d should have the same amount so can filter by either)
+  mutate(
+    remove = case_when(
+      is.na(mass.c) & is.na(biovolume) ~ "remove",
+      TRUE ~ "keep"
+    )
+  ) %>% 
+  
+  filter(
+    remove == "keep"
+  )
+
+# Find any that only have multi-cellular values but not single cell values
+multi_ind <- temp_bodysize %>% 
+  
+  group_by(nu, taxa.name) %>% 
+  
+  distinct(taxa.name, .keep_all = TRUE) %>% 
+  
+  ungroup() %>% 
+  
+  group_by(taxa.name) %>% 
+  
+  mutate(
+    n = n()
+  ) %>% 
+  
+  filter(
+    n == 1,
+    nu == "multi-cellular"
+  ) %>% 
+  
+  ungroup()
+
+# Remove ones with no single cell values ----
+bodysize_phyto <- temp_bodysize %>% 
+  
+  filter(
+    !(individual.uid %in% multi_ind$individual.uid)
+  )
+
+# save
+saveRDS(bodysize_phyto, file = "R/Data_outputs/database_products/final_products/bodysize_phyto.rds")
+
+
+# Select ones just to species/genus level ----
+phyto_subset <- bodysize_phyto %>% 
+  
+  filter(
+    !is.na(genus)
+  ) %>% 
+  
+  # make a rank column to know which ones are species and which are to genus level
+  mutate(
+    rank = if_else(
+      is.na(species),
+      "Genus",
+      "Species"
+    )
+  )
+
+# save
+saveRDS(phyto_subset, file = "R/Data_outputs/database_products/final_products/phyto_subset.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Functional groups ----
 # Only have phyto functional groups but need to groups to calulate phyto mass so do it now and then can have one data set of masses
 

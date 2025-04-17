@@ -592,6 +592,7 @@ taxonomy_pmc <- taxonomy_order %>%
       order == "Chloroflexales" ~ "Chloroflexi",
       order == "Diphylleida" ~ "Diphyllatea",
       order == "Chlorellales" ~ "Trebouxiophyceae",
+      order == "Neobodonida" ~ "Kinetoplastea",
       
       resolved.taxa.name == "Prymnesiophyceae" ~ "Coccolithophyceae",
       resolved.taxa.name == "Insecta" ~ "Hexapoda",
@@ -947,6 +948,11 @@ x <- taxonomy %>%
     phylum
   )
 
+
+
+
+
+
 # Final changes to taxonomy ----
 # Edit ones that got flagged up from the phylogeny graph and also just ones that poped up on the fly
 # Quite a lot so going to fill it in in an extra spreadsheet and then import in
@@ -959,12 +965,21 @@ taxonomy <- taxonomy_mc1 %>%
   
   # Remove weird ones
   filter(
-    !(ott.id %in% c("972900")),
-    !(resolved.taxa.name %in% manual_multi$resolved.taxa.name)
+    !(resolved.taxa.name %in% manual_multi$resolved.taxa.name),
+    !(ott.id %in% c("972900"))
   ) %>% 
   
   bind_rows(
     ., manual_multi
+  ) %>% 
+  
+  mutate(
+    # minor edits
+    genus = if_else(
+      genus == "Cryptaulax",
+      "Cryptaulax (genus in infrakingdom Excavata)",
+      genus
+    )
   )
 
 # Save
@@ -1230,7 +1245,3 @@ bodysize_taxonomy <-  bodysize_raw %>%
 
 # Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/database_products/bodysize_taxonomy.rds")
-
-
-
-
