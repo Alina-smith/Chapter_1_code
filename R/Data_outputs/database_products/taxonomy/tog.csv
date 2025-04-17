@@ -1,581 +1,190 @@
-genus,family
-Cyanothece,Cyanothecaceae
-Merismopedia,Microcystaceae
-Prochloron,Prochloraceae
-Chroococcus,Chroococcaceae
-Komvophoron,Gomontiellaceae
-Pannus,Microcystaceae
-Cyanodictyon,Cymatolegaceae
-Lemmermanniella,Cymatolegaceae
-Leptolyngbya,Leptolyngbyaceae
-Aphanothece,Microcystaceae
-Synechococcus,Synechococcaceae
-Anathece,Prochloraceae
-Microcystis (genus in domain Bacteria),Microcystaceae
-NA,NA
-Rhabdoderma (genus in domain Bacteria),Cymatolegaceae
-Snowella,Microcystaceae
-Lyngbya (genus in domain Bacteria),Microcoleaceae
-Phormidium,Oscillatoriaceae
-Pseudanabaena,Pseudanabaenaceae
-Coelosphaerium,Microcystaceae
-Radiocystis,Microcystaceae
-Pseudopedinella,Actinomonadaceae
-Anagnostidinema,Wilmottiaceae
-Limnothrix,Pseudanabaenaceae
-Achroonema,Pelonemataceae
-Chroogloeocystis,Aliterellaceae
-Woronichinia,Coelosphaeriaceae
-Nitzschia (genus silva:Y10566/#7),Bacillariaceae
-Oscillatoria,Oscillatoriaceae
-Anabaena,Aphanizomenonaceae
-Dolichospermum,Aphanizomenonaceae
-Cyanobium,Prochloraceae
-Kephyrion,Chrysococcaceae
-Planothidium,Achnanthidiaceae
-Calothrix,Rivulariaceae
-Aphanizomenon,Aphanizomenonaceae
-Coccomyxa (genus in kingdom Archaeplastida),Coccomyxaceae
-Pseudococcomyxa,Oocystaceae
-Mantellum,Microcystaceae
-Cylindrospermum,Aphanizomenonaceae
-Chrysochromulina,Chrysochromulinaceae
-Aulomonas,NA
-Pseudokephyrion,Dinobryaceae
-Uroglena,Ochromonadaceae
-Gloeocapsa,Aliterellaceae
-Gomphonema,Gomphonemataceae
-Lemmermannia,Chroococcaceae
-Planktothrix,Microcoleaceae
-Stichococcus,Stichococcaceae
-Pyramimonas,Pyramimonadaceae
-Stephanodiscus,Stephanodiscaceae
-Jaaginema,Synechococcales familia incertae sedis
-Heterothrix,Tribonemataceae
-Tribonema,Tribonemataceae
-Johansenia (genus in domain Bacteria),NA
-Ochromonas,Ochromonadaceae
-Chroomonas,Hemiselmidaceae
-Sellaphora,Sellaphoraceae
-Navicula,Naviculaceae
-Geissleria,Naviculaceae
-Fragilaria,Fragilariaceae
-Staurosira,Fragilariaceae
-Diploneis,Diploneidaceae
-Skeletonema,Skeletonemaceae
-Rhodomonas,Pyrenomonadaceae
-Plagioselmis,Geminigeraceae
-Synedra,Fragilariaceae
-Coenocystis (genus in kingdom Archaeplastida),Radiococcaceae
-Botryococcus,Botryococcaceae
-Synechocystis,Microcystaceae
-Cyclotella,Stephanodiscaceae
-Nephrodiella,Pleurochloridaceae
-Cymbella,Cymbellaceae
-Dinobryon,Dinobryaceae
-Dinobryon (in Ochromonas sup.),Dinobryaceae
-Encyonema,Cymbellaceae
-Chloroidium,Watanabeaceae
-Heleochloris,Sphaerocystidaceae
-Chrysolykos,Dinobryaceae
-Achnanthidium,Achnanthidiaceae
-Pseudostaurosira,Fragilariaceae
-Nephrocytium,Nephrocytiaceae
-Eunotia,Eunotiaceae
-Coelomoron,Microcystaceae
-Monallantus,Pleurochloridaceae
-Epipyxis,Dinobryaceae
-Amphora,Catenulaceae
-Neocystis,Radiococcaceae
-Tychonema,Microcoleaceae
-Oedogonium,Oedogoniaceae
-Achnanthes,Achnanthaceae
-Protoperidinium,Protoperidiniaceae
-Thalassiosira (genus silva:X85397/#7),Thalassiosiraceae
-Fragilariforma,Fragilariaceae
-Goniochloris,Goniochloris
-Neidium,Neidiaceae
-Tetraedriella,Goniochloridaceae
-Craticula (genus in subkingdom SAR),Stauroneidaceae
-Gymnodinium,Gymnodiniaceae
-Aulacoseira,Aulacoseiraceae
-Monosiga,NA
-Lobocystis,Chlorophyceae familia incertae sedis
-Chrysococcus,Chrysococcaceae
-Elakatothrix,Elakatotrichaceae
-Asterionella,Fragilariaceae
-Discostella,Stephanodiscaceae
-Haslea,Naviculaceae
-Cladomonas,NA
-Sciadium,Sciadiaceae
-Stokesiella (genus in subkingdom SAR),Dinobryaceae
-Chromulina,Chromulinaceae
-Tryblionella,Bacillariaceae
-Peridinium,Peridiniaceae
-Cryptomonas,Cryptomonadaceae
-Cyanosarcina,Chroococcaceae
-Amphidinium,Amphidiniaceae
-Karayevia,Achnanthidiaceae
-Melosira,Melosiraceae
-Himantidium,Eunotiaceae
-Chrysastrella,Chrysosphaeraceae
-Palaeacmea,Palaeacmaeidae
-Diatoma,Fragilariaceae
-Ulnaria,Fragilariaceae
-Korshikoviella,Characiaceae
-Placoneis,Cymbellaceae
-Isthmochloron,Pleurochloridaceae
-Oestrupia,Pinnulariaceae
-Hannaea,Fragilariaceae
-Cocconeis,Cocconeidaceae
-Acanthosphaera (genus in subkingdom SAR),NA
-Cymbopleura,Cymbellaceae
-Pinnularia,Pinnulariaceae
-Surirella,Surirellaceae
-Limnococcus,Cyanothrichaceae
-Codosiga,NA
-Meridion,Fragilariaceae
-Chaetoceros,Chaetocerotaceae
-Gyrosigma,Pleurosigmataceae
-Pseudostaurastrum,Goniochloridaceae
-Trochiscia,Oocystaceae
-Frustulia,Amphipleuraceae
-Puncticulata,Stephanodiscaceae
-Eucocconeis,Achnanthidiaceae
-Stauroneis,Stauroneidaceae
-Amphipleura,Amphipleuraceae
-Belonastrum,Bacillariophyceae familia incertae sedis
-Centritractus,Centritractaceae
-Gyrodinium,Gyrodiniaceae
-Peridiniopsis,Peridiniopsidaceae
-Rhopalodia,Rhopalodiaceae
-Dinosphaera,Dinosphaeraceae
-Lithoperidinium,Peridiniaceae
-Strombomonas,Euglenaceae
-Glenodinium,Peridiniales familia incertae sedis
-Spiniferodinium,Gymnodiniaceae
-Epithemia,Rhopalodiaceae
-Diplosalis,Dinosphaeraceae
-Cymatopleura,Surirellaceae
-Lindavia,Stephanodiscaceae
-Campylodiscus,Surirellaceae
-Cylindrospermopsis,Aphanizomenonaceae
-Erkenia,Chrysochromulinaceae
-Gloeotrichia,Aphanizomenonaceae
-Fragilariopsis,Bacillariaceae
-Chlorocloster,Pleurochloridaceae
-Spirulina (genus in domain Bacteria),Spirulinaceae
-Chrysocapsa,Chrysocapsaceae
-Polygoniochloris,Pleurochloridaceae
-Cyanogranis,Microcystaceae
-Actinocyclus (genus in subkingdom SAR),Hemidiscaceae
-Nephroselmis,Nephroselmidaceae
-Gloeothece,Microcystaceae
-Rhizosolenia (in Bacillariophytina),Rhizosoleniaceae
-Anabaenopsis,Nodulariaceae
-Cyanocatena,Microcystaceae
-Dactylococcopsis (genus in domain Bacteria),Chroococcaceae
-Chrysosporum,Nodulariaceae
-Trichormus,Aphanizomenonaceae
-Entomoneis,Entomoneidaceae
-Monodus,Pleurochloridaceae
-Romeria,Cymatolegaceae
-Gonyostomum,Vacuolariaceae
-Akashiwo,Gymnodiniaceae
-Ophiocytium,Ophiocytiaceae
-Syncrypta,Mallomonadaceae
-Thalassiosira (genus in class Bacillariophyceae),Thalassiosiraceae
-Tabularia,Fragilariaceae
-Coscinodiscus,Coscinodiscaceae
-Bacillaria,Bacillariaceae
-Amphiprora,Amphipleuraceae
-Anacystis,NA
-Grunowia,Bacillariaceae
-Gloeobacter,Gloeobacteraceae
-Marssoniella (genus in kingdom Archaeplastida),NA
-Chrysamoeba (genus in subkingdom SAR),Chrysamoebaceae
-Attheya,Attheyaceae
-Actinoptychus,Heliopeltaceae
-Amphicampa,Eunotiaceae
-Biddulphia,Biddulphiaceae
-Characiopsis,Chlorobotryaceae
-Komma,Chroomonadaceae
-Crypthecodinium,Crypthecodiniaceae
-Dictyocha,Dictyochaceae
-Chytriodinium,Chytriodiniaceae
-Ditylum,Lithodesmiaceae
-Eucapsis,Microcystaceae
-Eutreptiella,Eutreptiaceae
-Hapalosiphon,Hapalosiphonaceae
-Hemiselmis,Chroomonadaceae
-Leptocylindrus,Leptocylindraceae
-Leucocryptos,Kathablepharidae
-Nostoc,Nostocaceae
-Odontella (genus in subkingdom SAR),Triceratiaceae
-Stephanopyxis,Stephanopyxidaceae
-Pedinella,Actinomonadaceae
-Phaeocystis,Phaeocystaceae
-Pleurosigma,Pleurosigmataceae
-Protoderma,Helicodictyaceae
-Prymnesium,Prymnesiaceae
-Pseudoanabaena (genus in domain Bacteria),Pseudoanabaenaceae
-Pyrophacus,Pyrophacaceae
-Raphidiopsis,Aphanizomenonaceae
-Reimeria,Gomphonemataceae
-Salpingella,Tintinnidae
-Stenopterobia,Surirellaceae
-Teleaulax,Geminigeraceae
-Triceratium,Triceratiaceae
-Warnowia,Warnowiaceae
-Gyromitus (genus in kingdom Archaeplastida),Polyblepharidaceae
-Katablepharis,Kathablepharidae
-Monas (merged with Chromulinales),Ochromonadaceae
-Chrysidiastrum,Chrysamoebaceae
-Monochrysis (genus in subkingdom SAR),Chromulinaceae
-Telonema,Telonemidae
-Synuropsis,Ochromonadaceae
-Chrysosphaera,Chrysosphaeraceae
-Paramastix (genus in kingdom Archaeplastida),Paramastigaceae
-Diplochloris,Chlorophyceae familia incertae sedis
-Monas,Ochromonadaceae
-Paraphysomonas,Paraphysomonadaceae
-Cyanonephron,Synechococcaceae
-Bodo,Bodonidae
-Goniomonas,Cyathomonadaceae
-Vacuolaria,Vacuolariaceae
-Planctococcus,Sphaerocystidaceae
-Chrysostephanosphaera,Chrysamoebaceae
-Kephyriopsis,Dinobryaceae
-Cryptaulax,NA
-Tyrannodinium,Pfiesteriaceae
-Glochidinium,Peridiniaceae
-Platymonas (genus in subkingdom SAR),Chlorodendraceae
-Pseudopolyedriopsis,Pleurochloridaceae
-Rhabdomonas,Astasiidae
-Hydrurus,Hydruraceae
-Actinella (genus in subkingdom SAR),Eunotiaceae
-Ducellieria,Botryochloridaceae
-Rhizochrysis,Chrysamoebaceae
-Bernardinium,Tovelliaceae
-Geitlerinema,Geitlerinemataceae
-Petalomonas,Scytomonadidae
-Kobayasiella,Naviculaceae
-Fistulifera,Naviculaceae
-Halamphora,Amphipleuraceae
-Picochlorum,Chlorellales familia incertae sedis
-Calamoceratidae,NA
-Xiphocentronidae,NA
-Amphipoda,NA
-Empididae,NA
-Ephydridae,NA
-Caenidae,NA
-Aeshnidae,NA
-Gomphidae,NA
-Ecnomidae,NA
-Glossosomatidae,NA
-Hydroptilidae,NA
-Pisuliidae,NA
-Stenopsychidae,NA
-Dixidae,NA
-Tanyderidae,NA
-Thaumaleidae,NA
-Tetrahymena (genus in subkingdom SAR),Tetrahymenidae
-Rotaria,Philodinidae
-Pyramidomonas,NA
-Cyanobacterium,Geminocystaceae
-Dolichospermum (inconsistent in FamilyI (in SubsectionIV)),Aphanizomenonaceae
-Glaucospira,Spirulinaceae
-Limnolyngbya,Leptolyngbyaceae
-Romeria (genus in domain Bacteria) (inconsistent in FamilyI (in SubsectionIII)),Romeriaceae
-Encyonopsis,Cymbellaceae
-Pantocsekiella,Stephanodiscaceae
-Stauroforma,Fragilariaceae
-Chimonodinium,Thoracosphaeraceae
-Trachydiscus,Goniochloridaceae
-Amoeba,NA
-Saccamoeba,Hartmannellidae
-Actinophrys,Actinophryidae
-Codonella,Bitectiporidae
-Aspidisca,Aspidiscidae
-Cinetochilum,Cinetochilidae
-Stentor (genus in subkingdom SAR),Stentoridae
-Campanella (genus in subkingdom SAR),Aeginidae
-Vorticella,Vorticellidae
-Litonotus,Litonotidae
-Chilodonella,Chilodonellidae
-Glaucoma (genus in subkingdom SAR),Glaucomidae
-Dexiostoma,Turaniellidae
-Carchesium,Vorticellidae
-Cothurnia,Vaginicolidae
-Trachelophyllum,Trachelophyllidae
-Adlafia,Naviculaceae
-Rossithidium,Achnanthidiaceae
-Psammothidium,Achnanthidiaceae
-Platessa,Pleuronectidae
-Naviculadicta,Naviculaceae
-Kolbesia,Achnanthidiaceae
-Berkeleya,Orbiniidae
-Anomoeoneis,Anomoeoneidaceae
-Biremis (genus in subkingdom SAR),Scoliotropidaceae
-Catenula (genus in subkingdom SAR),Catenulaceae
-Chamaepinnularia,Naviculaceae
-Ctenophora (genus in subkingdom SAR),Fragilariaceae
-Diadesmis,Diadesmidaceae
-Humidophila,Diadesmidaceae
-Delicatophycus,Cymbellaceae
-Delicata (genus in subkingdom SAR),Cymbellaceae
-Eolimna,Naviculaceae
-Distrionella,Fragilariaceae
-Scalptrum,Naviculaceae
-Licmophora,Licmophoraceae
-Lemnicola,Achnanthidiaceae
-Dorofeyukea,Stauroneidaceae
-Microcostatus,Naviculaceae
-Muelleria,Holothuriidae
-Opephora,Fragilariaceae
-Parlibellus,Berkeleyaceae
-Achnantheiopsis,Achnanthidiaceae
-Lysigonium,Melosiraceae
-Stauroptera,Naviculaceae
-Praetriceratium,Triceratiaceae
-Pulchella,Naviculaceae
-Simonsenia,Bacillariaceae
-Arachnochloris,Pleurochloridaceae
-Arthrospira,Microcoleaceae
-Chlorolobium,Chlorobiaceae
-Chroococcopsis,Hydrococcaceae
-Korschpalmella,Sphaerocystidaceae
-Cylindrotheca (genus in subkingdom SAR),Bacillariaceae
-Dendromonas,Chromulinaceae
-Durinskia,Kryptoperidiniaceae
-Epigloeosphaera,Cymatolegaceae
-Leibleinia (merged with FamilyI (in SubsectionIII)),Microcoleaceae
-Microcrocis,Geminocystaceae
-Nodularia (genus in domain Bacteria),Nodulariaceae
-Pavlova,Pavlovaceae
-Phytodinium,Phytodiniaceae
-Pleurogaster,Pleurochloridaceae
-Pseudopodosira,Melosiraceae
-Sphaerocavum,Microcystaceae
-Sphaerospermopsis,Aphanizomenonaceae
-Spumella,Ochromonadaceae
-Tetraktis,Botryochloridaceae
-Tetraplektron,Pleurochloridaceae
-Chironomidae,NA
-Culicidae,NA
-Plecoptera (order in cohort Polyneoptera),NA
-Ephemeroptera,NA
-Coleoptera,NA
-Phaeodactylum,Phaeodactylaceae
-Euplotoides,Euplotidae
-Epistylis,Epistylididae
-Paramecium (genus in subkingdom SAR),Parameciidae
-Strobilidium,Strobilidiidae
-Strombidium,Strombidiidae
-Tintinnidium (genus in subkingdom SAR),Tintinnidiidae
-Brachionus (genus in subkingdom SAR),Brachionidae
-Nannochloropsis,Monodopsidaceae
-Syracosphaera,NA
-Frankophila,Fragilariaceae
-Trichodina,Trichodinidae
-Limnostrombidium,Strombidiidae
-Monodinium,Didiniidae
-Lagynophrya,Trachelophyllidae
-Blepharisma,Blepharismidae
-Halteria,Halteriidae
-Cyclidium (genus in subkingdom SAR),Cyclidiidae
-Rimostrombidium,Strobilidiidae
-Lacrymaria (genus in subkingdom SAR),Lacrymariidae
-Vorticellides,NA
-Pelagostrombidium,Strombidiidae
-Colpoda,Colpodidae
-Ellipsoidion,Pleurochloridaceae
-Codonosigopsis,NA
-Plectonema,Microcoleaceae
-Rhabdomonas (merged with Aphagea),Astasiidae
-Actidesmium,Characiaceae
-Actinomonas,Actinomonadaceae
-Acanthochloris,Pleurochloridaceae
-Ammatoidea,Microcoleaceae
-Amphichrysis,Chromulinaceae
-Nusuttodinium,Gymnodiniaceae
-Togula,Gymnodiniaceae
-Ankistrodinium,Gymnodiniaceae
-Amphirhiza,Chrysamoebaceae
-Apedinella,Actinomonadaceae
-Astasia,Astasiidae
-Aulosira,Leptobasaceae
-Bacularia,Cymatolegaceae
-Blennothrix,Microcoleaceae
-Parabodo,NA
-Neobodo,Neobodonidae
-Botrydium (genus in subkingdom SAR),Botrydiaceae
-Botryochloris,Botryochloridaceae
-Brachynema (genus in kingdom Archaeplastida),NA
-Brasilonema,Scytonemataceae
-Pseudobumilleriopsis,Sciadiaceae
-Camptylonemopsis,Leptobasaceae
-Parkeria,NA
-Chakia,Scytonemataceae
-Chamaecalyx,Hyellaceae
-Characiellopsis,Characiaceae
-Chlorallanthus,Ophiocytiaceae
-Chlorella,Chlorellaceae
-Chloridella,Squillidae
-Chlorobotrys,Chlorobotryaceae
-Chlorogibba,Pleurochloridaceae
-Chondrocystis,Hydrococcaceae
-Chroococcidiopsis,Chroococcidiopsidaceae
-Chrysapsis,Chromulinaceae
-Chrysocapsella,Chrysocapsaceae
-Haptolina,Prymnesiaceae
-Braarudosphaera,Braarudosphaeraceae
-Chrysodendron (genus in subkingdom SAR),Ochromonadaceae
-Chrysomonas,Chromulinaceae
-Chrysopora,Chrysocapsaceae
-Chrysotilos,Chrysocapsaceae
-Chrysoxys,Chromulinaceae
-Coccopedia,Merismopediaceae
-Coleochlamys,Microthamniaceae
-Coleodesmium (genus in domain Bacteria) (merged with uncultured (silva:AB177177/#4)),Tolypothrichaceae
-Conradocystis,Chrysococcaceae
-Crinalium,Gomontiellaceae
-Cryptoglena,NA
-Leptomonas,Trypanosomatidae
-Cyanokybus,Chroococcaceae
-Cyanotetras,Microcystaceae
-Cyanothamnos,Cymatolegaceae
-Cyclidiopsis,Phacaceae
-Cyclonexis,Ochromonadaceae
-Cymbomonas,Pyramimonadaceae
-Cystodinedria,Phytodiniaceae
-Cystodinium,Phytodiniaceae
-Dactylosphaerium (genus in kingdom Archaeplastida),Dictyosphaeriaceae
-Dasygloea,Microcoleaceae
-Pleurocapsa,Hydrococcaceae
-Desmococcus (genus in kingdom Archaeplastida),Stichococcaceae
-Deuterocharacium,Characiaceae
-Diachros,Ophiocytiaceae
-Dichothrix,Rivulariaceae
-Dinococcus,Phytodiniaceae
-Distigma (merged with Aphagea),Distigmatidae
-Distigma,Distigmatidae
-Epicystis (genus in subkingdom SAR),Chrysosphaeraceae
-Crumenula (genus in infrakingdom Excavata),NA
-Fortiea,Leptobasaceae
-Glenodiniopsis,Glenodiniopsidaceae
-Kryptoperidinium,Peridiniaceae
-Coolia,Ostreopsidaceae
-Gloeochrysis,Chrysocapsaceae
-Gloeococcus,Palmellopsidaceae
-Lepidodinium,Gymnodiniaceae
-Levanderina,Gymnodiniales familia incertae sedis
-Karlodinium,NA
-Woloszynskia,Tovelliaceae
-Karenia,NA
-Hassallia (genus in domain Bacteria),Tolypothrichaceae
-Helicopedinella,Actinomonadaceae
-Heterochromonas,Chromulinaceae
-Heterodesmus (genus in subkingdom SAR),Botryochloridaceae
-Hexamitus,Hexamitidae
-Hormothece,Microcystaceae
-Hormotila,Hormotilaceae
-Hortobagyiella,Chlorophyceae familia incertae sedis
-Hydrocoleum,Microcoleaceae
-Katagnymene,Gomontiellaceae
-Aduncodinium,Pfiesteriaceae
-Khawkinea,Euglenaceae
-Lepochromulina,Chrysococcaceae
-Chroakolemma,Leptolyngbyaceae
-Macrospermum,Aphanizomenonaceae
-Mallomonas,Mallomonadaceae
-Merotricha,Vacuolariaceae
-Microchaete (merged with FamilyI (in SubsectionIV)),Rivulariaceae
-Microcoleus (genus in domain Bacteria),Microcoleaceae
-Mischococcus,Mischococcaceae
-Myochloris,Nephroselmidaceae
-Echinochrysis,Ochromonadaceae
-Cercomonas (genus in infrakingdom Excavata),Cercomonadidae
-Ollicola,Dinobryaceae
-Oonephris,Oocystaceae
-Ophiothrix (genus in domain Bacteria),Scytonemataceae
-Pachycladella,Oocystaceae
-Palatinus,Peridiniaceae
-Paracapsa,Chroococcaceae
-Staszicella,Peridiniaceae
-Archaeperidinium,Protoperidiniaceae
-Petalonema,Scytonemataceae
-Phaeobotrys (genus in subkingdom SAR),Phaeothamniaceae
-Phaeoplaca,Chrysothallaceae
-Planktothricoides,Oscillatoriaceae
-Pleurochloris,Pleurochloridaceae
-Polyedriella,Pleurochloridaceae
-Polylepidomonas,Paraphysomonadaceae
-Porphyrosiphon,Microcoleaceae
-Prismatella,Pleurochloridaceae
-Pseudocapsa,Chroococcaceae
-Pseudocharaciopsis,Chlorobotryaceae
-Pseudocharacium,Chlorobotryaceae
-Pseudochattonella,Ignatiaceae
-Pseudoncobyrsa,Microcystaceae
-Pseudophormidium,Leptolyngbyaceae
-Radiofilum,Sphaeropleaceae
-Raphidosphaera,Pleurochloridaceae
-Rhaphidiopsis,NA
-Rhodostichus,Cymatolegaceae
-Rivularia (genus in domain Bacteria),Rivulariaceae
-Saccochrysis,Chromulinaceae
-Schizochlamydella,Oocystaceae
-Hypheothrix,Oscillatoriaceae
-Schizothrix,NA
-Scytonema (genus in domain Bacteria),Scytonemataceae
-Sphaeraspis (genus in subkingdom SAR),Chromulinaceae
-Spirodinium (merged with Trichostomatia),Gymnodiniaceae
-Stanieria,Hydrococcaceae
-Stenokalyx,Chrysococcaceae
-Storeatula,Pyrenomonadaceae
-Stylochrysalis,Dinobryaceae
-Symplocastrum,Microcoleaceae
-Tetrarcus,Chroococcaceae
-Tolypothrix,Tolypothrichaceae
-Trachychloron,Pleurochloridaceae
-Trichocoleus,Trichocoleusaceae
-Trichodesmium,Microcoleaceae
-Tubiella,Cymatolegaceae
-Umezakia,Aphanizomenonaceae
-Vischeria (genus in subkingdom SAR) (merged with Eustigmatales),Chlorobotryaceae
-Wollea,Aphanizomenonaceae
-Wolskyella,Cymatolegaceae
-Xenococcus (genus in domain Bacteria),Pleurocapsaceae
-Xenotholos,Hydrococcaceae
-Opercularia (genus in subkingdom SAR),Operculariidae
-Frontonia,Frontoniidae
-Euplotes,Euplotidae
-Gleocapsa,NA
-Bromeliothrix,NA
-Colpidium (genus in Opisthokonta),NA
-Colpidium,Turaniellidae
-Didinium,Didiniidae
-Glaucomides,Bromeliophryidae
-Meseres (genus in subkingdom SAR),Synallactidae
-Pauliella (genus in subkingdom SAR),Lithodesmiaceae
-Cothurniopsis,NA
-Pyxicola,Vaginicolidae
-Stokesia (genus in subkingdom SAR),Stokesiidae
-Urocentrum,Urocentridae
-Picocystis,Picocystaceae
-Stephanoceros,Collothecidae
-Paradileptus,Tracheliidae
-Pelagohalteria,Halteriidae
-Staurophora (genus in subkingdom SAR),Laodiceidae
-Pseudourostyla,Pseudourostylidae
-Stylonychia,Oxytrichidae
-Gastrostyla,Oxytrichidae
-Uroleptus,Urostylidae
-Condylostoma,Condylostomatidae
-Dileptus,Tracheliidae
-Celsinotum,Chydoridae
-Stephanocostis,Stephanodiscaceae
-Praestephanos,NA
-Tintinnopsis,Codonellidae
-Pulvinularia,Stigonemataceae
+family,order
+Cyanothecaceae,Gomontiellales
+Microcystaceae,Chroococcales
+Prochloraceae,Chroococcales
+Chroococcaceae,Chroococcales
+Gomontiellaceae,Gomontiellales
+Cymatolegaceae,Nodosilineales
+Leptolyngbyaceae,Leptolyngbyales
+Synechococcaceae,Synechococcales
+Microcoleaceae,Oscillatoriales
+Oscillatoriaceae,Oscillatoriales
+Coccomyxaceae,Trebouxiophyceae ordo incertae sedis
+Pseudanabaenaceae,Pseudanabaenales
+Wilmottiaceae,Coleofasciculales
+Pelonemataceae,Pelonematales
+Aliterellaceae,Chroococcidiopsidales
+Coelosphaeriaceae,Synechococcales
+Bacillariaceae,Bacillariales
+Aphanizomenonaceae,Nostocales
+Achnanthidiaceae,Achnanthales
+Rivulariaceae,Nostocales
+Oocystaceae,Chlorellales
+Gomphonemataceae,Cymbellales
+Stephanodiscaceae,Thalassiosirales
+Synechococcales familia incertae sedis,Synechococcales
+Brachysiraceae,Naviculales
+Gomphosphaeriaceae,Chroococcales
+Sellaphoraceae,Naviculales
+Naviculaceae,Naviculales
+Diploneidaceae,Naviculales
+Skeletonemaceae,Thalassiosirales
+Radiococcaceae,Sphaeropleales
+Botryococcaceae,Trebouxiales
+Cymbellaceae,Cymbellales
+Watanabeaceae,Watanabeales
+Nephrocytiaceae,Sphaeropleales
+Eunotiaceae,Eunotiales
+Tovelliaceae,Tovelliales
+Catenulaceae,Thalassiophysales
+Achnanthaceae,Achnanthales
+Thalassiosiraceae,Thalassiosirales
+Neidiaceae,Naviculales
+Stauroneidaceae,Naviculales
+Gymnodiniaceae,Gymnodiniales
+Aulacoseiraceae,Aulacoseirales
+Elakatotrichaceae,Klebsormidiales
+Fragilariaceae,Fragilariales
+Amphidiniaceae,Amphidiniales
+Cavinulaceae,Naviculales
+Melosiraceae,Melosirales
+Chrysosphaeraceae,Chrysosphaerales
+Palaeacmaeidae,NA
+Mastogloiaceae,Mastogloiales
+Pinnulariaceae,Naviculales
+Cocconeidaceae,Achnanthales
+Surirellaceae,Surirellales
+Cyanothrichaceae,Chroococcales
+Rhoicospheniaceae,Cymbellales
+Chaetocerotaceae,Chaetocerotanae incertae sedis
+Pleurosigmataceae,Naviculales
+Amphipleuraceae,Naviculales
+Bacillariophyceae familia incertae sedis,Bacillariophyceae ordo incertae sedis
+Acanthocerataceae,Chaetocerotanae incertae sedis
+Gyrodiniaceae,Gymnodiniales
+Peridiniopsidaceae,Peridiniales
+Rhopalodiaceae,Rhopalodiales
+Thoracosphaeraceae,Thoracosphaerales
+Spirulinaceae,Spirulinales
+Hemidiscaceae,Coscinodiscales
+Nephroselmidaceae,Nephroselmidales
+Rhizosoleniaceae,Rhizosoleniales
+Nodulariaceae,Nostocales
+Entomoneidaceae,Surirellales
+Vacuolariaceae,Chattonellales
+Coscinodiscaceae,Coscinodiscales
+Gloeobacteraceae,Gloeobacterales
+Attheyaceae,Chaetocerotanae incertae sedis
+Heliopeltaceae,Coscinodiscales
+Biddulphiaceae,Biddulphiales
+Chytriodiniaceae,Coccidiniales
+Lithodesmiaceae,Lithodesmiales
+Hapalosiphonaceae,Nostocales
+Leptocylindraceae,Leptocylindrales
+Kathablepharidae,Katablepharidales
+Mesodiniidae,Cyclotrichiida
+Nostocaceae,Nostocales
+Triceratiaceae,Triceratiales
+Stephanopyxidaceae,Melosirales
+Phaeocystaceae,Phaeocystales
+Pseudoanabaenaceae,Pseudanabaenales
+Tintinnidae,Choreotrichida
+Warnowiaceae,Gymnodiniales
+Paramastigaceae,Spironematellales
+Cryptomonadaceae,NA
+Cyathomonadaceae,Goniomonadales
+Peridiniaceae,Peridiniales
+Chlorodendraceae,Chlorodendrales
+Peroniaceae,Eunotiales
+Geitlerinemataceae,Geitlerinematales
+Ellobiidae,Ellobiida
+Plagiotropidaceae,Naviculales
+Potamididae,Caenogastropoda incertae sedis
+Thiaridae,Caenogastropoda incertae sedis
+Paludomidae,Caenogastropoda incertae sedis
+Tetrahymenidae,Tetrahymenida
+Philodinidae,Philodinida
+Geminocystaceae,Chroococcales
+Romeriaceae,Synechococcales
+Actinophryidae,Actinophryida
+Bitectiporidae,Cheilostomatida
+Aspidiscidae,Euplotida
+Cinetochilidae,Philasterida
+Stentoridae,Heterotrichida
+Aeginidae,Narcomedusae
+Vorticellidae,Sessilida
+Histiobalantiidae,Pleuronematida
+Litonotidae,Pleurostomatida
+Chilodonellidae,Chlamydodontida
+Glaucomidae,Tetrahymenida
+Turaniellidae,Tetrahymenida
+Vaginicolidae,Sessilida
+Trachelophyllidae,Haptorida
+Pleuronectidae,Pleuronectiformes
+Anomoeoneidaceae,Cymbellales
+Scoliotropidaceae,Naviculales
+Diadesmidaceae,Naviculales
+Radialiplicataceae,Paraliales
+Holothuriidae,Holothuriida
+Auriculaceae,Surirellales
+Berkeleyaceae,Naviculales
+Chlorobiaceae,Chlorobiales
+Hydrococcaceae,Pleurocapsales
+Hemidiniaceae,Suessiales
+Pavlovaceae,Pavlovales
+Schizotrichaceae,Oscillatoriales
+Phaeodactylaceae,Naviculales
+Euplotidae,Euplotida
+Epistylididae,Sessilida
+Strobilidiidae,Choreotrichida
+Strombidiidae,Oligotrichia
+Tintinnidiidae,Choreotrichida
+Brachionidae,Ploima
+Trichodinidae,Mobilida
+Actinobolinidae,Haptorida
+Didiniidae,Haptorida
+Blepharismidae,Heterotrichida
+Halteriidae,Halteriida
+Cyclidiidae,Pleuronematida
+Lacrymariidae,Haptorida
+Suessiaceae,Suessiales
+Leptobasaceae,Nostocales
+Borghiellaceae,Suessiales
+Borziaceae,Oscillatoriales
+Scytonemataceae,Nostocales
+Hyellaceae,Pleurocapsales
+Entophysalidaceae,Chroococcales
+Vaginulinidae,Vaginulinida
+Chroococcidiopsidaceae,Chroococcidiopsidales
+Chrysosaccaceae,Chrysosaccales
+Merismopediaceae,Synechococcales
+Tolypothrichaceae,Nostocales
+Stichococcaceae,Prasiolales
+Euglenaceae,Euglenales
+Kareniaceae,NA
+Gymnodiniales familia incertae sedis,Gymnodiniales
+Heteroleibleiniaceae,Pseudanabaenales
+Hexamitidae,Diplomonadida
+Ammatoideaceae,Oscillatoriales
+Chlorophyceae familia incertae sedis,Chlorophyceae incertae sedis
+Mallomonadaceae,Synurales
+Phaeothamniaceae,Phaeothamniales
+Sphaeropleaceae,Sphaeropleales
+Pleurochloridaceae,Mischococcales
+Trichocoleusaceae,Leptolyngbyales
+Pleurocapsaceae,Chroococcales
+Operculariidae,Sessilida
+Bromeliophryidae,NA
+Synallactidae,Synallactida
+Urocentridae,Peniculida
+Picocystaceae,Picocystales
+Tracheliidae,Haptorida
+Laodiceidae,Leptothecata
+Pseudourostylidae,Spirotrichea ordo incertae sedis
+Oxytrichidae,Spirotrichea ordo incertae sedis
+Urostylidae,Spirotrichea ordo incertae sedis
+Condylostomatidae,Heterotrichida
+Amoebidae,NA
+Codonellidae,Choreotrichida
+Stigonemataceae,Nostocales
+Collodictyonidae,NA
