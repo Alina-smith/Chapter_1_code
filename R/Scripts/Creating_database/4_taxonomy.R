@@ -66,7 +66,7 @@ cleaned_gna <- do.call(rbind, lapply(names_list, function(name) {
   tryCatch(
     {
       # Process each name and return the result
-      gna_verifier(names_list) %>%
+      gna_verifier(name) %>%
         as.data.frame() %>%
         select(submittedName, matchedCanonicalFull, dataSourceTitleShort)
     },
@@ -275,12 +275,14 @@ saveRDS(resolved_pmc, "R/data_outputs/database_products/taxonomy/resolved_pmc.rd
 ## tax_lineage ----
 
 ### Import data ----
-resolved_pmc <- readRDS("R/data_outputs/database_products/taxonomy/resolved_pmc.rds")
+resolved_pmc <- readRDS("R/data_outputs/database_products/taxonomy/resolved_pmc.rds") %>% 
+  
+  head(10)
 
 ### Lineage ----
 # Get the taxonomy lineage from tol
 
-taxonomy_raw_pmc <- resolved_pre_multi_check %>% 
+taxonomy_raw_pmc <- resolved_pmc %>% 
   
   mutate(
     tax = list( # need to set as list so that it makes it into a list column with each row containing a dataframe for that taxa
@@ -647,9 +649,9 @@ taxonomy_pmc <- taxonomy_order %>%
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
       phylum == "Cyanobacteria" ~ "Phytoplankton",
-      phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta", "Choanozoa") ~ "Phytoplankton",
+      phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
       
-      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
+      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa", "Choanozoa") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
       
       TRUE ~ NA
@@ -940,13 +942,6 @@ circular_plot <- circular_plot %<+% phylo_plot_data_update +
 
 circular_plot
 
-x <- taxonomy %>% 
-  filter(
-    kingdom == "Plantae"
-  ) %>% 
-  distinct(
-    phylum
-  )
 
 
 
@@ -1141,8 +1136,6 @@ saveRDS(tax_list_raw, file = "R/data_outputs/database_products/taxonomy/tax_list
 # need to join things inn sequence because there were a couple of steps to get from the raw names to the formatted names
 
 ## Linking new to original names ----
-
-### Import data ----
 
 ### taxonomy to resolved ----
 

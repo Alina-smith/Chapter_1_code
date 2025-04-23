@@ -5,7 +5,6 @@ library(plyr)
 library(tidyverse)
 library(rotl)
 library(ape)
-library(ggplot2)
 
 install.packages(c("treeplyr", "BiocManager"))
 library(BiocManager)
@@ -19,12 +18,12 @@ library(ggnewscale)
 # Species ----
 
 # Data ----
-trait_data <- readRDS("R/Data_outputs/database_products/final_products/phyto_all.rds") %>% 
+data <- readRDS("R/Data_outputs/database_products/final_products/phyto_subset.rds") %>% 
   # select just individuals for now
   filter(
-    nu == "individual",
-    #r.group != "Unassigned"
+    nu == "individual"
   )
+
 resolved <- readRDS("R/Data_outputs/database_products/taxonomy/resolved.rds")
 
 # Format data ----
@@ -275,7 +274,7 @@ circular_plot_mass
 
 ggsave("R/Data_outputs/database_products/plots/circular_plot_mass.png", width = 7, height = 5, limitsize = FALSE)
 
-# Genus ----
+# genus ----
 
 # Data ----
 trait_data <- readRDS("R/Data_outputs/database_products/final_products/phyto_all.rds") %>% 
@@ -560,10 +559,10 @@ phyto_subset <- readRDS("R/data_outputs/database_products/final_products/phyto_s
 ## Format data ----
 # Get a taxonomy list to add in in later steps
 
-phylo_plot_data <- phyto_subset %>% 
+phylo_plot_data_genus <- phyto_subset %>% 
   
   select(
-    nu, genus, phylum, kingdom, family, order, class
+    nu, genus, phylum, kingdom, family, order, class, r.group.genus
   ) %>% 
   distinct(genus, .keep_all = TRUE) %>% 
   
@@ -588,8 +587,8 @@ saveRDS(in_tree_genus, "R/data_outputs/database_products/taxonomy/in_tree_genus.
 in_tree_genus
 
 # See which ones are in and out
-sum(in_tree_genus == TRUE) # 665
-sum(in_tree_genus == FALSE) # 156
+sum(in_tree_genus == TRUE) # 658
+sum(in_tree_genus == FALSE) # 154
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
@@ -603,6 +602,9 @@ taxa_in_tree <- phylo_plot_data[in_tree_genus, ] %>%
 
 # Make tree
 tree <- tol_induced_subtree(ott_ids = taxa_in_tree$ott_id)
+
+#save tree out here before adapting it for plotting: 
+write.nexus(tree, file="R/data_outputs/exploring/tree_pre_plot.nex")
 
 tol_about() # gives info about the current synthetic tree
 tree # shows info about my tree
@@ -636,12 +638,13 @@ phylo_plot_data_update <- as.data.frame(tree$tip.label) %>% # get the tip labels
   ) %>% 
   
   select(
-    tip.label, genus, phylum, family, kingdom, class, order
+    tip.label, genus, phylum, family, kingdom, class, order, r.group.genus
   ) %>% 
   
   mutate(
     kingdom_label = paste0("Kingdom: ", kingdom),
-    phylum_label = paste0("Phylum: ", phylum)
+    phylum_label = paste0("Phylum: ", phylum),
+    r_label = paste0("R.group: ", r.group.genus)
   )
 
 ## Plotting circular tree ----
@@ -654,6 +657,7 @@ circular_plot
 circular_plot <- circular_plot %<+% phylo_plot_data_update +
   geom_tippoint(aes(x = x + 1, color = phylum_label), size = 3, show.legend = TRUE)+
   geom_tippoint(aes(x = x + 3, color = kingdom_label), size = 3, show.legend = TRUE) +
+  geom_tippoint(aes(x = x + 5, color = r_label), size = 3, show.legend = TRUE)
   
   scale_color_manual(values =
                        c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#8B0000", "Kingdom: Chromista" = "#00008B",
@@ -710,7 +714,7 @@ log_mass_genus <- phylo_plot_data_update %>%
 # plot
 circular_plot_mass = circular_plot + new_scale_fill() # so new geoms added in can use a new scale
 
-circular_plot_mass <- gheatmap(circular_plot_mass, log_mass_genus, offset=2, width=0.2, colnames = F)
+circular_plot_mass <- gheatmap(circular_plot_mass, log_mass_genus, offset=7, width=0.2, colnames = F)
 circular_plot_mass
 
 ggsave("R/Data_outputs/database_products/plots/circular_plot_mass.png", width = 7, height = 5, limitsize = FALSE)

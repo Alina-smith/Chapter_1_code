@@ -24,24 +24,31 @@ library(ggtreeExtra)
 
 
 # Import data ----
-taxonomy <- readRDS("R/data_outputs/database_products/taxonomy/taxonomy.rds")
+data <- readRDS("R/data_outputs/database_products/final_products/phyto_subset.rds")
 
 
-phylo_plot_data <- taxonomy %>% 
+phylo_plot_data <- data %>% 
+  
+  filter(
+    !is.na(species)
+  ) %>% 
   
   select(
-    ott.id,
-    tol.taxa.name,
+    taxa.name,
     species,
     genus,
     family,
     order,
     class,
     phylum,
-    kingdom
+    kingdom,
+    r.group,
+    group,
+    mass.c,
+    mass.d
   ) %>% 
   
-  distinct(ott.id, .keep_all = TRUE)
+  distinct(taxa.name, .keep_all = TRUE)
 
 ## Get phylo relationships from a list of taxa: ----
 
