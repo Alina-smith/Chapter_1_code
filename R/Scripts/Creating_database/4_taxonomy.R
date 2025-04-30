@@ -275,9 +275,7 @@ saveRDS(resolved_pmc, "R/data_outputs/database_products/taxonomy/resolved_pmc.rd
 ## tax_lineage ----
 
 ### Import data ----
-resolved_pmc <- readRDS("R/data_outputs/database_products/taxonomy/resolved_pmc.rds") %>% 
-  
-  head(10)
+resolved_pmc <- readRDS("R/data_outputs/database_products/taxonomy/resolved_pmc.rds")
 
 ### Lineage ----
 # Get the taxonomy lineage from tol
@@ -538,7 +536,7 @@ taxonomy_order <- taxonomy_family %>%
     ),
     
     order = case_when(
-      resolved.taxa.name %in% c("Chromulinales", "Gymnodiniales", "Ochromonadales", "Oscillatoriales", "Peridiniales", "Chroococcales", "Chlamydomonadales") ~ resolved.taxa.name,
+      resolved.taxa.name %in% c("Chromulinales", "Gymnodiniales", "Ochromonadales", "Oscillatoriales", "Peridiniales", "Chroococcales", "Chlamydomonadales", "Pennales") ~ resolved.taxa.name,
       
       family == "Collodictyonidae" ~ "Diphylleida", # one that got missed
       family == "Chlorellaceae" ~ "Chlorellales",

@@ -11,15 +11,15 @@ library(stringi)
 library(taxize)
 library(rotl)
 
-# Formatting data ----
+# Formatting all data ----
+# Final list of all data including phyto and zooplankton with groups and mass
 
 ## Import data ----
 bodysize_location <- readRDS("R/Data_outputs/database_products/bodysize_location.rds")
 tax_list_raw <- readRDS("R/Data_outputs/database_products/taxonomy/tax_list_raw.rds")
 sources_list_update <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
 
-## All data ----
-# Final list of all data including phyto and zooplankton
+## Initial edits ----
 
 format_all_bs <- bodysize_location %>% 
   
@@ -194,7 +194,7 @@ bs_raw <- format_all_bs %>%
   )
 
 ## Combine all together ----
-bodysize_formatted <- format_all_bs %>% 
+bodysize_groups <- format_all_bs %>% 
   
   # remove raw data
   filter(
@@ -224,116 +224,62 @@ bodysize_formatted <- format_all_bs %>%
     body.size, .keep_all = TRUE
   ) %>% 
   
-  ungroup()
-
-
-# save
-saveRDS(bodysize_formatted, file = "R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
-
-
-# Functional groups ----
-# Only have phyto functional groups but need to groups to calulate phyto mass so do it now and then can have one data set of masses
-
-## Import data ----
-
-rimmet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet") # 2018, padisak and reynolds
-kruk <- read_xlsx("raw_data/kruk_groups.xlsx") # 2017, reynolds
-padisak <- read_xlsx("raw_data/functional_groups_padisak.xlsx", sheet = "groups") # 2009, padisak
-
-## Format ----
-
-### padisak ----
-padisak_1 <- padisak %>% 
-  
-  # remove the old grouping and keep just the updated padisak groups
-  select(
-    - reynolds.group
-  ) %>% 
-  
-  # Put each species on its own line
-  separate(taxa.name, sep = ",", into = c("taxa.name.1", "taxa.name.2", "taxa.name.3", "taxa.name.4", "taxa.name.5", "taxa.name.6", "taxa.name.7", "taxa.name.8", "taxa.name.9", "taxa.name.10", "taxa.name.11", "taxa.name.12", "taxa.name.13", "taxa.name.14", "taxa.name.15", "taxa.name.16", "taxa.name.17", "taxa.name.18", "taxa.name.19", "taxa.name.20", "taxa.name.21", "taxa.name.22", "taxa.name.23", "taxa.name.24", "taxa.name.25")) %>% 
-  
-  pivot_longer(
-    cols = taxa.name.1:taxa.name.25,
-    values_to = "taxa.name"
-  ) %>% 
-  
-  filter(
-    !is.na(taxa.name)
-  ) %>% 
-  
-  mutate(
-    taxa.name = str_trim(taxa.name)
-  ) %>% 
-  
-  select(
-    - name
-  ) %>% 
-  
-  mutate(
-    multiple.uid = row_number()
-  )
-  
-  # Some have more than one group input so find these and then select the most up to date one
-padisak_multiples <- padisak_1 %>% 
-  
-  group_by(
-    taxa.name
-  ) %>% 
-  
-  mutate(
-    n = n()
-  ) %>% 
-  
-  filter(
-    n>1
-  ) %>% 
-  
   ungroup() %>% 
   
-  group_by(taxa.name, padisak.r.group) %>% 
+  # Add in groups 
   
   mutate(
-    n2 = n()
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  # Any where n != n2 are one with more than one grouping
-  filter(
-    n != n2
+    group = case_when(
+      phylum %in% c("Cyanobacteria", "Glaucophyta") ~ "Blue/green",
+      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
+      phylum == "Bacillariophyta" ~ "Diatom",
+      phylum == "Rhodophyta" ~ "Red",
+      phylum == "Euglenozoa" ~ "Euglenoid",
+      phylum == "Cryptophyta" ~ "Cryptomonads",
+      phylum == "Haptophyta" ~ "Haptophytes",
+      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
+      
+      class %in% c("Chrysophyceae", "Dictyochophyceae", "Bicosoecophyceae") ~ "Golden-brown",
+      class == "Dinophyceae" ~ "Dinoflagellate",
+      class == "Raphidophyceae" ~ "Raphidophytes",
+      class == "Xanthophyceae" ~ "Yellow-green",
+      class == "Eustigmatophyceae" ~ "Eustigmatophytes",
+      class == "Phaeothamniophyceae" ~ "Brown",
+      
+      # Zooplankton - more for the length weight joining
+      genus == "Bosmina" ~ "bosmina",
+      genus == "Daphnia" ~ "daphnia",
+      family == "Daphniidae" ~ "daphniidae",
+      order == "Diplostraca" ~ "cladocera",
+      phylum == "Rotifera" ~ "rotifer",
+      phylum == "Arthropoda" ~ "copepoda",
+      
+      TRUE ~ NA
+    )
   ) 
-  
-  
-# edit the ones that have multiple groups:
-# When there is a clear majority use this to be the most representative
-# when it is evenly split select the most representative lake type
-padisak_format <- padisak_1 %>% 
-  
-  # remove the ones that are not the majority
-  filter(
-    !(multiple.uid %in% c("400", "29", "717", "263", "262", "314", "345", "417", "535", "995",
-                          "994", "988", "990", "264", "105", "120", "42", "1007", "150", "166",
-                          "219", "393", "1095", "523", "1100", "1098", "1003", "1010", "32", "43"))
-    ) %>% 
 
-  group_by(
-    taxa.name, padisak.r.group
+## Reynolds groups ----
+
+### Import data ----
+# These are all large databases that I have already used that include R groups
+
+# Rimmet - 2018, padisak and reynolds
+rimmet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet") %>% 
+  select(
+    `Genus + species name`,
+    `Functional groups (Padisak 2009)`
   ) %>% 
   
-  distinct(
-    taxa.name
+  rename(
+    taxa.name = `Genus + species name`,
+    reynolds.group = `Functional groups (Padisak 2009)`
   ) %>% 
-  
-  ungroup() %>% 
   
   mutate(
-    ref = "padisak"
+    ref = "rimmet"
   )
-
-### Kruk ----
-kruk_1 <- kruk %>% 
-  
+# Kruk - 2017, reynolds
+kruk <- read_xlsx("raw_data/kruk_groups.xlsx") %>% 
   select(
     Species_name,
     `Classification by Experts`,
@@ -342,212 +288,78 @@ kruk_1 <- kruk %>%
   rename(
     taxa.name = Species_name,
     reynolds.group = `Classification by Experts`
-  ) 
+  ) %>% 
+  
+  mutate(
+    ref = "kruk"
+  )
+# Padisak - 2009, padisak
+padisak <- read_xlsx("raw_data/functional_groups_padisak.xlsx", sheet = "groups") %>% 
+  select(
+     padisak.r.group,
+     taxa.name
+  ) %>% 
+  
+  rename(
+    reynolds.group = padisak.r.group
+  )%>% 
+  
+  mutate(
+    ref = "padisak"
+  )
+# Lt - 2021, reynolds using updated padisak
+lt <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Laplace-Treyture") %>% 
+  select(
+    Taxa_Name,
+    Reynolds_Group
+  ) %>% 
+  
+  rename(
+    taxa.name = Taxa_Name,
+    reynolds.group = Reynolds_Group
+  )%>% 
+  
+  mutate(
+    ref = "lt"
+  )
 
-kruk_multiples <- kruk_format %>% 
+### Join together ----
+r_groups_raw <- bind_rows(padisak, rimmet, kruk, lt) %>% 
   
-  group_by(
-    taxa.name
-  ) %>% 
-  
-  mutate(
-    n = n()
-  ) %>% 
-  
-  filter(
-    n>1
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  group_by(taxa.name, reynolds.group) %>% 
+  # put all taxa onto seperate rows
+  separate_rows(taxa.name, sep = ",|/") %>% 
   
   mutate(
-    n2 = n()
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  # Any where n != n2 are one with more than one grouping
-  filter(
-    n != n2
-  ) 
-
-# fix multiples
-kruk_format <- kruk_1 %>% 
-  
-  group_by(
-    taxa.name, reynolds.group
-  ) %>% 
-  
-  distinct(
-    taxa.name
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  mutate(
-    ref = "kruk",
+    # Get rid of any white spaces on the ends
+    old.taxa.name = str_trim(taxa.name),
     
-    # fix multiples
-    reynolds.group = case_when(
-      taxa.name == "Schroederia sp" ~ "X1",
-      taxa.name == "Scenedesmus quadricauda" ~ "J",
-      taxa.name == "Scenedesmus brasiliensis" ~ "J",
-      taxa.name == "Raphidiopsis curvata" ~ "S1",
-      taxa.name == "Pseudanabaena mucicola" ~ "MP",
-      taxa.name == "Pediastrum tetras (Ehrenb)Ralfs" ~ "J",
-      taxa.name == "Mallomonas akrokomos Ruttner" ~ "E",
-      taxa.name %in% c("Gymnodinium sp", "Gymnodinium sp1") ~ "LO",
-      taxa.name == "Cosmarium bioculatum" ~ "N",
-      taxa.name == "Cryptomonas erosa" ~ "Y",
-      taxa.name == "Gymnodinium cnecoides" ~ "LO",
-      taxa.name == "Staurodesmus phimus" ~ "N",
-      taxa.name == "Chlorolobium braunii" ~ "X1",
-      taxa.name == "Dendromonas virgaria" ~ "X3",
-      taxa.name == "Actinotaenium perminutum" ~ "X1",
-      
-      TRUE ~ reynolds.group
+    # Make all groups upper case because some are a mix of upper and lower
+    reynolds.group = toupper(reynolds.group),
+    
+    # remove the var. and f.
+    old.taxa.name = if_else(
+      stri_detect_regex(old.taxa.name, "var\\.|f\\."),
+      stri_extract_first_regex(old.taxa.name, "(\\S+ )*\\S+ \\S+(?= var\\.| f\\.)"),
+      old.taxa.name
     )
   ) %>% 
   
-  # when there is a multiple and this is already in another dataset then remove
+  select(
+    - taxa.name
+  ) %>% 
+  
+  # remove any that have no reynolds group
   filter(
-    !(taxa.name %in% c(
-      "Ankistrodesmus falcatus",
-      "Chromulina sp1",
-      "Chroococcus minutus",
-      "Coelastrum reticulatum",
-      'Coelastrum microporum',
-      "Crucigeniella rectangularis",
-      "Cryptomonas sp",
-      "Cryptomonas ovata",
-      "Cryptomonas marsonii",
-      "Microcystis aeruginosa",
-      "Microcystis wesenbergii",
-      "Monoraphidium griffith",
-      "Ochromonas sp1",
-      "Oscillatoria sp",
-      "Pseudokephyrion sp",
-      "Staurastrum sp1",
-      "Synechococcus nidulans",
-      "Chrysophyceae 2",
-      "Chrysophyceae 5",
-      "Chrysophyceae 7",
-      "Monoraphidium griffithi (Berk) Kom Legn",
-      "Raphidiopsis mediterranea",
-      "Synechocystis aquatilis"
-    ))
-  )
-  
-  
-
-
-### rimmet ----
-# no multiples so can skip that step
-rimmet_format <- rimmet %>% 
-  
-  select(
-    `Genus + species name`,
-    `Functional groups (Reynolds 2002)`,
-    `Functional groups (Padisak 2009)`
-  ) %>% 
-  
-  rename(
-    taxa.name = `Genus + species name`,
-    reynolds.group = `Functional groups (Reynolds 2002)`,
-    padisak.r.group = `Functional groups (Padisak 2009)`
-  ) %>% 
-  
-  group_by(
-    taxa.name, padisak.r.group, reynolds.group
-  ) %>% 
-  
-  distinct(
-    taxa.name
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  mutate(
-    ref = "rimmet"
+    !is.na(reynolds.group),
+    reynolds.group != "#NA"
   )
 
-### Join ----
-names_list <- bind_rows(padisak_format, rimmet_format, kruk_format) %>% 
-  distinct(
-    taxa.name
-  )
-
-## Join padisaks together ----
-padisak_raw <- bind_rows(padisak_format, rimmet_format) %>% 
-  
-  select(
-    - reynolds.group
-  ) %>% 
-  
-  group_by(
-    taxa.name, padisak.r.group
-  ) %>% 
-  
-  distinct(
-    taxa.name, .keep_all = TRUE
-  ) %>% 
-  
-  pivot_wider(
-    names_from = ref,
-    values_from = c(padisak.r.group),
-    values_fn = function(x) paste(unique(x), collapse = "/")
-  ) %>% 
-  
-  rename(
-    `r.group.padisak (padisak 2009)` = padisak,
-    `r.group.padisak (rimmet 2018)` = rimmet
-  )
-
-## Join reynolds together ----
-reynolds_raw <- bind_rows(rimmet_format, kruk_format) %>% 
-  
-  group_by(
-    taxa.name, reynolds.group
-  ) %>% 
-  
-  distinct(
-    taxa.name, .keep_all = TRUE
-  ) %>% 
-  
-  pivot_wider(
-    names_from = ref,
-    values_from = c(reynolds.group),
-    values_fn = function(x) paste(unique(x), collapse = "/")
-  ) %>% 
-  
-  rename(
-    `r.group.reynolds (rimmet 2018)` = rimmet,
-    `r.group.reynolds (kruk 2017)` = kruk,
-  )
-
-## Add to names list ----
-functional_raw <- names_list %>% 
-  
-  left_join(
-    reynolds_raw, by = "taxa.name"
-  ) %>% 
-  
-  left_join(
-    padisak_raw, by = "taxa.name"
-  ) %>% 
-  
-  rename(
-    old.taxa.name = taxa.name
-  )
-
-## Update taxa.names ----
+### Update taxa.names ----
 # These have the names pre taxonomy step so need to update them
-# Rimmet and Kruk data have already gone through the taxonomy step so can just add in the names from the bodysize_taxonomy data
+# Rimmet, Kruk and lt data have already gone through the taxonomy step so can just add in the names from the bodysize_taxonomy data
 # Padisak hasn't gone through the taxonomy step so need to do these
 
-### Import data ----
+#### Import data ----
 
 bodysize_taxonomy <- readRDS("R/Data_outputs/database_products/bodysize_taxonomy.rds") %>% 
   select(
@@ -566,13 +378,13 @@ bodysize_taxonomy <- readRDS("R/Data_outputs/database_products/bodysize_taxonomy
 updated_spec_char <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "special_characters")
 tax_list_raw <- readRDS("R/Data_outputs/database_products/taxonomy/tax_list_raw.rds")
 
-### update names ----
+#### Special characters ----
 
-names_list_updated <- functional_raw %>% 
+spec_char <- r_groups_raw %>% 
   
-  select(
+  distinct(
     old.taxa.name
-  ) %>% 
+  ) %>%
   
   # Need to edit the names to remove species characters as done in join_db script so that the original.taxa.names are the same for left joining
   mutate(
@@ -634,12 +446,12 @@ names_list_updated <- functional_raw %>%
       TRUE ~ taxa.name
     )
   )
+  
+#### Run remaning names through taxonomy steps ----
 
-### Run remaning names through taxonomy steps ----
-
-#### clean ----
+##### clean ----
 # Get a list of all distinct names with no taxa.name
-names_list_clean <- names_list_updated %>% 
+to_clean <- spec_char %>% 
   
   filter(
     is.na(taxa.name)
@@ -655,11 +467,11 @@ names_list_clean <- names_list_updated %>%
   pull(old.taxa.name)
 
 # View names
-glimpse(names_list_clean)
+glimpse(to_clean)
 
-### run through gna_verifier ----
+##### gna_verifier ----
 # Run string through the verifyer and select columns I want - run through a catchall because it will throw an error for the whole thing when it doesn't recognize a name
-cleaned_gna <- do.call(rbind, lapply(names_list_clean, function(name) {
+cleaned_gna <- do.call(rbind, lapply(to_clean, function(name) {
   tryCatch(
     {
       # Process each name and return the result
@@ -684,6 +496,8 @@ cleaned_gna <- do.call(rbind, lapply(names_list_clean, function(name) {
     cleaned.source.gna = dataSourceTitleShort
   )
 
+
+##### Manual clean ----
 cleaned <- cleaned_gna %>% 
   
   mutate(
@@ -727,7 +541,9 @@ cleaned <- cleaned_gna %>%
     cleaned.taxa.name != "Monoraphidium pseudomirabilis"
   )
 
-### Run through tnrs_match_names ----
+saveRDS(cleaned, "R/data_outputs/database_products/cleaned_groups.rds")
+
+##### tnrs_match_names ----
 # Run the cleaned names through tnrs_match_names to get updated versions of names from open tree of life (otl)
 
 resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name) %>% 
@@ -735,152 +551,365 @@ resolved_tol <- tnrs_match_names(cleaned$cleaned.taxa.name) %>%
   select(
     unique_name,
     search_string
-  )
-
-### Add to main list
-
-add_list <- cleaned %>% 
+  ) %>% 
   
   mutate(
-    cleaned.taxa.name = tolower(cleaned.taxa.name)
-  ) %>% 
-  
-  left_join(
-    ., resolved_tol, by = c("cleaned.taxa.name" = "search_string")
-  ) %>% 
-  
-  select(
-    original.taxa.name,
-    unique_name
+    unique_name = if_else(
+      search_string == "aulacoseira ambigua ambigua",
+      "Aulacoseira ambigua",
+      unique_name
+    )
   ) %>% 
   
   rename(
-    taxa.name = unique_name,
-    old.taxa.name = original.taxa.name
+    old.taxa.name = search_string,
+    taxa.name = unique_name
   )
 
-# add to functional_raw
-names_list_final <- names_list_updated %>% 
+# save
+saveRDS(resolved_tol, "R/data_outputs/database_products/resolved_tol_groups.rds")
+
+##### final updated names list ----
+
+names_list_updated <- spec_char %>% 
   
+  # Remove the ones from spec_char that didn't have a taxa.name
   filter(
     !is.na(taxa.name)
   ) %>% 
   
+  # Add back in the names removed above with the taxa.names added in
   bind_rows(
-    add_list
+    resolved_tol
+  ) %>% 
+  
+  # just remove two random var. ones as have the species version in there
+  filter(
+    !(taxa.name %in% c("Aulacoseira granulata var. angustissima", "Staurastrum avicula var. lunatum"))
+  )%>% 
+  
+  # Make old.taxa.name lower case so all are the same because some have upper and some have lower
+  mutate(
+    old.taxa.name = tolower(old.taxa.name)
+  ) %>% 
+  
+  distinct(
+    old.taxa.name, .keep_all = TRUE
   )
 
-# functional
-functional <- functional_raw %>% 
+#### Format r_groups_raw ----
+
+r_groups <- r_groups_raw %>%
+  
+  # Update taxa.names
+  
+  mutate(
+    # make old.taxa.name lower case for joining
+    old.taxa.name = tolower(old.taxa.name)
+  ) %>% 
   
   left_join(
-    names_list_final, by = "old.taxa.name"
+    names_list_updated,  by = "old.taxa.name"
+  ) %>% 
+  
+  filter(
+    !is.na(taxa.name)
   ) %>% 
   
   select(
     - old.taxa.name
   ) %>% 
   
-  # select preference - first padisak from rimmet then padisak from padisak then reynolds in date order
+  group_by(
+    taxa.name
+  ) %>% 
+  
+  pivot_wider(
+    names_from = ref,
+    values_from = c(reynolds.group),
+    values_fn = function(x) paste(unique(x), collapse = "/")
+  ) %>% 
+  
+  ungroup() %>% 
+  
+  rename(
+    `r.group (padisak 2009)` = padisak,
+    `r.group (rimmet 2018)` = rimmet,
+    `r.group (Laplace-Treyture 2021)` = lt,
+    `r.group (kruk 2017)` = kruk
+  ) %>% 
+  
+  # select preference - first lt, then padisak from rimmet then padisak from padisak then reynolds in date order
   mutate(
     
     r.group.source = case_when(
-      !(is.na(`r.group.padisak (rimmet 2018)`)) ~ "rimmet(2018)",
-      is.na(`r.group.padisak (rimmet 2018)`) & !(is.na(`r.group.padisak (padisak 2009)`)) ~ "padisak(2009)",
-      is.na(`r.group.padisak (rimmet 2018)`) & is.na(`r.group.padisak (padisak 2009)`) & !(is.na(`r.group.reynolds (rimmet 2018)`)) ~ "rimmet(2018)",
-      is.na(`r.group.padisak (rimmet 2018)`) & is.na(`r.group.padisak (padisak 2009)`) & is.na(`r.group.reynolds (rimmet 2018)`) & !(is.na(`r.group.reynolds (kruk 2017)`)) ~ "kruk(2017)",
+      !is.na(`r.group (Laplace-Treyture 2021)`) ~ "Laplace-Treyture(2021)",
+      is.na(`r.group (Laplace-Treyture 2021)`) & !is.na(`r.group (rimmet 2018)`) ~ "rimmet(2018)",
+      is.na(`r.group (Laplace-Treyture 2021)`) & is.na(`r.group (rimmet 2018)`) & !is.na(`r.group (padisak 2009)`) ~ "padisak(2009)",
+      is.na(`r.group (Laplace-Treyture 2021)`) & is.na(`r.group (rimmet 2018)`) & is.na(`r.group (padisak 2009)`) & !is.na(`r.group (kruk 2017)`) ~ "kruk(2017)",
       
       TRUE ~ NA
     ),
     
     r.group = case_when(
-      !(is.na(`r.group.padisak (rimmet 2018)`)) ~ `r.group.padisak (rimmet 2018)`,
-      is.na(`r.group.padisak (rimmet 2018)`) & !(is.na(`r.group.padisak (padisak 2009)`)) ~ `r.group.padisak (padisak 2009)`,
-      is.na(`r.group.padisak (rimmet 2018)`) & is.na(`r.group.padisak (padisak 2009)`) & !(is.na(`r.group.reynolds (rimmet 2018)`)) ~ `r.group.reynolds (rimmet 2018)`,
-      is.na(`r.group.padisak (rimmet 2018)`) & is.na(`r.group.padisak (padisak 2009)`) & is.na(`r.group.reynolds (rimmet 2018)`) & !(is.na(`r.group.reynolds (kruk 2017)`)) ~ `r.group.reynolds (kruk 2017)`,
+      !is.na(`r.group (Laplace-Treyture 2021)`) ~ `r.group (Laplace-Treyture 2021)`,
+      is.na(`r.group (Laplace-Treyture 2021)`) & !is.na(`r.group (rimmet 2018)`) ~ `r.group (rimmet 2018)`,
+      is.na(`r.group (Laplace-Treyture 2021)`) & is.na(`r.group (rimmet 2018)`) & !is.na(`r.group (padisak 2009)`) ~ `r.group (padisak 2009)`,
+      is.na(`r.group (Laplace-Treyture 2021)`) & is.na(`r.group (rimmet 2018)`) & is.na(`r.group (padisak 2009)`) & !is.na(`r.group (kruk 2017)`) ~ `r.group (kruk 2017)`,
       
       TRUE ~ NA
     )
   ) %>% 
+  
+  select(
+    taxa.name, r.group.source, r.group
+  ) %>% 
+  
+  # There are some that have multiple inputs for the r.group so select one for these
+  # When there is a clear majority use this to be the most representative
+  # when it is evenly split select the most representative lake type
+  mutate(
+    r.group = case_when(
+      taxa.name == "Raphidiopsis curvata" ~ "S1",
+      taxa.name == "Staurodesmus phimus" ~ "N",
+      taxa.name == "Chlorolobium braunii" ~ "X1",
+      taxa.name == "Dendromonas virgaria" ~ "X3",
+      taxa.name == "Actinotaenium perminutum" ~ "X1",
+      taxa.name == "Closteriopsis" ~ "J",
+      taxa.name == "Kephyrion ampulla" ~ "X3",
+      taxa.name == "Lemmermanniella pallida" ~ "LO",
+      taxa.name == "Chromulina grandis" ~ "X3",
+      taxa.name == "Cryptomonas tetrapyrenoidosa" ~ "X2",
+      taxa.name == "Dolichospermum (inconsistent in FamilyI (in SubsectionIV))" ~ "H1",
+      taxa.name == "Micractinium bornhemiense" ~ "F",
+      taxa.name == "Bacillariophyceae" ~ "D",
+      taxa.name == "Desmodesmus brasiliensis" ~ "J",
+      taxa.name == "Vitreochlamys" ~ "X2",
+      taxa.name == "Cyclotella comta" ~ "B",
+      taxa.name == "Stephanodiscus rotula" ~ "C",
+      taxa.name == "Chlorolobium" ~ "X1",
+      taxa.name == "Cyanodictyon" ~ "K",
+      taxa.name == "Ceratium" ~ "LO",
+      taxa.name == "Encyonema minutum" ~ "D",
+      taxa.name == "Gymnodinium mitratum" ~ "LO",
+      taxa.name == "Brebissonia lanceolata" ~ "MP",
+      taxa.name == "Klebsormidium subtile" ~ "V",
+      
+      TRUE ~ r.group
+    )
+  ) %>% 
+  
+  # taxonomy
   
   left_join(
-    tax_list_raw, ., by = "taxa.name"
+    tax_list_raw, by = "taxa.name"
   ) %>% 
   
-  select(
-    - resolved.taxa.name, - type
-  ) %>% 
-  
-  distinct(
-    taxa.name, .keep_all = TRUE
-  ) %>% 
-  
-  # Add in groups 
-  
+  # want to fix the genera that are different to taxa name
   mutate(
-    group = case_when(
-      phylum %in% c("Cyanobacteria", "Glaucophyta") ~ "Blue/green",
-      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
-      phylum == "Bacillariophyta" ~ "Diatom",
-      phylum == "Rhodophyta" ~ "Red",
-      phylum == "Euglenozoa" ~ "Euglenoid",
-      phylum == "Cryptophyta" ~ "Cryptomonads",
-      phylum == "Haptophyta" ~ "Haptophytes",
-      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
+    taxa.name = case_when(
+      !is.na(genus) & is.na(species) ~ genus,
+      taxa.name == "Dinoflagellata" ~ "Myzozoa",
+      # ones with var.
+      taxa.name == "Aulacoseira granulata var. angustissima" ~ "Aulacoseira granulata",
+      taxa.name == "Staurastrum avicula var. lunatum" ~ "Staurastrum avicula",
       
-      class %in% c("Chrysophyceae", "Dictyochophyceae", "Bicosoecophyceae") ~ "Golden-brown",
-      class == "Dinophyceae" ~ "Dinoflagellate",
-      class == "Raphidophyceae" ~ "Raphidophytes",
-      class == "Xanthophyceae" ~ "Yellow-green",
-      class == "Eustigmatophyceae" ~ "Eustigmatophytes",
-      class == "Phaeothamniophyceae" ~ "Brown",
-      
-      # Zooplankton - more for the length weight joining
-      genus == "Bosmina" ~ "bosmina",
-      genus == "Daphnia" ~ "daphnia",
-      family == "Daphniidae" ~ "daphniidae",
-      order == "Diplostraca" ~ "cladocera",
-      phylum == "Rotifera" ~ "rotifer",
-      phylum == "Arthropoda" ~ "copepoda",
-      
-      TRUE ~ NA
+      TRUE ~ taxa.name
     )
   ) %>% 
   
-  select(
-    taxa.name, ott.id, r.group, r.group.source, species, genus, family, order, class, phylum, kingdom, domain, group
-  ) %>% 
-  
-  # Remove any without a group
-  filter(
-    !(is.na(group))
-  ) %>% 
-  
-  # make all r.groups upper case
   mutate(
-    r.group = toupper(r.group)
+    rank = case_when(
+      taxa.name == species ~ "species",
+      taxa.name == genus ~ "genus",
+      taxa.name == family ~ "family",
+      taxa.name == order ~ "order",
+      taxa.name == class ~ "class",
+      taxa.name == phylum ~ "phylum",
+      
+      # Remaining ones that don't match
+      stri_detect_regex(taxa.name, " ") ~ "species", # all remaining ones with a space are species
+      taxa.name %in% c("Chlorolobium", "Chromatium", "Pyrobotrys", "Dimorphococcus", "Binuclearia") ~ "genus",
+      taxa.name == "Cryptomonadales" ~ "order",
+      taxa.name %in% c("Euglenophyceae", "Xanthophyceae") ~ "class",
+      
+      TRUE ~ NA),
+    
+    # fill in missing tax - just makes later steps easier
+    species = if_else(
+      rank == "species" & is.na(species),
+      taxa.name,
+      species
+    ),
+    
+    genus = if_else(
+      rank == "genus" & is.na(genus),
+      taxa.name,
+      genus
+    ),
+    
+    family = if_else(
+      rank == "family" & is.na(family),
+      taxa.name,
+      family
+    ),
+    
+    order = if_else(
+      rank == "order" & is.na(order),
+      taxa.name,
+      order
+    ),
+    
+    class = if_else(
+      rank == "class" & is.na(class),
+      taxa.name,
+      class
+    ),
+    
+    phylum = if_else(
+      rank == "phylum" & is.na(phylum),
+      taxa.name,
+      phylum
+      )
+    ) %>% 
+  
+  select(
+    taxa.name, rank, r.group, r.group.source, species, genus, family, order, class, phylum
+  ) 
+
+# save
+saveRDS(r_groups, "R/data_outputs/database_products/r_groups.rds")
+
+
+#### Add groups to main data ----
+
+# Get lists of all the different ranks
+species_groups <- r_groups %>% 
+  filter(
+    !is.na(species)
   )
 
-saveRDS(functional, "R/data_outputs/database_products/functional.rds")
+genus_groups <- r_groups %>% 
+  filter(
+    !is.na(genus),
+    is.na(species)
+  ) %>% 
+  distinct(
+    genus, .keep_all = TRUE
+    )
 
-### Add groups to main data ----
-data_groups <- bodysize_formatted %>% 
+family_groups <- r_groups %>% 
+  filter(
+    !is.na(family),
+    is.na(genus)
+  ) %>% 
+  distinct(
+    family, .keep_all = TRUE
+  )
+
+order_groups <- r_groups %>% 
+  filter(
+    !is.na(order),
+    is.na(family)
+  ) %>% 
+  distinct(
+    order, .keep_all = TRUE
+  )
+
+class_groups <- r_groups %>% 
+  filter(
+    !is.na(class),
+    is.na(order)
+  ) %>% 
+  distinct(
+    class, .keep_all = TRUE
+  )
+
+phylum_groups <- r_groups %>% 
+  filter(
+    !is.na(phylum),
+    is.na(class)
+  ) %>% 
+  distinct(
+    phylum, .keep_all = TRUE
+  )
+
+# Add to data
+bodysize_formatted <- bodysize_groups %>% 
   
   left_join(
     select(
-      functional, group, taxa.name
-    ), by = "taxa.name"
-  )
+      species_groups, species, r.group
+      ), by = "species"
+  ) %>% 
   
+  rename(
+    r.group.species = r.group
+  ) %>% 
+  
+  left_join(
+    select(
+      genus_groups, genus, r.group
+    ), by = "genus"
+  ) %>% 
+  
+  rename(
+    r.group.genus = r.group
+  ) %>% 
+  
+  left_join(
+    select(
+      family_groups, family, r.group
+    ), by = "family"
+  ) %>% 
+  
+  rename(
+    r.group.family = r.group
+  ) %>% 
+  
+  left_join(
+    select(
+      order_groups, order, r.group
+    ), by = "order"
+  ) %>% 
+  
+  rename(
+    r.group.order = r.group
+  )%>% 
+  
+  left_join(
+    select(
+      class_groups, class, r.group
+    ), by = "class"
+  ) %>% 
+  
+  rename(
+    r.group.class = r.group
+  )%>% 
+  
+  left_join(
+    select(
+      phylum_groups, phylum, r.group
+    ), by = "phylum"
+  ) %>% 
+  
+  rename(
+    r.group.phylum = r.group
+  )
+
 # save
-saveRDS(data_groups, "R/data_outputs/database_products/data_groups.rds")
+saveRDS(bodysize_r_groups, "R/data_outputs/database_products/bodysize_r_groups.rds")
+
 
 
 
 # Calculating masses ----
+## Import data
+
+bodysize_r_groups <- readRDS("R/data_outputs/database_products/bodysize_r_groups.rds")
 
 ## Calculate ----
-data_groups_mass <- data_groups %>% 
+mass <- bodysize_r_groups %>% 
   
   # Get all the different bodysize.measurements on one row per individual
   pivot_wider(
@@ -897,7 +926,7 @@ data_groups_mass <- data_groups %>%
   # join all extra data back 
   left_join(
     select(
-      data_groups, - body.size, bodysize.measurement, - uid
+      bodysize_r_groups, - body.size, bodysize.measurement, - uid
     ), by = "individual.uid"
   ) %>% 
   
@@ -972,7 +1001,7 @@ data_groups_mass <- data_groups %>%
     individual.uid, source.code, original.sources, taxa.name,
     nu, ind.per.nu, pg.c, mass.c, mass.d, mass, biovolume, mld,
     ott.id, type, species, genus, family, order, class, phylum, kingdom,
-    group,
+    r.group.species, r.group.genus, r.group.family, r.group.order, r.group.class, r.group.phylum, group,
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
   
@@ -988,8 +1017,9 @@ data_groups_mass <- data_groups %>%
     remove == "keep"
   )
 
+## Remove only multi-cellular ----
 # Find any that only have multi-cellular values but not single cell values
-multi_ind <- data_groups_mass %>% 
+multi_ind <- mass %>% 
   
   group_by(nu, taxa.name) %>% 
   
@@ -1011,7 +1041,7 @@ multi_ind <- data_groups_mass %>%
   ungroup()
 
 # Remove ones with no single cell values ----
-bodysize <- data_groups_mass %>% 
+bodysize <- mass %>% 
   
   filter(
     !(individual.uid %in% multi_ind$individual.uid)
@@ -1039,114 +1069,11 @@ saveRDS(phyto_all, file = "R/Data_outputs/database_products/final_products/phyto
 # Phyto subset ----
 # select just species and genus level
 
-## genus and species groups ----
-
-# need to get a liste of noth species and genus groups
-
-### genus ----
-functional_genus <- functional %>% 
-  
-  rename(
-    r.group.genus = r.group
-  ) %>% 
-  
-  filter(
-    !is.na(r.group.genus),
-    is.na(species),
-    !is.na(genus)
-  ) %>% 
-  
-  select(
-    - species
-  ) %>% 
-  
-  # make a names column with and without the brackets
-  mutate(
-    taxa.name.full = taxa.name,
-    taxa.name.short = case_when(
-      stri_detect_regex(taxa.name, "\\(") ~ stri_extract_first_regex(taxa.name, "\\w+(?= \\()"),
-      
-      TRUE ~ taxa.name
-    )
-  ) %>% 
-  
-  select(
-    - taxa.name
-  ) %>% 
-  
-  distinct(
-    genus, .keep_all = TRUE
-  )
-
-# species
-functional_species <- functional %>% 
-  
-  rename(
-    r.group.species = r.group
-  ) %>% 
-  
-  filter(
-    !is.na(r.group.species),
-    !is.na(species)
-  ) %>% 
-  
-  group_by(
-    species
-  ) %>% 
-  
-  mutate(
-    n = n()
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  mutate(
-    remove = if_else(
-      n > 1 & stri_detect_regex(taxa.name, "var\\."),
-      "remove",
-      "keep"
-    )
-  ) %>% 
-  
-  filter(
-    remove == "keep"
-  )
-  
-  
-
 phyto_subset <- phyto_all %>% 
   
   filter(
     !is.na(genus)
-  ) %>% 
-  
-  left_join(
-    select(
-      functional_species, r.group.species, species
-    ), by = "species"
-  ) %>% 
-  
-  left_join(
-    select(
-      functional_genus, r.group.genus, genus
-    ), by = "genus"
-  ) %>% 
-  
-  mutate(
-    # if there is a species group but not for the genus then put it as the species on
-    r.group.genus = if_else(
-      is.na(r.group.genus) & !is.na(r.group.species),
-      r.group.species,
-      r.group.genus
-    ),
-    
-    # make a rank column to know which ones are species and which are to genus level
-    rank = if_else(
-      is.na(species),
-      "Genus",
-      "Species"
-    )
-  )
+  ) 
 
 # save
 saveRDS(phyto_subset, file = "R/Data_outputs/database_products/final_products/phyto_subset.rds")
