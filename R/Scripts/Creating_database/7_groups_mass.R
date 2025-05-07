@@ -230,7 +230,8 @@ bodysize_groups <- format_all_bs %>%
   
   mutate(
     group = case_when(
-      phylum %in% c("Cyanobacteria", "Glaucophyta") ~ "Blue/green",
+      phylum == "Cyanobacteria" ~ "Blue/green",
+      phylum == "Glaucophyta" ~ "Glaucophytes",
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
       phylum == "Bacillariophyta" ~ "Diatom",
       phylum == "Rhodophyta" ~ "Red",
@@ -239,11 +240,10 @@ bodysize_groups <- format_all_bs %>%
       phylum == "Haptophyta" ~ "Haptophytes",
       phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
       
-      class %in% c("Chrysophyceae", "Dictyochophyceae", "Bicosoecophyceae") ~ "Golden-brown",
+      class %in% c("Chrysophyceae", "Dictyochophyceae") ~ "Golden-brown",
       class == "Dinophyceae" ~ "Dinoflagellate",
       class == "Raphidophyceae" ~ "Raphidophytes",
-      class == "Xanthophyceae" ~ "Yellow-green",
-      class == "Eustigmatophyceae" ~ "Eustigmatophytes",
+      class %in% c("Xanthophyceae", "Eustigmatophyceae") ~ "Yellow-green",
       class == "Phaeothamniophyceae" ~ "Brown",
       
       # Zooplankton - more for the length weight joining
@@ -253,6 +253,7 @@ bodysize_groups <- format_all_bs %>%
       order == "Diplostraca" ~ "cladocera",
       phylum == "Rotifera" ~ "rotifer",
       phylum == "Arthropoda" ~ "copepoda",
+      phylum == "Bigyra" ~ "Stramenopile",
       
       TRUE ~ NA
     )
@@ -278,6 +279,7 @@ rimmet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet") %>%
   mutate(
     ref = "rimmet"
   )
+
 # Kruk - 2017, reynolds
 kruk <- read_xlsx("raw_data/kruk_groups.xlsx") %>% 
   select(
@@ -293,6 +295,7 @@ kruk <- read_xlsx("raw_data/kruk_groups.xlsx") %>%
   mutate(
     ref = "kruk"
   )
+
 # Padisak - 2009, padisak
 padisak <- read_xlsx("raw_data/functional_groups_padisak.xlsx", sheet = "groups") %>% 
   select(
@@ -307,6 +310,7 @@ padisak <- read_xlsx("raw_data/functional_groups_padisak.xlsx", sheet = "groups"
   mutate(
     ref = "padisak"
   )
+
 # Lt - 2021, reynolds using updated padisak
 lt <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Laplace-Treyture") %>% 
   select(
@@ -834,8 +838,9 @@ phylum_groups <- r_groups %>%
     phylum, .keep_all = TRUE
   )
 
+
 # Add to data
-bodysize_formatted <- bodysize_groups %>% 
+bodysize_r_groups <- bodysize_groups %>% 
   
   left_join(
     select(

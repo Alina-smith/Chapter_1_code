@@ -377,3 +377,20 @@ taxa_update_in_tree_edit_Closterium <- taxa_update_in_tree_Closterium %>%
 circular_plot_group_Closterium <- circular_plot_Closterium %<+% taxa_update_in_tree_edit_Closterium
 
 circular_plot_group_Closterium
+
+
+
++
+  scale_color_manual(values = c(
+    "Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#8B0000", "Kingdom: Chromista" = "#00008B",
+    
+    "Phylum: Chlorophyta" = "#e5f5e0", "Phylum: Charophyta" = "#a1d99b", "Phylum: Glaucophyta" = "#74c476", "Phylum: Rhodophyta" = "#238b45", "Phylum: Cryptophyta" = "#41ab5d",
+    "Phylum: Cyanobacteria" = "#B57EDC",
+    "Phylum: Euglenozoa" = "#F08080", "Phylum: Amoebozoa" = "#FF6347", "Phylum: Choanozoa" = "#D32F2F",
+    "Phylum: Myzozoa" = "#6495ED", "Phylum: Bacillariophyta" = "#CFE2F3", "Phylum: Ochrophyta" = "#87CEEB", "Phylum: Haptophyta" = "#ADD8E6", "Phylum: Bigyra"= "#003366", "Phylum: Ciliophora (phylum in subkingdom SAR)" = "#1E3A5F", "Phylum: Cercozoa" = "#4682B4","Phylum: Heliozoa" = "#EBF5FA",
+    
+    "R.group: A" = "#8DD3C7", "R.group: B" = "#FFFFB3", "R.group: C" = "#BEBADA", "R.group: D" = "#FB8072", "R.group: E" = "#80B1D3", "R.group: F" = "#FDB462", "R.group: G" = "#B3DE69", "R.group: J" = "#FCCDE5", "R.group: K" = "#D9D9D9", "R.group: LM" = "#BC80BD", "R.group: LO" = "#CCEBC5",
+    "R.group: M" = "#FFED6F", "R.group: MP" = "#A6CEE3", "R.group: N" = "#1F78B4", "R.group: NA" = "#B2DF8A", "R.group: P" = "#33A02C", "R.group: Q" = "#FB9A99", "R.group: S1" = "#E31A1C", "R.group: S2" = "#FDBF6F", "R.group: T" = "#FF7F00", "R.group: TB" = "#CAB2D6",
+    "R.group: U" = "#6A3D9A", "R.group: V" = "#FFFF99", "R.group: W0" = "#B15928", "R.group: W1" = "#F781BF", "R.group: W2" = "#999999", "R.group: WS" = "#66C2A5", "R.group: X1" = "#FC8D62", "R.group: X2" = "#E78AC3", "R.group: X3" = "#A6D854", "R.group: XPH" = "#FFD92F", "R.group: Y" = "#E5C494"
+  )
+  )

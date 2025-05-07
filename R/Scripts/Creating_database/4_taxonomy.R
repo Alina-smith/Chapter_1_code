@@ -580,7 +580,7 @@ taxonomy_pmc <- taxonomy_order %>%
       order %in% c("Gomontiellales", "Coleofasciculales", "Pelonematales", "Chroococcidiopsidales", "Gloeobacterales", "Geitlerinematales") ~ "Cyanophyceae",
       order == "Spironematellales" ~ "Spironematellophyceae",
       order == "Picocystales" ~ "Picocystophyceae",
-      order == "Bicosoecales" ~ "Bicosoecophyceae",
+      order == "Bicosoecales" ~ "Bicosoecophyceae", 
       order == "Chaetonotida" ~ "Gastrotricha incertae sedis",
       order == "Craspedida" ~ "Choanoflagellatea",
       order == "Cryptomonadales" ~ "Cryptophyceae",
@@ -610,7 +610,7 @@ taxonomy_pmc <- taxonomy_order %>%
       class %in% c("Kinetoplastea", "Euglenophyceae", "Euglenoidea") ~ "Euglenozoa",
       class == "Cryptophyceae" ~ "Cryptophyta",
       class == "Choanoflagellatea" ~ "Choanozoa",
-      class == "Cyanophyceae" ~ "Cyanobacteria",
+      class == "Cyanophyceae" ~ "Cyanobacteria", 
       class == "Centrohelea" ~ "Heliozoa",
       class == "Oligohymenophorea" ~ "Ciliophora (phylum in subkingdom SAR)",
       class == "Tubulinea" ~ "Amoebozoa",
@@ -647,9 +647,9 @@ taxonomy_pmc <- taxonomy_order %>%
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
       phylum == "Cyanobacteria" ~ "Phytoplankton",
-      phylum %in% c("Ochrophyta", "Haptophyta", "Bigyra", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+      phylum %in% c("Ochrophyta", "Haptophyta", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
       
-      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa", "Choanozoa") ~ "Zooplankton",
+      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa", "Choanozoa", "Bigyra") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
       
       TRUE ~ NA
