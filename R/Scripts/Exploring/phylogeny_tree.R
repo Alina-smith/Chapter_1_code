@@ -354,18 +354,20 @@ r_label_colors <- paletteer_c("grDevices::RdYlGn", length(unique(phylo_plot_data
 
 # Create plot
 circular_plot_groups_species <- circular_plot_species %<+% phylo_plot_data_update_species +
-  geom_tippoint(aes(x = x + 1, color = group_label), size = 5, show.legend = NA) +
+  geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA) +
   scale_color_manual(values = group_colors, name = "Group Label") +
   
   new_scale_color() +  # Reset color scale for next use
   
-  geom_tippoint(aes(x = x + 3, color = r_label), size = 5, show.legend = NA) +
+  geom_tippoint(aes(x = x + 3, color = r_label), size = 2.5, show.legend = NA) +
   scale_colour_manual(values = r_label_colors, name = "R Label")+
   
   theme(
-    legend.key.size = unit(0.2, "cm"),
+    legend.box = "horizontal",
+    legend.key.size = unit(0.1, "cm"),
+    legend.spacing.x = unit(-0.3, 'cm'),
     legend.text = element_text(size = 4),
-    legend.title = element_text(size = 4),
+    legend.title = element_text(size = 4)
   )
 
 circular_plot_groups_species
@@ -413,16 +415,10 @@ log_mass_species <- phylo_plot_data_update_species %>%
 # plot
 circular_plot_mass_species = circular_plot_groups_species + new_scale_fill() # so new geoms added in can use a new scale
 
-circular_plot_mass_species <- gheatmap(circular_plot_mass_species, log_mass_species, offset=3, width=0.2, colnames = F)+
-  
-  theme(
-    legend.box = "horizontal",
-    legend.key.size = unit(0.1, "cm"),
-    legend.spacing.x = unit(-0.3, 'cm'),
-    legend.text = element_text(size = 4),
-    legend.title = element_text(size = 4),
-  )
+circular_plot_mass_species <- gheatmap(circular_plot_mass_species, log_mass_species, offset=3, width=0.2, colnames = F) 
+
 
 circular_plot_mass_species
 
 ggsave("R/Data_outputs/plots/circular_plot_mass_species.png", width = 7, height = 5, limitsize = FALSE)
+
