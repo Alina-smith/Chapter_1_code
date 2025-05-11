@@ -76,7 +76,7 @@ saveRDS(in_tree_genus, "R/data_outputs/phylo_tree/in_tree_genus.rds")
 in_tree_genus
 
 # See which ones are in and out
-sum(in_tree_genus == TRUE) # 656
+sum(in_tree_genus == TRUE) # 655
 sum(in_tree_genus == FALSE) # 154
 
 ## Get tree ----
@@ -276,7 +276,7 @@ saveRDS(in_tree_species, "R/data_outputs/phylo_tree/in_tree_species.rds")
 in_tree_species
 
 # See which ones are in and out
-sum(in_tree_species == TRUE) # 3064
+sum(in_tree_species == TRUE) # 3063
 sum(in_tree_species == FALSE) # 515
 
 ## Get tree ----

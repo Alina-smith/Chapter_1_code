@@ -231,20 +231,16 @@ bodysize_groups <- format_all_bs %>%
   mutate(
     group = case_when(
       phylum == "Cyanobacteria" ~ "Blue/green",
+      phylum == "Ochrophyta" ~ "Stramenopile",
       phylum == "Glaucophyta" ~ "Glaucophytes",
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
       phylum == "Bacillariophyta" ~ "Diatom",
-      phylum == "Rhodophyta" ~ "Red",
       phylum == "Euglenozoa" ~ "Euglenoid",
       phylum == "Cryptophyta" ~ "Cryptomonads",
       phylum == "Haptophyta" ~ "Haptophytes",
-      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
+      phylum == "Myzozoa" ~ "Dinoflagellate",
       
-      class %in% c("Chrysophyceae", "Dictyochophyceae") ~ "Golden-brown",
-      class == "Dinophyceae" ~ "Dinoflagellate",
-      class == "Raphidophyceae" ~ "Raphidophytes",
-      class %in% c("Xanthophyceae", "Eustigmatophyceae") ~ "Yellow-green",
-      class == "Phaeothamniophyceae" ~ "Brown",
+      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
       
       # Zooplankton - more for the length weight joining
       genus == "Bosmina" ~ "bosmina",

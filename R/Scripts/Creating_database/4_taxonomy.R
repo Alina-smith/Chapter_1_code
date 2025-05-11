@@ -641,7 +641,7 @@ taxonomy_pmc <- taxonomy_order %>%
       
       # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
       kingdom == "Fungi" ~ "not plankton",
-      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha") ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Rhodophyta") ~ "not plankton",
       class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
       
       # Ones that are plankton

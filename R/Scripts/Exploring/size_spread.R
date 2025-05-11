@@ -67,7 +67,7 @@ mass_genus <- phyto_format_genus %>%
 # Plot
 # Facet by R group
 size_spread_r_genus <- ggplot(mass_genus, aes(x = log(avg.mass.d))) +
-  geom_histogram(binwidth = 2) +
+  geom_histogram(binwidth = 0.5) +
   # facet by r.group
   facet_wrap(~r.group, scales = "free_y", ncol = 5)
 
@@ -77,7 +77,7 @@ ggsave("R/Data_outputs/plots/ssize_spread_r_genus.png", plot = size_spread_r_gen
 
 # Facet by group
 size_spread_group_genus <- ggplot(mass_genus, aes(x = log(avg.mass.d))) +
-  geom_histogram(binwidth = 2) +
+  geom_histogram(binwidth = 1) +
   # facet by group
   facet_wrap(~group, scales = "free_y", ncol = 5)
 
@@ -149,9 +149,9 @@ mass_species <- phyto_format_species %>%
 # Plot
 # Facet by R group
 size_spread_r_species <- ggplot(mass_species, aes(x = log(avg.mass.d))) +
-  geom_histogram(binwidth = 0.3) +
+  geom_histogram(binwidth = 1) +
   # facet by r.group
-  facet_wrap(~r.group, ncol = 5)
+  facet_wrap(~r.group, scales = "free_y", ncol = 5)
 
 size_spread_r_species
 
@@ -159,7 +159,7 @@ ggsave("R/Data_outputs/plots/size_spread_r_species.png", plot = size_spread_r_sp
 
 # Facet by group
 size_spread_group_species <- ggplot(mass_species, aes(x = log(avg.mass.d))) +
-  geom_histogram(binwidth = 0.5) +
+  geom_histogram(binwidth = 1) +
   # facet by group
   facet_wrap(~group, scales = "free_y", ncol = 5)
 
