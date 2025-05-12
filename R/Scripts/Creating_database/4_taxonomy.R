@@ -593,6 +593,7 @@ taxonomy_pmc <- taxonomy_order %>%
       order == "Diphylleida" ~ "Diphyllatea",
       order == "Chlorellales" ~ "Trebouxiophyceae",
       order == "Neobodonida" ~ "Kinetoplastea",
+      order == "Goniochloridales" ~ "Eustigmatophyceae",
       
       resolved.taxa.name == "Prymnesiophyceae" ~ "Coccolithophyceae",
       resolved.taxa.name == "Insecta" ~ "Hexapoda",
@@ -1125,6 +1126,22 @@ ggsave("R/data_outputs/exploring/circular_plot.pdf", width = 7, height = 5, limi
 tax_list_raw <- taxonomy %>% 
   distinct(
     ott.id, .keep_all = TRUE
+  ) %>% 
+  
+  # make a rank column 
+  mutate(
+    rank = case_when(
+      !is.na(species) ~ "Species",
+      !is.na(genus) ~ "Genus",
+      !is.na(family) ~ "Family",
+      !is.na(order) ~ "Order",
+      !is.na(class) ~ "Class",
+      !is.na(phylum) ~ "Phylum",
+      !is.na(kingdom) ~ "Kingdom",
+      !is.na(domain) ~ "Domain",
+      
+      TRUE ~ NA
+    )
   )
 
 # Save
