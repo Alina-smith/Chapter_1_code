@@ -230,29 +230,41 @@ bodysize_groups <- format_all_bs %>%
   
   mutate(
     group = case_when(
+      # Phyto
       phylum == "Cyanobacteria" ~ "Blue/green",
       phylum == "Ochrophyta" ~ "Stramenopile",
-      phylum == "Glaucophyta" ~ "Glaucophytes",
+      phylum == "Glaucophyta" ~ "Glaucophyte",
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
       phylum == "Bacillariophyta" ~ "Diatom",
       phylum == "Euglenozoa" ~ "Euglenoid",
-      phylum == "Cryptophyta" ~ "Cryptomonads",
-      phylum == "Haptophyta" ~ "Haptophytes",
+      phylum == "Cryptophyta" ~ "Cryptomonad",
+      phylum == "Haptophyta" ~ "Haptophyte",
       phylum == "Myzozoa" ~ "Dinoflagellate",
       
+      # Zoo
+      class == "Branchiopoda" ~ "Cladoceran",
+      class == "Hexanauplia" ~ "Copepod",
+      phylum == "Rotifera" ~ "Rotifer",
       phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
+      class == "Ostracoda" ~ "Ostracod",
       
-      # Zooplankton - more for the length weight joining
-      genus == "Bosmina" ~ "bosmina",
-      genus == "Daphnia" ~ "daphnia",
+      TRUE ~ NA
+
+    ),
+    
+  # assign zooplankton to groups for length-weight
+    lw.group = case_when(
+        
+      taxa.name == "Bosmina" ~ "bosmina",
+      taxa.name == "Daphnia" ~ "daphnia",
       family == "Daphniidae" ~ "daphniidae",
       order == "Diplostraca" ~ "cladocera",
       phylum == "Rotifera" ~ "rotifer",
       phylum == "Arthropoda" ~ "copepoda",
-      phylum == "Bigyra" ~ "Stramenopile",
-      
+      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "ciliate",
+        
       TRUE ~ NA
-    )
+    ) 
   ) %>% 
   
   # Filter to genus level - chose genus as this gives the most data compared to species
@@ -857,7 +869,7 @@ bodysize_r_groups <- bodysize_groups %>%
   
   select(    uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name,
                nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type,
-               ott.id, group, fg, family, order, class, phylum, kingdom,
+               ott.id, group, lw.group, fg, family, order, class, phylum, kingdom,
                sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude)
 
 
@@ -908,6 +920,7 @@ mass <- bodysize_r_groups %>%
     # calculate biovolume for ones that have just body mass
     biovolume = case_when(
       is.na(biovolume) & !is.na(body.mass) & type == "Phytoplankton" ~ body.mass/(1*10^-6),
+      is.na(biovolume) & !is.na(body.mass) & group == "Ciliate" ~ body.mass/(1*10^-6),
       TRUE ~ biovolume
     ),
     
@@ -933,23 +946,37 @@ mass <- bodysize_r_groups %>%
     mass.d = case_when(
       !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
       is.na(body.mass) & type == "Phytoplankton" ~ biovolume*(1*10^-6),
+      is.na(body.mass) & group == "Ciliate" ~ biovolume*(1*10^-6),
       TRUE ~ NA
     ),
     
-    mass = case_when(
+    mass.z = case_when(
       !is.na(body.mass) & type == "Zooplankton" ~ body.mass,
       
-      group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
-      group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
-      group == "daphniidae" ~ 1.5072 + (2.761*log(length/1000)),
-      group == "cladocera" ~ 1.7512 + (2.653*log(length/1000)), 
-      group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
+      lw.group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
+      lw.group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
+      lw.group == "daphniidae" ~ 1.5072 + (2.761*log(length/1000)),
+      lw.group == "cladocera" ~ 1.7512 + (2.653*log(length/1000)), 
+      lw.group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
       
       TRUE ~ NA
     ),
     
     # unlog the mass
-    mass = exp(mass),
+    mass.z = exp(mass.z),
+    
+    # combine the zoo and phyto masses into one column
+    mass.all.c = if_else(
+      !is.na(mass.z),
+      mass.z,
+      mass.c
+    ),
+    
+    mass.all.d = if_else(
+      !is.na(mass.z),
+      mass.z,
+      mass.d
+    ),
     
     # make a mld column
     mld = case_when(
@@ -961,26 +988,15 @@ mass <- bodysize_r_groups %>%
   # select columns and reorder
   select(
     individual.uid, source.code, original.sources, taxa.name,
-    nu, ind.per.nu, pg.c, mass.c, mass.d, mass, biovolume, mld,
+    nu, ind.per.nu, mass.all.c, mass.all.d, biovolume, mld,
     ott.id, type, family, order, class, phylum, kingdom,
     group, fg, 
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
   
   # remove any without a mass measurement (mass.c and mass.d should have the same amount so can filter by either)
-  mutate(
-    remove = case_when(
-      is.na(mass.c) & is.na(mass) & is.na(biovolume) ~ "remove",
-      TRUE ~ "keep"
-    )
-  ) %>% 
-  
   filter(
-    remove == "keep"
-  ) %>% 
-  
-  select(
-    - remove
+    !is.na(mass.all.c)
   )
 
 ## Remove only multi-cellular ----
@@ -1007,11 +1023,92 @@ multi_ind <- mass %>%
   ungroup()
 
 # Remove ones with no single cell values ----
-bodysize <- mass %>% 
+individual_bodysizes <- mass %>% 
   
   filter(
     !(individual.uid %in% multi_ind$individual.uid)
   )
+
+# remove outlyers
+
+x <- individual_bodysizes %>% 
+  group_by(taxa.name, nu) %>% 
+  summarise(
+    mean_mass = mean(mass.all.d, na.rm = TRUE),
+    sd_mass = sd(mass.all.d, na.rm = TRUE),
+    n = n()
+  )
+
+ind <- individual_bodysizes %>% 
+  
+  filter(
+    nu == "individual"
+  ) %>% 
+  
+  left_join(
+    filter(
+      x, nu == "individual"), by = "taxa.name"
+  )%>% 
+  
+  mutate(
+    x = case_when(
+      mass.all.d >= (mean_mass - 2 * sd_mass) & mass.all.d <= (mean_mass + 2 * sd_mass) ~ "remove",
+      
+      TRUE ~ "keep"
+    )
+  ) %>% 
+  
+  filter(
+    source.code != "5",
+    x == "remove",
+    #type == "Zooplankton"
+  )
+
+
+
+
+# Phyto
+phyto <- individual_bodysizes %>% 
+  filter(
+    type == "Phytoplankton"
+  ) 
+mean_phyto <- mean(phyto$mass.all.d)
+sd_phyto <- sd(phyto$mass.all.d)
+
+phyto_outlyers <- individual_bodysizes %>% 
+  
+  filter(
+    type == "Phytoplankton",
+    mass.all.d >= (mean_phyto - 2 * sd_phyto) & mass.all.d <= (mean_phyto + 2 * sd_phyto)
+  )
+
+# Zoo
+zoo <- individual_bodysizes %>% 
+  filter(
+    type == "Zooplankton",
+    taxa.name != "Calanus"
+  ) 
+
+clean_mass <- zoo$mass.all.d[is.finite(zoo$mass.all.d)]
+
+mean_zoo <- mean(clean_mass)
+sd_zoo <- sd(clean_mass)
+
+zoo_outlyers <- individual_bodysizes %>% 
+  
+  filter(
+    type == "Zooplankton",
+    mass.all.d >= (mean_zoo - sd_zoo) & mass.all.d <= (mean_zoo + sd_zoo)
+  )
+
+bodysize <- bind_rows(phyto_outlyers, zoo_outlyers) %>% 
+  mutate(
+    log = log10(mass.all.d)
+  )
+
+
+##### CALCULATE CILLIATE BIOVOL
+  
 
 # save
 saveRDS(bodysize, file = "R/Data_outputs/database_products/final_products/bodysize.rds")

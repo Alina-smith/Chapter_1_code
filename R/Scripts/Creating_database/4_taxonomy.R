@@ -642,15 +642,16 @@ taxonomy_pmc <- taxonomy_order %>%
       
       # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
       kingdom == "Fungi" ~ "not plankton",
-      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Rhodophyta") ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Rhodophyta", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
       class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
+      genus == "Rhogostoma" ~ "not plankton",
       
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
       phylum == "Cyanobacteria" ~ "Phytoplankton",
-      phylum %in% c("Ochrophyta", "Haptophyta", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta") ~ "Phytoplankton",
+      phylum %in% c("Ochrophyta", "Haptophyta", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra") ~ "Phytoplankton",
       
-      phylum %in% c("Cercozoa", "Amoebozoa", "Foraminifera", "Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa", "Choanozoa", "Bigyra") ~ "Zooplankton",
+      phylum %in% c("Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
       
       TRUE ~ NA

@@ -23,10 +23,12 @@ library(ggtree)
 library(treeio)
 library(ggtreeExtra)
 
-# Import data ----
+# Genus ----
+
+## Import data ----
 phyto_subset <- readRDS("R/data_outputs/database_products/final_products/phyto_subset.rds")
 
-# Genus ----
+
 ## Format data ----
 # Get a taxonomy list to add in in later steps
 
@@ -207,6 +209,224 @@ circular_plot_mass_genus <- gheatmap(circular_plot_mass_genus, log_mass_genus, o
 circular_plot_mass_genus
 
 ggsave("R/Data_outputs/plots/circular_plot_mass_genus.png", width = 9, height = 5, limitsize = FALSE)
+
+
+
+
+
+
+# Phyto + zoo ----
+
+## Import data ----
+bodysize <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
+
+## Format data ----
+# Get a taxonomy list to add in in later steps
+
+pz_plot_data <- bodysize %>% 
+  
+  filter(
+    nu == "individual"
+  ) %>% 
+  
+  select(
+    taxa.name, type, phylum, kingdom, family, order, class, fg, group
+  ) %>% 
+  
+  distinct(taxa.name, .keep_all = TRUE) %>% 
+  
+  mutate(
+    taxa.name = tolower(taxa.name)
+  )
+
+## Find only ones in the tree ----
+# Need to run through tnrs match again because there will be some that i don't have an ott_id for the genus
+taxa_pz <- tnrs_match_names(pz_plot_data$taxa.name)
+
+# Save
+saveRDS(taxa_pz, "R/data_outputs/phylo_tree/taxa_pz.rds")
+
+# Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
+in_tree_pz <- is_in_tree(ott_ids = ott_id(taxa_pz))
+
+# Save
+saveRDS(in_tree_pz, "R/data_outputs/phylo_tree/in_tree_pz.rds")
+
+# View data
+in_tree_pz
+
+# See which ones are in and out
+sum(in_tree_pz == TRUE) # 720
+sum(in_tree_pz == FALSE) # 160
+
+## Get tree ----
+# Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
+
+# get list of just species in the tree
+taxa_in_tree_pz <- pz_plot_data[in_tree_pz, ] %>% 
+  
+  left_join(
+    taxa_pz, by = c("taxa.name" = "search_string")
+  )
+
+# Save
+saveRDS(taxa_in_tree_pz, "R/data_outputs/phylo_tree/taxa_in_tree_pz.rds")
+
+# Make tree
+tree_pz <- tol_induced_subtree(ott_ids = taxa_in_tree_pz$ott_id)
+
+#save tree out here before adapting it for plotting: 
+write.nexus(tree_pz, file="R/data_outputs/phylo_tree/tree_pre_plot_pz.nex")
+
+tol_about() # gives info about the current synthetic tree
+tree_pz # shows info about my tree
+class(tree_pz) # check that it is a phylo
+
+## Plot square tree ----
+
+# Read in data
+tree_pz <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_pz.nex")
+taxa_in_tree_pz <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_pz.rds")
+
+plot(tree_pz, show.tip.label = FALSE)
+
+## Format data with tip.labels ----
+# Need to add in the tip labels to the data for plotting with group info
+
+phylo_plot_data_update_pz <- as.data.frame(tree_pz$tip.label) %>% # get the tip labels in the tree
+  
+  rename(
+    tip.label = `tree_pz$tip.label`
+  ) %>% 
+  
+  mutate(
+    # Make a new column with the tip labels stripped so just the name and no other info
+    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE)
+  ) %>% 
+  
+  # Join in the extra data
+  left_join(
+    taxa_in_tree_pz, by = c("stripped.tip.label" = "unique_name")
+  ) %>% 
+  
+  # Add in to make plotting labels look neater
+  mutate(
+    taxa.name = stripped.tip.label
+  ) %>% 
+  
+  select(
+    tip.label, taxa.name, type, phylum, family, kingdom, class, order, fg, group
+  ) %>% 
+  
+  mutate(
+    fg_label = paste0("FG: ", fg),
+    group_label = paste0("Group: ", group)
+  )
+
+## Plotting circular tree ----
+
+circular_plot_pz <- ggtree(tree_pz, branch.length='none', layout='circular') 
+circular_plot_pz
+
+## Plotting circular tree with group info ----
+group_colors_genus <- paletteer_d("colorBlindness::Blue2Green14Steps", (length(unique(phylo_plot_data_update_pz$group_label))))
+
+# Create plot
+circular_plot_groups_pz <- circular_plot_pz %<+% phylo_plot_data_update_pz +
+  geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA) +
+  scale_color_manual(values = group_colors_genus, name = "Group Label") +
+  
+  ggnewscale::new_scale_color() +  # Reset color scale for next use
+  
+  geom_tippoint(aes(x = x + 3, color = fg_label), size = 2.5, show.legend = NA) 
+
+circular_plot_groups_pz
+
+# Save
+ggsave("R/data_outputs/phylo_tree/circular_plot_groups_genus.pdf", width = 7, height = 5, limitsize = FALSE)
+
+
+## adding in mass info ----
+
+phylo_plot_data_mass_pz <- bodysize %>% 
+  
+  filter(
+    nu == "individual",
+    #taxa.name %in% taxa_in_tree_pz$taxa.name
+  ) %>% 
+  
+  mutate(
+    mass.all = if_else(
+      !is.na(mass),
+      mass,
+      mass.d
+    )
+  ) %>% 
+  
+  # get mean mass for each genera
+  group_by(taxa.name) %>% 
+  
+  summarise(
+    mean.mass = mean(mass.all),
+    .groups = "drop"
+  ) %>% 
+  
+  mutate(
+    log.mass = log10(mean.mass)
+  ) %>% 
+  
+  left_join(
+    phylo_plot_data_update_pz, by = "taxa.name"
+  ) %>% 
+  
+  # filter ones with no tip label as these are ones that are not in tree
+  filter(
+    !is.na(tip.label)
+  ) %>% 
+  
+  select(log.mass, tip.label) %>% 
+  distinct(tip.label, .keep_all = TRUE) %>% 
+
+  column_to_rownames(var = "tip.label")
+
+# plot
+circular_plot_mass_pz = circular_plot_groups_pz+ new_scale_fill() # so new geoms added in can use a new scale
+
+circular_plot_mass_pz <- gheatmap(circular_plot_mass_pz, phylo_plot_data_mass_pz, offset=3, width=0.2, colnames = F)+
+  
+  theme(
+    legend.box = "horizontal",
+    legend.key.size = unit(0.1, "cm"),
+    legend.spacing.x = unit(-0.3, 'cm'),
+    legend.text = element_text(size = 4),
+    legend.title = element_text(size = 4),
+  )
+
+circular_plot_mass_pz
+
+ggsave("R/Data_outputs/plots/circular_plot_mass_genus.png", width = 9, height = 5, limitsize = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
