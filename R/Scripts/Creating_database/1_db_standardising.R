@@ -211,6 +211,11 @@ rimet_formatted <- rimet %>%
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
   
+  # Remove any that can't be traced back to an origianl source
+  filter(
+    !is.na(original.source.code.1)
+  ) %>% 
+  
   ## Select columns ----
   select(source.code, original.source.code.1, sample.year, sample.month, join.location.1, join.location.2,
             individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
@@ -221,8 +226,9 @@ rimet_formatted <- rimet %>%
 saveRDS(rimet_formatted, file = "R/data_outputs/database_products/databases/rimet_formatted.rds")
 
 # Kremer ----
+# po - pre outliers
 
-kremer_formatted <- kremer %>% 
+kremer_formatted_po <- kremer %>% 
   
   ## Select columns ----
   select(location, original.taxa.name, cell.biovol, data.source, sample.date, cells.per.nu, nu.biovol) %>% 
@@ -340,13 +346,68 @@ kremer_formatted <- kremer %>%
     uid.no = row_number(),
     individual.uid = paste(uid.db, uid.no, sep = "")
   ) %>% 
+  
+  # add in iud for outliers
+  group_by(
+    nu, original.taxa.name
+  ) %>% 
+  mutate(
+    o.uid = cur_group_id()
+  ) %>% 
       
   ## Select columns ----
   select(source.code, original.source.code.1, sample.year, sample.month, join.location.1,
             individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
             min.body.size, max.body.size, body.size,
-            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type)
+            bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type,
+         o.uid)
 
+
+## outliers ----
+# follow the same procedure in the paper for removing outliers
+sd <- kremer_formatted_po %>% 
+  
+  group_by(
+    o.uid
+  ) %>% 
+  
+  summarise(
+    mean = mean(log10(body.size)),
+    sd = sd(log10(body.size)),
+    .groups = "drop"
+  ) %>% 
+  
+  filter(
+    !is.na(sd)
+  )
+
+kremer_formatted <- kremer_formatted_po %>% 
+  
+  left_join(
+    sd, by = "o.uid"
+  ) %>% 
+  
+  mutate(
+    log.bs = log10(body.size),
+    
+    keep = case_when(
+      is.na(sd) ~ "keep",
+      log.bs >= (mean - 2 * sd) & log.bs <= (mean + 2 * sd) ~ "remove",
+      
+      TRUE ~ "keep"
+    )
+  ) %>% 
+  
+  filter(
+    keep == "keep"
+  ) %>% 
+  
+  select(
+    source.code, original.source.code.1, sample.year, sample.month, join.location.1,
+    individual.uid, original.taxa.name, life.stage, sex, nu, ind.per.nu,
+    min.body.size, max.body.size, body.size,
+    bodysize.measurement, units, measurement.type, sample.size, reps, error, error.type
+  )
 
 ## Save ----
 saveRDS(kremer_formatted, file = "R/data_outputs/database_products/databases/kremer_formatted.rds")

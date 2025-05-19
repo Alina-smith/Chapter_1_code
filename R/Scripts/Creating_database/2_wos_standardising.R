@@ -20,10 +20,151 @@ library(stringi)
 # Data ---- 
 wos_raw_body <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "bodysize", guess_max = 50000)
 wos_source_list <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "source_list")
+wander_raw <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "wander_raw", guess_max = 100000)
+wander_names <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "wander_names")
+
+# Weird ones ----
+# ones i need to edit seperately and then add in as they were confusing to just add into the master excel sheet
+wander_edit <- wander_raw %>% 
+  
+  select(
+    site_no,
+    collect_date,
+    TaxaID,
+    Nauplius,
+    ObjectiveMagnification,
+    MarksInOcularMicrometer_No.,
+    MarksInOcularMicrometer_Width_No.,
+    MarksInOcularMicrometer_Height_No.
+  ) %>% 
+  
+  rename(
+    join.location.1 = site_no,
+    sample.start.date.full = collect_date,
+    taxa.name = TaxaID,
+    life.stage = Nauplius,
+    mag = ObjectiveMagnification,
+    length.marks = MarksInOcularMicrometer_No.,
+    width.marks = MarksInOcularMicrometer_Width_No.,
+    height.marks = MarksInOcularMicrometer_Height_No.
+  ) %>% 
+  
+  # add full names for ones that have a .
+  left_join(
+    wander_names, by = "taxa.name"
+  ) %>% 
+  
+  mutate(
+    original.taxa.name = if_else(
+      is.na(original.taxa.name),
+      taxa.name,
+      original.taxa.name
+    )
+  ) %>% 
+  
+  # remove ones with no data
+  filter(
+    !(stri_detect_regex(original.taxa.name, "\\."))
+  ) %>% 
+  
+  mutate(
+    # edit location codes
+    join.location.1 = stri_extract_last_regex(join.location.1, "\\w+(?=_)"),
+    join.location.1 = if_else(
+      join.location.1 == "BVR_50",
+      "BVR",
+      join.location.1
+    ),
+    
+    # date
+    sample.start.date.full = stri_replace_all_regex(sample.start.date.full, "-", "."),
+    
+    `body length` = case_when(
+      mag == "20x" ~ length.marks*0.4,
+      mag == "25x" ~ length.marks*0.32,
+      mag == "30x" ~ length.marks*0.27,
+      mag == "35x" ~ length.marks*0.22,
+      mag == "40x" ~ length.marks*0.2,
+      mag == "50x" ~ length.marks*0.16,
+      mag == "60x" ~ length.marks*0.13,
+      mag == "70x" ~ length.marks*0.11,
+      mag == "75x" ~ length.marks*0.11,
+      
+      TRUE ~ NA
+    ),
+    
+    `body width` = case_when(
+      mag == "20x" ~ width.marks*0.4,
+      mag == "25x" ~ width.marks*0.32,
+      mag == "30x" ~ width.marks*0.27,
+      mag == "35x" ~ width.marks*0.22,
+      mag == "40x" ~ width.marks*0.2,
+      mag == "50x" ~ width.marks*0.16,
+      mag == "60x" ~ width.marks*0.13,
+      mag == "70x" ~ width.marks*0.11,
+      mag == "75x" ~ width.marks*0.11,
+      
+      TRUE ~ NA
+    ),
+    
+    `body height` = case_when(
+      mag == "20x" ~ height.marks*0.4,
+      mag == "25x" ~ height.marks*0.32,
+      mag == "30x" ~ height.marks*0.27,
+      mag == "35x" ~ height.marks*0.22,
+      mag == "40x" ~ height.marks*0.2,
+      mag == "50x" ~ height.marks*0.16,
+      mag == "60x" ~ height.marks*0.13,
+      mag == "70x" ~ height.marks*0.11,
+      mag == "75x" ~ height.marks*0.11,
+      
+      TRUE ~ NA
+    ),
+    
+    # add in extra info
+    source.code = 1312,
+    original.source.code.1 = "1312",
+    experiemental.design = "in-situ",
+    individual.uid = paste0("10.1093/plankt/fbae017-", row_number()),
+    nu = "individual",
+    units = "mm",
+    measurement.type = "average",
+    sample.size = "100",
+    reps = "3",
+    ind.per.nu = 1,
+  ) %>% 
+  
+  pivot_longer(
+    cols = c(`body length`, `body width`, `body height`),
+    names_to = "bodysize.measurement",
+    values_to = "body.size"
+  ) %>% 
+  
+  mutate(
+    body.size = as.character(body.size)
+  ) %>% 
+  
+  # remove any without a body size
+  filter(
+    !is.na(body.size)
+  ) %>% 
+  
+  # Reorder
+  select(source.code, original.source.code.1, 
+           sample.start.date.full,
+           join.location.1,
+           individual.uid, original.taxa.name, life.stage, nu, ind.per.nu,
+           body.size,
+           bodysize.measurement, units, measurement.type, sample.size, reps
+  )
+
 
 # Formatting ----
 
 wos_formatted <- wos_raw_body %>%
+  
+  # add in ones done above seperately
+  bind_rows(wander_edit) %>% 
   
   ## Filter ----
   filter(
@@ -87,7 +228,7 @@ wos_formatted <- wos_raw_body %>%
     body.size = case_when(
       
       # Divide total population biovolume by abundance
-      !is.na(total.bs) ~ total.bs/abundance,
+      is.na(body.size) & !is.na(total.bs) ~ total.bs/abundance,
       
       # Take average of range values when the average isn't given already
       measurement.type == "range" & is.na(body.size) ~ (min.body.size+max.body.size)/2,

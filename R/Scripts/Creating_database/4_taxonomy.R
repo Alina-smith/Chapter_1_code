@@ -5,10 +5,10 @@
 # 2) Resolved names:  Run the cleaned names through rotl::tnrs_match_names to get most up to date names and then manually fix any that weren't picked up
 # 3) Taxonomy:        Run cleaned names through taxize::classification with tol to get taxonomy and then manuallu fill in any gaps
 
-# Last updated: 18/03/2025
-# Data run through veryfier on 19/01/2025
-# Data run through tnrs_match_names on 19/03/2025 
-# Data ran through classification on 19/03/2025
+# Last updated: 19/05/2025
+# Data run through veryfier on 19/05/2025
+# Data run through tnrs_match_names on 19/05/2025
+# Data ran through classification on 19/05/2025
 
 # Packages ----
 
@@ -398,7 +398,7 @@ taxonomy_formatted_pmc <- taxonomy_raw_pmc %>%
     family = case_when(
       genus == "Euglena (genus in infrakingdom Excavata)" ~ "Euglenaceae",
       
-      resolved.taxa.name %in% c("Empididae", "Ephydridae", "Caenidae", "Aeshnidae", "Gomphidae", "Ecnomidae", "Glossosomatidae", "Hydroptilidae", "Pisuliidae", "Stenopsychidae", "Dixidae", "Tanyderidae", "Thaumaleidae", "Chironomidae", "Culicidae", "Xiphocentronidae", "Calamoceratidae") ~ resolved.taxa.name,
+      resolved.taxa.name %in% c("Empididae", "Ephydridae", "Caenidae", "Aeshnidae", "Gomphidae", "Ecnomidae", "Glossosomatidae", "Hydroptilidae", "Pisuliidae", "Stenopsychidae", "Dixidae", "Tanyderidae", "Thaumaleidae", "Chironomidae", "Culicidae", "Xiphocentronidae", "Calamoceratidae", "Gastropidae") ~ resolved.taxa.name,
       
       family.1 == "Bicosoecidae" ~ "Bicosoecaceae",
       
@@ -714,81 +714,24 @@ not_plankton_multi_all <- bind_rows(not_plankton_multi_list)
 # update the taxonomy info for the ones that need it - only two so just do in mutate as easier
 # mct - multi_check_1
 
+# Import data
+non_plankton_multi_check <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "non_plankton_multi_check")
+
 taxonomy_mc1 <- taxonomy_pmc %>% 
   
+  filter(
+    !(resolved.taxa.name %in% non_plankton_multi_check$resolved.taxa.name)
+  ) %>% 
+  
+  bind_rows(
+    non_plankton_multi_check
+  ) %>% 
+  
   mutate(
-    taxa.name = case_when(
-      resolved.taxa.name == "Sphaerellopsis" ~ "Vitreochlamys",
-      resolved.taxa.name == "Rhaphidiopsis" ~ "Raphidiopsis",
-      
-      TRUE ~ resolved.taxa.name
-    ),
-    
-    ott.id = case_when(
-      taxa.name == "Vitreochlamys" ~ 28980,
-      taxa.name == "Raphidiopsis" ~ 836111,
-      
-      TRUE ~ ott.id
-    ),
-    
-    species = case_when(
-      ott.id %in% c("28980", "836111") ~ NA,
-      
-      TRUE ~ species
-    ),
-    
-    genus = case_when(
-      ott.id %in% c("28980", "836111") ~ taxa.name,
-      
-      TRUE ~ genus
-    ),
-    
-    family = case_when(
-      genus == "Vitreochlamys" ~ "Chlamydomonadaceae",
-      genus == "Raphidiopsis" ~ "Aphanizomenonaceae",
-      
-      TRUE ~ family
-    ),
-    
-    order = case_when(
-      family == "Chlamydomonadaceae" ~ "Chlamydomonadales",
-      family == "Aphanizomenonaceae" ~ "Nostocales",
-      
-      TRUE ~ order
-    ),
-    
-    class = case_when(
-      order == "Chlamydomonadales" ~ "Chlorophyceae",
-      order == "Nostocales" ~ "Cyanophyceae",
-      
-      TRUE ~ class
-    ),
-    
-    phylum = case_when(
-      class == "Chlorophyceae" ~ "Chlorophyta",
-      class == "Cyanophyceae" ~ "Cyanobacteria",
-      
-      TRUE ~ phylum
-    ),
-    
-    kingdom = case_when(
-      phylum == "Chlorophyta" ~ "Plantae",
-      phylum == "Cyanobacteria" ~ "Bacteria",
-      
-      TRUE ~ kingdom
-    ),
-    
-    domain = case_when(
-      kingdom == "Plantae" ~ "Eukaryota",
-      kingdom == "Bacteria" ~ "Bacteria",
-      
-      TRUE ~ domain
-    ),
-    
-    type = case_when(
-      ott.id %in% c("28980", "836111") ~ "Phytoplankton",
-      
-      TRUE ~ type
+    taxa.name = if_else(
+      is.na(taxa.name),
+      resolved.taxa.name,
+      taxa.name
     )
   ) %>% 
   
@@ -840,23 +783,21 @@ in_tree_tax <- is_in_tree(ott_ids = phylo_plot_data$ott.id)
 # Save
 saveRDS(in_tree_tax, "R/data_outputs/database_products/taxonomy/in_tree_tax.rds")
 
-# View data
 in_tree_tax
 
 # See which ones are in and out
-sum(in_tree_tax == TRUE) # 4939
-sum(in_tree_tax == FALSE) # 822
+sum(in_tree_tax == TRUE) # 4747
+sum(in_tree_tax == FALSE) # 758
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 
 # get list of just species in the tree
-taxa_in_tree <- phylo_plot_data[in_tree_tax, ]
-taxa_in_tree <- taxa_in_tree %>% 
+taxa_in_tree <- phylo_plot_data[in_tree_tax, ] %>% 
   filter(
     kingdom == "Protozoa"
-    #phylum == "Arthropoda"
   )
+
 # Make tree
 tree <- tol_induced_subtree(ott_ids = taxa_in_tree$ott.id)
 
@@ -926,8 +867,9 @@ circular_plot
 
 circular_plot <- circular_plot %<+% phylo_plot_data_update +
   #geom_tippoint(aes(x = x + 5, color = class_label), size = 3, show.legend = TRUE)
-  geom_tippoint(aes(x = x + 5, color = phylum_label), size = 3, show.legend = TRUE)+
-  geom_tippoint(aes(x = x + 7, color = kingdom_label), size = 3, show.legend = TRUE) +
+  geom_tippoint(aes(x = x + 5, color = phylum_label), size = 3, show.legend = TRUE)
+  #geom_tippoint(aes(x = x + 7, color = kingdom_label), size = 3, show.legend = TRUE) 
++
   
   scale_color_manual(values =
                        c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#CC5500", "Kingdom: Chromista" = "#00008B", "Kingdom: Animalia" = "#8B0000",
@@ -953,19 +895,19 @@ circular_plot
 # Quite a lot so going to fill it in in an extra spreadsheet and then import in
 
 ## Import data ----
-manual_multi <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "multi_updates")
+multi_updates <- read_xlsx("raw_data/manual_taxonomy.xlsx", sheet = "multi_updates")
 
 ## Update names ----
 taxonomy <- taxonomy_mc1 %>% 
   
   # Remove weird ones
   filter(
-    !(resolved.taxa.name %in% manual_multi$resolved.taxa.name),
+    !(resolved.taxa.name %in% multi_updates$resolved.taxa.name),
     !(ott.id %in% c("972900"))
   ) %>% 
   
   bind_rows(
-    ., manual_multi
+    ., multi_updates
   ) %>% 
   
   mutate(
@@ -1022,8 +964,8 @@ saveRDS(in_tree_tax_2, "R/data_outputs/database_products/taxonomy/in_tree_tax_2.
 in_tree_tax_2
 
 # See which ones are in and out
-sum(in_tree_tax_2 == TRUE) # 4939
-sum(in_tree_tax_2 == FALSE) # 806
+sum(in_tree_tax_2 == TRUE) # 4749
+sum(in_tree_tax_2 == FALSE) # 744
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
@@ -1113,9 +1055,6 @@ circular_plot <- circular_plot %<+% phylo_plot_data_update +
   )
 
 circular_plot
-
-# Save
-ggsave("R/data_outputs/exploring/circular_plot.pdf", width = 7, height = 5, limitsize = FALSE)
 
 
 

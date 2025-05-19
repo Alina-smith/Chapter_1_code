@@ -890,7 +890,7 @@ mass <- bodysize_r_groups %>%
     id_cols = individual.uid,
     names_from = bodysize.measurement,
     values_from = body.size
-  ) %>%
+  )%>%
   
   rename(
     dry.mass = `dry mass`,
@@ -906,7 +906,7 @@ mass <- bodysize_r_groups %>%
   
   distinct(
     individual.uid, .keep_all = TRUE
-  ) %>% 
+  )%>% 
   
   mutate(
     # very few dry mass for phyto so just get rid of them
@@ -950,8 +950,11 @@ mass <- bodysize_r_groups %>%
       TRUE ~ NA
     ),
     
+    
+    # zooplankton specific ones
+    # have to divide length by 1000 to make it mm
     mass.z = case_when(
-      !is.na(body.mass) & type == "Zooplankton" ~ body.mass,
+      #!is.na(body.mass) & type == "Zooplankton" ~ body.mass,
       
       lw.group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
       lw.group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
@@ -960,6 +963,34 @@ mass <- bodysize_r_groups %>%
       lw.group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
       
       TRUE ~ NA
+    ),
+    
+    # unlog the mass
+    #mass.z = exp(mass.z),
+    
+    # calculate rotifers
+    mass.z = case_when(
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Anuraeopsis") ~ 0.33*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Ascomorpha") ~ 0.52*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Asplanchna") ~ 0.52*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name,"Brachionus") ~ 0.52*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Conochilus") ~ 0.26*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Collotheca") ~ 0.26*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Euchlanis") ~ 0.26*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Filinia") ~ 0.52*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Gastropus") ~ 0.80*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Hexarthra") ~ 0.26*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Kellicottia") ~ 0.26*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Notholca") ~ 0.13*(3*(length/1000)*(width/1000)*(height/1000) + 4*((height/1000)^3)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Ploesoma") ~ 0.52*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Polyarthra") ~ ((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Pompbolyx") ~ 0.40*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Synchaeta") ~ 0.26*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Testudinella") ~ 0.40*((length/1000)*(width/1000)*(height/1000)),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Trichocerca") ~ 0.52*((length/1000)*(width/1000)^2),
+      lw.group == "rotifer" & stri_detect_regex(taxa.name, "Keratella") ~ 0.13*((length/1000)*(width/1000)^2),
+      
+      TRUE ~ mass.z
     ),
     
     # unlog the mass
@@ -1022,108 +1053,26 @@ multi_ind <- mass %>%
   
   ungroup()
 
-# Remove ones with no single cell values ----
-individual_bodysizes <- mass %>% 
+# Final edits ----
+bodysize <- mass %>% 
   
   filter(
-    !(individual.uid %in% multi_ind$individual.uid)
+    # Remove ones with no single cell values
+    !(individual.uid %in% multi_ind$individual.uid),
+    
+    # filter out ones that are obviously errors and are way to large
+    mass.all.d < 1000000
   )
 
-# remove outlyers
+# View data ----
 
-x <- individual_bodysizes %>% 
-  group_by(taxa.name, nu) %>% 
-  summarise(
-    mean_mass = mean(mass.all.d, na.rm = TRUE),
-    sd_mass = sd(mass.all.d, na.rm = TRUE),
-    n = n()
-  )
+ggplot(bodysize, aes(x = log10(mass.all.d), fill = type))+
+  geom_histogram(binwidth = 0.3)+
+  facet_wrap(~type, ncol = 1)
 
-ind <- individual_bodysizes %>% 
-  
-  filter(
-    nu == "individual"
-  ) %>% 
-  
-  left_join(
-    filter(
-      x, nu == "individual"), by = "taxa.name"
-  )%>% 
-  
-  mutate(
-    x = case_when(
-      mass.all.d >= (mean_mass - 2 * sd_mass) & mass.all.d <= (mean_mass + 2 * sd_mass) ~ "remove",
-      
-      TRUE ~ "keep"
-    )
-  ) %>% 
-  
-  filter(
-    source.code != "5",
-    x == "remove",
-    #type == "Zooplankton"
-  )
-
-
-
-
-# Phyto
-phyto <- individual_bodysizes %>% 
-  filter(
-    type == "Phytoplankton"
-  ) 
-mean_phyto <- mean(phyto$mass.all.d)
-sd_phyto <- sd(phyto$mass.all.d)
-
-phyto_outlyers <- individual_bodysizes %>% 
-  
-  filter(
-    type == "Phytoplankton",
-    mass.all.d >= (mean_phyto - 2 * sd_phyto) & mass.all.d <= (mean_phyto + 2 * sd_phyto)
-  )
-
-# Zoo
-zoo <- individual_bodysizes %>% 
-  filter(
-    type == "Zooplankton",
-    taxa.name != "Calanus"
-  ) 
-
-clean_mass <- zoo$mass.all.d[is.finite(zoo$mass.all.d)]
-
-mean_zoo <- mean(clean_mass)
-sd_zoo <- sd(clean_mass)
-
-zoo_outlyers <- individual_bodysizes %>% 
-  
-  filter(
-    type == "Zooplankton",
-    mass.all.d >= (mean_zoo - sd_zoo) & mass.all.d <= (mean_zoo + sd_zoo)
-  )
-
-bodysize <- bind_rows(phyto_outlyers, zoo_outlyers) %>% 
-  mutate(
-    log = log10(mass.all.d)
-  )
-
-
-##### CALCULATE CILLIATE BIOVOL
-  
 
 # save
 saveRDS(bodysize, file = "R/Data_outputs/database_products/final_products/bodysize.rds")
-
-
-# Select phyto ----
-
-phyto_subset <- bodysize %>% 
-  
-  filter(
-    type == "Phytoplankton"
-  ) 
-
-# save
-saveRDS(phyto_subset, file = "R/Data_outputs/database_products/final_products/phyto_subset.rds")
 
 
 
