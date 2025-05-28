@@ -1627,6 +1627,11 @@ db_formatted<- bind_rows(rimet_formatted, kremer_formatted, odume_formatted, heb
     body.size != 0
   ) %>% 
   
+  # change error to numeric
+  mutate(
+    error = as.numeric(error)
+  ) %>% 
+  
   # reorder
   relocate(source.code, original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10, original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
            sample.year, sample.month, join.location.1, join.location.2, join.location.3, join.location.4, join.location.5,

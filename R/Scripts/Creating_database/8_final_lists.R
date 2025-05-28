@@ -8,14 +8,14 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-phyto_subset <- readRDS("R/data_outputs/database_products/final_products/phyto_subset.rds")
+bodysize <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
 sources_list <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
 location_list <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- phyto_subset %>% 
+location_codes <- bodysize %>% 
   
   # select column
   select(
@@ -55,7 +55,7 @@ saveRDS(location, "R/data_outputs/database_products/final_products/location.rds"
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- phyto_subset %>% 
+source_codes <- bodysize %>% 
   
   # select columns
   select(
@@ -120,5 +120,17 @@ sources <- sources_list %>%
 # save
 saveRDS(sources, "R/data_outputs/database_products/final_products/sources.rds")
 
+# taxonomy ----
+taxonomy_list <- bodysize %>% 
+  
+  select(
+    taxa.name, family, order, class, phylum, kingdom, type, group, fg
+  ) %>% 
+  
+  distinct(
+    taxa.name, .keep_all = TRUE
+  )
 
+# save
+saveRDS(taxonomy_list, "R/data_outputs/database_products/final_products/taxonomy_list.rds")
 

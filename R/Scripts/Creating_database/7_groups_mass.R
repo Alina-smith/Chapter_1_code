@@ -1,4 +1,7 @@
-## Calculating the body size for ones I don't have it for
+## Calculating the body sizes using length-weight and biovolume conversions
+# Have decided to go to genus level as this provides the most data points and locations compared to species level
+# focusing on adult individuals
+
 # all volume = um3
 # all length, width and height = um,
 # all mass = ug
@@ -11,17 +14,17 @@ library(stringi)
 library(taxize)
 library(rotl)
 
-# Formatting all data ----
 # Final list of all data including phyto and zooplankton with groups and mass
 
-## Import data ----
+# Import data ----
 bodysize_location <- readRDS("R/Data_outputs/database_products/bodysize_location.rds")
 tax_list_raw <- readRDS("R/Data_outputs/database_products/taxonomy/tax_list_raw.rds")
 sources_list_update <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
 
-## Initial edits ----
+# Getting averages for each source ----
 
-format_all_bs <- bodysize_location %>% 
+## Initial formatting ----
+bs_format <- bodysize_location %>% 
   
   mutate(
     
@@ -29,13 +32,6 @@ format_all_bs <- bodysize_location %>%
     
     # change types for later merging
     uid = as.character(uid),
-    
-    # change measurement type to single when its raw but only has one value because going to get averages of raw data later on so don't want these ones in there
-    measurement.type = if_else(
-      uid %in% c("340977", "341039", "343115", "338767", "338672", "338649"),
-      "single",
-      measurement.type
-    ),
     
     # assume all na life stage are adults
     life.stage = if_else(
@@ -73,13 +69,7 @@ format_all_bs <- bodysize_location %>%
     )
   ) %>%
   
-  # don't need units because each measurement type is the same now
-  select(
-    - units
-  ) %>% 
-  
   # nu column
-  
   mutate(
     nu = case_when(
       ind.per.nu > 1 ~ "multi-cellular",
@@ -91,196 +81,102 @@ format_all_bs <- bodysize_location %>%
     )
   ) %>% 
   
-  # select and relocate columns
+  # Select just adult individuals
+  filter(
+    life.stage %in% c("adult", "active"),
+    nu %in% "individual"
+  ) %>% 
+  
+  # select and relocate columns - removing life stage and nu now as all adult individuals and don't need sex, reps, sample.size and error as majority don't have this
   
   select(
-    uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name,
-    nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type, measurement.type,
-    ott.id, species, genus, family, order, class, phylum, kingdom,
-    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude,
-    bodysize.measurement.notes
+    individual.uid, uid, source.code, original.sources, type,
+    nu, ind.per.nu, body.size, bodysize.measurement, units,
+    genus, family, order, class, phylum, kingdom,
+    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+  ) %>% 
+  
+  # rename the taxa.name as genus as I am only going to genus level and filter out ones that are a higher resolution
+  rename(
+    taxa.name = genus
+  ) %>% 
+  
+  filter(
+    !is.na(taxa.name)
   )
 
-## Convert raw to averages ----
+## Get averages ----
 
-# get location info to left join to bs_raw
-location_info <- format_all_bs %>% 
+# Get extra info to add in
+# All the extra infor for the multiples of the same individual are the same and so can just left join by individual.uid
+extra_info <- bs_format %>% 
+  
   select(
-    location.code, habitat, location, country, continent, latitude, longitude
+    - body.size,
+    - bodysize.measurement,
+    - uid
   ) %>% 
   
   distinct(
-    location.code, .keep_all = TRUE
+    individual.uid, .keep_all = TRUE
   )
 
-# Calculate average
-bs_raw <- format_all_bs %>% 
-  
-  # Select raw data
-  filter(
-    measurement.type == "raw"
-  ) %>% 
-  
-  # Group by all the below factors so that it gives average for different locations and dates
+# Find averages
+bs_avg <- bs_format %>% 
+
+  # get an average for each individual.uid
   group_by(
-    ott.id, source.code, original.sources, location.code, bodysize.measurement, life.stage, sex, sample.year, sample.month, nu
+    individual.uid, bodysize.measurement
   ) %>% 
   
-  # Calculate mean
   summarise(
-    body.size.mean = mean(body.size),
-    sample.size = n(),
-    sd = sd(body.size),
-    error = sd/sqrt(sample.size),
+    body.size = mean(body.size),
     .groups = "drop"
   ) %>% 
   
-  rename(
-    body.size = body.size.mean
+  left_join(
+    extra_info, by = "individual.uid"
   ) %>% 
   
-  ungroup() %>% 
+  # make a new uid column
+  mutate(
+    uid = row_number()
+  )
+
+## Genus ott ids ----
+# Rerun names through tol now they are genus to get ott ids
+genus_list <- bs_avg %>% 
+  distinct(taxa.name)
+
+genus_ott <- tnrs_match_names(genus_list$taxa.name)
+
+# check all have been matched to an ott id - if false then okay
+unique(is.na(genus_ott$ott_id))
+
+# Add in ott_ids to data
+bs_ott <- bs_avg %>% 
   
-  # Join back in extra info
-  left_join(
-    location_info, by = "location.code"
-  )%>% 
-  
-  left_join(
-    tax_list_raw, by = "ott.id"
+  # Set the taxa.name to lower case to match the search string
+  mutate(
+    taxa.name = tolower(taxa.name)
   ) %>% 
   
   left_join(
     select(
-      sources_list_update, doi, source.code, new.source.code
-    ), by = c("source.code" = "new.source.code")
+      genus_ott, search_string, unique_name, ott_id
+    ), by = c("taxa.name" = "search_string")
   ) %>% 
   
-  # Make new individual.uid
-  group_by(
-    ott.id, source.code, original.sources, location.code, life.stage, sex, sample.year, sample.month, nu
-  ) %>% 
-  
-  mutate(
-    individual.uid = paste(doi, cur_group_id(), sep = "-")
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  mutate(
-    
-    # Add in misc extra info
-    uid = paste("r", row_number(), sep = "-"),
-    ind.per.nu = 1, # all individuals
-    reps = NA,
-    error.type = "se",
-    measurement.type = "average",
-    bodysize.measurement.notes = NA,
-    
-    # change tyes for later merging
-    sample.size = as.character(sample.size),
-    error = as.character(error)
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  # Select and relocate
+  # get rid of old taxa.name and replace with new taxa.name
   select(
-    uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name,
-    nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type, measurement.type,
-    ott.id, species, genus, family, order, class, phylum, kingdom,
-    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude,
-    bodysize.measurement.notes
-  )
-
-## Combine all together ----
-bodysize_groups <- format_all_bs %>% 
-  
-  # remove raw data
-  filter(
-    !(measurement.type == "raw")
+    -taxa.name
   ) %>% 
   
-  # add in the new averages of raw data
-  bind_rows(
-    bs_raw
-  ) %>% 
-  
-  # remove columns that aren't needed
-  select(
-    - measurement.type # all average now
-  ) %>% 
-  
-  # Calculate average for ones that are the same individual in the same location and time
-  group_by(
-    individual.uid, bodysize.measurement,life.stage
-  ) %>% 
-  
-  mutate(
-    body.size = mean(body.size)
-  ) %>% 
-  
-  distinct(
-    body.size, .keep_all = TRUE
-  ) %>% 
-  
-  ungroup() %>% 
-  
-  # Add in traditional fg info
-  
-  mutate(
-    group = case_when(
-      # Phyto
-      phylum == "Cyanobacteria" ~ "Blue/green",
-      phylum == "Ochrophyta" ~ "Stramenopile",
-      phylum == "Glaucophyta" ~ "Glaucophyte",
-      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
-      phylum == "Bacillariophyta" ~ "Diatom",
-      phylum == "Euglenozoa" ~ "Euglenoid",
-      phylum == "Cryptophyta" ~ "Cryptomonad",
-      phylum == "Haptophyta" ~ "Haptophyte",
-      phylum == "Myzozoa" ~ "Dinoflagellate",
-      
-      # Zoo
-      class == "Branchiopoda" ~ "Cladoceran",
-      class == "Hexanauplia" ~ "Copepod",
-      phylum == "Rotifera" ~ "Rotifer",
-      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
-      class == "Ostracoda" ~ "Ostracod",
-      
-      TRUE ~ NA
-
-    ),
-    
-  # assign zooplankton to groups for length-weight
-    lw.group = case_when(
-        
-      taxa.name == "Bosmina" ~ "bosmina",
-      taxa.name == "Daphnia" ~ "daphnia",
-      family == "Daphniidae" ~ "daphniidae",
-      order == "Diplostraca" ~ "cladocera",
-      phylum == "Rotifera" ~ "rotifer",
-      phylum == "Arthropoda" ~ "copepoda",
-      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "ciliate",
-        
-      TRUE ~ NA
-    ) 
-  ) %>% 
-  
-  # Filter to genus level - chose genus as this gives the most data compared to species
-  filter(
-    !is.na(genus)
-  ) %>% 
-  
-  select(
-    - species, -taxa.name
-  ) %>% 
-  
-  # replace taxa name with the genera
   rename(
-    taxa.name = genus
+    taxa.name = unique_name,
+    ott.id = ott_id
   )
-  
+
 
 # New functional groups ----
 
@@ -785,7 +681,11 @@ r_groups <- r_groups_raw %>%
       taxa.name == "Chlorolobium" ~ "X1",
       taxa.name == "Cyanodictyon" ~ "K",
       taxa.name == "Ceratium" ~ "LO",
-      
+      taxa.name == "Lyngbya (genus in domain Bacteria)" ~ "S1",
+      taxa.name == "Chlorophyceae" ~ "X1",
+      taxa.name == "Chlamydomonadales" ~ "X1",
+      taxa.name == "Copepoda" ~ "3",
+       
       TRUE ~ fg
     )
   ) 
@@ -797,7 +697,7 @@ saveRDS(r_groups, "R/data_outputs/database_products/r_groups.rds")
 #### Add groups to main data ----
 
 # Add to data
-bodysize_r_groups <- bodysize_groups %>% 
+bs_fg <- bs_ott %>% 
   
   # genus
   left_join(
@@ -863,34 +763,66 @@ bodysize_r_groups <- bodysize_groups %>%
       !is.na(fg.class) ~ fg.class,
       !is.na(fg.phylum) ~ fg.phylum,
       
-      TRUE ~ "unasigned"
+      TRUE ~ "Unassigned"
     )
   ) %>% 
   
-  select(    uid, individual.uid, source.code, original.sources, type, life.stage, sex, taxa.name,
-               nu, ind.per.nu, body.size, bodysize.measurement, reps, sample.size, error, error.type,
+  # assign traditional groups 
+  mutate(
+    group = case_when(
+      # Phyto
+      phylum == "Cyanobacteria" ~ "Blue/green",
+      phylum == "Ochrophyta" ~ "Stramenopile",
+      phylum == "Glaucophyta" ~ "Glaucophyte",
+      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
+      phylum == "Bacillariophyta" ~ "Diatom",
+      phylum == "Euglenozoa" ~ "Euglenoid",
+      phylum == "Cryptophyta" ~ "Cryptomonad",
+      phylum == "Haptophyta" ~ "Haptophyte",
+      phylum == "Myzozoa" ~ "Dinoflagellate",
+      
+      # Zoo
+      class == "Branchiopoda" ~ "Cladoceran",
+      class == "Hexanauplia" ~ "Copepod",
+      phylum == "Rotifera" ~ "Rotifer",
+      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "Ciliate",
+      class == "Ostracoda" ~ "Ostracod",
+      
+      TRUE ~ NA
+      
+    ),
+    
+    # assign zooplankton to groups for length-weight
+    lw.group = case_when(
+      
+      taxa.name == "Bosmina" ~ "bosmina",
+      taxa.name == "Daphnia" ~ "daphnia",
+      family == "Daphniidae" ~ "daphniidae",
+      order == "Diplostraca" ~ "cladocera",
+      phylum == "Rotifera" ~ "rotifer",
+      phylum == "Arthropoda" ~ "copepoda",
+      phylum == "Ciliophora (phylum in subkingdom SAR)" ~ "ciliate",
+      
+      TRUE ~ NA
+    ) 
+  ) %>% 
+  
+  select(individual.uid, uid, source.code, original.sources, type, taxa.name,
+               body.size, bodysize.measurement,
                ott.id, group, lw.group, fg, family, order, class, phylum, kingdom,
                sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude)
 
-
-# save
-saveRDS(bodysize_r_groups, "R/data_outputs/database_products/bodysize_r_groups.rds")
-
-
 # Calculating masses ----
-## Import data
+# Calculate the masses from length weight and remove any obvious errors
 
-bodysize_r_groups <- readRDS("R/data_outputs/database_products/bodysize_r_groups.rds")
-
-## Calculate ----
-mass <- bodysize_r_groups %>% 
+bodysize_raw <- bs_fg %>% 
   
   # Get all the different bodysize.measurements on one row per individual
   pivot_wider(
     id_cols = individual.uid,
     names_from = bodysize.measurement,
     values_from = body.size
-  )%>%
+  ) %>%
   
   rename(
     dry.mass = `dry mass`,
@@ -900,76 +832,44 @@ mass <- bodysize_r_groups %>%
   # join all extra data back 
   left_join(
     select(
-      bodysize_r_groups, - body.size, bodysize.measurement, - uid
+      bs_fg, - body.size, - bodysize.measurement
     ), by = "individual.uid"
   ) %>% 
   
-  distinct(
-    individual.uid, .keep_all = TRUE
-  )%>% 
+  # Dry and wet mass
+  # Zooplankton - There is a very small amount of info for wet mass and so just discard this and focus on length-weight and dry mass
+  # Phytoplankton - There is very small amount of info for dry mass so discard this and focus on biovolume
+  
+  # Remove the wet mass column
+  select(
+    - `wet mass`
+  ) %>% 
   
   mutate(
-    # very few dry mass for phyto so just get rid of them
-    # When biovolume is given use this over dry/wet mass
+  
+    # Change dry mass to NA for phytoplankton
     dry.mass = if_else(
       type == "Phytoplankton",
       NA,
       dry.mass
     ),
     
-    # calculate biovolume for ones that have just body mass
-    biovolume = case_when(
-      is.na(biovolume) & !is.na(body.mass) & type == "Phytoplankton" ~ body.mass/(1*10^-6),
-      is.na(biovolume) & !is.na(body.mass) & group == "Ciliate" ~ body.mass/(1*10^-6),
-      TRUE ~ biovolume
-    ),
+    # Calculate mass
+    # Zooplankton: measurments are in micro so need to turn to mm first
     
-    # calculate mass from biovolume
-    
-    # 1) go through pg c
-    # first convert to pg C
-    pg.c = case_when(
-      group == "Diatom" ~ 0.288*biovolume^0.811, # diatom specific one
-      type == "Phytoplankton" ~ 0.216*biovolume^0.939, # general phytoplankton one
-      TRUE ~ NA
-    ),
-    
-    # Next convert to mass
-    mass.c = case_when(
-      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
-      is.na(body.mass) & type == "Phytoplankton" ~ 1e-12*0.07*pg.c,
-      
-      TRUE ~ NA
-    ),
-    
-    # 2) assume density of 1
-    mass.d = case_when(
-      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
-      is.na(body.mass) & type == "Phytoplankton" ~ biovolume*(1*10^-6),
-      is.na(body.mass) & group == "Ciliate" ~ biovolume*(1*10^-6),
-      TRUE ~ NA
-    ),
-    
-    
-    # zooplankton specific ones
-    # have to divide length by 1000 to make it mm
     mass.z = case_when(
-      #!is.na(body.mass) & type == "Zooplankton" ~ body.mass,
+      # using mass info
+      !is.na(body.mass) ~ body.mass,
+      !is.na(dry.mass) ~ dry.mass,
       
+      # using length weight regression equations - calculates micrograms so don't need to chnage any of those
       lw.group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
       lw.group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
       lw.group == "daphniidae" ~ 1.5072 + (2.761*log(length/1000)),
       lw.group == "cladocera" ~ 1.7512 + (2.653*log(length/1000)), 
       lw.group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
       
-      TRUE ~ NA
-    ),
-    
-    # unlog the mass
-    #mass.z = exp(mass.z),
-    
-    # calculate rotifers
-    mass.z = case_when(
+      # Rotifers
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Anuraeopsis") ~ 0.33*((length/1000)*(width/1000)*(height/1000)),
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Ascomorpha") ~ 0.52*((length/1000)*(width/1000)*(height/1000)),
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Asplanchna") ~ 0.52*((length/1000)*(width/1000)^2),
@@ -990,23 +890,27 @@ mass <- bodysize_r_groups %>%
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Trichocerca") ~ 0.52*((length/1000)*(width/1000)^2),
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Keratella") ~ 0.13*((length/1000)*(width/1000)^2),
       
-      TRUE ~ mass.z
+      TRUE ~ NA
     ),
     
     # unlog the mass
     mass.z = exp(mass.z),
     
-    # combine the zoo and phyto masses into one column
-    mass.all.c = if_else(
-      !is.na(mass.z),
-      mass.z,
-      mass.c
+    # Phytoplankton
+    
+    # Assume density of 1
+    mass.p = case_when(
+      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
+      is.na(body.mass) & type == "Phytoplankton" ~ biovolume*(1*10^-6),
+      is.na(body.mass) & group == "Ciliate" ~ biovolume*(1*10^-6),
+      TRUE ~ NA
     ),
     
-    mass.all.d = if_else(
+    # Combine together
+    mass = if_else(
       !is.na(mass.z),
       mass.z,
-      mass.d
+      mass.p
     ),
     
     # make a mld column
@@ -1016,58 +920,63 @@ mass <- bodysize_r_groups %>%
     )
   ) %>% 
   
+  # remove any without a mass measurement
+  filter(
+    !is.na(mass)
+  ) %>%
+  
+  # Remove obvious errors
+  mutate(
+    outlier = case_when(
+      mass.z > 1000 ~ "outlier",
+      
+      TRUE ~ "keep"
+    )
+  ) %>% 
+  
+  filter(
+    outlier == "keep"
+  )
+  
+bodysize <- bodysize_raw %>% 
+  # calculate average for each source
+  group_by(
+    individual.uid
+  ) %>% 
+  
+  summarise(
+    mass = mean(mass),
+    .groups = "drop"
+  ) %>% 
+  
+  mutate(
+    mass.log = log10(mass)
+  ) %>% 
+  
+  left_join(
+    select(
+      bodysize_raw,
+      individual.uid, uid, source.code, original.sources, taxa.name, mld,
+      ott.id, type, family, order, class, phylum, kingdom,
+      group, fg, 
+      sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+    ), by = "individual.uid"
+  ) %>% 
+  
   # select columns and reorder
   select(
-    individual.uid, source.code, original.sources, taxa.name,
-    nu, ind.per.nu, mass.all.c, mass.all.d, biovolume, mld,
+    uid, source.code, original.sources, taxa.name,
+    mass, mass.log, mld,
     ott.id, type, family, order, class, phylum, kingdom,
     group, fg, 
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
-  ) %>% 
-  
-  # remove any without a mass measurement (mass.c and mass.d should have the same amount so can filter by either)
-  filter(
-    !is.na(mass.all.c)
   )
 
-## Remove only multi-cellular ----
-# Find any that only have multi-cellular values but not single cell values
-multi_ind <- mass %>% 
-  
-  group_by(nu, taxa.name) %>% 
-  
-  distinct(taxa.name, .keep_all = TRUE) %>% 
-  
-  ungroup() %>% 
-  
-  group_by(taxa.name) %>% 
-  
-  mutate(
-    n = n()
-  ) %>% 
-  
-  filter(
-    n == 1,
-    nu == "multi-cellular"
-  ) %>% 
-  
-  ungroup()
-
-# Final edits ----
-bodysize <- mass %>% 
-  
-  filter(
-    # Remove ones with no single cell values
-    !(individual.uid %in% multi_ind$individual.uid),
-    
-    # filter out ones that are obviously errors and are way to large
-    mass.all.d < 1000000
-  )
 
 # View data ----
 
-ggplot(bodysize, aes(x = log10(mass.all.d), fill = type))+
-  geom_histogram(binwidth = 0.3)+
+ggplot(bodysize, aes(x = mass.log, fill = type))+
+  geom_histogram(binwidth = 0.2)+
   facet_wrap(~type, ncol = 1)
 
 

@@ -18,7 +18,7 @@ library(tidyverse)
 library(stringi)
 
 # Data ---- 
-wos_raw_body <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "bodysize", guess_max = 50000)
+wos_raw_body <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "bodysize", guess_max = 100000)
 wos_source_list <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "source_list")
 wander_raw <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "wander_raw", guess_max = 100000)
 wander_names <- read_xlsx("raw_data/master_wos_data.xlsx", sheet = "wander_names")
@@ -412,6 +412,9 @@ wos_formatted <- wos_raw_body %>%
   ) %>% 
   
   mutate(
+    # change error type 
+    error = as.numeric(error),
+    
     ## nu ----
     # Edit weird form ones
     
@@ -480,4 +483,3 @@ wos_formatted <- wos_raw_body %>%
 
 # Save
 saveRDS(wos_formatted, file = "R/data_outputs/database_products/wos_formatted.rds")
-
