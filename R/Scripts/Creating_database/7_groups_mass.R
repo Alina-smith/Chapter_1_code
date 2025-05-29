@@ -177,6 +177,9 @@ bs_ott <- bs_avg %>%
     ott.id = ott_id
   )
 
+saveRDS(bs_ott, "R/data_outputs/database_products/bs_ott.rds")
+
+
 
 # New functional groups ----
 
@@ -772,7 +775,7 @@ bs_fg <- bs_ott %>%
     group = case_when(
       # Phyto
       phylum == "Cyanobacteria" ~ "Blue/green",
-      phylum == "Ochrophyta" ~ "Stramenopile",
+      phylum %in% c("Ochrophyta", "Bigyra") ~ "Stramenopile",
       phylum == "Glaucophyta" ~ "Glaucophyte",
       phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
       phylum == "Bacillariophyta" ~ "Diatom",
@@ -780,6 +783,7 @@ bs_fg <- bs_ott %>%
       phylum == "Cryptophyta" ~ "Cryptomonad",
       phylum == "Haptophyta" ~ "Haptophyte",
       phylum == "Myzozoa" ~ "Dinoflagellate",
+      phylum == "Choanozoa" ~ "Opisthokont",
       
       # Zoo
       class == "Branchiopoda" ~ "Cladoceran",
@@ -855,19 +859,21 @@ bodysize_raw <- bs_fg %>%
     ),
     
     # Calculate mass
-    # Zooplankton: measurments are in micro so need to turn to mm first
-    
-    mass.z = case_when(
-      # using mass info
-      !is.na(body.mass) ~ body.mass,
-      !is.na(dry.mass) ~ dry.mass,
+
+    # a) convert linear measurements to dry weight
+    dw = case_when(
       
       # using length weight regression equations - calculates micrograms so don't need to chnage any of those
-      lw.group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
-      lw.group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
-      lw.group == "daphniidae" ~ 1.5072 + (2.761*log(length/1000)),
-      lw.group == "cladocera" ~ 1.7512 + (2.653*log(length/1000)), 
-      lw.group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
+      # measurements are in micro so need to turn to mm first for zooplankton
+      !is.na(length) & lw.group == "bosmina" ~ 3.0896 + (3.0395*log(length/1000)),
+      !is.na(length) & lw.group == "daphnia" ~ 1.4681 + (2.8292*log(length/1000)),
+      !is.na(length) & lw.group == "daphniidae" ~ 1.5072 + (2.761*log(length/1000)),
+      !is.na(length) & lw.group == "cladocera" ~ 1.7512 + (2.653*log(length/1000)), 
+      !is.na(length) & lw.group == "copepoda" ~ 1.9526 + (2.399*log(length/1000)),
+      
+      # using mass info
+      is.na(length) & !is.na(body.mass) ~ body.mass,
+      is.na(length) & !is.na(dry.mass) ~ dry.mass,
       
       # Rotifers
       lw.group == "rotifer" & stri_detect_regex(taxa.name, "Anuraeopsis") ~ 0.33*((length/1000)*(width/1000)*(height/1000)),
@@ -893,25 +899,45 @@ bodysize_raw <- bs_fg %>%
       TRUE ~ NA
     ),
     
-    # unlog the mass
-    mass.z = exp(mass.z),
+    # unlog the dw
+    dw = exp(dw),
     
-    # Phytoplankton
-    
-    # Assume density of 1
-    mass.p = case_when(
-      !is.na(body.mass) & type == "Phytoplankton" ~ body.mass,
-      is.na(body.mass) & type == "Phytoplankton" ~ biovolume*(1*10^-6),
-      is.na(body.mass) & group == "Ciliate" ~ biovolume*(1*10^-6),
+    # b) convert dry weight and volume to carbon mass
+    c.pg.p = case_when(
+      group == "Diatom" ~ (0.288*(biovolume^0.811))/1000000,
+      group == "Blue/green" ~ (0.218*(biovolume^0.85))/1000000,
+      type == "Phytoplankton" ~ (0.216*(biovolume^0.939))/1000000,
+      group == "Ciliate" ~ (0.310*(biovolume^0.983))/1000000,
+      
       TRUE ~ NA
     ),
     
-    # Combine together
-    mass = if_else(
-      !is.na(mass.z),
-      mass.z,
-      mass.p
+    c.pg.z = case_when(
+      !is.na(dw) ~ (log(dw) - 0.499)/0.991,
+      
+      TRUE ~ NA
     ),
+    
+    c.pg.z = exp(c.pg.z),
+    
+    cm = if_else(
+      !is.na(c.pg.p),
+      c.pg.p,
+      c.pg.z
+    ),
+    
+    # c) convert carbon mass to wet mass
+    #ww = case_when(
+    #  type == "Phytoplankton" ~ (0.07*c.pg)/1000000,
+    #  group == "Ciliate" ~ (0.07*c.pg)/1000000,
+      
+    #  TRUE ~ NA
+    #),
+    
+    #mass.ww.dw = case_when(
+    #  !is.na(dw) ~ dw,
+    #  !is.na(ww) ~ ww
+    #),
     
     # make a mld column
     mld = case_when(
@@ -920,38 +946,24 @@ bodysize_raw <- bs_fg %>%
     )
   ) %>% 
   
-  # remove any without a mass measurement
+  # remove obvious outliers and any without a mass measurement
   filter(
-    !is.na(mass)
-  ) %>%
-  
-  # Remove obvious errors
-  mutate(
-    outlier = case_when(
-      mass.z > 1000 ~ "outlier",
-      
-      TRUE ~ "keep"
-    )
-  ) %>% 
-  
-  filter(
-    outlier == "keep"
-  )
+    !is.na(cm),
+    cm < 1000000 # obvious outliers
+  ) 
+
   
 bodysize <- bodysize_raw %>% 
+  
   # calculate average for each source
   group_by(
     individual.uid
   ) %>% 
   
   summarise(
-    mass = mean(mass),
+    mass = mean(cm),
     .groups = "drop"
-  ) %>% 
-  
-  mutate(
-    mass.log = log10(mass)
-  ) %>% 
+  ) %>%
   
   left_join(
     select(
@@ -966,7 +978,7 @@ bodysize <- bodysize_raw %>%
   # select columns and reorder
   select(
     uid, source.code, original.sources, taxa.name,
-    mass, mass.log, mld,
+    mass, mld,
     ott.id, type, family, order, class, phylum, kingdom,
     group, fg, 
     sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
@@ -975,9 +987,10 @@ bodysize <- bodysize_raw %>%
 
 # View data ----
 
-ggplot(bodysize, aes(x = mass.log, fill = type))+
+ggplot(bodysize, aes(x = log10(mass), fill = type))+
   geom_histogram(binwidth = 0.2)+
-  facet_wrap(~type, ncol = 1)
+  facet_wrap(~type, ncol = 1)+
+  scale_y_log10()
 
 
 # save

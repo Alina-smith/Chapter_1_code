@@ -30,20 +30,42 @@ avg_mass <- bs %>%
   # add back in extra info
   left_join(
     taxonomy_list, by = "taxa.name"
-  ) %>% 
-  filter(
-    !is.na(group)
-  )
+  ) 
 
 # Plot
-ggplot(avg_mass, aes(x = log.mass, fill = type))+
+# facet by type
+spread_type <- ggplot(avg_mass, aes(x = log.mass, fill = type))+
   geom_histogram(binwidth = 0.5)+
-  facet_wrap(~type, scales = "free_y", ncol = 1)
+  facet_wrap(~type, ncol = 1)+
+  scale_y_log10()
 
-ggplot(avg_mass, aes(x = log.mass, fill = type))+
-  geom_histogram(binwidth = 1)+
-  facet_wrap(~group, scales = "free_y")
+spread_type # View
 
-ggplot(avg_mass, aes(x = log.mass, fill = type))+
-  geom_histogram(binwidth = 0.5)+
-  facet_wrap(~fg, scales = "free_y")
+# save
+ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type)
+
+# Facet by group
+spread_group <- ggplot(avg_mass, aes(x = log.mass, fill = type))+
+  geom_histogram(binwidth = 0.8)+
+  facet_wrap(~group) +
+  scale_y_log10()
+
+spread_group
+
+# save
+ggsave("R/Data_outputs/plots/spread_group.png", plot = spread_group)
+
+# Facet by fg
+spread_fg <- ggplot(avg_mass, aes(x = log.mass, fill = type))+
+  geom_histogram(binwidth = 0.8)+
+  facet_wrap(~fg) +
+  scale_y_log10()
+
+spread_fg
+
+# save
+ggsave("R/Data_outputs/plots/spread_fg.png", plot = spread_fg)
+
+
+
+
