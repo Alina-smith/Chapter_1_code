@@ -26,6 +26,15 @@ sources_list_update <- readRDS("R/Data_outputs/database_products/sources_list_up
 ## Initial formatting ----
 bs_format <- bodysize_location %>% 
   
+  # remove columns not needed now
+  select(
+    - sample.size,
+    - sample.year,
+    - sample.month,
+    - sex,
+    - reps
+  ) %>% 
+  
   mutate(
     
     # Small misc edits
@@ -87,13 +96,13 @@ bs_format <- bodysize_location %>%
     nu %in% "individual"
   ) %>% 
   
-  # select and relocate columns - removing life stage and nu now as all adult individuals and don't need sex, reps, sample.size and error as majority don't have this
+  # select and relocate columns - removing life stage and nu now as all adult individuals
   
   select(
     individual.uid, uid, source.code, original.sources, type,
     nu, ind.per.nu, body.size, bodysize.measurement, units,
     genus, family, order, class, phylum, kingdom,
-    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+    location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
   
   # rename the taxa.name as genus as I am only going to genus level and filter out ones that are a higher resolution
@@ -143,6 +152,7 @@ bs_avg <- bs_format %>%
     uid = row_number()
   )
 
+
 ## Genus ott ids ----
 # Rerun names through tol now they are genus to get ott ids
 genus_list <- bs_avg %>% 
@@ -180,6 +190,7 @@ bs_ott <- bs_avg %>%
 saveRDS(bs_ott, "R/data_outputs/database_products/bs_ott.rds")
 
 
+############################## Now have a dataset of raw bodysizes with just one per individual but not functional group data
 
 # New functional groups ----
 
@@ -814,10 +825,19 @@ bs_fg <- bs_ott %>%
   select(individual.uid, uid, source.code, original.sources, type, taxa.name,
                body.size, bodysize.measurement,
                ott.id, group, lw.group, fg, family, order, class, phylum, kingdom,
-               sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude)
+              location.code, habitat, location, country, continent, latitude, longitude)
 
 # Calculating masses ----
 # Calculate the masses from length weight and remove any obvious errors
+
+# get extra info to add in
+extra_raw <- bs_fg %>% 
+  distinct(individual.uid, .keep_all = TRUE) %>% 
+  
+  select(
+    - bodysize.measurement,
+    - body.size
+  )
 
 bodysize_raw <- bs_fg %>% 
   
@@ -835,9 +855,7 @@ bodysize_raw <- bs_fg %>%
   
   # join all extra data back 
   left_join(
-    select(
-      bs_fg, - body.size, - bodysize.measurement
-    ), by = "individual.uid"
+    extra_raw, by = "individual.uid"
   ) %>% 
   
   # Dry and wet mass
@@ -903,41 +921,15 @@ bodysize_raw <- bs_fg %>%
     dw = exp(dw),
     
     # b) convert dry weight and volume to carbon mass
-    c.pg.p = case_when(
-      group == "Diatom" ~ (0.288*(biovolume^0.811))/1000000,
-      group == "Blue/green" ~ (0.218*(biovolume^0.85))/1000000,
-      type == "Phytoplankton" ~ (0.216*(biovolume^0.939))/1000000,
-      group == "Ciliate" ~ (0.310*(biovolume^0.983))/1000000,
+    c.pg = case_when(
+      group == "Diatom" ~ 0.288*(biovolume^0.811),
+      group == "Blue/green" ~ 0.218*(biovolume^0.85),
+      type == "Phytoplankton" ~ 0.216*(biovolume^0.939),
+      group == "Ciliate" ~ 0.310*(biovolume^0.983),
+      !is.na(dw) ~ (dw/0.5)*1000000, # first part is converting to ug and then divide by 1000000 to get pg
       
       TRUE ~ NA
     ),
-    
-    c.pg.z = case_when(
-      !is.na(dw) ~ (log(dw) - 0.499)/0.991,
-      
-      TRUE ~ NA
-    ),
-    
-    c.pg.z = exp(c.pg.z),
-    
-    cm = if_else(
-      !is.na(c.pg.p),
-      c.pg.p,
-      c.pg.z
-    ),
-    
-    # c) convert carbon mass to wet mass
-    #ww = case_when(
-    #  type == "Phytoplankton" ~ (0.07*c.pg)/1000000,
-    #  group == "Ciliate" ~ (0.07*c.pg)/1000000,
-      
-    #  TRUE ~ NA
-    #),
-    
-    #mass.ww.dw = case_when(
-    #  !is.na(dw) ~ dw,
-    #  !is.na(ww) ~ ww
-    #),
     
     # make a mld column
     mld = case_when(
@@ -947,33 +939,125 @@ bodysize_raw <- bs_fg %>%
   ) %>% 
   
   # remove obvious outliers and any without a mass measurement
+  mutate(
+    outlier = case_when(
+      # na
+      is.na(c.pg) ~ "outlier",
+      # phyto
+      c.pg > 200000 & type == "Phytoplankton" ~ "outlier",
+      # zoo
+      c.pg > 2.5e+10 & type == "Zooplankton" ~ "outlier",
+      
+      # random ones
+      uid %in% c("4260", "4253", "4276","4255") ~ "outlier",
+      
+      TRUE ~ NA
+    )
+  ) %>% 
+  
   filter(
-    !is.na(cm),
-    cm < 1000000 # obvious outliers
-  ) 
+    is.na(outlier)
+  ) %>% 
+  
+  select(
+    uid, individual.uid, source.code, original.sources, taxa.name,
+    c.pg, mld,
+    ott.id, type, family, order, class, phylum, kingdom,
+    group, fg, 
+    location.code, habitat, location, country, continent, latitude, longitude
+  )
 
   
-bodysize <- bodysize_raw %>% 
+# calculate the mean and standard deviation 
+outliers_info <- bodysize_raw %>% 
   
-  # calculate average for each source
   group_by(
-    individual.uid
+    taxa.name
   ) %>% 
   
   summarise(
-    mass = mean(cm),
+    mean = mean(c.pg),
+    sd = sd(c.pg),
     .groups = "drop"
-  ) %>%
+  )
+
+# Remove outliers and get average for multiple of the same individual.uid
+bodysize_outliers <- bodysize_raw %>% 
+  
+  left_join(outliers_info, by = "taxa.name") %>% 
+  
+  filter(
+    c.pg <= mean + (sd * 2) & c.pg >= mean - (sd * 2)
+  ) %>% 
+  
+  # calculate average for each source and location
+  group_by(
+    individual.uid, location.code, source.code, original.sources
+  ) %>% 
+  
+  summarise(
+    mass = mean(c.pg),
+    mld = mean(mld),
+    .groups = "drop"
+  )
+
+# add in extra info
+locations_updated <- bodysize_raw %>% 
+  select(
+    location.code,
+    habitat, 
+    location,
+    country,
+    continent,
+    longitude,
+    latitude
+  ) %>% 
+
+  distinct(
+    location.code, .keep_all = TRUE
+  )%>% 
+  
+  filter(
+    location.code %in% bodysize_outliers$location.code
+  )
+
+tax_updated <- bodysize_raw %>% 
+  select(
+    individual.uid,
+    ott.id,
+    type,
+    group,
+    fg,
+    taxa.name,
+    family,
+    order,
+    class,
+    phylum,
+    kingdom
+  ) %>% 
+  distinct(
+    individual.uid, .keep_all = TRUE
+  ) %>% 
+  
+  filter(
+    individual.uid %in% bodysize_outliers$individual.uid
+  )
+
+
+# Final bits
+bodysize <- bodysize_outliers %>%
   
   left_join(
-    select(
-      bodysize_raw,
-      individual.uid, uid, source.code, original.sources, taxa.name, mld,
-      ott.id, type, family, order, class, phylum, kingdom,
-      group, fg, 
-      sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
-    ), by = "individual.uid"
+    locations_updated, by = "location.code"
   ) %>% 
+  
+  left_join(
+    tax_updated, by = "individual.uid"
+  ) %>% 
+  
+  mutate(
+    uid = row_number()
+  )%>% 
   
   # select columns and reorder
   select(
@@ -981,14 +1065,13 @@ bodysize <- bodysize_raw %>%
     mass, mld,
     ott.id, type, family, order, class, phylum, kingdom,
     group, fg, 
-    sample.year, sample.month, location.code, habitat, location, country, continent, latitude, longitude
+    location.code, habitat, location, country, continent, latitude, longitude
   )
 
 
 # View data ----
-
-ggplot(bodysize, aes(x = log10(mass), fill = type))+
-  geom_histogram(binwidth = 0.2)+
+ggplot(bodysize, aes(x = log10(mass), fill = type)) +
+  geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
