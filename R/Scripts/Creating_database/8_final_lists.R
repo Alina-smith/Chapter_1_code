@@ -8,14 +8,14 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-bodysize <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
+bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
 sources_list <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
-location_list <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
+location_list_old <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- bodysize %>% 
+location_codes <- bodysize_traits %>% 
   
   # select column
   select(
@@ -44,18 +44,18 @@ location_codes <- bodysize %>%
   pull(location.code)
   
 # select locations in location_codes
-location <- location_list %>% 
+locations_list <- location_list_old %>% 
   filter(
     location.code %in% location_codes
   )
 
 # save
-saveRDS(location, "R/data_outputs/database_products/final_products/location.rds")
+saveRDS(locations_list, "R/data_outputs/database_products/final_products/locations_list.rds")
 
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- bodysize %>% 
+source_codes <- bodysize_traits %>% 
   
   # select columns
   select(
@@ -96,7 +96,7 @@ source_codes <- bodysize %>%
   )
   
 # Select sources that are in source_codes
-sources <- sources_list %>% 
+sources_list <- sources_list %>% 
   
   # rename new.source.code and source.code and remove old source.code
   select(
@@ -118,10 +118,10 @@ sources <- sources_list %>%
   )
   
 # save
-saveRDS(sources, "R/data_outputs/database_products/final_products/sources.rds")
+saveRDS(sources_list, "R/data_outputs/database_products/final_products/sources_list.rds")
 
 # taxonomy ----
-taxonomy_list <- bodysize %>% 
+taxonomy_list <- bodysize_traits %>% 
   
   select(
     taxa.name, family, order, class, phylum, kingdom, type, group, fg

@@ -359,7 +359,7 @@ habitats <- bodysize_location_codes %>%
 
 
 # Adding all to main data ----
-bodysize_location <- bodysize_location_codes %>% 
+bodysize_formatted <- bodysize_location_codes %>% 
   left_join(latitudes, by = "uid") %>% 
   left_join(longitudes, by = "uid") %>% 
   left_join(countries, by = "uid") %>% 
@@ -381,10 +381,10 @@ bodysize_location <- bodysize_location_codes %>%
   )
 
 # save
-saveRDS(bodysize_location, file = "R/Data_outputs/database_products/bodysize_location.rds")
+saveRDS(bodysize_formatted, file = "R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
 
 # update location list
-locations_list_update <- bodysize_location %>% 
+locations_list_update <- bodysize_formatted %>% 
   
   select(
     location.code

@@ -1,21 +1,13 @@
-# Aim of script: Standardising the databases and merging into one
+# Aim of script: Standardising the current available databases and merging into one
 
-# Description of databases ----
-  # Rimet - all phyto
-  # Kremer - all phyto
-  # Odume - all zoo or insects 
-  # Hebert - all zoo
-  # Gavrilko - all zoo
-  # Laplace-Treyture - all phyto
-  # Neury-Ormanni - all phyto
 
-# Packages 
+# Packages ----
 library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
 
-# data ----
+# Import data ----
 rimet <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimmet")
 kremer <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Kremer")
 odume <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Odume")
@@ -32,6 +24,7 @@ rimet_2012_sources <- read_xlsx("raw_data/master_db_data.xlsx", sheet = "Rimet_2
 
 # Rimmet ----
 # All phyto
+
 rimet_formatted <- rimet %>% 
   
   ## Select columns ----

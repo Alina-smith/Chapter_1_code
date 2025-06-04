@@ -25,12 +25,34 @@ library(treeio)
 library(ggtreeExtra)
 
 # Import data ----
-bodysize <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
+bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
 
 # Format data ----
 # Get a taxonomy list to add in in later steps
 
-plot_data <- bodysize %>% 
+# Phyto
+p_data <- bodysize_traits %>% 
+  
+  filter(
+    type == "Phytoplankton"
+  ) %>% 
+  
+  select(
+    ott.id, taxa.name, type, phylum, kingdom, family, order, class, fg, group
+  ) %>% 
+  
+  distinct(taxa.name, .keep_all = TRUE) %>% 
+  
+  mutate(
+    taxa.name = tolower(taxa.name)
+  ) 
+
+# Phyto
+z_data <- bodysize_traits %>% 
+  
+  filter(
+    type == "Zooplankton"
+  ) %>% 
   
   select(
     ott.id, taxa.name, type, phylum, kingdom, family, order, class, fg, group
@@ -45,53 +67,43 @@ plot_data <- bodysize %>%
 # Filter for in tree ----
 
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
-in_tree <- is_in_tree(ott_ids = plot_data$ott.id)
+in_tree_p <- is_in_tree(ott_ids = p_data$ott.id)
+in_tree_z <- is_in_tree(ott_ids = z_data$ott.id)
 
 # Save
-saveRDS(in_tree, "R/data_outputs/phylo_tree/in_tree.rds")
+saveRDS(in_tree_p, "R/data_outputs/phylo_tree/in_tree_p.rds")
+saveRDS(in_tree_z, "R/data_outputs/phylo_tree/in_tree_z.rds")
 
 # View data
-in_tree
+in_tree_p
+in_tree_z
 
 # See which ones are in and out
-sum(in_tree == TRUE) # 819
-sum(in_tree == FALSE) # 152
+sum(in_tree_p == TRUE) # 454
+sum(in_tree_p == FALSE) # 99
+
+sum(in_tree_z == TRUE) # 139
+sum(in_tree_z == FALSE) # 6
 
 # Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 
 ## Phyto ----
 # get list of just species in the tree split by phyto and zoo
-taxa_in_tree_p <- plot_data[in_tree, ] %>% 
-  
-  left_join(
-    taxa, by = c("taxa.name" = "search_string")
-  ) %>% 
-  
-  filter(
-    type =="Phytoplankton"
-  )
+taxa_in_tree_p <- p_data[in_tree_p, ]
 
 # Save
 saveRDS(taxa_in_tree_p, "R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
 
 ## Zoo ----
-taxa_in_tree_z <- plot_data[in_tree, ] %>% 
-  
-  left_join(
-    taxa, by = c("taxa.name" = "search_string")
-  ) %>% 
-  
-  filter(
-    type =="Zooplankton"
-  )
+taxa_in_tree_z <- z_data[in_tree_z, ]
 
 # Save
 saveRDS(taxa_in_tree_z, "R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
 
 # Make trees
-tree_pre_plot_p <- tol_induced_subtree(ott_ids = taxa_in_tree_p$ott_id)
-tree_pre_plot_z <- tol_induced_subtree(ott_ids = taxa_in_tree_z$ott_id)
+tree_pre_plot_p <- tol_induced_subtree(ott_ids = taxa_in_tree_p$ott.id)
+tree_pre_plot_z <- tol_induced_subtree(ott_ids = taxa_in_tree_z$ott.id)
 
 #save tree out here before adapting it for plotting: 
 write.nexus(tree_pre_plot_p, file="R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
@@ -120,7 +132,7 @@ plot(tree_pre_plot_z, show.tip.label = FALSE)
 # Need to add in the tip labels to the data for plotting with group info
 
 ### Phyto ----
-new_tips_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the tip labels in the tree
+taxa_in_tree_full_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the tip labels in the tree
   
   rename(
     tip.label = `tree_pre_plot_p$tip.label`
@@ -128,12 +140,13 @@ new_tips_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the tip labels 
   
   mutate(
     # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE)
+    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
+    stripped.tip.label = tolower(stripped.tip.label)
   ) %>% 
   
   # Join in the extra data
   left_join(
-    taxa_in_tree_p, by = c("stripped.tip.label" = "unique_name")
+    taxa_in_tree_p, by = c("stripped.tip.label" = "taxa.name")
   ) %>% 
   
   # Add in to make plotting labels look neater
@@ -151,7 +164,7 @@ new_tips_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the tip labels 
   )
 
 ### Zoo ----
-new_tips_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the tip labels in the tree
+taxa_in_tree_full_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the tip labels in the tree
   
   rename(
     tip.label = `tree_pre_plot_z$tip.label`
@@ -159,12 +172,13 @@ new_tips_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the tip labels 
   
   mutate(
     # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE)
+    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
+    stripped.tip.label = tolower(stripped.tip.label)
   ) %>% 
   
   # Join in the extra data
   left_join(
-    taxa_in_tree_z, by = c("stripped.tip.label" = "unique_name")
+    taxa_in_tree_z, by = c("stripped.tip.label" = "taxa.name")
   ) %>% 
   
   # Add in to make plotting labels look neater
@@ -181,14 +195,18 @@ new_tips_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the tip labels 
     group_label = paste0("Group: ", group)
   )
 
+# Save
+saveRDS(taxa_in_tree_full_p, "R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds")
+saveRDS(taxa_in_tree_full_z, "R/data_outputs/phylo_tree/taxa_in_tree_full_z.rds")
+
 ## Circular ----
 
 ### Phyto ----
-circular_plot_p <- ggtree(tree_pre_plot_p, branch.length='none', layout='circular') 
+circular_plot_p <- ggtree(tree_pre_plot_p, branch.length='none', layout='circular')
 circular_plot_p
 
 #### Group info ----
-circular_plot_groups_p <- circular_plot_p %<+% new_tips_p +
+circular_plot_groups_p <- circular_plot_p %<+% taxa_in_tree_full_p +
   geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA)+
   
   labs(colour = "Traditional groupings")+
@@ -207,7 +225,11 @@ ggsave("R/data_outputs/plots/circular_plot_groups_p.pdf", width = 7, height = 5,
 #### Mass info ----
 
 ##### Format data ----
-mass_data_p <- bodysize %>% 
+mass_data_p <- bodysize_traits %>% 
+  
+  filter(
+    type == "Phytoplankton"
+  ) %>% 
   
   # get mean mass for each genera
   group_by(taxa.name) %>% 
@@ -218,11 +240,12 @@ mass_data_p <- bodysize %>%
   ) %>% 
   
   mutate(
-    log.mass = log10(mean.mass)
+    log.mass = log10(mean.mass),
+    taxa.name = tolower(taxa.name)
   ) %>% 
   
   left_join(
-    new_tips_p, by = "taxa.name"
+    taxa_in_tree_full_p, by = "taxa.name"
   ) %>% 
   
   # filter ones with no tip label as these are ones that are not in tree
@@ -262,7 +285,7 @@ circular_plot_z <- ggtree(tree_pre_plot_z, branch.length='none', layout='circula
 circular_plot_z
 
 #### Group info ----
-circular_plot_groups_z <- circular_plot_z %<+% new_tips_z +
+circular_plot_groups_z <- circular_plot_z %<+% taxa_in_tree_full_z +
   geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA)+
   
   labs(colour = "Traditional groupings")+
@@ -280,7 +303,11 @@ ggsave("R/data_outputs/plots/circular_plot_groups_z.pdf", width = 7, height = 5,
 
 #### Mass info ----
 ##### Format data ----
-mass_data_z <- bodysize %>% 
+mass_data_z <- bodysize_traits %>% 
+  
+  filter(
+    type == "Zooplankton"
+  ) %>% 
   
   # get mean mass for each genera
   group_by(taxa.name) %>% 
@@ -291,11 +318,12 @@ mass_data_z <- bodysize %>%
   ) %>% 
   
   mutate(
-    log.mass = log10(mean.mass)
+    log.mass = log10(mean.mass),
+    taxa.name = tolower(taxa.name)
   ) %>% 
   
   left_join(
-    new_tips_z, by = "taxa.name"
+    taxa_in_tree_full_z, by = "taxa.name"
   ) %>% 
   
   # filter ones with no tip label as these are ones that are not in tree

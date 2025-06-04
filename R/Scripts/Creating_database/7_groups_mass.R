@@ -17,14 +17,14 @@ library(rotl)
 # Final list of all data including phyto and zooplankton with groups and mass
 
 # Import data ----
-bodysize_location <- readRDS("R/Data_outputs/database_products/bodysize_location.rds")
+bodysize_formatted <- readRDS("R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
 tax_list_raw <- readRDS("R/Data_outputs/database_products/taxonomy/tax_list_raw.rds")
 sources_list_update <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
 
 # Getting averages for each source ----
 
 ## Initial formatting ----
-bs_format <- bodysize_location %>% 
+bs_format <- bodysize_formatted %>% 
   
   # remove columns not needed now
   select(
@@ -164,7 +164,7 @@ genus_ott <- tnrs_match_names(genus_list$taxa.name)
 unique(is.na(genus_ott$ott_id))
 
 # Add in ott_ids to data
-bs_ott <- bs_avg %>% 
+bodysize_genus <- bs_avg %>% 
   
   # Set the taxa.name to lower case to match the search string
   mutate(
@@ -187,7 +187,7 @@ bs_ott <- bs_avg %>%
     ott.id = ott_id
   )
 
-saveRDS(bs_ott, "R/data_outputs/database_products/bs_ott.rds")
+saveRDS(bodysize_genus, "R/data_outputs/database_products/final_products/bodysize_genus.rds")
 
 
 ############################## Now have a dataset of raw bodysizes with just one per individual but not functional group data
@@ -711,7 +711,7 @@ saveRDS(r_groups, "R/data_outputs/database_products/r_groups.rds")
 #### Add groups to main data ----
 
 # Add to data
-bs_fg <- bs_ott %>% 
+bs_fg <- bodysize_genus %>% 
   
   # genus
   left_join(
@@ -1045,7 +1045,7 @@ tax_updated <- bodysize_raw %>%
 
 
 # Final bits
-bodysize <- bodysize_outliers %>%
+bodysize_traits <- bodysize_outliers %>%
   
   left_join(
     locations_updated, by = "location.code"
@@ -1070,14 +1070,14 @@ bodysize <- bodysize_outliers %>%
 
 
 # View data ----
-ggplot(bodysize, aes(x = log10(mass), fill = type)) +
+ggplot(bodysize_traits, aes(x = log10(mass), fill = type)) +
   geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
 
 # save
-saveRDS(bodysize, file = "R/Data_outputs/database_products/final_products/bodysize.rds")
+saveRDS(bodysize_traits, file = "R/Data_outputs/database_products/final_products/bodysize_traits.rds")
 
 
 

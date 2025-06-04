@@ -40,6 +40,17 @@ spread_type # View
 # save
 ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type)
 
+# Facet by phyla
+spread_phylum <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
+  geom_histogram(binwidth = 0.8)+
+  facet_wrap(~phylum) +
+  scale_y_log10()
+
+spread_phylum
+
+# save
+ggsave("R/Data_outputs/plots/spread_phylum.png", plot = spread_phylum)
+
 # Facet by group
 spread_group <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
   geom_histogram(binwidth = 0.8)+
