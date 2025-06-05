@@ -29,7 +29,6 @@ tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
 tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
 
 traits_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds") %>% 
-  head(100) %>% 
   select(
     tip.label, taxa.name, fg
   ) %>% 
@@ -84,6 +83,7 @@ fit_p <- corHMM(phy = phy_p,
                  rate.cat = 1, # simple Mk model
                  model = "ARD", # all rates differ
                  node.states = "marginal",
+                fixed.nodes = TRUE,
                  get.tip.states = TRUE) # keep reconstructed tips
 # `fit$tip.states` is a matrix: rows = tips, cols = 5 states (likelihoods)
 
@@ -101,20 +101,20 @@ fit_z <- corHMM(phy = phy_z,
 # Get the imputed data ----
 #############################################
 ## Phyto ----
-tip_recon_p <- data.frame(tip.label = rownames(fit_p$tip.states),
-                           fit_p$tip.states)
+tip_recon_z <- data.frame(tip.label = rownames(fit_z$tip.states),
+                           fit_z$tip.states)
 
 # Define how many functional groups
-levels_p = 3
+levels_z = 17
 
 # Select the imputed data
-imputed_p <-  dat_cor_p %>%
-  bind_cols(select(tip_recon_me, -tip.label)) %>%
-  mutate(imputed_state = ifelse(diet == "?",
-                                max.col(tip_recon_me[,c(2:4)]),
-                                as.character(diet)))
+imputed_z <-  dat_cor_z %>%
+  bind_cols(select(tip_recon_z, -tip.label)) %>%
+  mutate(imputed_state = ifelse(fg == "?",
+                                max.col(tip_recon_z[,c(2:4)]),
+                                as.character(fg)))
 
-imputed_all = left_join(imputed, select(
+imputed_all_z = left_join(imputed_z, select(
   all_info, - diet
 ), by = "tip.label")
 
