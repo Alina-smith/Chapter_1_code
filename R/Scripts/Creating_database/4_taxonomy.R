@@ -5,10 +5,10 @@
 # 2) Resolved names:  Run the cleaned names through rotl::tnrs_match_names to get most up to date names and then manually fix any that weren't picked up
 # 3) Taxonomy:        Run cleaned names through taxize::classification with tol to get taxonomy and then manuallu fill in any gaps
 
-# Last updated: 19/05/2025
-# Data run through veryfier on 19/05/2025
-# Data run through tnrs_match_names on 19/05/2025
-# Data ran through classification on 19/05/2025
+# Last updated: 11/06/2025
+# Data run through veryfier on 11/06/2025
+# Data run through tnrs_match_names on 11/06/2025
+# Data ran through classification on 11/06/2025
 
 # Packages ----
 
@@ -786,17 +786,14 @@ saveRDS(in_tree_tax, "R/data_outputs/database_products/taxonomy/in_tree_tax.rds"
 in_tree_tax
 
 # See which ones are in and out
-sum(in_tree_tax == TRUE) # 4747
-sum(in_tree_tax == FALSE) # 758
+sum(in_tree_tax == TRUE) # 4737
+sum(in_tree_tax == FALSE) # 754
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 
 # get list of just species in the tree
-taxa_in_tree <- phylo_plot_data[in_tree_tax, ] %>% 
-  filter(
-    kingdom == "Protozoa"
-  )
+taxa_in_tree <- phylo_plot_data[in_tree_tax, ]
 
 # Make tree
 tree <- tol_induced_subtree(ott_ids = taxa_in_tree$ott.id)
@@ -866,10 +863,8 @@ circular_plot
 ## Plotting circular tree with group info ----
 
 circular_plot <- circular_plot %<+% phylo_plot_data_update +
-  #geom_tippoint(aes(x = x + 5, color = class_label), size = 3, show.legend = TRUE)
-  geom_tippoint(aes(x = x + 5, color = phylum_label), size = 3, show.legend = TRUE)
-  #geom_tippoint(aes(x = x + 7, color = kingdom_label), size = 3, show.legend = TRUE) 
-+
+  geom_tippoint(aes(x = x + 5, color = phylum_label), size = 3, show.legend = TRUE) +
+  geom_tippoint(aes(x = x + 7, color = kingdom_label), size = 3, show.legend = TRUE) +
   
   scale_color_manual(values =
                        c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#CC5500", "Kingdom: Chromista" = "#00008B", "Kingdom: Animalia" = "#8B0000",
@@ -964,8 +959,8 @@ saveRDS(in_tree_tax_2, "R/data_outputs/database_products/taxonomy/in_tree_tax_2.
 in_tree_tax_2
 
 # See which ones are in and out
-sum(in_tree_tax_2 == TRUE) # 4749
-sum(in_tree_tax_2 == FALSE) # 744
+sum(in_tree_tax_2 == TRUE) # 4740
+sum(in_tree_tax_2 == FALSE) # 739
 
 ## Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
@@ -1193,3 +1188,4 @@ bodysize_taxonomy <-  bodysize_raw %>%
 
 # Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/database_products/bodysize_taxonomy.rds")
+

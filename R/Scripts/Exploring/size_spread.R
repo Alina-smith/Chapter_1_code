@@ -8,7 +8,7 @@ library(ggplot2)
 library(patchwork)
 
 # Import data ----
-bs <- readRDS("R/data_outputs/database_products/final_products/bodysize.rds")
+bs <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
 taxonomy_list <- readRDS("R/data_outputs/database_products/final_products/taxonomy_list.rds")
 
 

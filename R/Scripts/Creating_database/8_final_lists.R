@@ -9,7 +9,7 @@ library(stringi)
 
 # Data ----
 bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
-sources_list <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
+sources_list_old <- readRDS("R/Data_outputs/database_products/source_list_wt.rds")
 location_list_old <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
@@ -66,13 +66,6 @@ source_codes <- bodysize_traits %>%
   # separate out into their own columns
   separate(original.sources, into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"), sep = ";") %>% 
   
-  # make same type
-  mutate(
-    across(
-      everything(), ~ as.integer(.)
-      )
-    ) %>% 
-  
   # put onto their own rows 
   pivot_longer(
     cols = 1:17,
@@ -94,28 +87,22 @@ source_codes <- bodysize_traits %>%
   pull(
     source.code
   )
-  
+
 # Select sources that are in source_codes
-sources_list <- sources_list %>% 
-  
-  # rename new.source.code and source.code and remove old source.code
-  select(
-   - source.code
-  ) %>% 
-  
-  rename(
-    source.code = new.source.code
-  ) %>% 
+sources_list <- sources_list_old %>% 
   
   # select ones in source_codes
   filter(
     source.code %in% source_codes
   ) %>% 
   
+  distinct(source.code, .keep_all = TRUE) %>% 
+  
   # select and reorder
   select(
     source.code, authors, year, title, publication, volume, issue, start.page, end.page, doi, ISSN, ISBN
-  )
+  ) 
+
   
 # save
 saveRDS(sources_list, "R/data_outputs/database_products/final_products/sources_list.rds")

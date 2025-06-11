@@ -10,25 +10,11 @@ library(stringi)
 # Data ----
 location_raw <- read_xlsx("raw_data/location_data_full.xlsx", sheet = "location_raw")
 bodysize_sources <- readRDS("R/Data_outputs/database_products/bodysize_sources.rds")
-new_sources <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
+sources_list_nd <- readRDS("R/Data_outputs/database_products/sources_list_nd.rds")
 
 # Edit location list ----
 # need to add source.code to join.location to make it easier to left join as some sources have the same join.locationeven though they are different locations
 location_join <- location_raw %>% 
-  
-  # update with new source codes
-  left_join(., select(
-    new_sources, source.code, new.source.code
-    ), by = "source.code"
-  ) %>% 
-  
-  select(
-    -source.code
-  ) %>% 
-  
-  rename(
-    source.code = new.source.code
-  ) %>% 
   
   mutate(
     join.location = paste(source.code, join.location, sep = "-")
@@ -66,7 +52,6 @@ bodysize_location_codes <- bodysize_sources %>%
   # pivot back to get seperate columns for each location.code
   pivot_wider(
     id_cols = uid,
-    #names_from = name,
     values_from = c(location.code, longitude, latitude, country, continent, location, habitat)
   ) %>% 
   rename_with(~ gsub("location.code_join.location", "location.code", .)) %>% 

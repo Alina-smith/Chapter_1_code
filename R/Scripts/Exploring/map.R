@@ -12,9 +12,9 @@ library(scatterpie)
 library(ggrepel)
 library(patchwork)
 
-location_list <- read_rds("R/Data_outputs/database_products/final_products/location.rds")
-source_list <- read_rds("R/Data_outputs/database_products/final_products/sources.rds")
-bs_data <- readRDS("R/Data_outputs/database_products/final_products/bodysize.rds")
+location_list <- read_rds("R/Data_outputs/database_products/final_products/locations_list.rds")
+source_list <- read_rds("R/Data_outputs/database_products/final_products/sources_list.rds")
+bs_data <- readRDS("R/Data_outputs/database_products/final_products/bodysize_traits.rds")
 
 # format data ----
 # phyto ----

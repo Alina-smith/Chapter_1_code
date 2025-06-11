@@ -1556,13 +1556,18 @@ rimet2012_formatted <- rimet2012 %>%
   # left join original.source.codes from rimet_2012_sources
   left_join(
     select(
-      rimet_2012_sources, source.code, join.source
-      ), by = c("join.all" = "join.source")) %>% 
+      db_source_list, source.code, join.source
+      ), by = c("join.all" = "join.source")
+    ) %>% 
   
   # rename
   rename(
     original.source.code.1 = source.code
   ) %>%
+  
+  filter(
+    !is.na(original.source.code.1)
+  ) %>% 
   
   ## Sample.size etc ----
   # left join extra info by join.all column

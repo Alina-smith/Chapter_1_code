@@ -97,7 +97,7 @@ t_rimmet <- rimmet %>%
       "Motile",
       "Non-motile"
     ),
-    motility.method.1 = case_when(
+    motility.method = case_when(
       `Mobility apparatus: Flagella` == 1 & `Mobility apparatus: Raphe` == 1 ~ "Flagella/Raphe",
       `Mobility apparatus: Flagella` == 1 ~ "Flagella",
       `Mobility apparatus: Raphe` == 1 ~ "Raphe",
@@ -113,7 +113,7 @@ t_rimmet <- rimmet %>%
     ),
     ref = "rimmet",
     remove = if_else(
-      is.na(fg) & is.na(morpho.class.kruk2010) & is.na(motility.method.1) & is.na(body.shape) & is.na(trophic.group) & is.na(motility),
+      is.na(fg) & is.na(morpho.class.kruk2010) & is.na(motility.method) & is.na(body.shape) & is.na(trophic.group) & is.na(motility),
       "remove",
       "keep"
     )
@@ -160,7 +160,7 @@ t_padisak <- padisak %>%
 
 t_lt <- lt %>% 
   select(Taxa_Name, Reynolds_Group, Life_Form, Motility, Flagellum, Phytobs_Cell_Form, Nutrition) %>% 
-  rename(taxa.name = Taxa_Name, fg = Reynolds_Group, motility = Motility, motility.method.1 = Flagellum, life.form = Life_Form, body.shape = Phytobs_Cell_Form, trophic.group = Nutrition) %>% 
+  rename(taxa.name = Taxa_Name, fg = Reynolds_Group, motility = Motility, motility.method = Flagellum, life.form = Life_Form, body.shape = Phytobs_Cell_Form, trophic.group = Nutrition) %>% 
   # make edits
   mutate(
     motility = if_else(
@@ -168,8 +168,8 @@ t_lt <- lt %>%
       "Motile",
       "Non-motile"
     ),
-    motility.method.1 = if_else(
-      motility.method.1 == 1,
+    motility.method = if_else(
+      motility.method == 1,
       "Flagella",
       NA
     ),
@@ -180,7 +180,7 @@ t_lt <- lt %>%
     ),
     ref = "lt",
     remove = if_else(
-      is.na(fg) & is.na(motility.method.1) & is.na(body.shape) & is.na(trophic.group) & is.na(motility) & is.na(life.form),
+      is.na(fg) & is.na(motility.method) & is.na(body.shape) & is.na(trophic.group) & is.na(motility) & is.na(life.form),
       "remove",
       "keep"
     )
@@ -234,14 +234,12 @@ t_gavrilko <- gavrilko %>%
   ) %>%
   filter(remove == "keep") %>% 
   select(- capture, -primary.filtration, -secondary.filtration, -verification, -suction, -gathering, -swimming, -crawling, -remove) %>% 
-  distinct(taxa.name, .keep_all = TRUE) %>% 
-  separate(feeding.type, into = c("feeding.type.1", "feeding.type.2"), sep = "/") %>% 
-  separate(motility.method, into = c("motility.method.1", "motility.method.2"), sep = "/")
+  distinct(taxa.name, .keep_all = TRUE) 
 
 ### odume ----
 t_odume <- odume %>% 
   select(Taxon, Mobility, `Functional feeding group (FFG) (Schael 2006)`, `Body shape`, `Trophic status preferences`) %>% 
-  rename(taxa.name = Taxon, motility.method.1 = Mobility, feeding.type.1 = `Functional feeding group (FFG) (Schael 2006)`, body.shape = `Body shape`, trophic.group = `Trophic status preferences`) %>% 
+  rename(taxa.name = Taxon, motility.method = Mobility, feeding.type = `Functional feeding group (FFG) (Schael 2006)`, body.shape = `Body shape`, trophic.group = `Trophic status preferences`) %>% 
   filter(
     !is.na(taxa.name),
     !(taxa.name == "Taxon")
@@ -249,27 +247,27 @@ t_odume <- odume %>%
   # make edits
   mutate(
     motility = "Motile",
-    motility.method.1 = case_when(
-      motility.method.1 == "Crawler" ~ "Crawling",
-      motility.method.1 == "Burrower" ~ "Burrowing",
-      motility.method.1 == "Swimmer" ~ "Swimming",
-      motility.method.1 %in% c("Walker", "walker") ~ "Walking",
-      motility.method.1 == "Sprawler" ~ "Sprawling",
-      motility.method.1 == "Skater" ~ "Skating",
-      motility.method.1 == "Climber" ~ "Climbing",
+    motility.method = case_when(
+      motility.method == "Crawler" ~ "Crawling",
+      motility.method == "Burrower" ~ "Burrowing",
+      motility.method == "Swimmer" ~ "Swimming",
+      motility.method %in% c("Walker", "walker") ~ "Walking",
+      motility.method == "Sprawler" ~ "Sprawling",
+      motility.method == "Skater" ~ "Skating",
+      motility.method == "Climber" ~ "Climbing",
       TRUE ~ NA
     ),
-    feeding.type.1 = case_when(
-      stri_detect_regex(feeding.type.1, "(?i)Predator") ~ "Capture",
-      stri_detect_regex(feeding.type.1, "(?i)Filter feeder") ~ "Filtration",
-      stri_detect_regex(feeding.type.1, "(?i)Shredder") ~ "Shredder",
-      stri_detect_regex(feeding.type.1, "(?i)Scraper") ~ "Scraper",
-      stri_detect_regex(feeding.type.1, "(?i)Grazer") ~ "Grazer",
-      stri_detect_regex(feeding.type.1, "(?i)Deposit feeder") ~ "Deposit feeder",
+    feeding.type = case_when(
+      stri_detect_regex(feeding.type, "(?i)Predator") ~ "Capture",
+      stri_detect_regex(feeding.type, "(?i)Filter feeder") ~ "Filtration",
+      stri_detect_regex(feeding.type, "(?i)Shredder") ~ "Shredder",
+      stri_detect_regex(feeding.type, "(?i)Scraper") ~ "Scraper",
+      stri_detect_regex(feeding.type, "(?i)Grazer") ~ "Grazer",
+      stri_detect_regex(feeding.type, "(?i)Deposit feeder") ~ "Deposit feeder",
       TRUE ~ NA
     ),
     trophic.group = case_when(
-      stri_detect_regex(feeding.type.1, "(?i)Omnivore") ~ "Omnivore",
+      stri_detect_regex(feeding.type, "(?i)Omnivore") ~ "Omnivore",
       TRUE ~ NA
     ),
     body.shape = case_when(
@@ -282,7 +280,7 @@ t_odume <- odume %>%
     ),
     ref = "odume",
     remove = if_else(
-      is.na(body.shape) & is.na(motility.method.1) & is.na(motility) & is.na(feeding.type.1) & is.na(trophic.group),
+      is.na(body.shape) & is.na(motility.method) & is.na(motility) & is.na(feeding.type) & is.na(trophic.group),
       "remove",
       "keep"
     )
@@ -295,17 +293,17 @@ t_odume <- odume %>%
 
 t_no <- no %>% 
   select(Species, BodyShape, SubstrateRelation, TrophicType, FeedMode) %>% 
-  rename(taxa.name = Species, body.shape = BodyShape, motility.method.1 = SubstrateRelation, trophic.group = TrophicType, feeding.type.1 = FeedMode,) %>% 
+  rename(taxa.name = Species, body.shape = BodyShape, motility.method = SubstrateRelation, trophic.group = TrophicType, feeding.type = FeedMode,) %>% 
   # make edits
   mutate(
     motility = if_else(
-      !is.na(motility.method.1),
+      !is.na(motility.method),
       "Motile",
       NA
     ),
     ref = "no",
     remove = if_else(
-      is.na(body.shape) & is.na(motility.method.1) & is.na(motility) & is.na(feeding.type.1) & is.na(trophic.group),
+      is.na(body.shape) & is.na(motility.method) & is.na(motility) & is.na(feeding.type) & is.na(trophic.group),
       "remove",
       "keep"
     )
@@ -324,17 +322,17 @@ traits_raw <- bind_rows(t_padisak, t_rimmet, t_kruk, t_lt, t_wang, t_gavrilko, t
       NA,
       fg
     ),
-    motility.method.1 = case_when(
-      motility.method.1 == "Crawling_gliding" ~ "Crawling",
-      motility.method.1 == "Endobenthic" ~ NA,
-      motility.method.1 == "Swimmer" ~ "Swimming",
-      motility.method.1 == "Walker" ~ "Walking",
-      TRUE ~ motility.method.1
+    motility.method = case_when(
+      motility.method == "Crawling_gliding" ~ "Crawling",
+      motility.method == "Endobenthic" ~ NA,
+      motility.method == "Swimmer" ~ "Swimming",
+      motility.method == "Walker" ~ "Walking",
+      TRUE ~ motility.method
     ),
-    feeding.type.1 = case_when(
-      feeding.type.1 == "Absorber_sucker" ~ "Absorbtion",
-      feeding.type.1 == "Filter_feeder" ~ "Filtration",
-      TRUE ~ feeding.type.1
+    feeding.type = case_when(
+      feeding.type == "Absorber_sucker" ~ "Absorbtion",
+      feeding.type == "Filter_feeder" ~ "Filtration",
+      TRUE ~ feeding.type
     ),
     trophic.group = case_when(
       trophic.group == "Autotrophic" ~ "Autotroph",
@@ -586,7 +584,7 @@ names_list_updated <- spec_char %>%
 
 #### Format traits_raw ----
 
-traits_list <- traits_raw %>%
+traits_list_all <- traits_raw %>%
   # Update taxa.names
   mutate(
     # make old.taxa.name lower case for joining
@@ -595,7 +593,7 @@ traits_list <- traits_raw %>%
   left_join(names_list_updated,  by = "old.taxa.name") %>% 
   filter(!is.na(taxa.name)) %>% 
   select(- old.taxa.name) %>% 
-  pivot_longer(cols = c(fg, body.shape, feeding.type.1, feeding.type.2, morpho.class.kruk2010, motility, motility.method.1, motility.method.2, trophic.group, life.form),
+  pivot_longer(cols = c(fg, body.shape, feeding.type, morpho.class.kruk2010, motility, motility.method, trophic.group, life.form),
                names_to = "trait.name", values_to = "trait.value") %>%
   filter(!is.na(trait.value)) %>% 
   unite("source.variable", ref, trait.name) %>%  # combine source and variable names
@@ -614,92 +612,90 @@ traits_list <- traits_raw %>%
   ) %>% 
   
   # select preference - lt, rimmet, padisak, reynolds and wang (wang last beacuse doesn't use updated padisak ones)
+  # odume, lt, gav, no, rimet, kruk, kremer, rimet, padisak, wang
   # order colums in order of preference
   relocate(
-    taxa.name, matches("lt"), matches("gavrilko"), matches("odume"), matches("no"), matches("rimmet"), matches("kruk"), matches("kremer"), matches("rimet_2012"), matches("padisak"), matches("wang")
+    taxa.name, matches("odume"), matches("lt"), matches("gavrilko"), matches("no"), matches("rimmet"), matches("kruk"), matches("kremer"), matches("rimet_2012"), matches("padisak"), matches("wang")
   ) %>% 
   #select(matches("life.form"))
   mutate(
     #morpho
-    morpho.class.source = "kruk(2010)",
     morpho.class = rimmet_morpho.class.kruk2010,
+    morpho.class.source = if_else(
+      !is.na(morpho.class),
+      "1313",
+      NA
+    ),
     #fg
     fg.source = case_when(
-      !is.na(lt_fg) ~ "Laplace-Treyture(2021)",
-      !is.na(rimmet_fg) ~ "rimmet(2018)",
-      !is.na(padisak_fg) ~ "padisak(2009)",
-      !is.na(kruk_fg) ~ "kruk(2017)",
-      !is.na(wang_fg) ~ "Wang(2024)",
-      !is.na(gavrilko_fg) ~ "Gavrilko(2022)",
+      !is.na(lt_fg) ~ "db-6",
+      !is.na(gavrilko_fg) ~ "db-5",
+      !is.na(rimmet_fg) ~ "db-1",
+      !is.na(kruk_fg) ~ "1313",
+      !is.na(padisak_fg) ~ "t-1",
+      !is.na(wang_fg) ~ "t-2",
       TRUE ~ NA
     ),
     fg = case_when(
       !is.na(lt_fg) ~ lt_fg,
-      !is.na(rimmet_fg) ~ rimmet_fg,
-      !is.na(padisak_fg) ~ padisak_fg,
-      !is.na(kruk_fg) ~ kruk_fg,
-      !is.na(wang_fg) ~ wang_fg,
       !is.na(gavrilko_fg) ~ gavrilko_fg,
+      !is.na(rimmet_fg) ~ rimmet_fg,
+      !is.na(kruk_fg) ~ kruk_fg,
+      !is.na(padisak_fg) ~ padisak_fg,
+      !is.na(wang_fg) ~ wang_fg,
       TRUE ~ NA
     ),
     #body.shape
     body.shape.source = case_when(
-      !is.na(lt_body.shape) ~ "Laplace-Treyture(2021)",
-      !is.na(rimmet_body.shape) ~ "rimmet(2018)",
-      !is.na(odume_body.shape) ~ "odume(2023)",
-      !is.na(rimet_2012_body.shape) ~ "rimmet(2012)",
+      !is.na(odume_body.shape) ~ "db-3",
+      !is.na(lt_body.shape) ~ "db-6",
+      !is.na(rimmet_body.shape) ~ "db-1",
+      !is.na(rimet_2012_body.shape) ~ "db-8",
       TRUE ~ NA
     ),
     body.shape = case_when(
+      !is.na(odume_body.shape) ~ odume_body.shape,
       !is.na(lt_body.shape) ~ lt_body.shape,
       !is.na(rimmet_body.shape) ~ rimmet_body.shape,
-      !is.na(odume_body.shape) ~ odume_body.shape,
       !is.na(rimet_2012_body.shape) ~ rimet_2012_body.shape,
       TRUE ~ NA
     ),
     #motility
     motility.source = case_when(
-      !is.na(rimmet_motility) ~ "rimmet(2018)",
-      !is.na(kremer_motility) ~ "kremer(2014)",
-      !is.na(odume_motility) ~ "Wang(2024)",
-      !is.na(gavrilko_motility) ~ "Gavrilko(2022)",
+      !is.na(odume_motility) ~ "db-3",
+      !is.na(gavrilko_motility) ~ "db-5",
+      !is.na(rimmet_motility) ~ "db-1",
+      !is.na(kremer_motility) ~ "db-2",
+
       TRUE ~ NA
     ),
-    motilty = case_when(
-      !is.na(rimmet_motility) ~ rimmet_motility,
-      !is.na(kremer_motility) ~ kremer_motility,
+    motility = case_when(
       !is.na(odume_motility) ~ odume_motility,
       !is.na(gavrilko_motility) ~ gavrilko_motility,
+      !is.na(rimmet_motility) ~ rimmet_motility,
+      !is.na(kremer_motility) ~ kremer_motility,
       TRUE ~ NA
     ),
     #motility method
-    motility.method.1.source = case_when(
-      !is.na(rimmet_motility) ~ "rimmet(2018)",
-      !is.na(lt_motility) ~ "Laplace-Treyture(2021)",
-      !is.na(odume_motility) ~ "odume(2023)",
-      !is.na(gavrilko_motility) ~ "Gavrilko(2022)",
+    motility.method.source = case_when(
+      !is.na(odume_motility) ~ "db-3",
+      !is.na(gavrilko_motility) ~ "db-5",
+      !is.na(lt_motility) ~ "db-6",
+      !is.na(rimmet_motility) ~ "db-1",
       TRUE ~ NA
     ),
-    motilty.method.1 = case_when(
-      !is.na(rimmet_motility) ~ rimmet_motility,
-      !is.na(lt_motility) ~ kremer_motility,
+    motility.method = case_when(
       !is.na(odume_motility) ~ odume_motility,
       !is.na(gavrilko_motility) ~ gavrilko_motility,
+      !is.na(lt_motility) ~ lt_motility,
+      !is.na(rimmet_motility) ~ rimmet_motility,
       TRUE ~ NA
     ),
     
-    motility.method.2.source = case_when(
-      !is.na(gavrilko_motility) ~ "Gavrilko(2022)",
-      TRUE ~ NA
-    ),
-    motilty.method.2 = case_when(
-      !is.na(gavrilko_motility) ~ gavrilko_motility,
-      TRUE ~ NA
-    ),
     #trophic group
     trophic.group.source = case_when(
-      !is.na(lt_trophic.group) ~ "Laplace-Treyture(2021)",
-      !is.na(rimmet_trophic.group) ~ "rimmet(2018)",
+      !is.na(lt_trophic.group) ~ "db-6",
+      !is.na(rimmet_trophic.group) ~ "db-1",
       TRUE ~ NA
     ),
     trophic.group = case_when(
@@ -709,67 +705,90 @@ traits_list <- traits_raw %>%
     ),
     #life form
     life.form.source = case_when(
-      !is.na(lt_life.form) ~ "Laplace-Treyture(2021)",
-      !is.na(rimet_2012_life.form) ~ "rimmet(2012)",
-      !is.na(kruk_life.form) ~ "kruk(2017)",
-      !is.na(kremer_life.form) ~ "kremer(2014)",
+      !is.na(lt_life.form) ~ "db-6",
+      !is.na(kruk_life.form) ~ "1313",
+      !is.na(kremer_life.form) ~ "db-2",
+      !is.na(rimet_2012_life.form) ~ "db-8",
       TRUE ~ NA
     ),
     life.form = case_when(
       !is.na(lt_life.form) ~ lt_life.form,
-      !is.na(rimet_2012_life.form) ~ rimet_2012_life.form,
       !is.na(kruk_life.form) ~ kruk_life.form,
       !is.na(kremer_life.form) ~ kremer_life.form,
+      !is.na(rimet_2012_life.form) ~ rimet_2012_life.form,
       TRUE ~ NA
     ),
     #feeding.type
-    feeding.type.1.source = case_when(
-      !is.na(odume_feeding.type.1) ~ "odume(2023)",
-      !is.na(gavrilko_feeding.type.1) ~ "Gavrilko(2022)",
+    feeding.type.source = case_when(
+      !is.na(odume_feeding.type) ~ "db-3",
+      !is.na(gavrilko_feeding.type) ~ "db-5",
       TRUE ~ NA
     ),
-    feeding.type.1 = case_when(
-      !is.na(odume_feeding.type.1) ~ odume_feeding.type.1,
-      !is.na(gavrilko_feeding.type.1) ~ gavrilko_feeding.type.1,
+    feeding.type = case_when(
+      !is.na(odume_feeding.type) ~ odume_feeding.type,
+      !is.na(gavrilko_feeding.type) ~ gavrilko_feeding.type,
       TRUE ~ NA
-    ),
-    
-    feeding.type.2.source = case_when(
-      !is.na(gavrilko_feeding.type.2) ~ "Gavrilko(2022)",
-      TRUE ~ NA
-    ),
-    feeding.type.2 = case_when(
-      !is.na(gavrilko_feeding.type.2) ~ gavrilko_feeding.type.2,
-      TRUE ~ NA
-    ),
+    )
   ) %>% 
+  
+  # remove redundant columns
   select(
     !(matches("_"))
   ) %>% 
   
-  # There are some that have multiple inputs for the r.group so select one for these
+  # sort out ones with multiple values
   # When there is a clear majority use this to be the most representative
   # when it is evenly split select the most representative lake type
   mutate(
     fg = case_when(
-      taxa.name == "Closteriopsis" ~ "J",
+      taxa.name %in% c("Closteriopsis", "Desmodesmus brasiliensis") ~ "J",
       taxa.name == "Dolichospermum (inconsistent in FamilyI (in SubsectionIV))" ~ "H1",
-      taxa.name == "Bacillariophyceae" ~ "D",
-      taxa.name == "Vitreochlamys" ~ "X2",
-      taxa.name == "Chlorolobium" ~ "X1",
-      taxa.name == "Cyanodictyon" ~ "K",
-      taxa.name == "Ceratium" ~ "LO",
-      taxa.name == "Lyngbya (genus in domain Bacteria)" ~ "S1",
-      taxa.name == "Chlorophyceae" ~ "X1",
-      taxa.name == "Chlamydomonadales" ~ "X1",
-      taxa.name == "Copepoda" ~ "3",
+      taxa.name %in% c("Bacillariophyceae", "Encyonema minutum") ~ "D",
+      taxa.name %in% c("Vitreochlamys", "Cryptomonas tetrapyrenoidosa", "Chlorolobium braunii", "Cryptophyceae")~ "X2",
+      taxa.name %in% c("Ceratium", "Lemmermanniella pallida", "Gymnodinium mitratum", "Radiocystis fernandoi") ~ "LO",
+      taxa.name %in% c("Raphidiopsis mediterranea", "Raphidiopsis curvata") ~ "S1",
+      taxa.name %in% c("Chrysophyceae", "Kephyrion ampulla", "Chromulina grandis") ~ "X3",
+      taxa.name == "Dendromonas virgaria" ~ "E",
+      taxa.name == "Micractinium bornhemiense" ~ "F",
+      taxa.name == "Cyclotella comta" ~ "B",
+      taxa.name == "Stephanodiscus rotula" ~ "C",
+      taxa.name %in% c("Actinotaenium perminutum", "Cosmarium contractum", "Staurodesmus phimus", "Chlorolobium", "Chlorophyceae", "Chlamydomonadales") ~ "X1",
+      taxa.name %in% c("Klebsormidium subtile", "Brebissonia lanceolata") ~ "MP",
       
       TRUE ~ fg
+    ),
+    
+    body.shape = case_when(
+      taxa.name %in% c("Snowella rosea", "Cosmarium venustum", "Microcystis parasitica", "Cosmarium subprotumidum", "Cosmarium undulatum", "Cosmarium tumidum", "Paradoxia multiseta", "Korshikoviella michailovskoensis", "Staurodesmus dejectus") ~ "ellipsoid",
+      taxa.name == "Adlafia suchlandtii" ~ "elliptic cylinder",
+      taxa.name %in% c("Cymbella perpusilla", "Hippodonta subcostulata") ~ "rectangular box",
+      TRUE ~ body.shape
     )
-  ) 
-
+  )
 
 # save
-saveRDS(traits_list, "R/data_outputs/database_products/final_products/traits_list.rds")
+saveRDS(traits_list_all, "R/data_outputs/database_products/traits_list_all.rds")
 
-################# PUT INTO ORDER and sort out multiples
+# add in new sources
+ts <- read_xlsx("raw_data/functional_groups.xlsx", sheet = "sources") %>% 
+  mutate(
+    year = as.character(year),
+    volume = as.character(volume),
+    issue = as.character(issue),
+    start.page = as.character(start.page),
+    end.page = as.character(end.page),
+  )
+
+source_list_wt <- bind_rows(sources_list_nd, ts)
+  
+# save
+saveRDS(source_list_wt, "R/data_outputs/database_products/source_list_wt.rds")
+  
+  
+  
+  
+  
+  
+  
+  
+  

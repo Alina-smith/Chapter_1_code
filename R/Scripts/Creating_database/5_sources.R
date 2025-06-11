@@ -109,11 +109,12 @@ within_dupe_check <- all_source_raw %>%
     title = tolower(title),
     
     # Make a new column take the doi if it has it and if not second choice is ISBN and then final choice is title
-    source.info = case_when(
-      !is.na(doi) ~ doi,
-      is.na(doi) & !is.na(ISBN) ~ ISBN,
-      is.na(doi) & is.na(ISBN) ~ title
-    )
+    source.info = title
+      #case_when(
+      #!is.na(doi) ~ doi,
+      #is.na(doi) & !is.na(ISBN) ~ ISBN,
+      #is.na(doi) & is.na(ISBN) ~ title
+    #)
   ) %>% 
   
   ## Filter ----
@@ -137,14 +138,36 @@ within_dupe_check <- all_source_raw %>%
   filter(
     freq > 1
   )
+
+
+# Change source code of dupes
+bodysize_sources_wd <- bodysize_taxonomy %>% 
   
-## No duplicates within sources under different source.codes
+  mutate(
+    across(original.source.code.1:original.source.code.18, ~ case_when(
+      .x == "384" ~ "383",
+      .x == "db-191" ~ "db-197",
+      .x == "db-190" ~ "db-133",
+      .x == "db-193" ~ "db-158",
+      .x == "db-192" ~ "db-163",
+      
+      TRUE ~ .x
+      )
+    )
+  )
+  
+# remove duplicates from source list
+all_source_raw_wd <- all_source_raw %>% 
+  filter(
+    !(source.code %in% c("384", "db-191", "db-190", "db-193", "db-192"))
+  )
+
 
 # Between source duplicates ----
 # Checking if there are any sources that are inputted twice under different source codes between citing sources
 
 ## Duplicates source info list ----
-between_dupe_check <- all_source_raw %>% 
+between_dupe_check <- all_source_raw_wd %>% 
   
   mutate(
     ### Formatting ----
@@ -152,11 +175,12 @@ between_dupe_check <- all_source_raw %>%
     title = tolower(title),
     
     # Make a new column take the doi if it has it and if not second choice is ISBN and then final choice is title
-    source.info = case_when(
-      !is.na(doi) ~ doi,
-      is.na(doi) & !is.na(ISBN) ~ ISBN,
-      is.na(doi) & is.na(ISBN) ~ title
-    )
+    source.info = title
+    #case_when(
+    #!is.na(doi) ~ doi,
+    #is.na(doi) & !is.na(ISBN) ~ ISBN,
+    #is.na(doi) & is.na(ISBN) ~ title
+    #)
   ) %>% 
   
   ### Filter ----
@@ -186,40 +210,28 @@ between_dupe_check <- all_source_raw %>%
 ## Duplicate source.codes list ----
 # Using the doi list to etting a list of source codes for each duplicate source found
 
-duplicate_source_list <- all_source_raw %>% 
+duplicate_source_list <- all_source_raw_wd %>% 
   
   mutate(
     ### Formatting ----
     # make the same format as the between dupes list
     title = tolower(title), # make titles lower case incase there are any duplicates but have different caps in their title
-    
-    # make a new column take the doi if it has it and if not second choice is ISBN and then final choice is title
-    source.info = case_when(
-      !is.na(doi) ~ doi,
-      is.na(doi) & !is.na(ISBN) ~ ISBN,
-      is.na(doi) & is.na(ISBN) ~ title
-    )
+    source.info = title
+  ) %>% 
+  
+  rename(
+    original.source.code = source.code
+  ) %>% 
+  
+  filter(
+    source.info %in% between_dupe_check$source.info
   ) %>% 
   
   select(
-    source.code,
+    original.source.code,
     source.info,
     source.type
     ) %>% 
-  
-  ### Filter for duplicates ----
-  # Get a list of all duplicates
-
-  # left join the frequency info from between_source_dupes by the new source.info column
-  left_join(
-    between_dupe_check,
-    by = "source.info"
-  ) %>% 
-  
-  # Select ones that have a frequency value as there are the ones the appear more than once
-  filter(
-    !is.na(freq)
-  ) %>% 
   
   ### Make into wider format ----
   # Put each duplicate onto one row with separate columns for each different source.code so that new source codes can be assigned
@@ -229,48 +241,8 @@ duplicate_source_list <- all_source_raw %>%
     source.info
     ) %>%
   
-  # Make a column with the source codes for each duplicate merged together
-  summarise(
-    source.codes = paste(source.code, collapse = ",")
-    ) %>% 
-  
-  # separate out into separate columns
-  separate(
-    source.codes,
-    into = c("source.code.1", "source.code.2", "source.code.3"),
-    sep = ","
-    ) %>% 
-  
-  ### New source codes
-  # Assign new source codes to the duplicates to make them identifiable as a duplicate 
-  
-  # Make a column called new.original.source.code
   mutate(
-    new.original.source.code = paste("dupe", row_number(), sep = "-")
-  ) %>% 
-  
-  # Pivot back into a longer format so that each source has it's own row but will still have the same dupe-(rownumber) new.original.source.code
-  pivot_longer(
-    cols = source.code.1:source.code.3,
-    values_to = "original.source.code",
-  ) %>% 
-  
-  filter(
-    !is.na(
-      original.source.code
-    )
-  ) %>% 
-  
-  # remove redundant columns
-  select(
-    -name
-    ) %>% 
-  
-  # Add in if it is a primary or secondary sources as this will be needed later
-  left_join(
-    select(
-      all_source_raw, source.code, source.type
-    ), by = c("original.source.code" = "source.code")
+    new.original.source.code = paste("dupe", cur_group_id(), sep = "-")
   )
 
 ## Duplicate uid list ----
@@ -282,7 +254,7 @@ duplicate_source_list <- all_source_raw %>%
 # Get a list of all the individual.uids that have duplicated data - probably a long winded way of doing it but only way I could visulise in my head
 # There may instances where they are from the same source but for different species so want to keep all that are for different species 
 
-duplicate_uids <- bodysize_taxonomy %>% 
+duplicate_data_points <- bodysize_taxonomy %>% 
   
   select(
     original.source.code.1:original.source.code.18,
@@ -406,11 +378,11 @@ duplicate_uids <- bodysize_taxonomy %>%
 
 ## Remove duplicates ----
 # remove duplicates when they have only one original source code
-bodysize_duplicates <- bodysize_taxonomy %>% 
+bodysize_sources <- bodysize_sources_wd %>% 
   
   mutate(
     duplicate = if_else(
-      individual.uid %in% duplicate_uids$individual.uid & original.source.code.2== "no.source",
+      individual.uid %in% duplicate_data_points$individual.uid & original.source.code.2 == "no.source",
       "yes",
       "no"
     )
@@ -418,93 +390,21 @@ bodysize_duplicates <- bodysize_taxonomy %>%
   
   filter(
     duplicate == "no"
-  )
-
-# Update source.codes ----
-# Make new source codes
-
-## Make a new source list ----
-# Make a new source list with new codes
-
-new_source_codes <- bodysize_duplicates %>% 
-  
-  # Select columns
-  select(source.code:original.source.code.18) %>% 
-  
-  # Get each source code on its own line
-  pivot_longer(
-    cols = source.code:original.source.code.18,
-    values_to = "source.code"
-    ) %>% 
-  
-  # Get all the distinct not unkown or no.source source codes
-  distinct(
-    source.code
   ) %>% 
-  
-  filter(
-    !(source.code %in% c("unknown", "no.source"))
-  ) %>% 
-  
-  # Add in source info
-  left_join(., all_source_raw, by = "source.code") %>%
-  
-  distinct(
-    source.code
-  ) %>% 
-  
-  # Make new source codes
-  mutate(
-    new.source.code = row_number()
-  )
-
-## Update source codes in data ----
-bodysize_sources <- bodysize_duplicates %>% 
-  
-  select(
-    source.code:original.source.code.18,
-    uid
-  ) %>% 
-  
-  # Pivot to get original.source.codes columns in one column
-  pivot_longer(
-    cols = source.code:original.source.code.18,
-    values_to = "old.source.code",
-    names_to = "source.code.column.no"
-  ) %>% 
-
-  # Join in new source codes
-  left_join(
-    select(
-      new_source_codes, source.code, new.source.code
-  ), by = c("old.source.code" = "source.code")
-  ) %>% 
-  
-  # Put back into original format
-  pivot_wider(
-    id_cols = uid,
-    names_from = source.code.column.no,
-    values_from = new.source.code
-  ) %>% 
-  
-  # Join back in data that was lost in the pivots
-  left_join(
-    bodysize_taxonomy, by = "uid", suffix = c(".new", ".old")
-  ) %>% 
-  select(
-    -source.code.old:-original.source.code.18.old
-  ) %>% 
-  
-  rename_with(~ gsub(".new", "", .))%>% 
   
   # Merge the original source columns together into one
   mutate(
+    across(
+      original.source.code.1:original.source.code.18, ~na_if(., "no.source")
+      ),
+
     original.sources = paste(original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10,
                              original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
-                             sep = ";"),
-    original.sources = stri_replace_all_regex(original.sources, "NA;|NA|;NA", ""),
-    original.sources = na_if(original.sources, "")
-  ) %>% 
+                             sep = " "),
+    original.sources = stri_replace_all_regex(original.sources, " NA|NA ", " "),
+    original.sources = stri_replace_all_regex(original.sources, "  +", ""),
+    original.sources = stri_replace_all_regex(original.sources, " ", ";")
+    )%>%
   
   select(
     -original.source.code.1:-original.source.code.18
@@ -526,17 +426,34 @@ saveRDS(bodysize_sources, file = "R/Data_outputs/database_products/bodysize_sour
 
 # updated source list
 
-sources_list_update <- left_join(new_source_codes, all_source_raw, by = "source.code") %>% 
-  
-  distinct(
-    source.code, .keep_all = TRUE
-  ) %>% 
+sources_list_nd <- bodysize_sources %>% 
   
   select(
-    - citing.source,
-    - source.type
+    original.sources, source.code
+  )%>%
+  
+  separate(
+    original.sources, into = c("original.source.code.1", "original.source.code.2", "original.source.code.3", "original.source.code.4", "original.source.code.5", "original.source.code.6", "original.source.code.7", "original.source.code.8", "original.source.code.9", "original.source.code.10",
+                             "original.source.code.11", "original.source.code.12", "original.source.code.13", "original.source.code.14", "original.source.code.15", "original.source.code.16", "original.source.code.17", "original.source.code.18"),
+    sep = ";"
+  ) %>% 
+  
+  # Puts each unique original.source.code on their own row
+  pivot_longer(
+    cols = everything(),
+    values_to = "source.code"
+  ) %>% 
+  distinct(
+    source.code
+  ) %>% 
+  filter(
+    !is.na(source.code)
+  ) %>%
+  
+  left_join(
+    all_source_raw_wd, by = "source.code"
   )
 
 ## Save
-saveRDS(sources_list_update, file = "R/Data_outputs/database_products/sources_list_update.rds")
+saveRDS(sources_list_nd, file = "R/Data_outputs/database_products/sources_list_nd.rds")
 

@@ -18,8 +18,7 @@ library(rotl)
 
 # Import data ----
 bodysize_formatted <- readRDS("R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
-tax_list_raw <- readRDS("R/Data_outputs/database_products/taxonomy/tax_list_raw.rds")
-sources_list_update <- readRDS("R/Data_outputs/database_products/sources_list_update.rds")
+traits_list_all <- readRDS("R/Data_outputs/database_products/traits_list_all.rds")
 
 # Getting averages for each source ----
 
@@ -192,78 +191,188 @@ saveRDS(bodysize_genus, "R/data_outputs/database_products/final_products/bodysiz
 
 ############################## Now have a dataset of raw bodysizes with just one per individual but not functional group data
 
-
-#### Add groups to main data ----
+# Add in trait info ----
 
 # Add to data
 bs_fg <- bodysize_genus %>% 
   
   # genus
   left_join(
-    select(
-      r_groups, taxa.name, fg
-      ), by = "taxa.name"
-  ) %>% 
-  
-  rename(
-    fg.genus = fg
+      traits_list_all, by = "taxa.name"
   ) %>% 
   
   # family
   left_join(
-    select(
-      r_groups, taxa.name, fg
-    ), by = c("family" = "taxa.name")
-  ) %>% 
-  
-  rename(
-    fg.family = fg
+      traits_list_all, by = c("family" = "taxa.name"),
+      suffix = c(".genus", ".family")
   ) %>% 
   
   # order
   left_join(
-    select(
-      r_groups, taxa.name, fg
-    ), by = c("order" = "taxa.name")
-  ) %>% 
-  
-  rename(
-    fg.order = fg
+    traits_list_all, by = c("order" = "taxa.name")
   ) %>% 
   
   # class
   left_join(
-    select(
-      r_groups, taxa.name, fg
-    ), by = c("class" = "taxa.name")
+    traits_list_all, by = c("class" = "taxa.name"),
+      suffix = c(".order", ".class")
   ) %>% 
-  
-  rename(
-    fg.class = fg
-  ) %>% 
+
   
   # phylum
   left_join(
-    select(
-      r_groups, taxa.name, fg
-    ), by = c("phylum" = "taxa.name")
-  ) %>% 
-  
-  rename(
-    fg.phylum = fg
+    traits_list_all, by = c("phylum" = "taxa.name")
   ) %>% 
   
   # select that group with the lowest res
   mutate(
+    # morpho.class
+    morpho.class = case_when(
+      !is.na(morpho.class.genus) ~ morpho.class.genus,
+      !is.na(morpho.class.family) ~ morpho.class.family,
+      !is.na(morpho.class.order) ~ morpho.class.order,
+      !is.na(morpho.class.class) ~ morpho.class.class,
+      !is.na(morpho.class) ~ morpho.class,
+      TRUE ~ NA
+    ),
+    morpho.class.source = case_when(
+      !is.na(morpho.class.source.genus) ~ morpho.class.source.genus,
+      !is.na(morpho.class.source.family) ~ morpho.class.source.family,
+      !is.na(morpho.class.source.order) ~ morpho.class.source.order,
+      !is.na(morpho.class.source.class) ~ morpho.class.source.class,
+      !is.na(morpho.class.source) ~ morpho.class.source,
+      TRUE ~ NA
+    ),
+    
+    # fg
     fg = case_when(
       !is.na(fg.genus) ~ fg.genus,
       !is.na(fg.family) ~ fg.family,
       !is.na(fg.order) ~ fg.order,
       !is.na(fg.class) ~ fg.class,
-      !is.na(fg.phylum) ~ fg.phylum,
-      
-      TRUE ~ "Unassigned"
+      !is.na(fg) ~ fg,
+      TRUE ~ NA
+    ),
+    fg.source = case_when(
+      !is.na(fg.source.genus) ~ fg.source.genus,
+      !is.na(fg.source.family) ~ fg.source.family,
+      !is.na(fg.source.order) ~ fg.source.order,
+      !is.na(fg.source.class) ~ fg.source.class,
+      !is.na(fg.source) ~ fg.source,
+      TRUE ~ NA
+    ),
+    
+    # body.shape
+    body.shape = case_when(
+      !is.na(body.shape.genus) ~ body.shape.genus,
+      !is.na(body.shape.family) ~ body.shape.family,
+      !is.na(body.shape.order) ~ body.shape.order,
+      !is.na(body.shape.class) ~ body.shape.class,
+      !is.na(body.shape) ~ body.shape,
+      TRUE ~ NA
+    ),
+    body.shape.source = case_when(
+      !is.na(body.shape.source.genus) ~ body.shape.source.genus,
+      !is.na(body.shape.source.family) ~ body.shape.source.family,
+      !is.na(body.shape.source.order) ~ body.shape.source.order,
+      !is.na(body.shape.source.class) ~ body.shape.source.class,
+      !is.na(body.shape.source) ~ body.shape.source,
+      TRUE ~ NA
+    ),
+    
+    # motility
+    motility = case_when(
+      !is.na(motility.genus) ~ motility.genus,
+      !is.na(motility.family) ~ motility.family,
+      !is.na(motility.order) ~ motility.order,
+      !is.na(motility.class) ~ motility.class,
+      !is.na(motility) ~ motility,
+      TRUE ~ NA
+    ),
+    motility.source = case_when(
+      !is.na(motility.source.genus) ~ motility.source.genus,
+      !is.na(motility.source.family) ~ motility.source.family,
+      !is.na(motility.source.order) ~ motility.source.order,
+      !is.na(motility.source.class) ~ motility.source.class,
+      !is.na(motility.source) ~ motility.source,
+      TRUE ~ NA
+    ),
+    
+    # motility.method
+    motility.method = case_when(
+      !is.na(motility.method.genus) ~ motility.method.genus,
+      !is.na(motility.method.family) ~ motility.method.family,
+      !is.na(motility.method.order) ~ motility.method.order,
+      !is.na(motility.method.class) ~ motility.method.class,
+      !is.na(motility.method) ~ motility.method,
+      TRUE ~ NA
+    ),
+    motility.method.source = case_when(
+      !is.na(motility.method.source.genus) ~ motility.method.source.genus,
+      !is.na(motility.method.source.family) ~ motility.method.source.family,
+      !is.na(motility.method.source.order) ~ motility.method.source.order,
+      !is.na(motility.method.source.class) ~ motility.method.source.class,
+      !is.na(motility.method.source) ~ motility.method.source,
+      TRUE ~ NA
+    ),
+    
+    # trophic.group
+    trophic.group = case_when(
+      !is.na(trophic.group.genus) ~ trophic.group.genus,
+      !is.na(trophic.group.family) ~ trophic.group.family,
+      !is.na(trophic.group.order) ~ trophic.group.order,
+      !is.na(trophic.group.class) ~ trophic.group.class,
+      !is.na(trophic.group) ~ trophic.group,
+      TRUE ~ NA
+    ),
+    trophic.group.source = case_when(
+      !is.na(trophic.group.source.genus) ~ trophic.group.source.genus,
+      !is.na(trophic.group.source.family) ~ trophic.group.source.family,
+      !is.na(trophic.group.source.order) ~ trophic.group.source.order,
+      !is.na(trophic.group.source.class) ~ trophic.group.source.class,
+      !is.na(trophic.group.source) ~ trophic.group.source,
+      TRUE ~ NA
+    ),
+    
+    # life.form
+    life.form = case_when(
+      !is.na(life.form.genus) ~ life.form.genus,
+      !is.na(life.form.family) ~ life.form.family,
+      !is.na(life.form.order) ~ life.form.order,
+      !is.na(life.form.class) ~ life.form.class,
+      !is.na(life.form) ~ life.form,
+      TRUE ~ NA
+    ),
+    life.form.source = case_when(
+      !is.na(life.form.source.genus) ~ life.form.source.genus,
+      !is.na(life.form.source.family) ~ life.form.source.family,
+      !is.na(life.form.source.order) ~ life.form.source.order,
+      !is.na(life.form.source.class) ~ life.form.source.class,
+      !is.na(life.form.source) ~ life.form.source,
+      TRUE ~ NA
+    ),
+    
+    # feeding.type
+    feeding.type = case_when(
+      !is.na(feeding.type.genus) ~ feeding.type.genus,
+      !is.na(feeding.type.family) ~ feeding.type.family,
+      !is.na(feeding.type.order) ~ feeding.type.order,
+      !is.na(feeding.type.class) ~ feeding.type.class,
+      !is.na(feeding.type) ~ feeding.type,
+      TRUE ~ NA
+    ),
+    feeding.type.source = case_when(
+      !is.na(feeding.type.source.genus) ~ feeding.type.source.genus,
+      !is.na(feeding.type.source.family) ~ feeding.type.source.family,
+      !is.na(feeding.type.source.order) ~ feeding.type.source.order,
+      !is.na(feeding.type.source.class) ~ feeding.type.source.class,
+      !is.na(feeding.type.source) ~ feeding.type.source,
+      TRUE ~ NA
     )
+  ) %>% 
+  
+  select(
+    !(matches(".genus|.family|.order|.class|.phylum"))
   ) %>% 
   
   # assign traditional groups 
