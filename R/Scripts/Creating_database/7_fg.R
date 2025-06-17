@@ -770,6 +770,8 @@ traits_list_all <- traits_raw %>%
 saveRDS(traits_list_all, "R/data_outputs/database_products/traits_list_all.rds")
 
 # add in new sources
+sources_list_nd <- readRDS("R/Data_outputs/database_products/sources_list_nd.rds")
+
 ts <- read_xlsx("raw_data/functional_groups.xlsx", sheet = "sources") %>% 
   mutate(
     year = as.character(year),
@@ -783,12 +785,3 @@ source_list_wt <- bind_rows(sources_list_nd, ts)
   
 # save
 saveRDS(source_list_wt, "R/data_outputs/database_products/source_list_wt.rds")
-  
-  
-  
-  
-  
-  
-  
-  
-  

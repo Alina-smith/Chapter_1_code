@@ -8,7 +8,7 @@ library(ggplot2)
 library(patchwork)
 
 # Import data ----
-bs <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
+bs <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds")
 taxonomy_list <- readRDS("R/data_outputs/database_products/final_products/taxonomy_list.rds")
 
 
@@ -31,7 +31,7 @@ avg_mass <- bs %>%
 # Plot
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.4)+
+  geom_histogram(binwidth = 0.3)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
@@ -73,6 +73,53 @@ spread_fg
 # save
 ggsave("R/Data_outputs/plots/spread_fg.png", plot = spread_fg)
 
+# other spreads ----
+p <- bs %>% 
+  
+  filter(
+    type == "Phytoplankton"
+  ) %>% 
+  
+  distinct(
+    taxa.name, .keep_all = TRUE
+  ) %>% 
+  group_by(taxonomic.group) %>% 
+  summarise(
+    n = n()
+  )
+
+z <- bs %>% 
+  
+  filter(
+    type == "Zooplankton"
+  ) %>% 
+  
+  distinct(
+    taxa.name, .keep_all = TRUE
+  )  %>% 
+  group_by(taxonomic.group) %>% 
+  summarise(
+    n = n()
+  )
 
 
+group_hist_p <- ggplot(p, aes(x = taxonomic.group, fill = type))+
+  geom_bar()+
+  theme(
+    axis.text.x = element_text(angle = -20)
+  )+
+  ylim(c(0, 250))
+
+group_hist_z <- ggplot(z, aes(x = taxonomic.group, fill = type))+
+  geom_bar()+
+  theme(
+    axis.text.x = element_text(angle = -20)
+  )+
+  ylim(c(0, 250))
+
+group_hist <- group_hist_p + group_hist_z
+
+ggsave("R/Data_outputs/plots/group_hist.png", plot = group_hist)
+
+group_hist
 

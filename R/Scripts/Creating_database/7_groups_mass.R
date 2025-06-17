@@ -11,7 +11,6 @@ library(readxl)
 library(tidyr)
 library(tidyverse)
 library(stringi)
-library(taxize)
 library(rotl)
 
 # Final list of all data including phyto and zooplankton with groups and mass
@@ -89,10 +88,13 @@ bs_format <- bodysize_formatted %>%
     )
   ) %>% 
   
-  # Select just adult individuals
   filter(
+    # Select just adult individuals
     life.stage %in% c("adult", "active"),
-    nu %in% "individual"
+    nu %in% "individual",
+    
+    # remove any that are higher than genus
+    !is.na(genus)
   ) %>% 
   
   # select and relocate columns - removing life stage and nu now as all adult individuals
@@ -100,23 +102,14 @@ bs_format <- bodysize_formatted %>%
   select(
     individual.uid, uid, source.code, original.sources, type,
     nu, ind.per.nu, body.size, bodysize.measurement, units,
-    genus, family, order, class, phylum, kingdom,
+    ott.id, taxa.name, species, genus, family, order, class, phylum, kingdom,
     location.code, habitat, location, country, continent, latitude, longitude
-  ) %>% 
-  
-  # rename the taxa.name as genus as I am only going to genus level and filter out ones that are a higher resolution
-  rename(
-    taxa.name = genus
-  ) %>% 
-  
-  filter(
-    !is.na(taxa.name)
   )
 
 ## Get averages ----
 
 # Get extra info to add in
-# All the extra infor for the multiples of the same individual are the same and so can just left join by individual.uid
+# All the extra info for the multiples of the same individual are the same and so can just left join by individual.uid
 extra_info <- bs_format %>% 
   
   select(
@@ -153,40 +146,48 @@ bs_avg <- bs_format %>%
 
 
 ## Genus ott ids ----
+# get ott ids for genus to use for later on when agragating to genus
 # Rerun names through tol now they are genus to get ott ids
 genus_list <- bs_avg %>% 
-  distinct(taxa.name)
+  distinct(genus)
 
-genus_ott <- tnrs_match_names(genus_list$taxa.name)
+genus_ott <- tnrs_match_names(genus_list$genus)
 
 # check all have been matched to an ott id - if false then okay
 unique(is.na(genus_ott$ott_id))
 
 # Add in ott_ids to data
-bodysize_genus <- bs_avg %>% 
+bodysize_genus_ottid <- bs_avg %>% 
   
   # Set the taxa.name to lower case to match the search string
   mutate(
-    taxa.name = tolower(taxa.name)
+    genus = tolower(genus)
   ) %>% 
   
   left_join(
     select(
       genus_ott, search_string, unique_name, ott_id
-    ), by = c("taxa.name" = "search_string")
+    ), by = c("genus" = "search_string")
   ) %>% 
   
-  # get rid of old taxa.name and replace with new taxa.name
+  # get rid of old genus and replace with new genus
   select(
-    -taxa.name
+    -genus
   ) %>% 
   
   rename(
-    taxa.name = unique_name,
-    ott.id = ott_id
+    genus = unique_name,
+    genus.ott.id = ott_id
+  ) %>% 
+  
+  select(
+    individual.uid, uid, source.code, original.sources, type,
+    nu, ind.per.nu, body.size, bodysize.measurement, units,
+    ott.id, genus.ott.id, taxa.name, species, genus, family, order, class, phylum, kingdom,
+    location.code, habitat, location, country, continent, latitude, longitude
   )
 
-saveRDS(bodysize_genus, "R/data_outputs/database_products/final_products/bodysize_genus.rds")
+saveRDS(bodysize_genus_ottid, "R/data_outputs/database_products/bodysize_genus_ottid.rds")
 
 
 ############################## Now have a dataset of raw bodysizes with just one per individual but not functional group data
@@ -194,7 +195,7 @@ saveRDS(bodysize_genus, "R/data_outputs/database_products/final_products/bodysiz
 # Add in trait info ----
 
 # Add to data
-bs_fg <- bodysize_genus %>% 
+bs_fg <- bodysize_genus_ottid %>% 
   
   # genus
   left_join(
@@ -204,7 +205,7 @@ bs_fg <- bodysize_genus %>%
   # family
   left_join(
       traits_list_all, by = c("family" = "taxa.name"),
-      suffix = c(".genus", ".family")
+      suffix = c(".s.g", ".family")
   ) %>% 
   
   # order
@@ -218,7 +219,6 @@ bs_fg <- bodysize_genus %>%
       suffix = c(".order", ".class")
   ) %>% 
 
-  
   # phylum
   left_join(
     traits_list_all, by = c("phylum" = "taxa.name")
@@ -228,7 +228,7 @@ bs_fg <- bodysize_genus %>%
   mutate(
     # morpho.class
     morpho.class = case_when(
-      !is.na(morpho.class.genus) ~ morpho.class.genus,
+      !is.na(morpho.class.s.g) ~ morpho.class.s.g,
       !is.na(morpho.class.family) ~ morpho.class.family,
       !is.na(morpho.class.order) ~ morpho.class.order,
       !is.na(morpho.class.class) ~ morpho.class.class,
@@ -236,7 +236,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     morpho.class.source = case_when(
-      !is.na(morpho.class.source.genus) ~ morpho.class.source.genus,
+      !is.na(morpho.class.source.s.g) ~ morpho.class.source.s.g,
       !is.na(morpho.class.source.family) ~ morpho.class.source.family,
       !is.na(morpho.class.source.order) ~ morpho.class.source.order,
       !is.na(morpho.class.source.class) ~ morpho.class.source.class,
@@ -246,7 +246,7 @@ bs_fg <- bodysize_genus %>%
     
     # fg
     fg = case_when(
-      !is.na(fg.genus) ~ fg.genus,
+      !is.na(fg.s.g) ~ fg.s.g,
       !is.na(fg.family) ~ fg.family,
       !is.na(fg.order) ~ fg.order,
       !is.na(fg.class) ~ fg.class,
@@ -254,7 +254,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     fg.source = case_when(
-      !is.na(fg.source.genus) ~ fg.source.genus,
+      !is.na(fg.source.s.g) ~ fg.source.s.g,
       !is.na(fg.source.family) ~ fg.source.family,
       !is.na(fg.source.order) ~ fg.source.order,
       !is.na(fg.source.class) ~ fg.source.class,
@@ -264,7 +264,7 @@ bs_fg <- bodysize_genus %>%
     
     # body.shape
     body.shape = case_when(
-      !is.na(body.shape.genus) ~ body.shape.genus,
+      !is.na(body.shape.s.g) ~ body.shape.s.g,
       !is.na(body.shape.family) ~ body.shape.family,
       !is.na(body.shape.order) ~ body.shape.order,
       !is.na(body.shape.class) ~ body.shape.class,
@@ -272,7 +272,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     body.shape.source = case_when(
-      !is.na(body.shape.source.genus) ~ body.shape.source.genus,
+      !is.na(body.shape.source.s.g) ~ body.shape.source.s.g,
       !is.na(body.shape.source.family) ~ body.shape.source.family,
       !is.na(body.shape.source.order) ~ body.shape.source.order,
       !is.na(body.shape.source.class) ~ body.shape.source.class,
@@ -282,7 +282,7 @@ bs_fg <- bodysize_genus %>%
     
     # motility
     motility = case_when(
-      !is.na(motility.genus) ~ motility.genus,
+      !is.na(motility.s.g) ~ motility.s.g,
       !is.na(motility.family) ~ motility.family,
       !is.na(motility.order) ~ motility.order,
       !is.na(motility.class) ~ motility.class,
@@ -290,7 +290,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     motility.source = case_when(
-      !is.na(motility.source.genus) ~ motility.source.genus,
+      !is.na(motility.source.s.g) ~ motility.source.s.g,
       !is.na(motility.source.family) ~ motility.source.family,
       !is.na(motility.source.order) ~ motility.source.order,
       !is.na(motility.source.class) ~ motility.source.class,
@@ -300,7 +300,7 @@ bs_fg <- bodysize_genus %>%
     
     # motility.method
     motility.method = case_when(
-      !is.na(motility.method.genus) ~ motility.method.genus,
+      !is.na(motility.method.s.g) ~ motility.method.s.g,
       !is.na(motility.method.family) ~ motility.method.family,
       !is.na(motility.method.order) ~ motility.method.order,
       !is.na(motility.method.class) ~ motility.method.class,
@@ -308,7 +308,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     motility.method.source = case_when(
-      !is.na(motility.method.source.genus) ~ motility.method.source.genus,
+      !is.na(motility.method.source.s.g) ~ motility.method.source.s.g,
       !is.na(motility.method.source.family) ~ motility.method.source.family,
       !is.na(motility.method.source.order) ~ motility.method.source.order,
       !is.na(motility.method.source.class) ~ motility.method.source.class,
@@ -318,7 +318,7 @@ bs_fg <- bodysize_genus %>%
     
     # trophic.group
     trophic.group = case_when(
-      !is.na(trophic.group.genus) ~ trophic.group.genus,
+      !is.na(trophic.group.s.g) ~ trophic.group.s.g,
       !is.na(trophic.group.family) ~ trophic.group.family,
       !is.na(trophic.group.order) ~ trophic.group.order,
       !is.na(trophic.group.class) ~ trophic.group.class,
@@ -326,7 +326,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     trophic.group.source = case_when(
-      !is.na(trophic.group.source.genus) ~ trophic.group.source.genus,
+      !is.na(trophic.group.source.s.g) ~ trophic.group.source.s.g,
       !is.na(trophic.group.source.family) ~ trophic.group.source.family,
       !is.na(trophic.group.source.order) ~ trophic.group.source.order,
       !is.na(trophic.group.source.class) ~ trophic.group.source.class,
@@ -336,7 +336,7 @@ bs_fg <- bodysize_genus %>%
     
     # life.form
     life.form = case_when(
-      !is.na(life.form.genus) ~ life.form.genus,
+      !is.na(life.form.s.g) ~ life.form.s.g,
       !is.na(life.form.family) ~ life.form.family,
       !is.na(life.form.order) ~ life.form.order,
       !is.na(life.form.class) ~ life.form.class,
@@ -344,7 +344,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     life.form.source = case_when(
-      !is.na(life.form.source.genus) ~ life.form.source.genus,
+      !is.na(life.form.source.s.g) ~ life.form.source.s.g,
       !is.na(life.form.source.family) ~ life.form.source.family,
       !is.na(life.form.source.order) ~ life.form.source.order,
       !is.na(life.form.source.class) ~ life.form.source.class,
@@ -354,7 +354,7 @@ bs_fg <- bodysize_genus %>%
     
     # feeding.type
     feeding.type = case_when(
-      !is.na(feeding.type.genus) ~ feeding.type.genus,
+      !is.na(feeding.type.s.g) ~ feeding.type.s.g,
       !is.na(feeding.type.family) ~ feeding.type.family,
       !is.na(feeding.type.order) ~ feeding.type.order,
       !is.na(feeding.type.class) ~ feeding.type.class,
@@ -362,7 +362,7 @@ bs_fg <- bodysize_genus %>%
       TRUE ~ NA
     ),
     feeding.type.source = case_when(
-      !is.na(feeding.type.source.genus) ~ feeding.type.source.genus,
+      !is.na(feeding.type.source.s.g) ~ feeding.type.source.s.g,
       !is.na(feeding.type.source.family) ~ feeding.type.source.family,
       !is.na(feeding.type.source.order) ~ feeding.type.source.order,
       !is.na(feeding.type.source.class) ~ feeding.type.source.class,
@@ -372,23 +372,25 @@ bs_fg <- bodysize_genus %>%
   ) %>% 
   
   select(
-    !(matches(".genus|.family|.order|.class|.phylum"))
+    !(matches(".s.g|.family|.order|.class|.phylum"))
   ) %>% 
   
   # assign traditional groups 
   mutate(
-    group = case_when(
+    taxonomic.group = case_when(
       # Phyto
-      phylum == "Cyanobacteria" ~ "Blue/green",
-      phylum %in% c("Ochrophyta", "Bigyra") ~ "Stramenopile",
-      phylum == "Glaucophyta" ~ "Glaucophyte",
-      phylum %in% c("Chlorophyta", "Charophyta") ~ "Green",
-      phylum == "Bacillariophyta" ~ "Diatom",
-      phylum == "Euglenozoa" ~ "Euglenoid",
+      phylum == "Cyanobacteria" ~ "Blue-green",
+      phylum == "Glaucophyta" ~ "Glaucocystid",
+      phylum %in% c("Spironematellophyta", "Chlorophyta") ~ "Green",
+      class == "Bacillariophyceae" ~ "Diatom",
+      phylum == "Euglenophyta" ~ "Euglenoid-flagellate",
       phylum == "Cryptophyta" ~ "Cryptomonad",
       phylum == "Haptophyta" ~ "Haptophyte",
-      phylum == "Myzozoa" ~ "Dinoflagellate",
+      phylum == "Dinoflagellata" ~ "Dino-flagellate",
+      phylum == "Charophyta" ~ "Charophyte",
+      phylum == "Heterokontophyta" ~ "Heterokont",
       phylum == "Choanozoa" ~ "Opisthokont",
+      phylum == "Bigyra" ~ "Bigyra",
       
       # Zoo
       class == "Branchiopoda" ~ "Cladoceran",
@@ -418,8 +420,8 @@ bs_fg <- bodysize_genus %>%
   
   select(individual.uid, uid, source.code, original.sources, type, taxa.name,
                body.size, bodysize.measurement,
-               ott.id, group, lw.group, fg, family, order, class, phylum, kingdom,
-              location.code, habitat, location, country, continent, latitude, longitude)
+               ott.id, genus.ott.id, taxonomic.group, lw.group, fg, fg.source, taxa.name, species, genus, family, order, class, phylum, kingdom,
+               location.code, habitat, location, country, continent, latitude, longitude)
 
 # Calculating masses ----
 # Calculate the masses from length weight and remove any obvious errors
@@ -516,10 +518,10 @@ bodysize_raw <- bs_fg %>%
     
     # b) convert dry weight and volume to carbon mass
     c.pg = case_when(
-      group == "Diatom" ~ 0.288*(biovolume^0.811),
-      group == "Blue/green" ~ 0.218*(biovolume^0.85),
+      taxonomic.group == "Diatom" ~ 0.288*(biovolume^0.811),
+      taxonomic.group == "Blue/green" ~ 0.218*(biovolume^0.85),
       type == "Phytoplankton" ~ 0.216*(biovolume^0.939),
-      group == "Ciliate" ~ 0.310*(biovolume^0.983),
+      taxonomic.group == "Ciliate" ~ 0.310*(biovolume^0.983),
       !is.na(dw) ~ (dw/0.5)*1000000, # first part is converting to ug and then divide by 1000000 to get pg
       
       TRUE ~ NA
@@ -543,7 +545,7 @@ bodysize_raw <- bs_fg %>%
       c.pg > 2.5e+10 & type == "Zooplankton" ~ "outlier",
       
       # random ones
-      uid %in% c("4260", "4253", "4276","4255") ~ "outlier",
+      uid %in% c("4231", "4241", "4234", "4235", "4252", "4259", "4275", "90258", "98394", "98658", "98655", "98650") ~ "outlier",
       
       TRUE ~ NA
     )
@@ -554,10 +556,10 @@ bodysize_raw <- bs_fg %>%
   ) %>% 
   
   select(
-    uid, individual.uid, source.code, original.sources, taxa.name,
+    uid, source.code, original.sources, taxa.name,
     c.pg, mld,
-    ott.id, type, family, order, class, phylum, kingdom,
-    group, fg, 
+    ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
+    taxonomic.group, fg, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
   )
 
@@ -566,7 +568,7 @@ bodysize_raw <- bs_fg %>%
 outliers_info <- bodysize_raw %>% 
   
   group_by(
-    taxa.name
+    genus
   ) %>% 
   
   summarise(
@@ -578,7 +580,7 @@ outliers_info <- bodysize_raw %>%
 # Remove outliers and get average for multiple of the same individual.uid
 bodysize_outliers <- bodysize_raw %>% 
   
-  left_join(outliers_info, by = "taxa.name") %>% 
+  left_join(outliers_info, by = "genus") %>% 
   
   filter(
     c.pg <= mean + (sd * 2) & c.pg >= mean - (sd * 2)
@@ -586,7 +588,7 @@ bodysize_outliers <- bodysize_raw %>%
   
   # calculate average for each source and location
   group_by(
-    individual.uid, location.code, source.code, original.sources
+    uid, location.code, source.code, original.sources
   ) %>% 
   
   summarise(
@@ -617,61 +619,133 @@ locations_updated <- bodysize_raw %>%
 
 tax_updated <- bodysize_raw %>% 
   select(
-    individual.uid,
+    uid,
     ott.id,
+    genus.ott.id,
     type,
-    group,
+    taxonomic.group,
     fg,
+    fg.source,
     taxa.name,
+    species,
+    genus,
     family,
     order,
     class,
     phylum,
     kingdom
   ) %>% 
+  
   distinct(
-    individual.uid, .keep_all = TRUE
+    uid, .keep_all = TRUE
   ) %>% 
   
   filter(
-    individual.uid %in% bodysize_outliers$individual.uid
+    uid %in% bodysize_outliers$uid
   )
 
 
-# Final bits
-bodysize_traits <- bodysize_outliers %>%
+# join in the extra info to outliers
+trait_data_all <- bodysize_outliers %>%
   
   left_join(
     locations_updated, by = "location.code"
   ) %>% 
   
   left_join(
-    tax_updated, by = "individual.uid"
+    tax_updated, by = "uid"
   ) %>% 
   
-  mutate(
-    uid = row_number()
-  )%>% 
-  
+  rename(
+    functional.group = fg
+  ) %>% 
+
   # select columns and reorder
   select(
     uid, source.code, original.sources, taxa.name,
     mass, mld,
-    ott.id, type, family, order, class, phylum, kingdom,
-    group, fg, 
+    ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
+    taxonomic.group, functional.group, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
+  ) 
+
+# save
+saveRDS(trait_data_all, file = "R/Data_outputs/database_products/trait_data_all.rds")
+
+# Select species
+plankton_species_traits <- trait_data_all %>% 
+  
+  filter(
+    !is.na(species)
+  ) %>% 
+  
+  select(
+    -genus.ott.id,
+    -species
+  )
+
+# save
+saveRDS(plankton_species_traits, file = "R/Data_outputs/database_products/final_products/plankton_species_traits.rds")
+
+
+# Select genus
+genus_traits <- trait_data_all %>% 
+  
+  # select columns
+  select(
+    genus, functional.group, fg.source
+  ) %>% 
+  
+  # get ones only with fg info
+  filter(
+    !is.na(functional.group)
+  ) %>% 
+  
+  # get list of each taxa.name with each unique fg
+  group_by(genus, functional.group, fg.source) %>% 
+  distinct(genus) %>% 
+  ungroup() %>% 
+  group_by(genus) %>% 
+  summarise(
+    functional.group = paste(unique(functional.group), collapse = "/"),
+    fg.source = paste(unique(fg.source), collapse = "/")
+    )
+  
+# add to main data
+plankton_genus_traits <- trait_data_all %>% 
+  
+  select(
+    - ott.id,
+    - taxa.name,
+    - species,
+    - functional.group,
+    - fg.source
+  ) %>% 
+  
+  left_join(
+    genus_traits, by = "genus"
+  ) %>% 
+  
+  rename(
+    taxa.name = genus,
+    ott.id = genus.ott.id
   )
 
 
+# save
+saveRDS(plankton_genus_traits, file = "R/Data_outputs/database_products/final_products/plankton_genus_traits.rds")
+
+
 # View data ----
-ggplot(bodysize_traits, aes(x = log10(mass), fill = type)) +
+ggplot(plankton_genus_traits, aes(x = log10(mass), fill = type)) +
   geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
-
-# save
-saveRDS(bodysize_traits, file = "R/Data_outputs/database_products/final_products/bodysize_traits.rds")
+ggplot(plankton_species_traits, aes(x = log10(mass), fill = type)) +
+  geom_histogram(binwidth = 0.5)+
+  facet_wrap(~type, ncol = 1)+
+  scale_y_log10()
 
 
 

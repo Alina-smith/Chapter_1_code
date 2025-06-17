@@ -367,6 +367,7 @@ taxonomy_formatted_pmc <- taxonomy_raw_pmc %>%
       stri_detect_regex(name.crop, "Amoeba") ~ "Amoeba", 
       stri_detect_regex(name.crop, "Karlodinium") ~ "Karlodinium",
       stri_detect_regex(name.crop, "Karenia") ~ "Karenia",
+      resolved.taxa.name == "Diphylleia rotans" ~ "Aulacomonas",
       
       !is.na(genus.2) ~ genus.2,
       
@@ -565,7 +566,11 @@ taxonomy_pmc <- taxonomy_order %>%
     class = case_when(
       class == "Insecta" ~ "Hexapoda",
       class == "Prymnesiophyceae" ~ "Coccolithophyceae",
+      class == "Mediophyceae" ~ "Bacillariophyceae",
+      class == "Zygnemophyceae" ~ "Zygnematophyceae",
+      resolved.taxa.name == "Zygnemophyceae" ~ "Zygnematophyceae",
       
+      order == "Chlamydomonadales" ~ "Chlorophyceae",
       order == "Eustigmatales" ~ "Eustigmatophyceae",
       order == "Pyramimonadales" ~ "Pyramimonadophyceae",
       order %in% c("Fragilariales", "Tabellariales", "Coscinodiscales", "Aulacoseirales", "Melosirales", "Thalassiosirales", "Leptocylindrales", "Paraliales") ~ "Bacillariophyceae",
@@ -597,7 +602,7 @@ taxonomy_pmc <- taxonomy_order %>%
       
       resolved.taxa.name == "Prymnesiophyceae" ~ "Coccolithophyceae",
       resolved.taxa.name == "Insecta" ~ "Hexapoda",
-      resolved.taxa.name %in% c("Chlorophyceae", "Trebouxiophyceae", "Bacillariophyceae", "Zygnemophyceae", "Arachnida", "Bdelloidea (class in Lophotrochozoa)", "Ostracoda") ~ resolved.taxa.name,
+      resolved.taxa.name %in% c("Chlorophyceae", "Trebouxiophyceae", "Bacillariophyceae", "Arachnida", "Bdelloidea (class in Lophotrochozoa)", "Ostracoda") ~ resolved.taxa.name,
       
       TRUE ~ class
     ),
@@ -605,22 +610,21 @@ taxonomy_pmc <- taxonomy_order %>%
     #### Phylum ----
     phylum = case_when(
       phylum == "Streptophyta" ~ "Charophyta",
-       
-      class %in% c("Dictyochophyceae", "Chrysophyceae", "Xanthophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Actinophryidae", "Eustigmatophyceae", "Chrysomeridophyceae") ~ "Ochrophyta",
-      class == "Dinophyceae" ~ "Myzozoa",
-      class %in% c("Kinetoplastea", "Euglenophyceae", "Euglenoidea") ~ "Euglenozoa",
+      
+      class == "Spironematellophyceae" ~ "Spironematellophyta",
+      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Heterokontophyta",
+      class %in% c("Trebouxiophyceae", "Chlorophyceae") ~ "Chlorophyta",
+      class %in% c("Dinophyceae") ~ "Dinoflagellata",
+      class == "Cyanophyceae" ~ "Cyanobacteria",
+      class %in% c("Kinetoplastea", "Euglenophyceae", "Euglenoidea") ~ "Euglenophyta",
       class == "Cryptophyceae" ~ "Cryptophyta",
       class == "Choanoflagellatea" ~ "Choanozoa",
-      class == "Cyanophyceae" ~ "Cyanobacteria", 
-      class == "Centrohelea" ~ "Heliozoa",
+      class == "Centrohelea" ~ "Haptophyta",
       class == "Oligohymenophorea" ~ "Ciliophora (phylum in subkingdom SAR)",
       class == "Tubulinea" ~ "Amoebozoa",
-      class == "Diphyllatea" ~ "Sulcozoa",
       class == "Bicosoecophyceae" ~ "Bigyra",
-      class == "Trebouxiophyceae" ~ "Chlorophyta",
       
-      resolved.taxa.name == "Dinoflagellata" ~ "Myzozoa",
-      resolved.taxa.name %in% c("Cyanobacteria", "Chlorophyta", "Rotifera", "Haptophyta", "Ciliophora (phylum in subkingdom SAR)") ~ resolved.taxa.name,
+      resolved.taxa.name %in% c("Dinoflagellata", "Cyanobacteria", "Chlorophyta", "Rotifera", "Haptophyta", "Ciliophora (phylum in subkingdom SAR)") ~ resolved.taxa.name,
       
       TRUE ~ phylum
     ),
@@ -628,9 +632,9 @@ taxonomy_pmc <- taxonomy_order %>%
     #### Kingdom ----
     kingdom = case_when(
       phylum %in% c("Cyanobacteria",  "Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria") ~ "Bacteria",
-      phylum %in% c("Chlorophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Charophyta") ~ "Plantae",
-      phylum %in% c("Ochrophyta", "Bacillariophyta", "Haptophyta", "Bigyra", "Myzozoa", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa") ~ "Chromista",
-      phylum %in% c("Euglenozoa", "Amoebozoa", "Choanozoa", "Sulcozoa") ~ "Protozoa",
+      phylum %in% c("Chlorophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Charophyta", "Euglenophyta") ~ "Plantae",
+      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Heterokontophyta", "Dinoflagellata") ~ "Chromista",
+      phylum %in% c("Amoebozoa", "Choanozoa", "Sulcozoa", "Spironematellophyta") ~ "Protozoa",
       phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Chordata", "Annelida", "Platyhelminthes", "Nematoda") ~ "Animalia",
       phylum %in% c("Ascomycota", "Basidiomycota") ~ "Fungi",
       
@@ -642,14 +646,13 @@ taxonomy_pmc <- taxonomy_order %>%
       
       # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
       kingdom == "Fungi" ~ "not plankton",
-      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Rhodophyta", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
       class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
       genus == "Rhogostoma" ~ "not plankton",
       
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
-      phylum == "Cyanobacteria" ~ "Phytoplankton",
-      phylum %in% c("Ochrophyta", "Haptophyta", "Myzozoa", "Euglenozoa", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra") ~ "Phytoplankton",
+      phylum %in% c("Cyanobacteria", "Heterokontophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra", "Spironematellophyta") ~ "Phytoplankton",
       
       phylum %in% c("Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
@@ -870,7 +873,7 @@ circular_plot <- circular_plot %<+% phylo_plot_data_update +
                        c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#CC5500", "Kingdom: Chromista" = "#00008B", "Kingdom: Animalia" = "#8B0000",
                          "Phylum: Chlorophyta" = "#e5f5e0", "Phylum: Charophyta" = "#a1d99b", "Phylum: Glaucophyta" = "#74c476", "Phylum: Rhodophyta" = "#238b45", "Phylum: Cryptophyta" = "#41ab5d",
                          "Phylum: Cyanobacteria" = "#B57EDC",
-                         "Phylum: Euglenozoa" = "#FFFFE0", "Phylum: Amoebozoa" = "#FFF176", "Phylum: Choanozoa" = "#FBC02D",
+                         "Phylum: Euglenophyta" = "#FFFFE0", "Phylum: Amoebozoa" = "#FFF176", "Phylum: Choanozoa" = "#FBC02D",
                          "Phylum: Myzozoa" = "#6495ED", "Phylum: Bacillariophyta"= "#CFE2F3", "Phylum: Ochrophyta" = "#87CEEB", "Phylum: Haptophyta" = "#ADD8E6", "Phylum: Bigyra"= "#003366", "Phylum: Ciliophora (phylum in subkingdom SAR)" = "#1E3A5F", "Phylum: Cercozoa" = "#4682B4","Phylum: Heliozoa" = "#EBF5FA",
                          "Phylum: Cnidaria" = "#FFCCCB", "Phylum: Mollusca" = "#F08080", "Phylum: Arthropoda" = "#FF6347", "Phylum: Rotifera" = "#D32F2F", "Phylum: Gastrotricha" = "#B71C1C"
                        )
@@ -911,15 +914,117 @@ taxonomy <- taxonomy_mc1 %>%
       genus == "Cryptaulax",
       "Cryptaulax (genus in infrakingdom Excavata)",
       genus
+      ),
+    
+    # just do the same formatting as above to make sure the ranks are the same  
+    class = case_when(
+      class == "Insecta" ~ "Hexapoda",
+      class == "Prymnesiophyceae" ~ "Coccolithophyceae",
+      class == "Mediophyceae" ~ "Bacillariophyceae",
+      class == "Zygnemophyceae" ~ "Zygnematophyceae",
+      resolved.taxa.name == "Zygnemophyceae" ~ "Zygnematophyceae",
+      
+      order == "Chlamydomonadales" ~ "Chlorophyceae",
+      order == "Eustigmatales" ~ "Eustigmatophyceae",
+      order == "Pyramimonadales" ~ "Pyramimonadophyceae",
+      order %in% c("Fragilariales", "Tabellariales", "Coscinodiscales", "Aulacoseirales", "Melosirales", "Thalassiosirales", "Leptocylindrales", "Paraliales") ~ "Bacillariophyceae",
+      order == "Synurales" ~ "Chrysophyceae",
+      order == "Bangiales" ~ "Bangiophyceae",
+      order == "Chrysomeridales" ~ "Chrysomeridophyceae",
+      order %in% c("Chroococcales", "Oscillatoriales", "Nostocales", "Pseudanabaenales", "Pleurocapsales", "Synechococcales", "Nodosilineales", "Spirulinales", "Leptolyngbyales") ~ "Cyanophyceae",
+      order %in% c("Noctilucales", "Gymnodiniales") ~ "Dinophyceae",
+      order == "Vaginulinida" ~ "Nodosariata",
+      order == "Euglenales" ~ "Euglenophyceae",
+      order == "Mischococcales" ~ "Xanthophyceae",
+      order %in% c("Gomontiellales", "Coleofasciculales", "Pelonematales", "Chroococcidiopsidales", "Gloeobacterales", "Geitlerinematales") ~ "Cyanophyceae",
+      order == "Spironematellales" ~ "Spironematellophyceae",
+      order == "Picocystales" ~ "Picocystophyceae",
+      order == "Bicosoecales" ~ "Bicosoecophyceae", 
+      order == "Chaetonotida" ~ "Gastrotricha incertae sedis",
+      order == "Craspedida" ~ "Choanoflagellatea",
+      order == "Cryptomonadales" ~ "Cryptophyceae",
+      order == "Centrohelida" ~ "Centrohelea",
+      order == "Micrococcales" ~ 'Actinomycetia',
+      order %in% c("Glaucocystales", "Gloeochaetales") ~ "Glaucophyceae",
+      order == "Tetrahymenida" ~ "Oligohymenophorea",
+      order == "Euamoebida" ~ "Tubulinea",
+      order == "Chloroflexales" ~ "Chloroflexi",
+      order == "Diphylleida" ~ "Diphyllatea",
+      order == "Chlorellales" ~ "Trebouxiophyceae",
+      order == "Neobodonida" ~ "Kinetoplastea",
+      order == "Goniochloridales" ~ "Eustigmatophyceae",
+      
+      resolved.taxa.name == "Prymnesiophyceae" ~ "Coccolithophyceae",
+      resolved.taxa.name == "Insecta" ~ "Hexapoda",
+      resolved.taxa.name %in% c("Chlorophyceae", "Trebouxiophyceae", "Bacillariophyceae", "Arachnida", "Bdelloidea (class in Lophotrochozoa)", "Ostracoda") ~ resolved.taxa.name,
+      
+      TRUE ~ class
+    ),
+    
+    #### Phylum ----
+    phylum = case_when(
+      phylum == "Streptophyta" ~ "Charophyta",
+      
+      class == "Spironematellophyceae" ~ "Spironematellophyta",
+      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Heterokontophyta",
+      class %in% c("Trebouxiophyceae", "Chlorophyceae") ~ "Chlorophyta",
+      class %in% c("Dinophyceae") ~ "Dinoflagellata",
+      class == "Cyanophyceae" ~ "Cyanobacteria",
+      class %in% c("Kinetoplastea", "Euglenophyceae", "Euglenoidea") ~ "Euglenophyta",
+      class == "Cryptophyceae" ~ "Cryptophyta",
+      class == "Choanoflagellatea" ~ "Choanozoa",
+      class == "Centrohelea" ~ "Haptophyta",
+      class == "Oligohymenophorea" ~ "Ciliophora (phylum in subkingdom SAR)",
+      class == "Tubulinea" ~ "Amoebozoa",
+      class == "Bicosoecophyceae" ~ "Bigyra",
+      
+      resolved.taxa.name %in% c("Dinoflagellata", "Cyanobacteria", "Chlorophyta", "Rotifera", "Haptophyta", "Ciliophora (phylum in subkingdom SAR)") ~ resolved.taxa.name,
+      
+      TRUE ~ phylum
+    ),
+    
+    #### Kingdom ----
+    kingdom = case_when(
+      phylum %in% c("Cyanobacteria",  "Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria") ~ "Bacteria",
+      phylum %in% c("Chlorophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Charophyta", "Euglenophyta") ~ "Plantae",
+      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Heterokontophyta", "Dinoflagellata") ~ "Chromista",
+      phylum %in% c("Amoebozoa", "Choanozoa", "Sulcozoa", "Spironematellophyta") ~ "Protozoa",
+      phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Chordata", "Annelida", "Platyhelminthes", "Nematoda") ~ "Animalia",
+      phylum %in% c("Ascomycota", "Basidiomycota") ~ "Fungi",
+      
+      TRUE ~ NA
+    ),
+    
+    #### Type ----
+    type = case_when(
+      
+      # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
+      kingdom == "Fungi" ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
+      class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
+      genus == "Rhogostoma" ~ "not plankton",
+      
+      # Ones that are plankton
+      kingdom == "Plantae" ~ "Phytoplankton",
+      phylum %in% c("Cyanobacteria", "Heterokontophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra", "Spironematellophyta") ~ "Phytoplankton",
+      
+      phylum %in% c("Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
+      class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
+      
+      TRUE ~ NA
     )
+  ) %>% 
+  
+  relocate(
+    resolved.taxa.name, ott.id, type, species, genus, family, order, class, phylum, kingdom, domain
+  ) %>% 
+  
+  filter(
+    !is.na(type)
   )
 
 # Save
 saveRDS(taxonomy, "R/data_outputs/database_products/taxonomy/taxonomy.rds")
-
-
-
-
 
 
 # Phylogeny plot 2 ----
@@ -1043,15 +1148,13 @@ circular_plot <- circular_plot %<+% phylo_plot_data_update +
                        c("Kingdom: Plantae" = "#006400", "Kingdom: Bacteria" = "#9B59B6", "Kingdom: Protozoa" = "#CC5500", "Kingdom: Chromista" = "#00008B", "Kingdom: Animalia" = "#8B0000",
                          "Phylum: Chlorophyta" = "#e5f5e0", "Phylum: Charophyta" = "#a1d99b", "Phylum: Glaucophyta" = "#74c476", "Phylum: Rhodophyta" = "#238b45", "Phylum: Cryptophyta" = "#41ab5d",
                          "Phylum: Cyanobacteria" = "#B57EDC",
-                         "Phylum: Euglenozoa" = "#FFFFE0", "Phylum: Amoebozoa" = "#FFF176", "Phylum: Choanozoa" = "#FBC02D",
+                         "Phylum: Euglenophyta" = "#FFFFE0", "Phylum: Amoebozoa" = "#FFF176", "Phylum: Choanozoa" = "#FBC02D",
                          "Phylum: Myzozoa" = "#6495ED", "Phylum: Bacillariophyta"= "#CFE2F3", "Phylum: Ochrophyta" = "#87CEEB", "Phylum: Haptophyta" = "#ADD8E6", "Phylum: Bigyra"= "#003366", "Phylum: Ciliophora (phylum in subkingdom SAR)" = "#1E3A5F", "Phylum: Cercozoa" = "#4682B4","Phylum: Heliozoa" = "#EBF5FA",
                          "Phylum: Cnidaria" = "#FFCCCB", "Phylum: Mollusca" = "#F08080", "Phylum: Arthropoda" = "#FF6347", "Phylum: Rotifera" = "#D32F2F", "Phylum: Gastrotricha" = "#B71C1C"
                        )
   )
 
 circular_plot
-
-
 
 
 
@@ -1189,3 +1292,8 @@ bodysize_taxonomy <-  bodysize_raw %>%
 # Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/database_products/bodysize_taxonomy.rds")
 
+
+############################\
+# need to change:
+# Magnoliopsida
+# Liliopsida

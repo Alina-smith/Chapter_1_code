@@ -8,14 +8,14 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
+freshwater_plankton_traits <- readRDS("R/data_outputs/database_products/final_products/freshwater_plankton_traits.rds")
 sources_list_old <- readRDS("R/Data_outputs/database_products/source_list_wt.rds")
 location_list_old <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- bodysize_traits %>% 
+location_codes <- freshwater_plankton_traits %>% 
   
   # select column
   select(
@@ -55,7 +55,7 @@ saveRDS(locations_list, "R/data_outputs/database_products/final_products/locatio
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- bodysize_traits %>% 
+source_codes <- freshwater_plankton_traits %>% 
   
   # select columns
   select(
@@ -108,10 +108,10 @@ sources_list <- sources_list_old %>%
 saveRDS(sources_list, "R/data_outputs/database_products/final_products/sources_list.rds")
 
 # taxonomy ----
-taxonomy_list <- bodysize_traits %>% 
+taxonomy_list <- freshwater_plankton_traits %>% 
   
   select(
-    taxa.name, family, order, class, phylum, kingdom, type, group, fg
+    taxa.name, family, order, class, phylum, kingdom, type, taxonomic.group, fg
   ) %>% 
   
   distinct(

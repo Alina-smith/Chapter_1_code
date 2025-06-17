@@ -14,10 +14,11 @@ library(patchwork)
 
 location_list <- read_rds("R/Data_outputs/database_products/final_products/locations_list.rds")
 source_list <- read_rds("R/Data_outputs/database_products/final_products/sources_list.rds")
-bs_data <- readRDS("R/Data_outputs/database_products/final_products/bodysize_traits.rds")
+bs_data <- readRDS("R/Data_outputs/database_products/final_products/plankton_genus_traits.rds")
 
-# format data ----
-# phyto ----
+# Map ----
+## format data ----
+### phyto ----
 
 phyto_groups <- bs_data %>% 
   
@@ -25,13 +26,14 @@ phyto_groups <- bs_data %>%
     type == "Phytoplankton"
   ) %>% 
   
-  separate(location.code, into = c("1", "2", "3", "4", "5", "6"), sep = ";") %>% 
+  separate(location.code, into = c("1", "2", "3", "4", "5", "6"), sep = ";")%>%
+  separate(functional.group, into = c("f1", "f2", "f3", "f4"), sep = "/") %>% 
   
   select(
     latitude,
     `1`,
-    taxa.name,
-    fg
+    f1,
+    taxa.name
   ) %>% 
   
   filter(
@@ -39,7 +41,8 @@ phyto_groups <- bs_data %>%
   ) %>% 
   
   rename(
-    location.code = `1`
+    location.code = `1`,
+    functional.group = f1
   ) %>% 
   
   select(
@@ -84,7 +87,7 @@ diversity_phyto <- phyto_groups %>%
 
 fg_phyto <- phyto_groups %>% 
   
-  group_by(location.code, fg) %>% 
+  group_by(location.code, functional.group) %>% 
   
   summarise(
     value = n(),
@@ -129,7 +132,7 @@ world_map_phyto <- ggplot(world) +
       y = latitude
       ),
     pie_scale = 0.5,
-    cols = "fg",
+    cols = "functional.group",
     long_format = TRUE
   ) +
 
@@ -164,12 +167,13 @@ zoo_groups <- bs_data %>%
   ) %>% 
   
   separate(location.code, into = c("1", "2", "3", "4", "5", "6"), sep = ";") %>% 
+  separate(functional.group, into = c("f1", "f2", "f3"), sep = "/") %>% 
   
   select(
     latitude,
     `1`,
-    taxa.name,
-    fg
+    f1,
+    taxa.name
   ) %>% 
   
   filter(
@@ -177,13 +181,13 @@ zoo_groups <- bs_data %>%
   ) %>% 
   
   rename(
-    location.code = `1`
+    location.code = `1`,
+    functional.group = f1
   ) %>% 
   
   select(
     -latitude
   )
-
 
 diversity_zoo <- zoo_groups %>% 
   
@@ -222,7 +226,7 @@ diversity_zoo <- zoo_groups %>%
 
 fg_zoo <- zoo_groups %>% 
   
-  group_by(location.code, fg) %>% 
+  group_by(location.code, functional.group) %>% 
   
   summarise(
     value = n(),
@@ -267,7 +271,7 @@ world_map_zoo <- ggplot(world) +
       y = latitude
     ),
     pie_scale = 0.000015,
-    cols = "fg",
+    cols = "functional.group",
     long_format = TRUE
   ) +
   
@@ -296,4 +300,51 @@ world_map_zoo
 map <- world_map_phyto / world_map_zoo
 map
 
-ggsave("R/data_outputs/plots/map.png", plot = map, width = 10, height = 6, dpi = 600)
+ggsave("R/data_outputs/plots/world_map_phyto.png", plot = world_map_phyto, width = 15, height = 10, dpi = 600)
+ggsave("R/data_outputs/plots/world_map_zoo.png", plot = world_map_zoo, width = 15, height = 10, dpi = 600)
+ggsave("R/data_outputs/plots/map.png", plot = map, width = 11, height = 10, dpi = 600)
+
+# Continent spread ----
+## format data ----
+### phyto ----
+
+continent_spread_data <- bs_data %>% 
+  
+  filter(
+    !is.na(continent)
+  ) %>% 
+  
+  mutate(
+    continent = if_else(
+      stri_detect_regex(continent, ","),
+      stri_extract_first_regex(continent, "\\S+(?=,)"),
+      continent
+    )
+  )
+
+continent_spread <- ggplot(continent_spread_data, aes(x = continent, fill = type))+
+  geom_bar()+
+  facet_wrap(~type, ncol = 1)+
+  scale_y_log10()+
+  theme(
+    axis.text.x = element_text(angle = -20)
+  )
+
+continent_spread
+
+ggsave("R/data_outputs/plots/continent_spread.png", plot = continent_spread, width = 7, height = 7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
