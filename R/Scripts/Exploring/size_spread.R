@@ -31,7 +31,7 @@ avg_mass <- bs %>%
 # Plot
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.3)+
+  geom_histogram(binwidth = 0.1)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
@@ -54,7 +54,7 @@ ggsave("R/Data_outputs/plots/spread_phylum.png", plot = spread_phylum)
 # Facet by group
 spread_group <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
   geom_histogram(binwidth = 0.8)+
-  facet_wrap(~group) +
+  facet_wrap(~taxonomic.group) +
   scale_y_log10()
 
 spread_group
@@ -65,7 +65,7 @@ ggsave("R/Data_outputs/plots/spread_group.png", plot = spread_group)
 # Facet by fg
 spread_fg <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
   geom_histogram(binwidth = 0.8)+
-  facet_wrap(~fg) +
+  facet_wrap(~functional.group) +
   scale_y_log10()
 
 spread_fg

@@ -25,7 +25,7 @@ library(treeio)
 library(ggtreeExtra)
 
 # Import data ----
-bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/bodysize_traits.rds")
+bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds")
 
 # Format data ----
 # Get a taxonomy list to add in in later steps
@@ -38,7 +38,7 @@ p_data <- bodysize_traits %>%
   ) %>% 
   
   select(
-    ott.id, taxa.name, type, phylum, kingdom, family, order, class, fg, group
+    ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
   ) %>% 
   
   distinct(taxa.name, .keep_all = TRUE) %>% 
@@ -55,7 +55,7 @@ z_data <- bodysize_traits %>%
   ) %>% 
   
   select(
-    ott.id, taxa.name, type, phylum, kingdom, family, order, class, fg, group
+    ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
   ) %>% 
   
   distinct(taxa.name, .keep_all = TRUE) %>% 
