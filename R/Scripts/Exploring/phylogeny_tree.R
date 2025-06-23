@@ -79,18 +79,18 @@ in_tree_p
 in_tree_z
 
 # See which ones are in and out
-sum(in_tree_p == TRUE) # 454
-sum(in_tree_p == FALSE) # 99
+sum(in_tree_p == TRUE) # 591
+sum(in_tree_p == FALSE) # 141
 
-sum(in_tree_z == TRUE) # 139
-sum(in_tree_z == FALSE) # 6
+sum(in_tree_z == TRUE) # 216
+sum(in_tree_z == FALSE) # 8
 
 # Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 
 ## Phyto ----
 # get list of just species in the tree split by phyto and zoo
-taxa_in_tree_p <- p_data[in_tree_p, ]
+taxa_in_tree_p <- p_data[in_tree_p, ] 
 
 # Save
 saveRDS(taxa_in_tree_p, "R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
@@ -155,12 +155,12 @@ taxa_in_tree_full_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the ti
   ) %>% 
   
   select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, fg, group
+    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
   ) %>% 
   
   mutate(
-    fg_label = paste0("FG: ", fg),
-    group_label = paste0("Group: ", group)
+    fg_label = paste0("FG: ", functional.group),
+    group_label = paste0("Group: ", taxonomic.group)
   )
 
 ### Zoo ----
@@ -187,13 +187,13 @@ taxa_in_tree_full_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the ti
   ) %>% 
   
   select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, fg, group
+    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
   ) %>% 
   
   mutate(
-    fg_label = paste0("FG: ", fg),
-    group_label = paste0("Group: ", group)
-  )
+    fg_label = paste0("FG: ", functional.group),
+    group_label = paste0("Group: ", taxonomic.group)
+  ) 
 
 # Save
 saveRDS(taxa_in_tree_full_p, "R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds")

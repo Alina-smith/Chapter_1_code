@@ -26,12 +26,21 @@ avg_mass <- bs %>%
   # add back in extra info
   left_join(
     taxonomy_list, by = "taxa.name"
+  ) %>% 
+  
+  mutate(
+    functional.group = case_when(
+      is.na(functional.group) ~ NA,
+      stri_detect_regex(functional.group, "\\/") ~ stri_extract_first_regex(functional.group, "//S+(?=\\/)"),
+      !(stri_detect_regex(functional.group, "\\/")) ~ functional.group,
+      TRUE ~ NA
+    )
   )
 
 # Plot
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.1)+
+  geom_histogram(binwidth = 0.3)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
@@ -40,22 +49,12 @@ spread_type # View
 # save
 ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type)
 
-# Facet by phyla
-spread_phylum <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.8)+
-  facet_wrap(~phylum) +
-  scale_y_log10()
-
-spread_phylum
-
-# save
-ggsave("R/Data_outputs/plots/spread_phylum.png", plot = spread_phylum)
-
 # Facet by group
 spread_group <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.8)+
-  facet_wrap(~taxonomic.group) +
-  scale_y_log10()
+  geom_histogram(binwidth = 0.5)+
+  facet_wrap(type~taxonomic.group) +
+  scale_y_log10()+
+  guides(fill = "none")
 
 spread_group
 
@@ -65,8 +64,9 @@ ggsave("R/Data_outputs/plots/spread_group.png", plot = spread_group)
 # Facet by fg
 spread_fg <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
   geom_histogram(binwidth = 0.8)+
-  facet_wrap(~functional.group) +
-  scale_y_log10()
+  facet_wrap(type~functional.group) +
+  scale_y_log10()+
+  guides(fill = "none")
 
 spread_fg
 
