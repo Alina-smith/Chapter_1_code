@@ -20,7 +20,7 @@ avg_mass <- bs %>%
   ) %>% 
   
   summarise(
-    avg.mass = mean(mass)
+    avg.mass = mean(c.pg)
   ) %>% 
   
   # add back in extra info
@@ -40,7 +40,7 @@ avg_mass <- bs %>%
 # Plot
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(binwidth = 0.3)+
+  geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 

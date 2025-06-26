@@ -479,69 +479,12 @@ bs_fg <- bodysize_genus_ottid %>%
 # Calculate the masses from length weight and remove any obvious errors
 
 ## Get the equation info for zooplankton ----
-crustacean <- read_xlsx("raw_data/length_weight.xlsx", sheet = "crustacean_lw")
-rotifer <- read_xlsx("raw_data/length_weight.xlsx", sheet = "rotifer_lw")
-
-# Crustaceans
-crustacean_lw <- crustacean %>% 
-  
-  mutate(
-    info = stri_replace_first_regex(info, "\\S+ ", ""),
-    taxa.name = as.character(stri_extract_all_regex(info, "^(([^\\d\\s]+\\s+){0,3}[^\\d\\s]+)")),
-    lna = as.numeric(stri_extract_first_regex(info, "\\d(\\.\\d+)*")),
-    info = stri_replace_first_regex(info, "\\d(\\.\\d+)*", ""),
-    b = as.numeric(stri_extract_first_regex(info, "\\d(\\.\\d+)*")),
-    group = "crustacean",
-    
-    # remove spp
-    taxa.name = stri_replace_all_regex(taxa.name, " spp\\.| sp\\.| -", ""),
-    
-    # fix odd ones
-    lna = if_else(taxa.name == "Leptodora kindti", -0.822, lna)
-  ) %>% 
-  
-  select(
-    -info
-  )
-
-# Rotifers
-# all species are the same for eacxh genus so just aggregate to genus
-rotifer_lw <- rotifer %>% 
-  
-  mutate(
-    info = stri_replace_first_regex(info, "\\S+ ", ""),
-    taxa.name = as.character(stri_extract_all_regex(info, "^([^\\d\\s]+\\s+){1}")),
-    info = stri_replace_first_regex(info, "^(([^\\d\\s]+\\s+){0,3}[^\\d\\s]+) ", ""),
-    group = "rotifer",
-    
-    # remove spp
-    taxa.name = stri_replace_all_regex(taxa.name, " spp\\.| sp\\.", ""),
-    # fix off ones
-    taxa.name = case_when(
-      taxa.name == "Keratella cochlearis f. tecta" ~ "Keratella cochlearis",
-      taxa.name == "Keratella valga f. tropica" ~ "Keratella valga",
-      taxa.name == "Rotifera bdelloid" ~ "Bdelloidea",
-      taxa.name == "Keratella cochlearis hispida" ~ "keratella cochlearis",
-      TRUE ~ taxa.name
-    )
-  ) %>% 
-  
-  separate(
-    info, into = c("eq", "ff", "bv", "ww.dw"), sep = " "
-  ) %>% 
-  
-  # change types
-  mutate(
-    eq = as.numeric(eq),
-    ff = as.numeric(ff),
-    bv = as.numeric(bv),
-    ww.dw = as.numeric(ww.dw)
-  ) %>% 
-  
-  distinct(taxa.name, .keep_all = TRUE)
+crustacean_lw <- read_xlsx("raw_data/length_weight.xlsx", sheet = "crustacean_epa")
+rotifer_lw <- read_xlsx("raw_data/length_weight.xlsx", sheet = "rotifer_karabin")
 
 # join together
-zoo_lw <- bind_rows(crustacean_lw, rotifer_lw)
+zoo_lw <- bind_rows(crustacean_lw, rotifer_lw) %>% 
+  select(taxa.name, lna, b, ff.w, eq.w, ff.v, eq.v, average.appendices, length.range.min, length.range.max, ww.dw)
 
 ### Tol ----
 # run names through tol to make sure they all are up to date 
@@ -553,6 +496,7 @@ names_lw <- zoo_lw %>%
 names_lw_tol <- tnrs_match_names(names_lw$taxa.name)
 
 # check all have been matched to an ott id - if false then okay
+# the ones that weren't matched are juvenile forms
 unique(is.na(names_lw_tol$ott_id))
 
 # join new names back to data
@@ -569,12 +513,11 @@ zoo_lw_nn <- zoo_lw %>%
   
   select(-taxa.name) %>% 
   rename(taxa.name = unique_name) %>% 
-  
-  # manual edits
+
   mutate(
+    # manual edits
     taxa.name = case_when(
       taxa.name == "Brachionus (genus in subkingdom SAR)" ~ "Brachionus (genus in Opisthokonta)",
-      
       TRUE ~ taxa.name
     )
   ) %>% 
@@ -683,15 +626,6 @@ bodysize_raw <- bs_fg %>%
       !is.na(lna.p) ~ lna.p,
       TRUE ~ NA
     ),
-    group = case_when(
-      !is.na(group.t) ~ group.t,
-      !is.na(group.g) ~ group.g,
-      !is.na(group.f) ~ group.f,
-      !is.na(group.o) ~ group.o,
-      !is.na(group.c) ~ group.c,
-      !is.na(group.p) ~ group.p,
-      TRUE ~ NA
-    ),
     b = case_when(
       !is.na(b.t) ~ b.t,
       !is.na(b.g) ~ b.g,
@@ -701,31 +635,67 @@ bodysize_raw <- bs_fg %>%
       !is.na(b.p) ~ b.p,
       TRUE ~ NA
     ),
-    eq = case_when(
-      !is.na(eq.t) ~ eq.t,
-      !is.na(eq.g) ~ eq.g,
-      !is.na(eq.f) ~ eq.f,
-      !is.na(eq.o) ~ eq.o,
-      !is.na(eq.c) ~ eq.c,
-      !is.na(eq.p) ~ eq.p,
+    ff.v = case_when(
+      !is.na(ff.v.t) ~ ff.v.t,
+      !is.na(ff.v.g) ~ ff.v.g,
+      !is.na(ff.v.f) ~ ff.v.f,
+      !is.na(ff.v.o) ~ ff.v.o,
+      !is.na(ff.v.c) ~ ff.v.c,
+      !is.na(ff.v.p) ~ ff.v.p,
       TRUE ~ NA
     ),
-    ff = case_when(
-      !is.na(ff.t) ~ ff.t,
-      !is.na(ff.g) ~ ff.g,
-      !is.na(ff.f) ~ ff.f,
-      !is.na(ff.o) ~ ff.o,
-      !is.na(ff.c) ~ ff.c,
-      !is.na(ff.p) ~ ff.p,
+    eq.v = case_when(
+      !is.na(eq.v.t) ~ eq.v.t,
+      !is.na(eq.v.g) ~ eq.v.g,
+      !is.na(eq.v.f) ~ eq.v.f,
+      !is.na(eq.v.o) ~ eq.v.o,
+      !is.na(eq.v.c) ~ eq.v.c,
+      !is.na(eq.v.p) ~ eq.v.p,
       TRUE ~ NA
     ),
-    bv = case_when(
-      !is.na(bv.t) ~ bv.t,
-      !is.na(bv.g) ~ bv.g,
-      !is.na(bv.f) ~ bv.f,
-      !is.na(bv.o) ~ bv.o,
-      !is.na(bv.c) ~ bv.c,
-      !is.na(bv.p) ~ bv.p,
+    ff.w = case_when(
+      !is.na(ff.w.t) ~ ff.w.t,
+      !is.na(ff.w.g) ~ ff.w.g,
+      !is.na(ff.w.f) ~ ff.w.f,
+      !is.na(ff.w.o) ~ ff.w.o,
+      !is.na(ff.w.c) ~ ff.w.c,
+      !is.na(ff.w.p) ~ ff.w.p,
+      TRUE ~ NA
+    ),
+    eq.w = case_when(
+      !is.na(eq.w.t) ~ eq.w.t,
+      !is.na(eq.w.g) ~ eq.w.g,
+      !is.na(eq.w.f) ~ eq.w.f,
+      !is.na(eq.w.o) ~ eq.w.o,
+      !is.na(eq.w.c) ~ eq.w.c,
+      !is.na(eq.w.p) ~ eq.w.p,
+      TRUE ~ NA
+    ),
+    average.appendices = case_when(
+      !is.na(average.appendices.t) ~ average.appendices.t,
+      !is.na(average.appendices.g) ~ average.appendices.g,
+      !is.na(average.appendices.f) ~ average.appendices.f,
+      !is.na(average.appendices.o) ~ average.appendices.o,
+      !is.na(average.appendices.c) ~ average.appendices.c,
+      !is.na(average.appendices.p) ~ average.appendices.p,
+      TRUE ~ NA
+    ),
+    length.range.min = case_when(
+      !is.na(length.range.min.t) ~ length.range.min.t,
+      !is.na(length.range.min.g) ~ length.range.min.g,
+      !is.na(length.range.min.f) ~ length.range.min.f,
+      !is.na(length.range.min.o) ~ length.range.min.o,
+      !is.na(length.range.min.c) ~ length.range.min.c,
+      !is.na(length.range.min.p) ~ length.range.min.p,
+      TRUE ~ NA
+    ),
+    length.range.max = case_when(
+      !is.na(length.range.max.t) ~ length.range.max.t,
+      !is.na(length.range.max.g) ~ length.range.max.g,
+      !is.na(length.range.max.f) ~ length.range.max.f,
+      !is.na(length.range.max.o) ~ length.range.max.o,
+      !is.na(length.range.max.c) ~ length.range.max.c,
+      !is.na(length.range.max.p) ~ length.range.max.p,
       TRUE ~ NA
     ),
     ww.dw = case_when(
@@ -742,50 +712,80 @@ bodysize_raw <- bs_fg %>%
     !(ends_with(c(".t", ".g", ".f", ".o", ".c", ".p")))
   ) %>% 
   
+  # Filter out ones that lie outside the ranges for the equations
   mutate(
-    
-    # calculate rotifer biovolume - needs um in equation and gives um^3 as a result
-    #biovolume = case_when(
-    #  eq == 1 ~ (length^3 * ff) + (bv * length^3 * ff),
-    #  eq == 2 ~ (width^3 * ff),
-    #  eq == 3 ~ (length * width^2 * ff) + (bv * length * width^2 * ff),
+    outliers = case_when(
+      # Crustaceans
+      genus == "Ceriodaphnia" & length >= 300 & length <= 700 ~ "in-range",
+      genus == "Daphnia" & length >= 600 & length <= 4000 ~ "in-range",
+      genus %in% c("Bosmina", "Eubosmina") & length >= 280 & length <= 950 ~ "in-range",
+      genus == "Diaphanosoma" & length >= 440 & length <= 1440 ~ "in-range",
+      taxonomic.group == "Cladoceran" & length >= 280 & length <= 4830 ~ "in-range",
+      taxonomic.group == "Copepod" & length >= 140 & length <= 2450 ~ "in-range",
       
-    #  TRUE ~ biovolume
-    #),
+      # Rotifers
+      #stri_detect_regex(w.factor, "a") & length >= length.range.min & length <= length.range.max ~ "in-range",
+      #stri_detect_regex(w.factor, "b") & width >= length.range.min & width <= length.range.max ~ "in-range",
+      #taxonomic.group == "Rotifer" & !is.na(biovolume) ~ "in-range",
+      #taxonomic.group == "Rotifer" & !is.na(dry.mass) ~ "in-range",
+      
+      # Others
+      taxonomic.group %in% c("Ciliate", "Rotifer") ~ "in-range",
+      type == "Phytoplankton" ~ "in-range",
+      
+      TRUE ~ "outlier"
+    )
+  ) %>% 
+  
+  filter(
+    outliers == "in-range"
+  ) %>% 
     
+  mutate(
+    # a) Calculate dry mass
+    
+    # ff needs to be multiplied by 1000
+    ff.w = ff.w*1000,
+    
+    # Convert length in um to dry mass in ug
     dw = case_when(
-      # calculate crustacean dry weight - needs mm in equation and gives ug as result
+      # Crustaceans:
+      # equation takes length (mm) and gives dry mass (ug) - length is currently in um so need to convert to mm for equation
+      # Paper used: EPA guidlines; appendix 1 - slope and intercepts collated from multiple sources; Bottrell et al (1976) - pooled data used when isn't present in EPA
       !is.na(lna) ~ exp(lna + (b*log(length/1000))),
       is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod") & !is.na(dry.mass) ~ dry.mass,
       is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod") & !is.na(body.mass) ~ body.mass,
       
-      # calculate rotifer dry mass - needs um in equation and gives um^3 as a result
-      eq == 1 ~ (((length^3 * ff) + (bv * length^3 * ff)) * 10^-6) * ww.dw,
-      eq == 2 ~ (((width^3 * ff)) * 10^-6) * ww.dw,
-      eq == 3 ~ (((length * width^2 * ff) + (bv * length * width^2 * ff)) * 10^-6) * ww.dw,
-      taxonomic.group == "Rotifer" & !is.na(biovolume) ~ (biovolume * 10^-6) * ww.dw,
+      # Rotifers:
+      # equation takes length (mm) and gives dry mass (mg) so need to times by 1000 to get ug - length is currently in um so need to convert to mm for equation
+      # Paper: Ejsmont-Karabin, J 1998 table 2 and wet weight to dry weight conversion EPA guidlines appendix 2
+      eq.w == 1 & !is.na(length) ~ (ff.w * (length/1000)^3) * ww.dw,
+      eq.w == 2 & !is.na(length) & !is.na(width) ~ (ff.w * ((length/1000) * (width/1000)^2)) * ww.dw,
+      eq.w == 3 & !is.na(width) ~ (ff.w * (width/1000)^3) * ww.dw,
+      
+      taxonomic.group == "Rotifer" & !is.na(dry.mass) ~ dry.mass,
       
       TRUE ~ NA
     ),
     
-    # b) convert to carbon mass
+    # b) Calculate carbon mass
+    # Convert um^3 biovolume and ug dry mass to Cpg carbon mass
     c.pg = case_when(
       # From biovol measurements:
-      # Paper: Menden-Deuer & Lessard 2000 ; table 4
-      taxonomic.group == "Heterokont (Diatom)" ~ 10^(0.541 + (0.811 * log10(biovolume))),
+      # Paper: Menden-Deuer & Lessard 2000; table 4
+      taxonomic.group == "Heterokont (Diatom)" & biovolume > 3000 ~ 10^(0.541 + (0.811 * log10(biovolume))),
+      taxonomic.group == "Heterokont (Diatom)" & biovolume < 3000 ~ 10^(0.933 + (0.811 * log10(biovolume))),
       taxonomic.group == "Heterokont (non-Diatom)" ~ 10^(1.694 + (1.218 * log10(biovolume))),
       order == "Pyramimonadales" ~ 10^(0.545 + (0.886 * log10(biovolume))),
-      taxonomic.group == "Green" & order != "Pyramimonadales" ~ 10^(0.026 + (1.088 * log10(biovolume))),
+      taxonomic.group == "Green" & order != "Pyramimonadales" ~ 10^(1.026 + (1.088 * log10(biovolume))),
       taxonomic.group == "Dino-flagellate" ~ 10^(0.353 + (0.864 * log10(biovolume))),
       taxonomic.group == "Ciliate" & order == "Choreotrichida" ~ (10^(0.168 + (0.841 * log10(biovolume)))),
       taxonomic.group == "Ciliate" & order != "Choreotrichida" ~ (10^(0.639 + (0.984 * log10(biovolume)))),
       taxonomic.group == "Haptophyte" ~ (10^(0.642 + (0.899 * log10(biovolume)))),
-      taxonomic.group %in% c("Cryptomonad", "Euglenoid-flagellate") ~ 10^(0.665 + (0.939 * log10(biovolume))),
+      taxonomic.group %in% c("Cryptomonad", "Euglenoid-flagellate") & biovolume > 3000 ~ 10^(0.665 + (0.939 * log10(biovolume))),
+      taxonomic.group %in% c("Cryptomonad", "Euglenoid-flagellate") & biovolume < 3000 ~ 10^(0.583 + (0.860 * log10(biovolume))),
       # Paper: Mahlmann et al 2008
       taxonomic.group == "Blue-green" ~ biovolume * 0.127 * 10^-3,
-      
-      # Paper: unknown
-      #taxonomic.group == "Rotifer" ~ 0.053*(biovolume^0.99),
       
       # From dry mass
       # Paper: Gaedke et al. 2004
@@ -799,8 +799,6 @@ bodysize_raw <- bs_fg %>%
       TRUE ~ pmax(length, width, height, diameter, na.rm = TRUE)
     )
   ) %>% 
-  
-
   
   select(
     uid, source.code, original.sources, taxa.name,
@@ -820,22 +818,29 @@ bodysize_raw <- bs_fg %>%
       # zoo
       #c.pg > 5e+9 & type == "Zooplankton" ~ "outlier",
       
+      #taxonomic.group == "Ciliate" ~ "outlier",
+      #taxonomic.group == "Rotifer" ~ 
+
       # random ones
       #uid %in% c("100238", "100201", "100492", "100581", "100275", "99693", "100402", "98876", "92100", "91647", "90535", "90536", "90534", "91507", "91685", "91686", "91678", "91403", "3822") ~ "outlier",
-      
+
       TRUE ~ NA
     )
-  ) %>% 
+  ) %>%
   
   filter(
     is.na(outlier)
+  ) %>% 
+  
+  rename(
+    functional.group = fg
   ) %>% 
   
   select(
     uid, source.code, original.sources, taxa.name,
     c.pg, mld,
     ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
-    taxonomic.group, fg, fg.source,
+    taxonomic.group, functional.group, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
   ) 
 
@@ -847,104 +852,106 @@ ggplot(bodysize_raw, aes(x = log10(c.pg), fill = type)) +
 
   
 # calculate the mean and standard deviation 
-outliers_info <- bodysize_raw %>% 
+#outliers_info <- bodysize_raw %>% 
   
-  group_by(
-    genus
-  ) %>% 
+#  group_by(
+#    taxa.name
+#  ) %>% 
   
-  summarise(
-    mean = mean(c.pg),
-    sd = sd(c.pg),
-    .groups = "drop"
-  )
+#  summarise(
+#    mean = mean(c.pg),
+#    sd = sd(c.pg),
+#    .groups = "drop"
+#  )
 
 # Remove outliers and get average for multiple of the same individual.uid
-bodysize_outliers <- bodysize_raw %>% 
-  
-  left_join(outliers_info, by = "genus") %>% 
-  
-  filter(
-    #c.pg <= mean + (sd * 2) & c.pg >= mean - (sd * 2)
-  ) %>% 
-  
-  # calculate average for each source and location
-  group_by(
-    ott.id, location.code, source.code, original.sources
-  ) %>% 
-  
-  summarise(
-    mass = mean(c.pg),
-    mld = mean(mld),
-    .groups = "drop"
-  )
+# bodysize_outliers <- bodysize_raw %>% 
+#   
+#   left_join(outliers_info, by = "taxa.name") %>% 
+#   
+#   filter(
+#     #c.pg <= mean + (sd * 2) & c.pg >= mean - (sd * 2)
+#   ) %>% 
+#   
+#   # calculate average for each source and location
+#   group_by(
+#     ott.id, location.code, source.code, original.sources
+#   ) %>% 
+#   
+#   summarise(
+#     mass = mean(c.pg),
+#     mld = mean(mld),
+#     .groups = "drop"
+#   )
 
-# add in extra info
-locations_updated <- bodysize_raw %>% 
-  select(
-    location.code,
-    habitat, 
-    location,
-    country,
-    continent,
-    longitude,
-    latitude
-  ) %>% 
+# # add in extra info
+# locations_updated <- bodysize_raw %>% 
+#   select(
+#     location.code,
+#     habitat, 
+#     location,
+#     country,
+#     continent,
+#     longitude,
+#     latitude
+#   ) %>% 
+# 
+#   distinct(
+#     location.code, .keep_all = TRUE
+#   )%>% 
+#   
+#   filter(
+#     location.code %in% bodysize_outliers$location.code
+#   )
+# 
+# tax_updated <- bodysize_raw %>% 
+#   select(
+#     ott.id,
+#     genus.ott.id,
+#     type,
+#     taxonomic.group,
+#     fg,
+#     fg.source,
+#     taxa.name,
+#     species,
+#     genus,
+#     family,
+#     order,
+#     class,
+#     phylum,
+#     kingdom
+#   ) %>% 
+#   
+#   distinct(
+#     ott.id, .keep_all = TRUE
+#   ) 
 
-  distinct(
-    location.code, .keep_all = TRUE
-  )%>% 
-  
-  filter(
-    location.code %in% bodysize_outliers$location.code
-  )
 
-tax_updated <- bodysize_raw %>% 
-  select(
-    ott.id,
-    genus.ott.id,
-    type,
-    taxonomic.group,
-    fg,
-    fg.source,
-    taxa.name,
-    species,
-    genus,
-    family,
-    order,
-    class,
-    phylum,
-    kingdom
-  ) %>% 
-  
-  distinct(
-    ott.id, .keep_all = TRUE
-  ) 
+# # join in the extra info to outliers
+# plankton_traits_all <- bodysize_outliers %>%
+#   
+#   #left_join(
+#   #  locations_updated, by = "location.code"
+#   #) %>% 
+#   
+#   #left_join(
+#   #  tax_updated, by = "ott.id"
+#   #) %>% 
+#   
+#   rename(
+#     functional.group = fg
+#   )%>% 
+# 
+#   # select columns and reorder
+#   select(
+#     source.code, original.sources, taxa.name,
+#     c.pg, mld,
+#     ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
+#     taxonomic.group, functional.group, fg.source,
+#     location.code, habitat, location, country, continent, latitude, longitude
+#   ) 
 
-
-# join in the extra info to outliers
-plankton_traits_all <- bodysize_outliers %>%
-  
-  left_join(
-    locations_updated, by = "location.code"
-  ) %>% 
-  
-  left_join(
-    tax_updated, by = "ott.id"
-  ) %>% 
-  
-  rename(
-    functional.group = fg
-  ) %>% 
-
-  # select columns and reorder
-  select(
-    source.code, original.sources, taxa.name,
-    mass, mld,
-    ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
-    taxonomic.group, functional.group, fg.source,
-    location.code, habitat, location, country, continent, latitude, longitude
-  ) 
+plankton_traits_all <- bodysize_raw
 
 # save
 saveRDS(plankton_traits_all, file = "R/Data_outputs/database_products/final_products/plankton_traits_all.rds")
@@ -1022,28 +1029,13 @@ saveRDS(plankton_genus_traits, file = "R/Data_outputs/database_products/final_pr
 
 
 # View data ----
-ggplot(plankton_genus_traits, aes(x = log10(mass), fill = type)) +
+ggplot(plankton_genus_traits, aes(x = log10(c.pg), fill = type)) +
   geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
-ggplot(plankton_species_traits, aes(x = log10(mass), fill = type)) +
+ggplot(plankton_species_traits, aes(x = log10(c.pg), fill = type)) +
   geom_histogram(binwidth = 0.3)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
-
-
-x <- bodysize_raw %>% 
-  
-  filter(
-    taxonomic.group == "Ciliate"
-  ) %>% 
-  
-  mutate(
-    x = case_when(
-      order == "Choreotrichida" ~ "loricate",
-      class %in% c("Spirotrichea", "Litostomatea", "Oligohymenophorea", "Prostomatea", "Colpodea", "Armophorea") ~ "aloricate",
-      TRUE ~ NA
-    )
-  )
 

@@ -82,7 +82,7 @@ in_tree_z
 sum(in_tree_p == TRUE) # 591
 sum(in_tree_p == FALSE) # 141
 
-sum(in_tree_z == TRUE) # 216
+sum(in_tree_z == TRUE) # 188
 sum(in_tree_z == FALSE) # 8
 
 # Get tree ----
@@ -232,10 +232,10 @@ mass_data_p <- bodysize_traits %>%
   ) %>% 
   
   # get mean mass for each genera
-  group_by(taxa.name) %>% 
+  group_by(taxonomic) %>% 
   
   summarise(
-    mean.mass = mean(mass),
+    mean.mass = mean(c.pg),
     .groups = "drop"
   ) %>% 
   
@@ -313,7 +313,7 @@ mass_data_z <- bodysize_traits %>%
   group_by(taxa.name) %>% 
   
   summarise(
-    mean.mass = mean(mass),
+    mean.mass = mean(c.pg),
     .groups = "drop"
   ) %>% 
   
