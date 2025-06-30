@@ -38,15 +38,16 @@ avg_mass <- bs %>%
   )
 
 # reorder groups for plotting
-avg_mass$taxonomic.group <- factor(avg_mass$taxonomic.group, levels = c("Blue-green", "Dinoflagellate", "Green", "Diatom", "Protist", "Chrysophyte", "Aloricate ciliate", "Loricate ciliate", "Rotifer", "Copepod", "Cladoceran"))
+avg_mass$taxonomic.group <- factor(avg_mass$taxonomic.group, levels = c("Blue-green", "Dinoflagellate", "Green", "Diatom", "Protist", "Chrysophyte", "Ciliate", "Rotifer", "Copepod", "Ostracod", "Cladoceran"))
 
 
 # Plot
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram( bins = 16)+
-  facet_wrap(~type, ncol = 1)+
-  scale_y_log10()
+  geom_histogram(binwidth = 0.4) +
+  facet_wrap(~ type, ncol = 1)+
+  scale_y_log10()+
+  guides(fill = "none")
 
 spread_type # View
 
@@ -55,9 +56,8 @@ ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type)
 
 # Facet by group
 spread_group <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
-  geom_histogram(bins = 12)+
-  #facet_wrap(taxonomic.group ~ type) +
-  facet_grid(taxonomic.group ~ type) +
+  geom_histogram(binwidth = 0.6)+
+  facet_grid(type ~ taxonomic.group) +
   scale_y_log10()+
   guides(fill = "none")
 
@@ -69,7 +69,7 @@ ggsave("R/Data_outputs/plots/spread_group.png", plot = spread_group)
 # Facet by fg
 spread_fg <- ggplot(avg_mass, aes(x = log10(avg.mass), fill = type))+
   geom_histogram(bins = 12)+
-  facet_grid(functional.group ~ type) +
+  facet_grid(type ~ functional.group) +
   scale_y_log10()+
   guides(fill = "none")
 

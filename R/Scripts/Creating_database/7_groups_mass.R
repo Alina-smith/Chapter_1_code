@@ -447,11 +447,10 @@ bs_fg <- bodysize_genus_ottid %>%
       phylum %in% c("Glaucophyta", "Euglenophyta", "Charophyta", "Choanozoa", "Bigyra", "Heterokontophyta", "Cryptophyta") ~ "Protist",
       
       # Zoo
-      order == "Choreotrichida" ~ "Loricate ciliate",
       class == "Branchiopoda" ~ "Cladoceran",
       class == "Hexanauplia" ~ "Copepod",
       class == "Ostracoda" ~ "Ostracod",
-      phylum == "Ciliophora (phylum in subkingdom SAR)"~ "Aloricate ciliate",
+      phylum == "Ciliophora (phylum in subkingdom SAR)"~ "Ciliate",
       phylum == "Rotifera" ~ "Rotifer",
       
       TRUE ~ NA
@@ -463,7 +462,6 @@ bs_fg <- bodysize_genus_ottid %>%
                body.size, bodysize.measurement,
                ott.id, genus.ott.id, taxonomic.group, fg, fg.source, taxa.name, species, genus, family, order, class, phylum, kingdom,
                location.code, habitat, location, country, continent, latitude, longitude)
-
 
 
 
@@ -718,7 +716,7 @@ bodysize_raw <- bs_fg %>%
       genus == "Daphnia" & length >= 600 & length <= 4000 ~ "in-range",
       genus %in% c("Bosmina", "Eubosmina") & length >= 280 & length <= 950 ~ "in-range",
       genus == "Diaphanosoma" & length >= 440 & length <= 1440 ~ "in-range",
-      taxonomic.group == "Cladoceran" & length >= 280 & length <= 4830 ~ "in-range",
+      taxonomic.group %in% c("Cladoceran", "Ostracod") & length >= 280 & length <= 4830 ~ "in-range",
       taxonomic.group == "Copepod" & length >= 140 & length <= 2450 ~ "in-range",
       
       # Rotifers
@@ -728,7 +726,7 @@ bodysize_raw <- bs_fg %>%
       #taxonomic.group == "Rotifer" & !is.na(dry.mass) ~ "in-range",
       
       # Others
-      taxonomic.group %in% c("Loricate ciliate", "Aloricate ciliate", "Rotifer") ~ "in-range",
+      taxonomic.group %in% c("Ciliate", "Rotifer") ~ "in-range",
       type == "Phytoplankton" ~ "in-range",
       
       TRUE ~ "outlier"
@@ -746,15 +744,15 @@ bodysize_raw <- bs_fg %>%
       # Equation: lnW (ug) = lna + (b * lnL (mm))
       # Paper used: EPA guidlines; appendix 1 - slope and intercepts collated from multiple sources; Bottrell et al (1976) - pooled data used when isn't present in EPA
       !is.na(lna) ~ exp(lna + (b*log(length/1000))),
-      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod") & !is.na(dry.mass) ~ dry.mass,
-      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod") & !is.na(body.mass) ~ body.mass,
+      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") & !is.na(dry.mass) ~ dry.mass,
+      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") & !is.na(body.mass) ~ body.mass,
       TRUE ~ NA
     ),
     
     # c) Carbon mass
     # Paper: Gaedke et al. 2004
     c.pg = case_when(
-      taxonomic.group %in% c("Cladoceran", "Copepod") ~ (dw.ug*0.5)*10^6,
+      taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") ~ (dw.ug*0.5)*10^6,
       TRUE ~ NA
     ),
     
@@ -800,9 +798,9 @@ bodysize_raw <- bs_fg %>%
       taxonomic.group == "Dinoflagellate" ~ 10^(-0.353 + (0.864 * log10(biovolume))),
       taxonomic.group == "Prasinophyte" ~ 10^(-0.545 + (0.886 * log10(biovolume))),
       taxonomic.group == "Prymnesiophytes" ~ (10^(-0.642 + (0.899 * log10(biovolume)))),
-      taxonomic.group == "Loricate ciliate" ~ (10^(-0.168 + (0.841 * log10(biovolume)))),
-      taxonomic.group == "Aloricate ciliate" ~ (10^(-0.639 + (0.984 * log10(biovolume)))),
-      
+      taxonomic.group == "Ciliate" & order == "Choreotrichida" ~ (10^(-0.168 + (0.841 * log10(biovolume)))),
+      taxonomic.group == "Ciliate" & order != "Choreotrichida" ~ (10^(-0.639 + (0.984 * log10(biovolume)))),
+
       # Paper: Mahlmann et al 2008
       taxonomic.group == "Blue-green" ~ biovolume * 0.127 * 10^-3,
   
@@ -814,9 +812,9 @@ bodysize_raw <- bs_fg %>%
     # Paper: Moloney & Field 1989
     dw.ug = case_when(
       !is.na(c.pg) & type == "Phytoplankton" ~ (0.4 * c.pg)/1000000,
-      !is.na(c.pg) & taxonomic.group %in% c("Loricate ciliate", "Aloricate ciliate") ~ (0.4 * c.pg)/1000000,
+      !is.na(c.pg) & taxonomic.group %in% c("Ciliate") ~ (0.4 * c.pg)/1000000,
       is.na(c.pg) & type == "Phytoplankton" ~ body.mass,
-      is.na(c.pg) & taxonomic.group %in% c("Loricate ciliate", "Aloricate ciliate") ~ body.mass,
+      is.na(c.pg) & taxonomic.group %in% c("Ciliate") ~ body.mass,
       TRUE ~ dw.ug
     ),
     
@@ -1074,3 +1072,4 @@ ggplot(plankton_species_traits, aes(x = log10(dw.ug), fill = type)) +
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
+unique(plankton_genus_traits$taxonomic.group)

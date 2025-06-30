@@ -79,10 +79,10 @@ in_tree_p
 in_tree_z
 
 # See which ones are in and out
-sum(in_tree_p == TRUE) # 591
-sum(in_tree_p == FALSE) # 141
+sum(in_tree_p == TRUE) # 542
+sum(in_tree_p == FALSE) # 142
 
-sum(in_tree_z == TRUE) # 188
+sum(in_tree_z == TRUE) # 189
 sum(in_tree_z == FALSE) # 8
 
 # Get tree ----
@@ -209,7 +209,7 @@ circular_plot_p
 circular_plot_groups_p <- circular_plot_p %<+% taxa_in_tree_full_p +
   geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA)+
   
-  labs(colour = "Traditional groupings")+
+  labs(colour = "Traditional groupings") +
   
   ggnewscale::new_scale_color() +  # Reset color scale for next use
   
@@ -232,10 +232,10 @@ mass_data_p <- bodysize_traits %>%
   ) %>% 
   
   # get mean mass for each genera
-  group_by(taxonomic) %>% 
+  group_by(taxa.name) %>% 
   
   summarise(
-    mean.mass = mean(c.pg),
+    mean.mass = mean(dw.ug),
     .groups = "drop"
   ) %>% 
   
@@ -288,7 +288,7 @@ circular_plot_z
 circular_plot_groups_z <- circular_plot_z %<+% taxa_in_tree_full_z +
   geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA)+
   
-  labs(colour = "Traditional groupings")+
+  labs(colour = "Traditional groupings") +
   
   ggnewscale::new_scale_color() +  # Reset color scale for next use
   
@@ -313,7 +313,7 @@ mass_data_z <- bodysize_traits %>%
   group_by(taxa.name) %>% 
   
   summarise(
-    mean.mass = mean(c.pg),
+    mean.mass = mean(dw.ug),
     .groups = "drop"
   ) %>% 
   
