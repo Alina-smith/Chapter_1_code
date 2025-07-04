@@ -324,7 +324,7 @@ continent_spread_data <- bs_data %>%
 
 continent_spread <- ggplot(continent_spread_data, aes(x = continent, fill = type))+
   geom_bar()+
-  facet_wrap(~type, ncol = 1)+
+  #facet_wrap(~type, ncol = 1)+
   scale_y_log10()+
   theme(
     axis.text.x = element_text(angle = -20)

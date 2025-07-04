@@ -27,103 +27,12 @@ library(ggtreeExtra)
 # Import data ----
 bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds")
 
-# Format data ----
-# Get a taxonomy list to add in in later steps
-
-# Phyto
-p_data <- bodysize_traits %>% 
-  
-  filter(
-    type == "Phytoplankton"
-  ) %>% 
-  
-  select(
-    ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
-  ) %>% 
-  
-  distinct(taxa.name, .keep_all = TRUE) %>% 
-  
-  mutate(
-    taxa.name = tolower(taxa.name)
-  ) 
-
-# Phyto
-z_data <- bodysize_traits %>% 
-  
-  filter(
-    type == "Zooplankton"
-  ) %>% 
-  
-  select(
-    ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
-  ) %>% 
-  
-  distinct(taxa.name, .keep_all = TRUE) %>% 
-  
-  mutate(
-    taxa.name = tolower(taxa.name)
-  ) 
-
-# Filter for in tree ----
-
-# Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
-in_tree_p <- is_in_tree(ott_ids = p_data$ott.id)
-in_tree_z <- is_in_tree(ott_ids = z_data$ott.id)
-
-# Save
-saveRDS(in_tree_p, "R/data_outputs/phylo_tree/in_tree_p.rds")
-saveRDS(in_tree_z, "R/data_outputs/phylo_tree/in_tree_z.rds")
-
-# View data
-in_tree_p
-in_tree_z
-
-# See which ones are in and out
-sum(in_tree_p == TRUE) # 542
-sum(in_tree_p == FALSE) # 142
-
-sum(in_tree_z == TRUE) # 189
-sum(in_tree_z == FALSE) # 8
-
-# Get tree ----
-# Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
-
-## Phyto ----
-# get list of just species in the tree split by phyto and zoo
-taxa_in_tree_p <- p_data[in_tree_p, ] 
-
-# Save
-saveRDS(taxa_in_tree_p, "R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
-
-## Zoo ----
-taxa_in_tree_z <- z_data[in_tree_z, ]
-
-# Save
-saveRDS(taxa_in_tree_z, "R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
-
-# Make trees
-tree_pre_plot_p <- tol_induced_subtree(ott_ids = taxa_in_tree_p$ott.id)
-tree_pre_plot_z <- tol_induced_subtree(ott_ids = taxa_in_tree_z$ott.id)
-
-#save tree out here before adapting it for plotting: 
-write.nexus(tree_pre_plot_p, file="R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
-write.nexus(tree_pre_plot_z, file="R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
-
-tol_about() # gives info about the current synthetic tree
-tree_pre_plot_p # shows info about my tree
-tree_pre_plot_z
-class(tree_pre_plot_p) # check that it is a phylo
-class(tree_pre_plot_z) # check that it is a phylo
-
-# Plot trees ----
-
-## Read in data ----
 tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
 tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
 taxa_in_tree_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
 taxa_in_tree_z <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
 
-## Square ----
+# Square Plot ----
 # Inital plot to see it
 plot(tree_pre_plot_p, show.tip.label = FALSE)
 plot(tree_pre_plot_z, show.tip.label = FALSE)
@@ -199,13 +108,13 @@ taxa_in_tree_full_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the ti
 saveRDS(taxa_in_tree_full_p, "R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds")
 saveRDS(taxa_in_tree_full_z, "R/data_outputs/phylo_tree/taxa_in_tree_full_z.rds")
 
-## Circular ----
+# Circular plot ----
 
-### Phyto ----
+## Phyto ----
 circular_plot_p <- ggtree(tree_pre_plot_p, branch.length='none', layout='circular')
 circular_plot_p
 
-#### Group info ----
+### Group info ----
 circular_plot_groups_p <- circular_plot_p %<+% taxa_in_tree_full_p +
   geom_tippoint(aes(x = x + 1, color = group_label), size = 2.5, show.legend = NA)+
   
@@ -231,11 +140,21 @@ mass_data_p <- bodysize_traits %>%
     type == "Phytoplankton"
   ) %>% 
   
-  # get mean mass for each genera
+  # First calculate mean for each source
+  group_by(
+    source.code, taxa.name
+  ) %>% 
+  
+  summarise(
+    mean.dw = mean(dw.ug),
+    .groups = "drop"
+  ) %>% 
+  
+  # get mean mass for each genera - calculating mean of means not weighted mean
   group_by(taxa.name) %>% 
   
   summarise(
-    mean.mass = mean(dw.ug),
+    mean.mass = mean(mean.dw),
     .groups = "drop"
   ) %>% 
   
@@ -264,15 +183,13 @@ circular_plot_mass_p <- gheatmap(circular_plot_mass_p, mass_data_p, offset=3, wi
   
   scale_fill_gradient(name = "Mass (µg)", low = "pink", high = "purple") +
   
-  ggtitle("Phytoplankton")+
+  ggtitle("a)")+
   
   theme(
     legend.box = "horizontal",
-    legend.key.size = unit(0.3, "cm"),
-    legend.spacing.x = unit(-0.1, 'cm'),
-    legend.text = element_text(size = 10),
-    legend.title = element_text(size = 10),
-    title = element_text(size = 50)
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
+    title = element_text(size = 20)
   )
 
 circular_plot_mass_p
@@ -342,15 +259,13 @@ circular_plot_mass_z <- gheatmap(circular_plot_mass_z, mass_data_z, offset=3, wi
   
   scale_fill_gradient(name = "Mass (µg)", low = "pink", high = "purple") +
   
-  ggtitle("Zooplankton")+
+  ggtitle("b)")+
   
   theme(
     legend.box = "horizontal",
-    legend.key.size = unit(0.3, "cm"),
-    legend.spacing.x = unit(-0.1, 'cm'),
-    legend.text = element_text(size = 10),
-    legend.title = element_text(size = 10),
-    title = element_text(size = 50)
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
+    title = element_text(size = 20)
   )
 
 circular_plot_mass_z
@@ -359,7 +274,8 @@ ggsave("R/Data_outputs/plots/circular_plot_mass_z.png", width = 9, height = 5, l
 
 
 ### Join together ----
-circular_plot_mass <- circular_plot_mass_p + circular_plot_mass_z
+circular_plot_mass <- circular_plot_mass_p / circular_plot_mass_z
 circular_plot_mass
 
-ggsave("R/Data_outputs/plots/circular_plot_mass.png", width = 30, height = 20, limitsize = FALSE)
+ggsave("R/Data_outputs/plots/circular_plot_mass.png", width = 25, height = 30, limitsize = FALSE)
+

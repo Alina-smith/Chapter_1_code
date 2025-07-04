@@ -98,7 +98,7 @@ bs_format <- bodysize_formatted %>%
   ) %>% 
   
   filter(
-    # Select just adult individuals
+    # # Select just adult individuals
     life.stage %in% c("adult", "active"),
     nu %in% "individual",
     
@@ -110,13 +110,10 @@ bs_format <- bodysize_formatted %>%
   
   select(
     individual.uid, uid, source.code, original.sources, type,
-    nu, ind.per.nu, body.size, bodysize.measurement, units,
+    nu, ind.per.nu, body.size, bodysize.measurement, units, life.stage,
     ott.id, taxa.name, species, genus, family, order, class, phylum, kingdom,
     location.code, habitat, location, country, continent, latitude, longitude
   )
-
-
-
 
 
 
@@ -232,7 +229,7 @@ bodysize_genus_ottid <- bs_avg %>%
 saveRDS(bodysize_genus_ottid, "R/data_outputs/database_products/bodysize_genus_ottid.rds")
 
 
-############################## Now have a dataset of raw bodysizes for species and genera with just one per individual with no mass formatting or functional group data
+# What the data looks like so far: raw bodysizes for species and genera with just one per individual with no mass formatting or functional group data
 
 
 
@@ -436,22 +433,28 @@ bs_fg <- bodysize_genus_ottid %>%
     taxonomic.group = case_when(
       # Phyto:
       # assigned using the groupings in Menden-Deuer & Lessard 2000 to allow for conversions later on
-      order == "Pyramimonadales" ~ "Prasinophytes",
-      class == "Bacillariophyceae" ~ "Diatom",
-      class == "Chrysophyceae" ~ "Chrysophyte",
-      phylum %in% c("Spironematellophyta", "Chlorophyta") ~ "Green",
-      phylum == "Dinoflagellata" ~ "Dinoflagellate",
-      phylum == "Haptophyta" ~ "Prymnesiophyte",
+      class == "Bacillariophyceae" ~ "Diatoms",
+      class == "Chrysophyceae" ~ "Chrysophytes",
+      phylum == "Chlorophyta" ~ "Green",
+      phylum == "Dinoflagellata" ~ "Dinoflagellates",
       
+      phylum == "Haptophyta" ~ "Haptophytes",
       phylum == "Cyanobacteria" ~ "Blue-green",
-      phylum %in% c("Glaucophyta", "Euglenophyta", "Charophyta", "Choanozoa", "Bigyra", "Heterokontophyta", "Cryptophyta") ~ "Protist",
+      
+      #protists
+      phylum == "Euglenophyta" ~ "Euglenoids",
+      phylum == "Cryptophyta" ~ "Cryptomonads",
+      phylum == "Heterokontophyta" ~ "Heterokonts",
+      phylum == "Glaucophyta" ~ "Glaucophytes",
+      phylum %in% c("Ochrophyta", "Bigyra") ~ "Stramenopiles",
+      phylum == "Charophyta" ~ "Streptophyta",
       
       # Zoo
-      class == "Branchiopoda" ~ "Cladoceran",
-      class == "Hexanauplia" ~ "Copepod",
-      class == "Ostracoda" ~ "Ostracod",
-      phylum == "Ciliophora (phylum in subkingdom SAR)"~ "Ciliate",
-      phylum == "Rotifera" ~ "Rotifer",
+      class == "Branchiopoda" ~ "Cladocerans",
+      class == "Hexanauplia" ~ "Copepods",
+      class == "Ostracoda" ~ "Ostracods",
+      phylum == "Ciliophora (phylum in subkingdom SAR)"~ "Ciliates",
+      phylum == "Rotifera" ~ "Rotifers",
       
       TRUE ~ NA
       
@@ -480,7 +483,7 @@ rotifer_lw <- read_xlsx("raw_data/length_weight.xlsx", sheet = "rotifer_karabin"
 
 # join together
 zoo_lw <- bind_rows(crustacean_lw, rotifer_lw) %>% 
-  select(taxa.name, lna, b, ff.w, eq.w, ff.v, eq.v, average.appendices, length.range.min, length.range.max, ww.dw)
+  select(taxa.name, lna, b, ff, eq, average.appendices, length.range.min, length.range.max, ww.dw)
 
 ### Tol ----
 # run names through tol to make sure they all are up to date 
@@ -548,7 +551,7 @@ bodysize_raw <- bs_fg %>%
   
   rename(
     dry.mass = `dry mass`,
-    body.mass = `body mass`
+    wet.mass = `wet mass`
   ) %>% 
   
   # join all extra data back 
@@ -556,37 +559,7 @@ bodysize_raw <- bs_fg %>%
     extra_raw, by = "individual.uid"
   ) %>% 
   
-  
-  ## Dry and wet mass
-  # First calculate dry and wet mass to use in converting to carbon mass 
 
-  ### removing measurements
-  # remove measurements according to :
-  # Zooplankton - There is a very small amount of info for wet mass and so just discard this and focus on length-weight and dry mass
-  # Phytoplankton - There is very small amount of info for dry mass so discard this and focus on biovolume
-
-  
-  # Remove the wet mass column
-  select(
-    - `wet mass`
-  ) %>% 
-  
-  mutate(
-    # Change dry mass to NA for phytoplankton
-    dry.mass = if_else(
-      type == "Phytoplankton",
-      NA,
-      dry.mass
-    ),
-    
-    # remove data not needed for cilliates
-    length = if_else(
-      taxonomic.group == "Ciliate",
-      NA,
-      length
-    )
-  ) %>% 
-  
   ### Calculate mass
   # 1) convert linear measurements to dry weight
   
@@ -631,40 +604,22 @@ bodysize_raw <- bs_fg %>%
       !is.na(b.p) ~ b.p,
       TRUE ~ NA
     ),
-    ff.v = case_when(
-      !is.na(ff.v.t) ~ ff.v.t,
-      !is.na(ff.v.g) ~ ff.v.g,
-      !is.na(ff.v.f) ~ ff.v.f,
-      !is.na(ff.v.o) ~ ff.v.o,
-      !is.na(ff.v.c) ~ ff.v.c,
-      !is.na(ff.v.p) ~ ff.v.p,
+    ff = case_when(
+      !is.na(ff.t) ~ ff.t,
+      !is.na(ff.g) ~ ff.g,
+      !is.na(ff.f) ~ ff.f,
+      !is.na(ff.o) ~ ff.o,
+      !is.na(ff.c) ~ ff.c,
+      !is.na(ff.p) ~ ff.p,
       TRUE ~ NA
     ),
-    eq.v = case_when(
-      !is.na(eq.v.t) ~ eq.v.t,
-      !is.na(eq.v.g) ~ eq.v.g,
-      !is.na(eq.v.f) ~ eq.v.f,
-      !is.na(eq.v.o) ~ eq.v.o,
-      !is.na(eq.v.c) ~ eq.v.c,
-      !is.na(eq.v.p) ~ eq.v.p,
-      TRUE ~ NA
-    ),
-    ff.w = case_when(
-      !is.na(ff.w.t) ~ ff.w.t,
-      !is.na(ff.w.g) ~ ff.w.g,
-      !is.na(ff.w.f) ~ ff.w.f,
-      !is.na(ff.w.o) ~ ff.w.o,
-      !is.na(ff.w.c) ~ ff.w.c,
-      !is.na(ff.w.p) ~ ff.w.p,
-      TRUE ~ NA
-    ),
-    eq.w = case_when(
-      !is.na(eq.w.t) ~ eq.w.t,
-      !is.na(eq.w.g) ~ eq.w.g,
-      !is.na(eq.w.f) ~ eq.w.f,
-      !is.na(eq.w.o) ~ eq.w.o,
-      !is.na(eq.w.c) ~ eq.w.c,
-      !is.na(eq.w.p) ~ eq.w.p,
+    eq = case_when(
+      !is.na(eq.t) ~ eq.t,
+      !is.na(eq.g) ~ eq.g,
+      !is.na(eq.f) ~ eq.f,
+      !is.na(eq.o) ~ eq.o,
+      !is.na(eq.c) ~ eq.c,
+      !is.na(eq.p) ~ eq.p,
       TRUE ~ NA
     ),
     average.appendices = case_when(
@@ -716,8 +671,8 @@ bodysize_raw <- bs_fg %>%
       genus == "Daphnia" & length >= 600 & length <= 4000 ~ "in-range",
       genus %in% c("Bosmina", "Eubosmina") & length >= 280 & length <= 950 ~ "in-range",
       genus == "Diaphanosoma" & length >= 440 & length <= 1440 ~ "in-range",
-      taxonomic.group %in% c("Cladoceran", "Ostracod") & length >= 280 & length <= 4830 ~ "in-range",
-      taxonomic.group == "Copepod" & length >= 140 & length <= 2450 ~ "in-range",
+      taxonomic.group %in% c("Cladocerans", "Ostracods") & length >= 280 & length <= 4830 ~ "in-range",
+      taxonomic.group == "Copepods" & length >= 140 & length <= 2450 ~ "in-range",
       
       # Rotifers
       #stri_detect_regex(w.factor, "a") & length >= length.range.min & length <= length.range.max ~ "in-range",
@@ -726,7 +681,7 @@ bodysize_raw <- bs_fg %>%
       #taxonomic.group == "Rotifer" & !is.na(dry.mass) ~ "in-range",
       
       # Others
-      taxonomic.group %in% c("Ciliate", "Rotifer") ~ "in-range",
+      taxonomic.group %in% c("Ciliates", "Rotifers") ~ "in-range",
       type == "Phytoplankton" ~ "in-range",
       
       TRUE ~ "outlier"
@@ -741,80 +696,86 @@ bodysize_raw <- bs_fg %>%
     # 1) Crustaceans
     # a ) Dry weight
     dw.ug = case_when(
-      # Equation: lnW (ug) = lna + (b * lnL (mm))
+      # Equation: linear regression
       # Paper used: EPA guidlines; appendix 1 - slope and intercepts collated from multiple sources; Bottrell et al (1976) - pooled data used when isn't present in EPA
       !is.na(lna) ~ exp(lna + (b*log(length/1000))),
-      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") & !is.na(dry.mass) ~ dry.mass,
-      is.na(lna) & taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") & !is.na(body.mass) ~ body.mass,
+      is.na(lna) & taxonomic.group %in% c("Cladocerans", "Copepods", "Ostracods") & !is.na(dry.mass) ~ dry.mass,
       TRUE ~ NA
     ),
     
     # c) Carbon mass
     # Paper: Gaedke et al. 2004
     c.pg = case_when(
-      taxonomic.group %in% c("Cladoceran", "Copepod", "Ostracod") ~ (dw.ug*0.5)*10^6,
+      taxonomic.group %in% c("Cladocerans", "Copepods", "Ostracods") ~ (dw.ug*0.5)*10^6,
       TRUE ~ NA
     ),
     
     # Rotifers
     # a) Wet weight
-    ff.w = ff.w*1000, # ff needs to be multiplied by 1000
-    
     ww.ug = case_when(
-      # Equation: 
-      # equation takes length (mm) and gives dry mass (mg) so need to times by 1000 to get ug - length is currently in um so need to convert to mm for equation
+      # Equation: genus specific
       # Paper: Ejsmont-Karabin, J 1998 table 2
-      eq.w == 1 & !is.na(length) ~ (ff.w * (length/1000)^3),
-      eq.w == 2 & !is.na(length) & !is.na(width) ~ (ff.w * ((length/1000) * (width/1000)^2)),
-      eq.w == 3 & !is.na(width) ~ (ff.w * (width/1000)^3),
+      eq == 1 & !is.na(length) ~ (ff * 1000) * (length/1000)^3,
+      eq == 2 & !is.na(length) & !is.na(width) ~ (ff * 1000) * ((length/1000) * (width/1000)^2),
+      eq == 3 & !is.na(width) ~ (ff * 1000) * (width/1000)^3,
+      
+      eq == 4 & !is.na(length) & !is.na(width) & !is.na(height) ~ (ff * 1000) * ((length/1000) * (width/1000) * (height/1000)),
+      eq == 5 & !is.na(length) & !is.na(width) & !is.na(height) ~ (length/1000) * (width/1000) * (height/1000),
+      eq == 6 & !is.na(length) & !is.na(width) & !is.na(height) ~ (ff * 1000) * ((3 * (length/1000) * (width/1000) * (height/1000)) + 4 * ((height/1000)^3)),
+      !is.na(wet.mass) ~ wet.mass,
       TRUE ~ NA
     ),
     
     # b) Dry weight
     # paper: EPA guidlines appendix 2
     dw.ug = case_when(
-      taxonomic.group == "Rotifer" ~ ww.ug * ww.dw,
+      taxonomic.group == "Rotifers" & !is.na(ww.ug) ~ ww.ug * ww.dw,
+      !is.na(dry.mass) ~ dry.mass,
       TRUE ~ dw.ug
     ),
     
     # c) Carbon mass
     # Paper: Gaedke et al. 2004
     c.pg = case_when(
-      taxonomic.group == "Rotifer" ~ (dw.ug*0.5)*10^6,
+      taxonomic.group == "Rotifers" ~ (dw.ug*0.5)*10^6,
       TRUE ~ c.pg
     ),
     
-    # 3) From biovolume - phytoplankton + cilliates
+    # 3) Phytoplankton + ciliates
     
-    # b) Calculate carbon mass
+    # a) Carbon mass
     c.pg = case_when(
+      # From biovolume
+      # Equation: linear regression
       # Paper: Menden-Deuer & Lessard 2000; table 4
-      taxonomic.group == "Protist" & biovolume > 3000 ~ 10^(-0.665 + (0.939 * log10(biovolume))),
-      taxonomic.group == "Protist" & biovolume < 3000 ~ 10^(-0.583 + (0.860 * log10(biovolume))),
-      taxonomic.group == "Diatom" & biovolume > 3000 ~ 10^(-0.541 + (0.811 * log10(biovolume))),
-      taxonomic.group == "Diatom" & biovolume < 3000 ~ 10^(-0.933 + (0.881 * log10(biovolume))),
-      taxonomic.group == "Green" ~ 10^(-1.026 + (1.088 * log10(biovolume))),
-      taxonomic.group == "Chrysophyte" ~ 10^(-1.694 + (1.218 * log10(biovolume))),
-      taxonomic.group == "Dinoflagellate" ~ 10^(-0.353 + (0.864 * log10(biovolume))),
-      taxonomic.group == "Prasinophyte" ~ 10^(-0.545 + (0.886 * log10(biovolume))),
-      taxonomic.group == "Prymnesiophytes" ~ (10^(-0.642 + (0.899 * log10(biovolume)))),
-      taxonomic.group == "Ciliate" & order == "Choreotrichida" ~ (10^(-0.168 + (0.841 * log10(biovolume)))),
-      taxonomic.group == "Ciliate" & order != "Choreotrichida" ~ (10^(-0.639 + (0.984 * log10(biovolume)))),
-
+      taxonomic.group %in% c("Euglenoids", "Cryptomonads", "Heterokonts", "Glaucophytes", "Stramenopiles" ,"Streptophyta") & !is.na(biovolume) & biovolume > 3000 ~ 10^(-0.665 + (0.939 * log10(biovolume))),
+      taxonomic.group %in% c("Euglenoids", "Cryptomonads", "Heterokonts", "Glaucophytes", "Stramenopiles" ,"Streptophyta") & !is.na(biovolume) & biovolume <= 3000 ~ 10^(-0.583 + (0.860 * log10(biovolume))),
+      taxonomic.group == "Diatoms" & !is.na(biovolume) & biovolume > 3000 ~ 10^(-0.933 + (0.881 * log10(biovolume))),
+      taxonomic.group == "Diatoms" & !is.na(biovolume) & biovolume <= 3000 ~ 10^(-0.541 + (0.811 * log10(biovolume))),
+      taxonomic.group == "Green" & !is.na(biovolume) & order == "Pyramimonadales" ~ 110^(-0.545 + (0.886 * log10(biovolume))),
+      taxonomic.group == "Green" & !is.na(biovolume) ~ 10^(-1.026 + (1.088 * log10(biovolume))),
+      taxonomic.group == "Chrysophytes" & !is.na(biovolume) ~ 10^(-1.694 + (1.218 * log10(biovolume))),
+      taxonomic.group == "Dinoflagellates" & !is.na(biovolume) ~ 10^(-0.353 + (0.864 * log10(biovolume))),
+      taxonomic.group == "Haptophytes" & !is.na(biovolume) ~ (10^(-0.642 + (0.899 * log10(biovolume)))),
+      taxonomic.group == "Ciliates" & order == "Choreotrichida" & !is.na(biovolume) ~ (10^(-0.168 + (0.841 * log10(biovolume)))),
+      taxonomic.group == "Ciliates" & !is.na(biovolume) ~ (10^(-0.639 + (0.984 * log10(biovolume)))),
       # Paper: Mahlmann et al 2008
       taxonomic.group == "Blue-green" ~ biovolume * 0.127 * 10^-3,
+      
+      # From wet weight
+      # Paper: Moloney & Field 1989
+      type == "Phytoplankton" & !is.na(wet.mass) ~ (wet.mass*1000000) * 0.07,
+      taxonomic.group == "Ciliates" & !is.na(wet.mass) ~ (wet.mass*1000000) * 0.07,
   
       TRUE ~ c.pg
     ),
     
-    # Dry weight
+    # b) Dry weight
     # Equation: 1 dw(pg) = 0.4 c(pg)
     # Paper: Moloney & Field 1989
     dw.ug = case_when(
       !is.na(c.pg) & type == "Phytoplankton" ~ (0.4 * c.pg)/1000000,
-      !is.na(c.pg) & taxonomic.group %in% c("Ciliate") ~ (0.4 * c.pg)/1000000,
-      is.na(c.pg) & type == "Phytoplankton" ~ body.mass,
-      is.na(c.pg) & taxonomic.group %in% c("Ciliate") ~ body.mass,
+      !is.na(c.pg) & taxonomic.group == "Ciliates" ~ (0.4 * c.pg)/1000000,
       TRUE ~ dw.ug
     ),
     
@@ -828,14 +789,14 @@ bodysize_raw <- bs_fg %>%
     )
   ) %>% 
   
-  # rename biovolume column
-  rename(
-    bv.um3 = biovolume
-  ) %>% 
+  # # rename biovolume column
+  # rename(
+  #   bv.um3 = biovolume
+  # ) %>% 
   
   select(
     uid, source.code, original.sources, taxa.name,
-    c.ug, dw.ug, bv.um3, mld,
+    c.ug, dw.ug, mld,
     ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
     taxonomic.group, fg, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
@@ -871,16 +832,16 @@ bodysize_raw <- bs_fg %>%
   
   select(
     uid, source.code, original.sources, taxa.name,
-    c.ug, dw.ug, bv.um3, mld,
+    c.ug, dw.ug, mld,
     ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
     taxonomic.group, functional.group, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
-  ) 
+  )
 
 # View data
 ggplot(bodysize_raw, aes(x = log10(dw.ug), fill = type)) +
   geom_histogram(binwidth = 0.5)+
-  #facet_wrap(~type, ncol = 1)+
+  facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
   
@@ -1010,51 +971,15 @@ saveRDS(plankton_species_traits, file = "R/Data_outputs/database_products/final_
 
 
 # Select genus
-genus_traits <- plankton_traits_all %>% 
-  
-  # select columns
-  select(
-    genus, functional.group, fg.source
-  ) %>% 
-  
-  # get ones only with fg info
-  filter(
-    !is.na(functional.group)
-  ) %>% 
-  
-  # get list of each taxa.name with each unique fg
-  group_by(genus, functional.group, fg.source) %>% 
-  distinct(genus) %>% 
-  ungroup() %>% 
-  group_by(genus) %>% 
-  summarise(
-    functional.group = paste(unique(functional.group), collapse = "/"),
-    fg.source = paste(unique(fg.source), collapse = "/")
-    )
-  
-# add to main data
 plankton_genus_traits <- plankton_traits_all %>% 
-  
-  select(
-    - ott.id,
-    - taxa.name,
-    - species,
-    - functional.group,
-    - fg.source
-  ) %>% 
-  
-  left_join(
-    genus_traits, by = "genus"
-  ) %>% 
-  
+  select(-species, - ott.id) %>% 
   mutate(
+    taxa.name = genus,
     uid = paste("genus", row_number(), sep = "-")
   ) %>% 
-  
   rename(
-    taxa.name = genus,
     ott.id = genus.ott.id
-  )
+    )
 
 
 # save
@@ -1072,4 +997,3 @@ ggplot(plankton_species_traits, aes(x = log10(dw.ug), fill = type)) +
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
 
-unique(plankton_genus_traits$taxonomic.group)

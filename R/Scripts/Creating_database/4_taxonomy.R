@@ -612,7 +612,7 @@ taxonomy_pmc <- taxonomy_order %>%
       phylum == "Streptophyta" ~ "Charophyta",
       
       class == "Spironematellophyceae" ~ "Spironematellophyta",
-      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Heterokontophyta",
+      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Ochrophyta",
       class %in% c("Trebouxiophyceae", "Chlorophyceae") ~ "Chlorophyta",
       class %in% c("Dinophyceae") ~ "Dinoflagellata",
       class == "Cyanophyceae" ~ "Cyanobacteria",
@@ -633,7 +633,7 @@ taxonomy_pmc <- taxonomy_order %>%
     kingdom = case_when(
       phylum %in% c("Cyanobacteria",  "Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria") ~ "Bacteria",
       phylum %in% c("Chlorophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Charophyta", "Euglenophyta") ~ "Plantae",
-      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Heterokontophyta", "Dinoflagellata") ~ "Chromista",
+      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Ochrophyta", "Dinoflagellata") ~ "Chromista",
       phylum %in% c("Amoebozoa", "Choanozoa", "Sulcozoa", "Spironematellophyta") ~ "Protozoa",
       phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Chordata", "Annelida", "Platyhelminthes", "Nematoda") ~ "Animalia",
       phylum %in% c("Ascomycota", "Basidiomycota") ~ "Fungi",
@@ -646,13 +646,13 @@ taxonomy_pmc <- taxonomy_order %>%
       
       # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
       kingdom == "Fungi" ~ "not plankton",
-      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa", "Spironematellophyta", "Choanozoa") ~ "not plankton",
       class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
       genus == "Rhogostoma" ~ "not plankton",
       
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
-      phylum %in% c("Cyanobacteria", "Heterokontophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra", "Spironematellophyta") ~ "Phytoplankton",
+      phylum %in% c("Cyanobacteria", "Ochrophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Bigyra") ~ "Phytoplankton",
       
       phylum %in% c("Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
@@ -966,7 +966,7 @@ taxonomy <- taxonomy_mc1 %>%
       phylum == "Streptophyta" ~ "Charophyta",
       
       class == "Spironematellophyceae" ~ "Spironematellophyta",
-      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Heterokontophyta",
+      class %in% c("Bacillariophyceae", "Chrysophyceae", "Dictyochophyceae", "Eustigmatophyceae", "Phaeothamniophyceae", "Raphidophyceae", "Xanthophyceae", "Mediophyceae", "Chrysomeridophyceae") ~ "Ochrophyta",
       class %in% c("Trebouxiophyceae", "Chlorophyceae") ~ "Chlorophyta",
       class %in% c("Dinophyceae") ~ "Dinoflagellata",
       class == "Cyanophyceae" ~ "Cyanobacteria",
@@ -987,7 +987,7 @@ taxonomy <- taxonomy_mc1 %>%
     kingdom = case_when(
       phylum %in% c("Cyanobacteria",  "Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria") ~ "Bacteria",
       phylum %in% c("Chlorophyta", "Rhodophyta", "Glaucophyta", "Cryptophyta", "Charophyta", "Euglenophyta") ~ "Plantae",
-      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Heterokontophyta", "Dinoflagellata") ~ "Chromista",
+      phylum %in% c("Bacillariophyta", "Haptophyta", "Bigyra", "Ciliophora (phylum in subkingdom SAR)", "Cercozoa", "Foraminifera", "Heliozoa", "Ochrophyta", "Dinoflagellata") ~ "Chromista",
       phylum %in% c("Amoebozoa", "Choanozoa", "Sulcozoa", "Spironematellophyta") ~ "Protozoa",
       phylum %in% c("Arthropoda", "Mollusca", "Rotifera", "Gastrotricha", "Cnidaria", "Chordata", "Annelida", "Platyhelminthes", "Nematoda") ~ "Animalia",
       phylum %in% c("Ascomycota", "Basidiomycota") ~ "Fungi",
@@ -1000,13 +1000,13 @@ taxonomy <- taxonomy_mc1 %>%
       
       # One that aren't plankton - need to look over these incase any have multuples and need a different one selecting
       kingdom == "Fungi" ~ "not plankton",
-      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa") ~ "not plankton",
+      phylum %in% c("Proteobacteria (phylum silva:A16379/#2)", "Chloroflexi", "Actinobacteria", "Annelida", "Platyhelminthes", "Nematoda", "Cnidaria", "Mollusca", "Gastrotricha", "Amoebozoa", "Foraminifera", "Cercozoa", "Choanozoa") ~ "not plankton",
       class %in% c("Amphibia", "Anthozoa", "Arachnida", "Malacostraca", "Hexapoda") ~ "not plankton",
       genus == "Rhogostoma" ~ "not plankton",
       
       # Ones that are plankton
       kingdom == "Plantae" ~ "Phytoplankton",
-      phylum %in% c("Cyanobacteria", "Heterokontophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Choanozoa", "Bigyra", "Spironematellophyta") ~ "Phytoplankton",
+      phylum %in% c("Cyanobacteria", "Ochrophyta", "Dinoflagellata", "Haptophyta", "Euglenophyta", "Bacillariophyta", "Cryptophyta", "Bigyra", "Spironematellophyta") ~ "Phytoplankton",
       
       phylum %in% c("Ciliophora (phylum in subkingdom SAR)", "Rotifera", "Heliozoa", "Sulcozoa") ~ "Zooplankton",
       class %in% c("Branchiopoda", "Hexanauplia", "Ostracoda") ~ "Zooplankton",
@@ -1187,6 +1187,14 @@ saveRDS(tax_list_raw, file = "R/data_outputs/database_products/taxonomy/tax_list
 
 # Add to main data ----
 # need to join things inn sequence because there were a couple of steps to get from the raw names to the formatted names
+
+# import data
+bodysize_raw <- readRDS("R/data_outputs/database_products/final_products/bodysize_raw.rds")
+taxonomy <- readRDS("R/data_outputs/database_products/taxonomy/taxonomy.rds")
+resolved_pmc <- readRDS("R/data_outputs/database_products/taxonomy/resolved_pmc.rds")
+resolved_manual <- readRDS("R/data_outputs/database_products/taxonomy/resolved_manual.rds")
+cleaned <- readRDS("R/data_outputs/database_products/taxonomy/cleaned.rds")
+tax_list_raw <- readRDS("R/data_outputs/database_products/taxonomy/tax_list_raw.rds")
 
 ## Linking new to original names ----
 
