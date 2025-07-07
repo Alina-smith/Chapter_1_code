@@ -540,7 +540,7 @@ extra_raw <- bs_fg %>%
 
 
 ## Calculate mass ----
-bodysize_raw <- bs_fg %>% 
+plankton_traits_all <- bs_fg %>% 
   
   ## Put measurements on one row per individual
   pivot_wider(
@@ -675,13 +675,16 @@ bodysize_raw <- bs_fg %>%
       taxonomic.group == "Copepods" & length >= 140 & length <= 2450 ~ "in-range",
       
       # Rotifers
-      #stri_detect_regex(w.factor, "a") & length >= length.range.min & length <= length.range.max ~ "in-range",
-      #stri_detect_regex(w.factor, "b") & width >= length.range.min & width <= length.range.max ~ "in-range",
-      #taxonomic.group == "Rotifer" & !is.na(biovolume) ~ "in-range",
-      #taxonomic.group == "Rotifer" & !is.na(dry.mass) ~ "in-range",
+      is.na(eq) & taxonomic.group == "Rotifers" ~ "in-range",
+      is.na(length.range.min) & taxonomic.group == "Rotifers" ~ "in-range",
+      !is.na(dry.mass) & taxonomic.group == "Rotifers" ~ "in-range",
+      !is.na(wet.mass) & taxonomic.group == "Rotifers" ~ "in-range",
+      
+      eq %in% c("1", "2", "4", "5", "6") & length >= length.range.min & length <= length.range.max ~ "in-range",
+      eq == "3" & width >= length.range.min & width <= length.range.max ~ "in-range",
       
       # Others
-      taxonomic.group %in% c("Ciliates", "Rotifers") ~ "in-range",
+      taxonomic.group == "Ciliates" ~ "in-range",
       type == "Phytoplankton" ~ "in-range",
       
       TRUE ~ "outlier"
@@ -786,13 +789,18 @@ bodysize_raw <- bs_fg %>%
     mld = case_when(
       type == "Zooplankton" ~ length,
       TRUE ~ pmax(length, width, height, diameter, na.rm = TRUE)
+    ),
+    
+    x = if_else(
+      taxonomic.group == "Copepods" & dw.ug < 0.1,
+      "remove",
+      "keep"
     )
-  ) %>% 
-  
-  # # rename biovolume column
-  # rename(
-  #   bv.um3 = biovolume
-  # ) %>% 
+  ) %>%
+  filter(
+    !(stri_detect_regex(individual.uid, "0.1111/geb.13575")),
+    x == "keep"
+  )%>% 
   
   select(
     uid, source.code, original.sources, taxa.name,
@@ -801,29 +809,35 @@ bodysize_raw <- bs_fg %>%
     taxonomic.group, fg, fg.source,
     location.code, habitat, location, country, continent, latitude, longitude
   ) %>% 
+  
+  # Remove outliers
+  # calculate st and mean
+  group_by(
+    taxa.name
+  ) %>% 
+  
+  mutate(
+    mean = mean(dw.ug),
+    sd = sd(dw.ug)
+  ) %>% 
+  
+  # remove any without a mass measurement
+  filter(
+    !is.na(dw.ug)
+  ) %>% 
+  
 
-  # remove obvious outliers and any without a mass measurement
+  # remove outliers (above 2 sd from mean) and any without a mass measurement
   mutate(
     outlier = case_when(
-      # na
-      is.na(dw.ug) ~ "outlier",
-      # phyto
-      #c.pg > 1e+8 & type == "Phytoplankton" ~ "outlier",
-      # zoo
-      #c.pg > 5e+9 & type == "Zooplankton" ~ "outlier",
-      
-      #taxonomic.group == "Ciliate" ~ "outlier",
-      #taxonomic.group == "Rotifer" ~ 
-
-      # random ones
-      #uid %in% c("100238", "100201", "100492", "100581", "100275", "99693", "100402", "98876", "92100", "91647", "90535", "90536", "90534", "91507", "91685", "91686", "91678", "91403", "3822") ~ "outlier",
-
-      TRUE ~ NA
+      is.na(sd) ~ "keep",
+      dw.ug <= mean + (sd * 2) & dw.ug >= mean - (sd * 2) ~ "keep",
+      TRUE ~ "outlier"
     )
   ) %>%
   
   filter(
-    is.na(outlier)
+    outlier == "keep"
   ) %>% 
   
   rename(
@@ -839,113 +853,10 @@ bodysize_raw <- bs_fg %>%
   )
 
 # View data
-ggplot(bodysize_raw, aes(x = log10(dw.ug), fill = type)) +
+ggplot(plankton_traits_all, aes(x = log10(dw.ug), fill = type)) +
   geom_histogram(binwidth = 0.5)+
   facet_wrap(~type, ncol = 1)+
   scale_y_log10()
-
-  
-# calculate the mean and standard deviation 
-#outliers_info <- bodysize_raw %>% 
-  
-#  group_by(
-#    taxa.name
-#  ) %>% 
-  
-#  summarise(
-#    mean = mean(c.pg),
-#    sd = sd(c.pg),
-#    .groups = "drop"
-#  )
-
-# Remove outliers and get average for multiple of the same individual.uid
-# bodysize_outliers <- bodysize_raw %>% 
-#   
-#   left_join(outliers_info, by = "taxa.name") %>% 
-#   
-#   filter(
-#     #c.pg <= mean + (sd * 2) & c.pg >= mean - (sd * 2)
-#   ) %>% 
-#   
-#   # calculate average for each source and location
-#   group_by(
-#     ott.id, location.code, source.code, original.sources
-#   ) %>% 
-#   
-#   summarise(
-#     mass = mean(c.pg),
-#     mld = mean(mld),
-#     .groups = "drop"
-#   )
-
-# # add in extra info
-# locations_updated <- bodysize_raw %>% 
-#   select(
-#     location.code,
-#     habitat, 
-#     location,
-#     country,
-#     continent,
-#     longitude,
-#     latitude
-#   ) %>% 
-# 
-#   distinct(
-#     location.code, .keep_all = TRUE
-#   )%>% 
-#   
-#   filter(
-#     location.code %in% bodysize_outliers$location.code
-#   )
-# 
-# tax_updated <- bodysize_raw %>% 
-#   select(
-#     ott.id,
-#     genus.ott.id,
-#     type,
-#     taxonomic.group,
-#     fg,
-#     fg.source,
-#     taxa.name,
-#     species,
-#     genus,
-#     family,
-#     order,
-#     class,
-#     phylum,
-#     kingdom
-#   ) %>% 
-#   
-#   distinct(
-#     ott.id, .keep_all = TRUE
-#   ) 
-
-
-# # join in the extra info to outliers
-# plankton_traits_all <- bodysize_outliers %>%
-#   
-#   #left_join(
-#   #  locations_updated, by = "location.code"
-#   #) %>% 
-#   
-#   #left_join(
-#   #  tax_updated, by = "ott.id"
-#   #) %>% 
-#   
-#   rename(
-#     functional.group = fg
-#   )%>% 
-# 
-#   # select columns and reorder
-#   select(
-#     source.code, original.sources, taxa.name,
-#     c.pg, mld,
-#     ott.id, genus.ott.id, type, taxa.name, species, genus, family, order, class, phylum, kingdom,
-#     taxonomic.group, functional.group, fg.source,
-#     location.code, habitat, location, country, continent, latitude, longitude
-#   ) 
-
-plankton_traits_all <- bodysize_raw
 
 # save
 saveRDS(plankton_traits_all, file = "R/Data_outputs/database_products/final_products/plankton_traits_all.rds")

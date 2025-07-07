@@ -6,6 +6,9 @@ library(tidyverse)
 library(stringi)
 library(ggplot2)
 library(patchwork)
+library(ggfortify)
+library(agricolae)
+library(multcomp)
 
 # Import data ----
 taxonomy_list <- readRDS("R/data_outputs/database_products/final_products/taxonomy_list.rds")
@@ -55,14 +58,7 @@ avg_mass <- bs %>%
       stri_detect_regex(functional.group, "\\/") ~ stri_extract_first_regex(functional.group, "//S+(?=\\/)"),
       !(stri_detect_regex(functional.group, "\\/")) ~ functional.group,
       TRUE ~ NA
-    ),
-    
-    # # Rename groups so the fit on graph easier
-    # taxonomic.group = case_when(
-    #   taxonomic.group == "Blue-green" ~ "Blue-\ngreen",
-    #   taxonomic.group == "Dinoflagellate" ~ "Dino-\nflagellate",
-    #   TRUE ~ taxonomic.group
-    # )
+    )
   )
 
 # reorder groups for plotting
@@ -73,7 +69,7 @@ avg_mass$functional.group <- factor(avg_mass$functional.group, levels = c("A", "
 
 # facet by type
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
-  geom_histogram(binwidth = 0.35) +
+  geom_histogram(binwidth = 0.45) +
   scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#333333"))+
   facet_wrap(~ type, ncol = 1)+
   scale_y_log10()+
@@ -88,6 +84,14 @@ spread_type <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
   labs(x = "Log mean body size (ug)")
 
 spread_type # View
+
+# find overlapping range
+range_by_group <- avg_mass %>%
+  group_by(type) %>%
+  summarise(
+    min_mass = min(avg.dw),
+    max_mass = max(avg.dw)
+  )
 
 # save
 ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type, width = 8, height = 5)
@@ -178,7 +182,7 @@ group_box
 # save
 ggsave("R/Data_outputs/plots/group_box.png", plot = group_box, height = 10, width = 9)
 
-# Stats ----
+# ANOVA ----
 ## Format data ----
 zoo_sub <- avg_mass %>% 
   filter(type == "Zooplankton")
@@ -186,19 +190,138 @@ zoo_sub <- avg_mass %>%
 phyto_sub <- avg_mass %>% 
   filter(type == "Phytoplankton")
 
-## Anova ----
-# groups
-group_anova_zoo <- aov(avg.dw ~ taxonomic.group, data = zoo_sub)
-summary(group_anova_zoo)
+## Fit model ----
+# Taxonomic groups
+lm_zoo_tg <- lm(log(avg.dw) ~ taxonomic.group, data = zoo_sub)
+lm_phyto_tg <- lm(log(avg.dw) ~ taxonomic.group, data = phyto_sub)
 
-group_anova_phyto <- aov(avg.dw ~ taxonomic.group, data = phyto_sub)
-summary(group_anova_phyto)
+# Functional groups 
+lm_zoo_fg <- lm(log(avg.dw) ~ functional.group, data = zoo_sub)
+lm_phyto_fg <- lm(log(avg.dw) ~ functional.group, data = phyto_sub)
 
-# fg
-fg_anova_zoo <- aov(avg.dw ~ functional.group, data = zoo_sub)
-summary(fg_anova_zoo)
+## Check assumptions ----
+# Taxonomic groups
+autoplot(lm_zoo_tg)
+autoplot(lm_phyto_tg)
 
-fg_anova_phyto <- aov(fg_avg.dw ~ functional.group, data = phyto_sub)
-summary(anova_phyto)
+# Functional groups
+autoplot(lm_zoo_fg)
+autoplot(lm_phyto_fg)
+
+## F-test ----
+# Taxonomic groups
+an_zoo_tg <- anova(lm_zoo_tg)
+an_phyto_tg <- anova(lm_phyto_tg)
+
+summary(an_zoo_tg)
+summary(an_phyto_tg)
+
+# Functional groups
+an_zoo_fg <- anova(lm_zoo_fg)
+an_zoo_fg <- anova(lm_phyto_fg)
+
+summary(an_zoo_fg)
+summary(an_phyto_fg)
+
+## Post hoc test
+# Taxonomic groups:
+# aov
+zoo_tg_aov <- aov(lm_zoo_tg)
+phyto_tg_aov <- aov(lm_phyto_tg)
+
+zoo_tg_aov
+phyto_tg_aov
+
+# Tukey test
+tukey_zoo_tg <- glht(zoo_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+tukey_phyto_tg <- glht(phyto_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+
+summary(tukey_zoo_tg)
+summary(tukey_phyto_tg)
+
+# Plot
+plot(tukey_zoo_tg)
+plot(tukey_phyto_tg)
+
+# Functional groups
+# aov:
+zoo_fg_aov <- aov(lm_zoo_fg)
+phyto_fg_aov <- aov(lm_phyto_fg)
+
+zoo_fg_aov
+phyto_fg_aov
+
+# Tukey test
+tukey_zoo_fg <- glht(zoo_fg_aov,linfct = mcp(functional.group = "Tukey"))
+tukey_phyto_fg <- glht(phyto_fg_aov,linfct = mcp(functional.group = "Tukey"))
+
+summary(tukey_zoo_fg)
+summary(tukey_phyto_fg)
+
+# Plot
+plot(tukey_zoo_fg)
+plot(tukey_phyto_fg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ANOVA ----
+## Format data ----
+zoo_sub <- avg_mass %>% 
+  filter(type == "Zooplankton")
+
+phyto_sub <- avg_mass %>% 
+  filter(type == "Phytoplankton")
+
+## Fit model ----
+lm_zoo_tg <- lm(log(avg.dw) ~ taxonomic.group, data = zoo_sub)
+lm_phyto_tg <- lm(log(avg.dw) ~ taxonomic.group, data = phyto_sub)
+
+## Check assumptions ----
+autoplot(lm_zoo_tg)
+autoplot(lm_phyto_tg)
+
+## F-test ----
+an_zoo_tg <- anova(lm_zoo_tg)
+an_phyto_tg <- anova(lm_phyto_tg)
+
+summary(an_zoo_tg)
+summary(an_phyto_tg)
+
+## Post hoc test
+# aov
+zoo_tg_aov <- aov(lm_zoo_tg)
+phyto_tg_aov <- aov(lm_phyto_tg)
+
+zoo_tg_aov
+phyto_tg_aov
+
+# Tukey test
+tukey_zoo_tg <- glht(zoo_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+tukey_phyto_tg <- glht(phyto_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+
+summary(tukey_zoo_tg)
+summary(tukey_phyto_tg)
+
+# Plot
+plot(tukey_zoo_tg)
+plot(tukey_phyto_tg)
 
 

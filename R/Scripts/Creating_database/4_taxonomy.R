@@ -269,7 +269,6 @@ saveRDS(resolved_pmc, "R/data_outputs/database_products/taxonomy/resolved_pmc.rd
 
 
 
-
 # Taxonomy: ----
 
 ## tax_lineage ----
@@ -368,6 +367,7 @@ taxonomy_formatted_pmc <- taxonomy_raw_pmc %>%
       stri_detect_regex(name.crop, "Karlodinium") ~ "Karlodinium",
       stri_detect_regex(name.crop, "Karenia") ~ "Karenia",
       resolved.taxa.name == "Diphylleia rotans" ~ "Aulacomonas",
+      resolved.taxa.name == "Sida (genus in kingdom Archaeplastida)" ~ "Sida (genus in Opisthokonta)",
       
       !is.na(genus.2) ~ genus.2,
       
@@ -537,7 +537,7 @@ taxonomy_order <- taxonomy_family %>%
     ),
     
     order = case_when(
-      resolved.taxa.name %in% c("Chromulinales", "Gymnodiniales", "Ochromonadales", "Oscillatoriales", "Peridiniales", "Chroococcales", "Chlamydomonadales", "Pennales") ~ resolved.taxa.name,
+      resolved.taxa.name %in% c("Chromulinales", "Gymnodiniales", "Ochromonadales", "Oscillatoriales", "Peridiniales", "Chroococcales", "Chlamydomonadales", "Pennales", "Calanoida") ~ resolved.taxa.name,
       
       family == "Collodictyonidae" ~ "Diphylleida", # one that got missed
       family == "Chlorellaceae" ~ "Chlorellales",
@@ -561,6 +561,12 @@ taxonomy_order <- taxonomy_family %>%
 taxonomy_pmc <- taxonomy_order %>% 
   
   mutate(
+    # Change ott.id for some
+    ott.id = case_when(
+      resolved.taxa.name == "Sida (genus in kingdom Archaeplastida)" ~ 424907,
+      TRUE ~ ott.id
+    ),
+    
     #### Class ----
     
     class = case_when(
@@ -599,6 +605,7 @@ taxonomy_pmc <- taxonomy_order %>%
       order == "Chlorellales" ~ "Trebouxiophyceae",
       order == "Neobodonida" ~ "Kinetoplastea",
       order == "Goniochloridales" ~ "Eustigmatophyceae",
+      order == "Diplostraca" ~ "Branchiopoda",
       
       resolved.taxa.name == "Prymnesiophyceae" ~ "Coccolithophyceae",
       resolved.taxa.name == "Insecta" ~ "Hexapoda",
@@ -623,6 +630,7 @@ taxonomy_pmc <- taxonomy_order %>%
       class == "Oligohymenophorea" ~ "Ciliophora (phylum in subkingdom SAR)",
       class == "Tubulinea" ~ "Amoebozoa",
       class == "Bicosoecophyceae" ~ "Bigyra",
+      class == "Branchiopoda" ~ "Arthropoda",
       
       resolved.taxa.name %in% c("Dinoflagellata", "Cyanobacteria", "Chlorophyta", "Rotifera", "Haptophyta", "Ciliophora (phylum in subkingdom SAR)") ~ resolved.taxa.name,
       
@@ -1300,8 +1308,3 @@ bodysize_taxonomy <-  bodysize_raw %>%
 # Save
 saveRDS(bodysize_taxonomy, file = "R/data_outputs/database_products/bodysize_taxonomy.rds")
 
-
-############################\
-# need to change:
-# Magnoliopsida
-# Liliopsida
