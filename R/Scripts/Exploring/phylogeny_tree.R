@@ -187,9 +187,9 @@ circular_plot_mass_p <- gheatmap(circular_plot_mass_p, mass_data_p, offset=3, wi
   
   theme(
     legend.box = "horizontal",
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    title = element_text(size = 20)
+    #legend.text = element_text(size = 20),
+    #legend.title = element_text(size = 20),
+    #title = element_text(size = 20)
   )
 
 circular_plot_mass_p
@@ -257,15 +257,15 @@ circular_plot_mass_z = circular_plot_groups_z+ new_scale_fill() # so new geoms a
 
 circular_plot_mass_z <- gheatmap(circular_plot_mass_z, mass_data_z, offset=3, width=0.2, colnames = F)+
   
-  scale_fill_gradient(name = "Mass (µg)", low = "pink", high = "purple") +
+  scale_fill_gradient(name = "Mass (µg)", low = "pink", high = "purple")+
   
   ggtitle("b)")+
   
   theme(
     legend.box = "horizontal",
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    title = element_text(size = 20)
+    #legend.text = element_text(size = 20),
+    #legend.title = element_text(size = 20),
+    #title = element_text(size = 20)
   )
 
 circular_plot_mass_z
@@ -277,5 +277,5 @@ ggsave("R/Data_outputs/plots/circular_plot_mass_z.png", width = 9, height = 5, l
 circular_plot_mass <- circular_plot_mass_p / circular_plot_mass_z
 circular_plot_mass
 
-ggsave("R/Data_outputs/plots/circular_plot_mass.png", width = 25, height = 30, limitsize = FALSE)
+ggsave("R/Data_outputs/plots/circular_plot_mass.png", width = 15, height = 15, limitsize = FALSE)
 

@@ -84,7 +84,7 @@ bodysize_spec_char <- joined_raw %>%
 
 # Final edits ----
 
-bodysize_raw <- bodysize_spec_char %>% 
+bodysize_raw_no_loc <- bodysize_spec_char %>% 
   
   mutate(
     
@@ -124,13 +124,13 @@ bodysize_raw <- bodysize_spec_char %>%
         )
       ),
     
-    ## Join.source NAs ----
-    # When join.source is NA then set to "no.source" - just makes later steps in the location script easier
+    ## Join.location NAs ----
+    # When join.location is NA then set to "unkown" - just makes later steps in the location script easier
     across(
       .cols = join.location.2:join.location.17, # all join.location.1 column should have a value as the unknowns have their own location code
       ~ if_else(
         is.na(.),
-        "no.source",
+        "unkown",
         .)
       ),
     
@@ -168,6 +168,237 @@ bodysize_raw <- bodysize_spec_char %>%
     )
   )
 
+
+
+# Adding in location info ----
+# Data ----
+location_raw <- read_xlsx("raw_data/location_data_full.xlsx", sheet = "location_raw")
+#sources_list_nd <- readRDS("R/Data_outputs/database_products/sources_list_nd.rds")
+
+# Edit location list ----
+# need to add source.code to join.location to make it easier to left join as some sources have the same join.locationeven though they are different locations
+location_join <- location_raw %>% 
+  
+  mutate(
+    join.location = paste(source.code, join.location, sep = "-")
+  )
+
+# Update location info in raw data ----
+# left join the new location.code for each location to the raw data by the join.location columns
+bodysize_raw <- bodysize_raw_no_loc %>% 
+  
+  mutate(
+    ## Merge source.code and location.code ----
+    # join source.code and join.location to avoid duplicates when there is the same join.location between sources
+    across(
+      c(join.location.1:join.location.17),
+      ~ paste(source.code, ., sep = "-")
+    )
+  )%>% 
+  
+  ## Pivot longer ----
+  # want to get each join.location on it's own line so that can left join the location codes to it
+  pivot_longer(
+    cols = join.location.1:join.location.17,
+    values_to = "join.location"
+  ) %>% 
+  
+  ## Location.codes ----
+  # left join location codes
+  left_join(
+    select(
+      location_join, join.location, location.code, habitat, longitude, latitude, water.body, place, country, continent, area
+    ), by = "join.location"
+  )%>% 
+  
+  ## Pivot wider ----
+  # pivot back to get seperate columns for each location.code
+  pivot_wider(
+    id_cols = uid,
+    values_from = c(location.code, habitat, longitude, latitude, water.body, place, country, continent, area)
+  ) %>% 
+  rename_with(~ gsub("location.code_join.location", "location.code", .)) %>% 
+  rename_with(~ gsub("longitude_join.location", "longitude", .)) %>% 
+  rename_with(~ gsub("latitude_join.location", "latitude", .)) %>% 
+  rename_with(~ gsub("country_join.location", "country", .)) %>% 
+  rename_with(~ gsub("continent_join.location", "continent", .)) %>% 
+  rename_with(~ gsub("water.body_join.location", "water.body", .)) %>% 
+  rename_with(~ gsub("area_join.location", "area", .)) %>% 
+  rename_with(~ gsub("place_join.location", "place", .)) %>% 
+  rename_with(~ gsub("habitat_join.location", "habitat", .))%>% 
+  
+  # merge columns together
+  mutate(
+    location.code = pmap_chr(select(., starts_with("location.code.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")         # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    latitude = pmap_chr(select(., starts_with("latitude.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      if (length(vals) == 0) {
+        return(NA_character_)                          # Return NA if empty
+      } else {
+        paste(range(vals), collapse = ":")             # Return "min;max"
+      }
+    }),
+    
+    longitude = pmap_chr(select(., starts_with("longitude")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      if (length(vals) == 0) {
+        return(NA_character_)                          # Return NA if empty
+      } else {
+        paste(range(vals), collapse = ":")             # Return "min;max"
+      }
+    }),
+    
+    
+    habitat = pmap_chr(select(., starts_with("habitat.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    water.body = pmap_chr(select(., starts_with("water.body.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    place = pmap_chr(select(., starts_with("place.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    country = pmap_chr(select(., starts_with("country.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    continent = pmap_chr(select(., starts_with("continent.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+    
+    area = pmap_chr(select(., starts_with("area.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")                   # Collapse to single string
+      if_else(merged == "", NA, merged)
+    }),
+  ) %>% 
+  
+  select(
+    - starts_with("location.code."),
+    - starts_with("habitat."),
+    - starts_with("water.body."),
+    - starts_with("place."),
+    - starts_with("country."),
+    - starts_with("continent."),
+    - starts_with("area."),
+    - starts_with("longitude."),
+    - starts_with("latitude."),
+  ) %>% 
+  
+  # Add back in the rest of the data
+  left_join(bodysize_raw_no_loc,., by = "uid") %>% 
+  
+  select(
+    - starts_with("join.location.")
+  ) %>%  
+  
+  # Remove data from bromeliads
+  filter(
+    !(habitat == "bromeliads")
+  )
+
 # Save ----
 saveRDS(bodysize_raw, file = "R/data_outputs/database_products/final_products/bodysize_raw.rds")
+
+# update location list
+locations_list_update <- bodysize_raw %>% 
+  
+  select(
+    location.code
+  ) %>% 
+  
+  separate(
+    location.code, sep = ";", into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17")
+  ) %>%
+  
+  pivot_longer(., cols = 1:17, values_to = "location.code") %>% 
+  
+  distinct(
+    location.code
+  ) %>% 
+  
+  left_join(., location_join, by = "location.code") %>% 
+  
+  distinct(
+    location.code, .keep_all = TRUE
+  ) %>% 
+  
+  select(
+    -join.location,
+    - source.code) %>% 
+  
+  filter(
+    !is.na(location.code)
+  )
+
+# save
+saveRDS(locations_list_update, file = "R/Data_outputs/database_products/locations_list_update.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

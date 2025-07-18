@@ -24,21 +24,13 @@ library(stringi)
 
 
 # Import data ----
-
 bs_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds") %>% 
   mutate(
-    functional.group = case_when(
-      is.na(functional.group) ~ NA,
-      stri_detect_regex(functional.group, "\\/") ~ stri_extract_first_regex(functional.group, "//S+(?=\\/)"),
-      !(stri_detect_regex(functional.group, "\\/")) ~ functional.group,
-      TRUE ~ NA
+    taxa.name = tolower(taxa.name)
     )
-  )
 
-# Format data ----
-# Get a taxonomy list to add in in later steps
-
-# Phyto
+# Phyto ----
+## Format data ----
 p_data <- bs_traits %>% 
   
   filter(
@@ -49,13 +41,153 @@ p_data <- bs_traits %>%
     ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
   ) %>% 
   
-  distinct(taxa.name, .keep_all = TRUE) %>% 
+  distinct(taxa.name, .keep_all = TRUE)
+
+## Filter for in tree ----
+# get ott_ids
+taxa_p <- tnrs_match_names(p_data$taxa.name)
+
+# Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
+in_tree_p <- is_in_tree(ott_id(taxa_p))
+
+# Save
+saveRDS(in_tree_p, "R/data_outputs/phylo_tree/in_tree_p.rds")
+
+# View data
+in_tree_p
+
+# See which ones are in and out
+sum(in_tree_p == TRUE) # 614
+sum(in_tree_p == FALSE) # 138
+
+## Get tree ----
+# Select just taxa that are in the tree
+taxa_in_tree_p <- taxa_p[in_tree_p, ]
+
+# Save
+saveRDS(taxa_in_tree_p, "R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
+
+# Make tree 
+tree_p <- tol_induced_subtree(ott_ids = taxa_in_tree_p$ott_id)
+
+# Save
+write.nexus(tree_p, file="R/data_outputs/phylo_tree/tree_p.nex")
+
+## Remove extra nodes from tree ----
+# import trees and data
+tree_p <- read.nexus("R/data_outputs/phylo_tree/tree_p.nex")
+taxa_in_tree_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
+
+# make tip label column in data
+taxa_in_tree_update_p <- taxa_in_tree_p %>% 
+  
+  # Select columns
+  select(
+    search_string, unique_name, ott_id
+  ) %>% 
   
   mutate(
-    taxa.name = tolower(taxa.name)
+    # Make tip label column
+    tip.label = paste0(unique_name, "_ott", ott_id),
+    tip.label = stri_replace_all_regex(tip.label, " ", "_"),
+    
+    # Taxa.name
+    taxa.name = unique_name
+  ) %>% 
+  
+  # Join trait data in
+  left_join(p_data, by = c("search_string" = "taxa.name")) %>% 
+  
+  # Remove columns
+  select(
+    - unique_name, - search_string, - ott_id
+  )
+
+# Remove tips from tree that aren't in taxa_in_tree_update
+tree_p <- drop.tip(tree_p, setdiff(tree_p$tip.label, taxa_in_tree_update_p$tip.label))
+
+## Imputation ----
+# Get branch lengths
+phy_p = compute.brlen(tree_p)
+
+# Format data
+# assign groups numbers for corrhmm
+fg_no_p <- data.frame(
+  functional.group.imputed = c("X2", "X1", "K", "TB", "F", "J", "P", "B", "E", "X3", "LM", "LO", "XPH", "C", "N", "Y", "S1", "MP", "Q", "W1", "G", "D", "S2", "A", "H2", "TC", "SN", "U", "M", "T" ),
+  functional.group.cor = as.character(1:30)
+)
+
+# format data
+dat_cor_p <- taxa_in_tree_update_p %>%
+  
+  # add in number versions of functional.groups
+  left_join(fg_no_p, by = "functional.group") %>% 
+
+  # Set NAs to a regex that corHMM recognises
+  mutate(
+    functional.group.cor = ifelse(is.na(functional.group.cor), "?", functional.group.cor),
+    functional.group.cor = as.character(functional.group.cor)
+  ) %>% 
+  
+  # Select columns I want
+  select(
+    tip.label, functional.group.cor
   ) 
 
-# Phyto
+# Run corHMM
+
+fit_p <- corHMM(phy       = phy_p,
+                 data         = dat_cor_p,
+                 rate.cat     = 1,         # simple Mk model
+                 model        = "ARD",     # all rates differ
+                 node.states  = "marginal",
+                 get.tip.states = TRUE)    # keep reconstructed tips
+# `fit$tip.states` is a matrix: rows = tips, cols = 5 states (likelihoods)
+
+# Save
+saveRDS(fit_p, "R/data_outputs/database_products/fit_p.rds")
+
+# Get tip states from fit
+tip_recon_p <- as.data.frame(fit_p$tip.states) %>% 
+  mutate(
+    tip.label = rownames(.)
+  )
+
+# Get imputed states
+imputed_groups_p = dat_cor_p %>%
+  # Join in dat_cor data
+  left_join(
+    tip_recon_p, by = "tip.label"
+  ) %>% 
+  
+  # Remove the V from the titles
+  rename_with(
+    ~ sub("^V", "", .x)
+  ) %>% 
+  
+  # Select find highest tip state and select that column name
+  mutate(
+    functional.group.imputed.no = if_else(
+      functional.group.cor == "?",
+      apply(.[3:32], 1, function(x) names(.[3:32])[which.max(x)]),
+      functional.group.cor
+      )
+  ) %>% 
+  
+  # add back in original group names and taxonomy data
+  left_join(
+    fg_no_p, by = c("functional.group.imputed.no" = "functional.group.cor")
+  ) %>% 
+  left_join(
+    taxa_in_tree_update_p, by = "tip.label"
+  ) %>% 
+  
+  # Select columns
+  select(ott.id, tip.label, taxa.name, taxonomic.group, functional.group.imputed, type, family, order, class, phylum, kingdom)
+  
+
+# Zoo ----
+## Format data ----
 z_data <- bs_traits %>% 
   
   filter(
@@ -66,269 +198,149 @@ z_data <- bs_traits %>%
     ott.id, taxa.name, type, phylum, kingdom, family, order, class, functional.group, taxonomic.group
   ) %>% 
   
-  distinct(taxa.name, .keep_all = TRUE) %>% 
-  
-  mutate(
-    taxa.name = tolower(taxa.name)
-  ) 
-
-# Build tree ----
+  distinct(taxa.name, .keep_all = TRUE)
 
 ## Filter for in tree ----
+# get ott_ids
+taxa_z <- tnrs_match_names(z_data$taxa.name)
+
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
-in_tree_p <- is_in_tree(ott_ids = p_data$ott.id)
-in_tree_z <- is_in_tree(ott_ids = z_data$ott.id)
+in_tree_z <- is_in_tree(ott_id(taxa_z))
 
 # Save
-saveRDS(in_tree_p, "R/data_outputs/phylo_tree/in_tree_p.rds")
 saveRDS(in_tree_z, "R/data_outputs/phylo_tree/in_tree_z.rds")
 
 # View data
-in_tree_p
 in_tree_z
 
 # See which ones are in and out
-sum(in_tree_p == TRUE) # 631
-sum(in_tree_p == FALSE) # 142
-
-sum(in_tree_z == TRUE) # 203
-sum(in_tree_z == FALSE) # 8
+sum(in_tree_z == TRUE) # 185
+sum(in_tree_z == FALSE) # 7
 
 ## Get tree ----
-# Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
-
-### Phyto ----
-# get list of just species in the tree split by phyto and zoo
-taxa_in_tree_p <- p_data[in_tree_p, ] 
-
-# Save
-saveRDS(taxa_in_tree_p, "R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
-
-### Zoo ----
-taxa_in_tree_z <- z_data[in_tree_z, ]
+# Select just taxa that are in the tree
+taxa_in_tree_z <- taxa_z[in_tree_z, ]
 
 # Save
 saveRDS(taxa_in_tree_z, "R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
 
-# Make trees
-tree_pre_plot_p <- tol_induced_subtree(ott_ids = taxa_in_tree_p$ott.id)
-tree_pre_plot_z <- tol_induced_subtree(ott_ids = taxa_in_tree_z$ott.id)
-
-#save tree out here before adapting it for plotting: 
-write.nexus(tree_pre_plot_p, file="R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
-write.nexus(tree_pre_plot_z, file="R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
-
-tol_about() # gives info about the current synthetic tree
-tree_pre_plot_p # shows info about my tree
-tree_pre_plot_z
-class(tree_pre_plot_p) # check that it is a phylo
-class(tree_pre_plot_z) # check that it is a phylo
-
-# Plot trees ----
-
-## Read in data ----
-tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
-tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
-taxa_in_tree_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
-taxa_in_tree_z <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
-
-## Square ----
-# Inital plot to see it
-plot(tree_pre_plot_p, show.tip.label = FALSE)
-plot(tree_pre_plot_z, show.tip.label = FALSE)
-
-## Edit tip.labels ----
-# Need to add in the tip labels to the data for plotting with group info
-
-### Phyto ----
-taxa_in_tree_full_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the tip labels in the tree
-  
-  rename(
-    tip.label = `tree_pre_plot_p$tip.label`
-  ) %>% 
-  
-  mutate(
-    # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
-    stripped.tip.label = tolower(stripped.tip.label)
-  ) %>% 
-  
-  # Join in the extra data
-  left_join(
-    taxa_in_tree_p, by = c("stripped.tip.label" = "taxa.name")
-  ) %>% 
-  
-  # Add in to make plotting labels look neater
-  mutate(
-    taxa.name = stripped.tip.label
-  ) %>% 
-  
-  select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
-  ) %>% 
-  
-  mutate(
-    fg_label = paste0("FG: ", functional.group),
-    group_label = paste0("Group: ", taxonomic.group)
-  )
-
-### Zoo ----
-taxa_in_tree_full_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the tip labels in the tree
-  
-  rename(
-    tip.label = `tree_pre_plot_z$tip.label`
-  ) %>% 
-  
-  mutate(
-    # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
-    stripped.tip.label = tolower(stripped.tip.label)
-  ) %>% 
-  
-  # Join in the extra data
-  left_join(
-    taxa_in_tree_z, by = c("stripped.tip.label" = "taxa.name")
-  ) %>% 
-  
-  # Add in to make plotting labels look neater
-  mutate(
-    taxa.name = stripped.tip.label
-  ) %>% 
-  
-  select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
-  ) %>% 
-  
-  mutate(
-    fg_label = paste0("FG: ", functional.group),
-    group_label = paste0("Group: ", taxonomic.group)
-  ) 
+# Make tree 
+tree_z <- tol_induced_subtree(ott_ids = taxa_in_tree_z$ott_id)
 
 # Save
-saveRDS(taxa_in_tree_full_p, "R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds")
-saveRDS(taxa_in_tree_full_z, "R/data_outputs/phylo_tree/taxa_in_tree_full_z.rds")
+write.nexus(tree_z, file="R/data_outputs/phylo_tree/tree_z.nex")
 
-## Circular ----
+## Remove extra nodes from tree ----
+# import trees and data
+tree_z <- read.nexus("R/data_outputs/phylo_tree/tree_z.nex")
+taxa_in_tree_z <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
 
-# Phyto
-circular_plot_p <- ggtree(tree_pre_plot_p, branch.length='none', layout='circular')
-circular_plot_p
-
-# Zoo
-circular_plot_z <- ggtree(tree_pre_plot_z, branch.length='none', layout='circular')
-circular_plot_z
-
-
-
-# Imputation ----
-
-## Read in data ----
-tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
-tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
-
-traits_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_full_p.rds") %>% 
-  select(
-    tip.label, taxa.name, functional.group
-  ) %>% 
-  mutate(
-    functional.group = if_else(is.na(functional.group), "?", functional.group)
-  )
-traits_z <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_full_z.rds") %>% 
-  select(
-    tip.label, taxa.name, functional.group
-  ) %>% 
-  mutate(
-    functional.group = if_else(is.na(functional.group), "?", functional.group)
-  )
-
-
-## Get branch lengths ----
-# Phyto
-keep_p <- intersect(tree_pre_plot_p$tip.label, traits_p$tip.label)
-tree_filtered_p <- drop.tip(tree_pre_plot_p, setdiff(tree_pre_plot_p$tip.label, keep_p))
-phy_p = compute.brlen(tree_filtered_p)
-
-# Zoo
-keep_z <- intersect(tree_pre_plot_z$tip.label, traits_z$tip.label)
-tree_filtered_z <- drop.tip(tree_pre_plot_z, setdiff(tree_pre_plot_z$tip.label, keep_z))
-phy_z = compute.brlen(tree_filtered_z)
-
-## final trait table matched to the tree ----
-# Phyto
-dat_cor_p <- traits_p %>%
-  select(
-    tip.label, functional.group
-  )
-
-# Zoo
-dat_cor_z <- traits_z %>%
-  select(
-    tip.label, functional.group
-  )
-
+# make tip label column in data
+taxa_in_tree_update_z <- taxa_in_tree_z %>% 
   
-## Run corHMM and impute the missing tips ----
+  # Select columns
+  select(
+    search_string, unique_name, ott_id
+  ) %>% 
+  
+  mutate(
+    # Make tip label column
+    tip.label = paste0(unique_name, "_ott", ott_id),
+    tip.label = stri_replace_all_regex(tip.label, " ", "_"),
+    
+    # Taxa.name
+    taxa.name = unique_name
+  ) %>% 
+  
+  # Join trait data in
+  left_join(z_data, by = c("search_string" = "taxa.name")) %>% 
+  
+  # Remove columns
+  select(
+    - unique_name, - search_string, - ott_id
+  )
 
-### Phyto ----
-fit_p <- corHMM(phy = phy_p,
-                 data = dat_cor_p,
-                 rate.cat = 1, # simple Mk model
-                 model = "ARD", # all rates differ
-                 node.states = "marginal",
-                fixed.nodes = FALSE,
-                 get.tip.states = TRUE) # keep reconstructed tips
+# Remove tips from tree that aren't in taxa_in_tree_update
+tree_z <- drop.tip(tree_z, setdiff(tree_z$tip.label, taxa_in_tree_update_z$tip.label))
+
+## Imputation ----
+# Get branch lengths
+phy_z = compute.brlen(tree_z)
+
+# Format data
+# assign groups numbers for corrhmm
+fg_no_z <- data.frame(
+  functional.group.imputed = c("4", "16", "9", "7", "2", "1", "17", "10", "14", "13", "11", "12", "8", "6"),
+  functional.group.cor = as.character(1:14)
+)
+
+# format data
+dat_cor_p <- taxa_in_tree_update_p %>%
+  
+  # add in number versions of functional.groups
+  left_join(fg_no, by = "functional.group") %>% 
+  
+  # Set NAs to a regex that corHMM recognises
+  mutate(
+    functional.group.cor = ifelse(is.na(functional.group.cor), "?", functional.group.cor),
+    functional.group.cor = as.character(functional.group.cor)
+  ) %>% 
+  
+  # Select columns I want
+  select(
+    tip.label, functional.group.cor
+  ) 
+
+# Run corHMM
+
+fit_p <- corHMM(phy       = phy_p,
+                data         = dat_cor_p,
+                rate.cat     = 1,         # simple Mk model
+                model        = "ARD",     # all rates differ
+                node.states  = "marginal",
+                get.tip.states = TRUE)    # keep reconstructed tips
 # `fit$tip.states` is a matrix: rows = tips, cols = 5 states (likelihoods)
 
-## Zoo ----
-fit_z <- corHMM(phy = phy_z,
-                data = dat_cor_z,
-                rate.cat = 1, # simple Mk model
-                model = "ARD", # all rates differ
-                node.states = "marginal",
-                get.tip.states = TRUE) # keep reconstructed tips
-# `fit$tip.states` is a matrix: rows = tips, cols = 5 states (likelihoods)
+# Save
+saveRDS(fit_p, "R/data_outputs/database_products/fit_p.rds")
 
+# Get tip states from fit
+tip_recon_p <- as.data.frame(fit_p$tip.states) %>% 
+  mutate(
+    tip.label = rownames(.)
+  )
 
-#############################################
-# Get the imputed data ----
-#############################################
-## Phyto ----
-tip_recon_z <- data.frame(tip.label = rownames(fit_z$tip.states),
-                           fit_z$tip.states)
-
-# Define how many functional groups
-levels_z = 17
-
-# Select the imputed data
-imputed_z <-  dat_cor_z %>%
-  bind_cols(select(tip_recon_z, -tip.label)) %>%
-  mutate(imputed_state = ifelse(fg == "?",
-                                max.col(tip_recon_z[,c(2:4)]),
-                                as.character(fg)))
-
-imputed_all_z = left_join(imputed_z, select(
-  all_info, - diet
-), by = "tip.label")
-
-
-test = subset(imputed_all, diet == "?")
-
-ggplot(test) +
-  geom_bar(aes(x = imputed_state))+
-  facet_wrap(~ diet_intact)
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Get imputed states
+imputed_groups_p = dat_cor_p %>%
+  # Join in dat_cor data
+  left_join(
+    tip_recon_p, by = "tip.label"
+  ) %>% 
+  
+  # Remove the V from the titles
+  rename_with(
+    ~ sub("^V", "", .x)
+  ) %>% 
+  
+  # Select find highest tip state and select that column name
+  mutate(
+    functional.group.imputed.no = if_else(
+      functional.group.cor == "?",
+      apply(.[3:32], 1, function(x) names(.[3:32])[which.max(x)]),
+      functional.group.cor
+    )
+  ) %>% 
+  
+  # add back in original group names and taxonomy data
+  left_join(
+    fg_no, by = c("functional.group.imputed.no" = "functional.group.cor")
+  ) %>% 
+  left_join(
+    taxa_in_tree_update_p, by = "tip.label"
+  ) %>% 
+  
+  # Select columns
+  select(ott.id, tip.label, taxa.name, taxonomic.group, functional.group.imputed, type, family, order, class, phylum, kingdom)
 
 
 
@@ -388,7 +400,6 @@ traits_me$diet[miss] <- NA
 taxa <- tnrs_match_names(traits_me$species)
 
 # Filter for in tree ----
-
 # Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
 in_tree <- is_in_tree(ott_id(taxa))
 
@@ -402,67 +413,59 @@ sum(in_tree == FALSE) # 3
 # Get tree ----
 # Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
 
-## Phyto ----
-# get list of just species in the tree split by phyto and zoo
-taxa_in_tree <- taxa[in_tree, ]
+taxa_in_tree <- taxa[in_tree, ] # get list of just species in the tree
+tree <- tol_induced_subtree(ott_id(taxa_in_tree)) # make tree
 
-# make tree
-tree_raw_me <- tol_induced_subtree(ott_id(taxa_in_tree))
-
-# replace OTT labels with binomials & drop tips lacking traits
-
-all_info <- taxa_in_tree %>% 
+# Remove extra nodes from tree ----
+# update names in taxa_in_tree
+taxa_in_tree_update <- taxa_in_tree %>% 
   
+  # Select columns
   select(
-    search_string,
-    unique_name,
-    ott_id
+    search_string, unique_name, ott_id
   ) %>% 
   
+  # Make tip label column
   mutate(
     tip.label = paste0(unique_name, "_ott", ott_id),
     tip.label = stri_replace_all_regex(tip.label, " ", "_")
   ) %>% 
   
-  left_join(traits_me, by = c("search_string" = "species")) %>% 
+  # Join trait data in
+  left_join(traits_me, by = c("search_string" = "species"))%>% 
   
   # update species name with the new names from tol
   mutate(
-    species = strip_ott_ids(tip.label, remove_underscores = TRUE),
-    species = stri_replace_all_regex(species, " ", "_"),
-    species = tolower(species)
+    species = tolower(unique_name)
   ) %>% 
   
+  # Remove columns
   select(
-    - unique_name,
-    - search_string,
-    - ott_id
+    - unique_name, - search_string, - ott_id
   )
 
-# Get branch lengths
+# Remove tips from tree that aren't in taxa_in_tree_update
+tree <- drop.tip(tree, setdiff(tree$tip.label, taxa_in_tree_update$tip.label))
 
-keep     <- intersect(tree_raw_me$tip.label, all_info$tip.label)
-phy_me      <- drop.tip(tree_raw_me, setdiff(tree_raw_me$tip.label, keep))
-phy_me = compute.brlen(phy_me)
+# Imputation ----
+## Get branch lengths ----
 
-phy_me = compute.brlen(tree_raw_me)
+#keep     <- intersect(tree$tip.label, taxa_in_tree_update$tip.label)
+#phy_me      <- drop.tip(tree, setdiff(tree$taxa_in_tree_update, keep))
+phy_me = compute.brlen(tree)
 
-# final trait table matched to the tree --------------------
-dat_cor_me <- all_info %>%
+## Format data ----
+dat_cor_me <- taxa_in_tree_update %>%
   
+  # Set NAs to a regex that corHMM recognises
   mutate(
-    diet = ifelse(is.na(diet), "?", diet)
-  ) %>% 
-  
-  filter(tip.label %in% phy_me$tip.label) %>% 
-  mutate(diet = as.character(diet)) %>% 
-  
+    diet = ifelse(is.na(diet), "?", diet),
+    diet = as.character(diet)
+    ) %>% 
+  # Select columns I want
   select(
-    tip.label,
-    diet
+    tip.label, diet
   )
-
-x <- as.data.frame(tree_raw_me$tip.label)
 
 ############################################################
 ## 5.  Run corHMM and impute the missing tips --------------
@@ -492,6 +495,147 @@ imputed_all = left_join(imputed, select(
   all_info, - diet
 ), by = "tip.label")
 
+
+a <- tip_recon_me %>% select(tip.label)
+b <- dat_cor_me %>% select(tip.label)
+x <- setdiff(a, b)
+
+test = subset(imputed_all, diet == "?")
+
+ggplot(test) +
+  geom_bar(aes(x = imputed_state))+
+  facet_wrap(~ diet_intact)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################
+## 4.  Build a matching phylogeny (Open Tree) --------------
+############################################################
+bs_traits <- bs_traits %>% 
+  filter(type == "Phytoplankton") %>% 
+  distinct(taxa.name, .keep_all = TRUE)
+
+# Get ott_ids ----
+taxa <- tnrs_match_names(bs_traits$taxa.name)
+
+# Filter for in tree ----
+# Check which ones are in tree with is_in_tree function - True = in tree, false = not in tree
+in_tree <- is_in_tree(ott_id(taxa))
+in_tree <- is_in_tree(ott_ids = bs_traits$ott.id)
+
+# View data
+in_tree
+
+# See which ones are in and out
+sum(in_tree == TRUE) # 87
+sum(in_tree == FALSE) # 3
+
+# Get tree ----
+# Retrieve a tree from the OTL API that contains the taxa that is in in_tree 
+
+taxa_in_tree <- taxa[in_tree, ] # get list of just species in the tree
+taxa_in_tree <- bs_traits[in_tree, ]
+
+tree <- tol_induced_subtree(ott_ids = taxa_in_tree$ott.id) # make tree
+
+# Remove extra nodes from tree ----
+# update names in taxa_in_tree
+taxa_in_tree_update <- taxa_in_tree %>% 
+  
+  # # Select columns
+  # select(
+  #   search_string, unique_name, ott_id
+  # ) %>% 
+  
+  # Make tip label column
+  mutate(
+    tip.label = paste0(taxa.name, "_ott", ott.id),
+    tip.label = stri_replace_all_regex(tip.label, " ", "_"),
+  ) 
+%>% 
+  
+  # Join trait data in
+  left_join(bs_traits, by = c("search_string" = "taxa.name")) %>% 
+  
+  # update species name with the new names from tol
+  mutate(
+    taxa.name = unique_name
+  ) %>% 
+  
+  # Remove columns
+  select(
+    - unique_name, - search_string, - ott_id
+  )
+
+# Remove tips from tree that aren't in taxa_in_tree_update
+tree <- drop.tip(tree, setdiff(tree$tip.label, taxa_in_tree_update$tip.label))
+
+# Imputation ----
+## Get branch lengths ----
+
+#keep     <- intersect(tree$tip.label, taxa_in_tree_update$tip.label)
+#phy_me      <- drop.tip(tree, setdiff(tree$taxa_in_tree_update, keep))
+phy_me = compute.brlen(tree)
+
+## Format data ----
+dat_cor_me <- taxa_in_tree_update %>%
+  
+  # Set NAs to a regex that corHMM recognises
+  # mutate(
+  #   functional.group = ifelse(is.na(functional.group), "?", functional.group),
+  #   functional.group = as.character(functional.group)
+  # ) %>% 
+  # Select columns I want
+  select(
+    tip.label, functional.group
+  )
+
+############################################################
+## 5.  Run corHMM and impute the missing tips --------------
+############################################################
+
+fit_me <- corHMM(phy       = phy_me,
+                 data         = dat_cor_me,
+                 rate.cat     = 1,         # simple Mk model
+                 model        = "ARD",     # all rates differ
+                 node.states  = "marginal",
+                 get.tip.states = TRUE)    # keep reconstructed tips
+# `fit$tip.states` is a matrix: rows = tips, cols = 5 states (likelihoods)
+
+# Pick the ML state for the missing species ----------------
+tip_recon_me <- data.frame(tip.label = rownames(fit_me$tip.states),
+                           fit_me$tip.states)
+
+diet_levels = 3
+
+imputed = dat_cor_me %>%
+  bind_cols(select(tip_recon_me, -tip.label)) %>%
+  mutate(imputed_state = ifelse(diet == "?",
+                                max.col(tip_recon_me[,c(2:4)]),
+                                as.character(diet)))
+
+imputed_all = left_join(imputed, select(
+  all_info, - diet
+), by = "tip.label")
+
+
+a <- tip_recon_me %>% select(tip.label)
+b <- dat_cor_me %>% select(tip.label)
+x <- setdiff(a, b)
 
 test = subset(imputed_all, diet == "?")
 

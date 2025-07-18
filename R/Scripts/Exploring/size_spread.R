@@ -29,10 +29,6 @@ bs <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_tr
     taxonomy_list, by = "taxa.name"
   )
   
-# reorder groups 
-bs$taxonomic.group <- factor(bs$taxonomic.group, levels = c("Blue-green", "Dinoflagellates", "Green", "Diatoms", "Stramenopiles", "Streptophyta", "Chrysophytes", "Euglenoids", "Haptophytes", "Cryptomonads", "Glaucophytes", "Ciliates", "Rotifers", "Copepods", "Ostracods", "Cladocerans"))
-
-
 # Get mean masses ----
 # calcuating mean of mean apposed to weighted mean
 avg_mass <- bs %>% 
@@ -61,16 +57,18 @@ avg_mass <- bs %>%
     )
   )
 
-# reorder groups for plotting
-avg_mass$taxonomic.group <- factor(avg_mass$taxonomic.group, levels = c("Blue-green", "Dinoflagellates", "Green", "Diatoms", "Stramenopiles", "Streptophyta", "Chrysophytes", "Euglenoids", "Haptophytes", "Cryptomonads", "Glaucophytes", "Ciliates", "Rotifers", "Copepods", "Ostracods", "Cladocerans"))
+# reorder groups for plotting anbd make as factor 
+avg_mass$taxonomic.group <- factor(avg_mass$taxonomic.group, levels = c("Blue-green", "Dinoflagellates", "Green", "Diatoms", "Stramenopiles", "Charophytes", "Chrysophytes", "Euglenoids", "Haptophytes", "Cryptomonads", "Glaucophytes", "Ciliates", "Rotifers", "Copepods", "Ostracods", "Cladocerans"))
 avg_mass$functional.group <- factor(avg_mass$functional.group, levels = c("A", "D", "MP", "J", "X1", "LO", "Y", "X3", "H1", "S1", "K", "S2", "F", "X2", "W1", "SN", "N", "T", "TC", "H2", "Q", "P", "G", "B", "E", "1", "2", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16"))
+avg_mass$type <- factor(avg_mass$type, levels = c("Phytoplankton", "Zooplankton"))
 
 # Histogram ----
 
-# facet by type
+## Type ----
 spread_type <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
-  geom_histogram(binwidth = 0.45) +
-  scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#333333"))+
+  geom_histogram(binwidth = 0.3) +
+  #scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#A3C4DC"))+
   facet_wrap(~ type, ncol = 1)+
   scale_y_log10()+
   guides(fill = "none")+
@@ -81,7 +79,10 @@ spread_type <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
     axis.text.x = element_text(size = 5),
     axis.text.y = element_text(size = 5)
   )+
-  labs(x = "Log mean body size (ug)")
+  labs(
+    x = "Log mean body size (ug)",
+    y = "Count (log10)"
+  )
 
 spread_type # View
 
@@ -96,10 +97,11 @@ range_by_group <- avg_mass %>%
 # save
 ggsave("R/Data_outputs/plots/spread_type.png", plot = spread_type, width = 8, height = 5)
 
-# Facet by group
+## Taxonomic group ----
 spread_group <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
   geom_histogram(binwidth = 0.7)+
-  scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#333333"))+
+  #scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#A3C4DC"))+
   facet_wrap(~ taxonomic.group, ncol = 11)+
   scale_y_log10()+
   #guides(fill = "none")+
@@ -112,17 +114,21 @@ spread_group <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
     legend.text = element_text(size = 5),
     legend.title = element_text(size = 5)
   )+
-  labs(x = "Log mean body size (ug)")
+  labs(
+    x = "Log mean body size (ug)",
+    y = "Count (log10)"
+    )
 
 spread_group
 
 # save
 ggsave("R/Data_outputs/plots/spread_group.png", plot = spread_group, width = 10, height = 5)
 
-# Facet by fg
+## Functional group ----
 spread_fg <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
   geom_histogram(binwidth = 0.5)+
-  scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#333333"))+
+  #scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#A3C4DC"))+
   facet_wrap(~ functional.group, ncol = 25)+
   scale_y_log10()+
   guides(fill = "none")+
@@ -133,14 +139,17 @@ spread_fg <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
     axis.text.x = element_text(size = 5, angle = -45),
     axis.text.y = element_text(size = 5)
   )+
-  labs(x = "Log mean body size (ug)")
+  labs(
+    x = "Log mean body size (ug)",
+    y = "Count (log10)"
+  )
 
 spread_fg
 
 # save
-ggsave("R/Data_outputs/plots/spread_fg.png", plot = spread_fg)
+ggsave("R/Data_outputs/plots/spread_fg.png", plot = spread_fg, width = 20, height = 10)
 
-# Join all together
+## Join together ----
 
 all_spread <- (spread_type+spread_group)/spread_fg
 
@@ -151,20 +160,21 @@ ggsave("R/Data_outputs/plots/all_spread.png", plot = all_spread, width = 20, hei
 
 # box plot ----
 
-# type
+## Type ----
 type_box <- ggplot(avg_mass, aes(x = type, y = log(avg.dw), fill = type)) +
   geom_boxplot()+
-  scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#76B7B2"))+
   labs(x = "Type",
        y = " Log mean body size (ug)")
 
 # view
 type_box
 
-# group
-group_box <- ggplot(bs, aes(x = taxonomic.group, y = log(mean.dw), fill = type)) +
+## Taxonomic group ----
+group_box <- ggplot(avg_mass, aes(x = taxonomic.group, y = log(avg.dw), fill = type)) +
   geom_boxplot()+
-  scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  #scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
+  scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#76B7B2"))+
   labs(x = "Taxonomic group",
        y = " Log mean body size (ug)")+
   theme(
@@ -190,138 +200,97 @@ zoo_sub <- avg_mass %>%
 phyto_sub <- avg_mass %>% 
   filter(type == "Phytoplankton")
 
-## Fit model ----
-# Taxonomic groups
+## Type ----
+
+# Fit model
+lm_type <- lm(log(avg.dw) ~ type, data = avg_mass)
+
+# Check assumptions
+autoplot(lm_type)
+
+# F-test
+an_type <- anova(lm_type)
+summary(an_type)
+
+# Post hoc test
+## aov
+type_aov <- aov(lm_type)
+type_aov
+
+## Tukey test
+tukey_type <- glht(type_aov,linfct = mcp(type = "Tukey"))
+summary(tukey_type) # Significant difference between zoo and phyto
+
+## Taxonomic group ----
+
+# Fit model
 lm_zoo_tg <- lm(log(avg.dw) ~ taxonomic.group, data = zoo_sub)
 lm_phyto_tg <- lm(log(avg.dw) ~ taxonomic.group, data = phyto_sub)
 
-# Functional groups 
-lm_zoo_fg <- lm(log(avg.dw) ~ functional.group, data = zoo_sub)
-lm_phyto_fg <- lm(log(avg.dw) ~ functional.group, data = phyto_sub)
-
-## Check assumptions ----
-# Taxonomic groups
+# Check assumptions
 autoplot(lm_zoo_tg)
 autoplot(lm_phyto_tg)
 
-# Functional groups
-autoplot(lm_zoo_fg)
-autoplot(lm_phyto_fg)
-
-## F-test ----
-# Taxonomic groups
+# F-test
 an_zoo_tg <- anova(lm_zoo_tg)
 an_phyto_tg <- anova(lm_phyto_tg)
 
 summary(an_zoo_tg)
 summary(an_phyto_tg)
 
-# Functional groups
+# Post-hoc test
+## aov
+zoo_tg_aov <- aov(lm_zoo_tg)
+phyto_tg_aov <- aov(lm_phyto_tg)
+
+zoo_tg_aov
+phyto_tg_aov
+
+## Tukey test
+tukey_zoo_tg <- glht(zoo_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+tukey_phyto_tg <- glht(phyto_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
+
+summary(tukey_zoo_tg) # no significant difference within crustaceans and microzoo, significant difference between all the crustancean groups and microzoo groups
+summary(tukey_phyto_tg)
+
+## Plot
+plot(tukey_zoo_tg)
+plot(tukey_phyto_tg)
+
+## Functional group ----
+
+# Fit model
+lm_zoo_fg <- lm(log(avg.dw) ~ functional.group, data = zoo_sub)
+lm_phyto_fg <- lm(log(avg.dw) ~ functional.group, data = phyto_sub)
+
+# Check assumptions
+autoplot(lm_zoo_fg)
+autoplot(lm_phyto_fg)
+
+# F-test
 an_zoo_fg <- anova(lm_zoo_fg)
 an_zoo_fg <- anova(lm_phyto_fg)
 
 summary(an_zoo_fg)
 summary(an_phyto_fg)
 
-## Post hoc test
-# Taxonomic groups:
-# aov
-zoo_tg_aov <- aov(lm_zoo_tg)
-phyto_tg_aov <- aov(lm_phyto_tg)
-
-zoo_tg_aov
-phyto_tg_aov
-
-# Tukey test
-tukey_zoo_tg <- glht(zoo_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
-tukey_phyto_tg <- glht(phyto_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
-
-summary(tukey_zoo_tg)
-summary(tukey_phyto_tg)
-
-# Plot
-plot(tukey_zoo_tg)
-plot(tukey_phyto_tg)
-
-# Functional groups
-# aov:
+# Post hoc test
+## aov
 zoo_fg_aov <- aov(lm_zoo_fg)
 phyto_fg_aov <- aov(lm_phyto_fg)
 
 zoo_fg_aov
 phyto_fg_aov
 
-# Tukey test
+## Tukey test
 tukey_zoo_fg <- glht(zoo_fg_aov,linfct = mcp(functional.group = "Tukey"))
 tukey_phyto_fg <- glht(phyto_fg_aov,linfct = mcp(functional.group = "Tukey"))
 
 summary(tukey_zoo_fg)
 summary(tukey_phyto_fg)
 
-# Plot
+## Plot
 plot(tukey_zoo_fg)
 plot(tukey_phyto_fg)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ANOVA ----
-## Format data ----
-zoo_sub <- avg_mass %>% 
-  filter(type == "Zooplankton")
-
-phyto_sub <- avg_mass %>% 
-  filter(type == "Phytoplankton")
-
-## Fit model ----
-lm_zoo_tg <- lm(log(avg.dw) ~ taxonomic.group, data = zoo_sub)
-lm_phyto_tg <- lm(log(avg.dw) ~ taxonomic.group, data = phyto_sub)
-
-## Check assumptions ----
-autoplot(lm_zoo_tg)
-autoplot(lm_phyto_tg)
-
-## F-test ----
-an_zoo_tg <- anova(lm_zoo_tg)
-an_phyto_tg <- anova(lm_phyto_tg)
-
-summary(an_zoo_tg)
-summary(an_phyto_tg)
-
-## Post hoc test
-# aov
-zoo_tg_aov <- aov(lm_zoo_tg)
-phyto_tg_aov <- aov(lm_phyto_tg)
-
-zoo_tg_aov
-phyto_tg_aov
-
-# Tukey test
-tukey_zoo_tg <- glht(zoo_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
-tukey_phyto_tg <- glht(phyto_tg_aov,linfct = mcp(taxonomic.group = "Tukey"))
-
-summary(tukey_zoo_tg)
-summary(tukey_phyto_tg)
-
-# Plot
-plot(tukey_zoo_tg)
-plot(tukey_phyto_tg)
 
 

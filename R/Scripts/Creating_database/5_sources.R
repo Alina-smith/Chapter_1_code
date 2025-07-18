@@ -378,7 +378,7 @@ duplicate_data_points <- bodysize_taxonomy %>%
 
 ## Remove duplicates ----
 # remove duplicates when they have only one original source code
-bodysize_sources <- bodysize_sources_wd %>% 
+bodysize_formatted <- bodysize_sources_wd %>% 
   
   mutate(
     duplicate = if_else(
@@ -394,39 +394,37 @@ bodysize_sources <- bodysize_sources_wd %>%
   
   # Merge the original source columns together into one
   mutate(
-    across(
-      original.source.code.1:original.source.code.18, ~na_if(., "no.source")
-      ),
-
-    original.sources = paste(original.source.code.1, original.source.code.2, original.source.code.3, original.source.code.4, original.source.code.5, original.source.code.6, original.source.code.7, original.source.code.8, original.source.code.9, original.source.code.10,
-                             original.source.code.11, original.source.code.12, original.source.code.13, original.source.code.14, original.source.code.15, original.source.code.16, original.source.code.17, original.source.code.18,
-                             sep = " "),
-    original.sources = stri_replace_all_regex(original.sources, " NA|NA ", " "),
-    original.sources = stri_replace_all_regex(original.sources, "  +", ""),
-    original.sources = stri_replace_all_regex(original.sources, " ", ";")
-    )%>%
-  
-  select(
-    -original.source.code.1:-original.source.code.18
-  ) %>% 
+    # across(
+    #   original.source.code.1:original.source.code.18, ~na_if(., "no.source")
+    #   ),
+    
+    original.sources = pmap_chr(select(., starts_with("original.source.")), function(...) {
+      vals <- unlist(list(...))                     # Combine all columns into a vector
+      vals <- na_if(vals, "no.source")
+      vals <- vals[!is.na(vals) & vals != ""]       # Remove NA and empty strings
+      vals <- unique(vals)                          # Keep only unique values
+      merged <- paste(vals, collapse = ";")         # Collapse to single string
+      if_else(merged == "", NA, merged)
+      })
+    ) %>% 
   
   # Relocate
-  relocate(
-    uid, individual.uid,
-    source.code, original.sources,
-    original.taxa.name, taxa.name, ott.id, type, species, genus, family, order, class, phylum, kingdom,
-    nu, ind.per.nu, life.stage, sex,
-    min.body.size, max.body.size, body.size, units, bodysize.measurement, bodysize.measurement.notes,
-    reps, measurement.type, sample.size, error, error.type,
+  select(
+    uid, source.code, original.sources,
+    habitat, location.code, latitude, longitude, water.body, place, country, continent, area,
+    individual.uid, original.taxa.name, taxa.name, ott.id, type, species, genus, family, order, class, phylum, kingdom, domain,
+    life.stage, sex, nu, ind.per.nu,
+    min.body.size, max.body.size, body.size,
+    bodysize.measurement, bodysize.measurement.notes, units, measurement.type, sample.size, reps, error, error.type,
     sample.year, sample.month
   )
 
 # Save
-saveRDS(bodysize_sources, file = "R/Data_outputs/database_products/bodysize_sources.rds")
+saveRDS(bodysize_formatted, file = "R/Data_outputs/database_products/final_products/bodysize_formatted.rds")
 
 # updated source list
 
-sources_list_nd <- bodysize_sources %>% 
+sources_list_nd <- bodysize_formatted %>% 
   
   select(
     original.sources, source.code

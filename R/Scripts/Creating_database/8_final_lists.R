@@ -82,14 +82,14 @@ source_codes <- plankton_traits_all %>%
   
   # get all distinct non NAs
   distinct(
-    source.code
+    source.code, .keep_all = TRUE
   ) %>% 
   
   filter(
     !is.na(
       source.code
-    )
-  ) %>% 
+      )
+    )%>% 
   
   # pull out into a vector
   pull(

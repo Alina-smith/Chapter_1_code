@@ -11,10 +11,17 @@ library(ggmap)
 library(scatterpie)
 library(ggrepel)
 library(patchwork)
+library(paletteer)
 
 location_list <- read_rds("R/Data_outputs/database_products/final_products/locations_list.rds")
 source_list <- read_rds("R/Data_outputs/database_products/final_products/sources_list.rds")
-bs_data <- readRDS("R/Data_outputs/database_products/final_products/plankton_genus_traits.rds")
+bs_data <- readRDS("R/Data_outputs/database_products/final_products/plankton_genus_traits.rds") %>% 
+  mutate(
+    functional.group = if_else(
+      is.na(functional.group), "Unassigned",
+      functional.group
+    )
+  )
 
 # Map ----
 ## format data ----
@@ -125,24 +132,35 @@ world <- ne_countries(scale = "small", returnclass = "sf")
 world_map_phyto <- ggplot(world) +
   geom_sf(fill = "grey90", colour = "black") +
   coord_sf(ylim = c(-90, 90), xlim = c(-185, 185), expand = FALSE) +
-  geom_scatterpie(
-    data = fg_phyto,
-    aes(
-      x = longitude,
-      y = latitude
-      ),
-    pie_scale = 0.5,
-    cols = "functional.group",
-    long_format = TRUE
-  ) +
+  
+  # geom_point(
+  #     data = diversity_phyto,
+  #     aes(
+  #       x = longitude,
+  #       y = latitude,
+  #       alpha = 0.5,
+  #       color = diversity
+  #     )
+  # ) +
+   #scale_color_viridis_c()
+   geom_scatterpie(
+     data = fg_phyto,
+     aes(
+       x = longitude,
+       y = latitude
+       ),
+     pie_scale = 0.5,
+     cols = "functional.group",
+     long_format = TRUE
+   ) +
 
-  geom_text_repel(
-    data = diversity_phyto,
-    aes(x = longitude, y = latitude, label = diversity),
-    box.padding = 0.5,
-    max.overlaps = Inf,
-    nudge_x = 1.5
-  )+
+   geom_text_repel(
+     data = diversity_phyto,
+     aes(x = longitude, y = latitude, label = diversity),
+     box.padding = 0.5,
+     max.overlaps = Inf,
+     nudge_x = 1.5
+   )+
   
   theme(
     legend.key.size = unit(0.1, "cm"),
@@ -302,49 +320,51 @@ map
 
 ggsave("R/data_outputs/plots/world_map_phyto.png", plot = world_map_phyto, width = 15, height = 10, dpi = 600)
 ggsave("R/data_outputs/plots/world_map_zoo.png", plot = world_map_zoo, width = 15, height = 10, dpi = 600)
-ggsave("R/data_outputs/plots/map.png", plot = map, width = 11, height = 10, dpi = 600)
+ggsave("R/data_outputs/plots/map.png", plot = map, width = 10, height = 10)
 
 # Continent spread ----
 ## format data ----
 ### phyto ----
 
-continent_spread_data <- bs_data %>% 
-  
-  filter(
-    !is.na(continent)
+country_spread_data <- bs_data %>% 
+  #filter(type == "Zooplankton") %>% 
+  select(location.code, type) %>% 
+  separate_rows(location.code, sep = ";") %>%
+  left_join(location_list, by = "location.code") %>% 
+  distinct(habitat)
+  #distinct(location.code, .keep_all = TRUE) %>% 
+  group_by(habitat) %>% 
+  summarise(
+    count = n()
   ) %>% 
-  
   mutate(
-    continent = if_else(
-      stri_detect_regex(continent, ","),
-      stri_extract_first_regex(continent, "\\S+(?=,)"),
-      continent
-    )
+    per = (count/sum(count))*100
   )
+  filter(!is.na(country))
+  
 
-continent_spread <- ggplot(continent_spread_data, aes(x = continent, fill = type))+
+country_spread_data$country <- factor(country_spread_data$country, levels = c("Netherlands", "Ireland", "Austria", "Spain",  "Germany", "France", "Finland", "Norway", "UK", "Sweeden", "Belgium", "Czechia","Denmark","Russia", "Hungary", "Poland", "Greece", "Italy", 
+                                                                                "Canada", "USA", "Mexico",
+                                                                                "Uruguay", "Brazil", "Argentina", "Chile", "Ecuador", 
+                                                                                "China", "Japan", "Turkey", "South Korea", "Vietnam", "India", "Israel",  "Thailand",
+                                                                                "Australia", "New Zealand",
+                                                                                "Ethiopia", "South Africa", "Uganda", "Kenya", "Morocco"))
+
+country_spread_data$continent <- factor(country_spread_data$continent, levels = c("Africa", "Antarctica", "Australasia", "Asia", "South America", "North America", "Europe"))
+
+country_spread <- ggplot(country_spread_data, aes(x = country, fill = continent))+
   geom_bar()+
-  #facet_wrap(~type, ncol = 1)+
+  facet_wrap(~ type, ncol = 1)+
+  scale_fill_manual(values = c("Africa" = "#A3C4DC", "Antarctica" = "#76B7B2", "Asia" = "#97B498", "Australasia" = "#D6A77A", "Europe" = "#BFA0C8", "North America" = "#F1D4AF", "South America" = "#C4D6A4"))+
   scale_y_log10()+
   theme(
-    axis.text.x = element_text(angle = -20)
+    axis.text.x = element_text(angle = 90)
+  )+
+  labs(
+    y = "Count (log10)",
+    x = "Country"
   )
 
-continent_spread
+country_spread
 
-ggsave("R/data_outputs/plots/continent_spread.png", plot = continent_spread, width = 7, height = 7)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ggsave("R/data_outputs/plots/country_spread.png", plot = country_spread, width = 10, height = 7)
