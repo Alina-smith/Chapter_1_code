@@ -25,10 +25,11 @@ library(treeio)
 library(ggtreeExtra)
 
 # Import data ----
-bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds")
+bodysize_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_database.rds")
+taxonomy <- readRDS("R/data_outputs/database_products/final_products/taxonomy_groups_list.rds")
 
-tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_p.nex")
-tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_pre_plot_z.nex")
+tree_pre_plot_p <- read.nexus("R/data_outputs/phylo_tree/tree_p.nex")
+tree_pre_plot_z <- read.nexus("R/data_outputs/phylo_tree/tree_z.nex")
 taxa_in_tree_p <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_p.rds")
 taxa_in_tree_z <- readRDS("R/data_outputs/phylo_tree/taxa_in_tree_z.rds")
 
@@ -47,28 +48,16 @@ taxa_in_tree_full_p <- as.data.frame(tree_pre_plot_p$tip.label) %>% # get the ti
     tip.label = `tree_pre_plot_p$tip.label`
   ) %>% 
   
-  mutate(
-    # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
-    stripped.tip.label = tolower(stripped.tip.label)
-  ) %>% 
-  
-  # Join in the extra data
   left_join(
-    taxa_in_tree_p, by = c("stripped.tip.label" = "taxa.name")
-  ) %>% 
-  
-  # Add in to make plotting labels look neater
-  mutate(
-    taxa.name = stripped.tip.label
+    taxonomy, by = "tip.label"
   ) %>% 
   
   select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
+    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group.imputed, taxonomic.group
   ) %>% 
   
   mutate(
-    fg_label = paste0("FG: ", functional.group),
+    fg_label = paste0("FG: ", functional.group.imputed),
     group_label = paste0("Group: ", taxonomic.group)
   )
 
@@ -79,28 +68,16 @@ taxa_in_tree_full_z <- as.data.frame(tree_pre_plot_z$tip.label) %>% # get the ti
     tip.label = `tree_pre_plot_z$tip.label`
   ) %>% 
   
-  mutate(
-    # Make a new column with the tip labels stripped so just the name and no other info
-    stripped.tip.label = strip_ott_ids(tip.label, remove_underscores = TRUE),
-    stripped.tip.label = tolower(stripped.tip.label)
-  ) %>% 
-  
-  # Join in the extra data
   left_join(
-    taxa_in_tree_z, by = c("stripped.tip.label" = "taxa.name")
-  ) %>% 
-  
-  # Add in to make plotting labels look neater
-  mutate(
-    taxa.name = stripped.tip.label
+    taxonomy, by = "tip.label"
   ) %>% 
   
   select(
-    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group, taxonomic.group
+    tip.label, taxa.name, type, phylum, family, kingdom, class, order, functional.group.imputed, taxonomic.group
   ) %>% 
   
   mutate(
-    fg_label = paste0("FG: ", functional.group),
+    fg_label = paste0("FG: ", functional.group.imputed),
     group_label = paste0("Group: ", taxonomic.group)
   ) 
 
@@ -159,8 +136,7 @@ mass_data_p <- bodysize_traits %>%
   ) %>% 
   
   mutate(
-    log.mass = log10(mean.mass),
-    taxa.name = tolower(taxa.name)
+    log.mass = log10(mean.mass)
   ) %>% 
   
   left_join(
@@ -235,8 +211,7 @@ mass_data_z <- bodysize_traits %>%
   ) %>% 
   
   mutate(
-    log.mass = log10(mean.mass),
-    taxa.name = tolower(taxa.name)
+    log.mass = log10(mean.mass)
   ) %>% 
   
   left_join(

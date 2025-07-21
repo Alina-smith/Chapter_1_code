@@ -617,6 +617,10 @@ plankton_species_traits <- plankton_traits_all %>%
   select(
     -genus.ott.id,
     -species,
+  ) %>% 
+  
+  rename(
+    functional.group = functional.group.species
   )
 
 # save
@@ -631,7 +635,8 @@ plankton_genus_traits <- plankton_traits_all %>%
     uid = paste("genus", row_number(), sep = "-")
   ) %>% 
   rename(
-    ott.id = genus.ott.id
+    ott.id = genus.ott.id,
+    functional.group = functional.group.genus
     )
 
 

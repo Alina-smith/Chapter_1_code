@@ -8,22 +8,15 @@ library(tidyverse)
 library(stringi)
 
 # Data ----
-plankton_genus_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds") %>% 
-  mutate(
-    genus = taxa.name
-  )
-plankton_species_traits <- readRDS("R/data_outputs/database_products/final_products/plankton_species_traits.rds") %>% 
-  mutate(
-    species = taxa.name
-  )
-plankton_traits_all <- readRDS("R/data_outputs/database_products/final_products/plankton_traits_all.rds")
+plankton_database <- readRDS("R/data_outputs/database_products/final_products/plankton_database.rds")
+imputed_tax <- readRDS("R/data_outputs/database_products/imputed_tax.rds")
 sources_list_old <- readRDS("R/Data_outputs/database_products/source_list_wt.rds")
 location_list_old <- readRDS("R/Data_outputs/database_products/locations_list_update.rds")
 
 # location list ----
 
 # get a list of locations used in the final data
-location_codes <- plankton_traits_all %>% 
+location_codes <- plankton_database %>% 
   
   # select column
   select(
@@ -63,7 +56,7 @@ saveRDS(locations_list, "R/data_outputs/database_products/final_products/locatio
 # Sources ----
 
 # get a list of sources used in final data
-source_codes <- plankton_traits_all %>% 
+source_codes <- plankton_database %>% 
   
   # select columns
   select(
@@ -116,16 +109,21 @@ sources_list <- sources_list_old %>%
 saveRDS(sources_list, "R/data_outputs/database_products/final_products/sources_list.rds")
 
 # taxonomy ----
-taxonomy_list <- bind_rows(plankton_genus_traits, plankton_species_traits) %>% 
-  
+taxonomy_groups_list <- plankton_database %>% 
   select(
-    taxa.name, species, genus, family, order, class, phylum, kingdom, type, taxonomic.group, functional.group
+    ott.id, taxa.name, type, genus, family, order, class, phylum, kingdom, taxonomic.group, functional.group
   ) %>% 
-  
-  distinct(
-    taxa.name, .keep_all = TRUE
+  distinct(taxa.name, .keep_all = TRUE) %>% 
+  left_join(
+    select(
+      imputed_tax, taxa.name, tip.label
+    ), by = "taxa.name"
+  ) %>% 
+  relocate(
+    ott.id, tip.label, taxa.name, type, genus, family, order, class, phylum, kingdom, taxonomic.group, functional.group
   )
+# some wont have a tip label because they arebn't in the tree
 
 # save
-saveRDS(taxonomy_list, "R/data_outputs/database_products/final_products/taxonomy_list.rds")
+saveRDS(taxonomy_groups_list, "R/data_outputs/database_products/final_products/taxonomy_groups_list.rds")
 

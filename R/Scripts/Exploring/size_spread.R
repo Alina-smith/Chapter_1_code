@@ -11,8 +11,8 @@ library(agricolae)
 library(multcomp)
 
 # Import data ----
-taxonomy_list <- readRDS("R/data_outputs/database_products/final_products/taxonomy_list.rds")
-bs <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_traits.rds") %>% 
+taxonomy_list <- readRDS("R/data_outputs/database_products/final_products/taxonomy_groups_list.rds")
+bs <- readRDS("R/data_outputs/database_products/final_products/plankton_database.rds") %>% 
   
   # First calculate mean for each source
   group_by(
@@ -27,7 +27,9 @@ bs <- readRDS("R/data_outputs/database_products/final_products/plankton_genus_tr
   # add back in taxonomy info
   left_join(
     taxonomy_list, by = "taxa.name"
-  )
+  ) %>% 
+  
+  filter(!is.na(tip.label))
   
 # Get mean masses ----
 # calcuating mean of mean apposed to weighted mean
@@ -46,20 +48,11 @@ avg_mass <- bs %>%
   # add back in extra info
   left_join(
     taxonomy_list, by = "taxa.name"
-  ) %>% 
-  
-  mutate(
-    functional.group = case_when(
-      is.na(functional.group) ~ NA,
-      stri_detect_regex(functional.group, "\\/") ~ stri_extract_first_regex(functional.group, "//S+(?=\\/)"),
-      !(stri_detect_regex(functional.group, "\\/")) ~ functional.group,
-      TRUE ~ NA
-    )
   )
 
 # reorder groups for plotting anbd make as factor 
 avg_mass$taxonomic.group <- factor(avg_mass$taxonomic.group, levels = c("Blue-green", "Dinoflagellates", "Green", "Diatoms", "Stramenopiles", "Charophytes", "Chrysophytes", "Euglenoids", "Haptophytes", "Cryptomonads", "Glaucophytes", "Ciliates", "Rotifers", "Copepods", "Ostracods", "Cladocerans"))
-avg_mass$functional.group <- factor(avg_mass$functional.group, levels = c("A", "D", "MP", "J", "X1", "LO", "Y", "X3", "H1", "S1", "K", "S2", "F", "X2", "W1", "SN", "N", "T", "TC", "H2", "Q", "P", "G", "B", "E", "1", "2", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16"))
+avg_mass$functional.group <- factor(avg_mass$functional.group, levels = c("A", "B", "C", "D", "E", "F", "G", "H1", "H2", "J", "K", "LO", "LM", "MP", "N", "P", "Q", "SN", "S1", "S2", "T", "TC", "TB", "U", "W0", "W1", "X1", "X2", "X3", "XPH", "Y", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16", "17"))
 avg_mass$type <- factor(avg_mass$type, levels = c("Phytoplankton", "Zooplankton"))
 
 # Histogram ----
@@ -129,7 +122,7 @@ spread_fg <- ggplot(avg_mass, aes(x = log10(avg.dw), fill = type))+
   geom_histogram(binwidth = 0.5)+
   #scale_fill_manual(values = c("Phytoplankton" = "#999999", "Zooplankton" = "#555555"))+
   scale_fill_manual(values = c("Phytoplankton" = "#97B498", "Zooplankton" = "#A3C4DC"))+
-  facet_wrap(~ functional.group, ncol = 25)+
+  facet_wrap(~ functional.group, ncol = 31)+
   scale_y_log10()+
   guides(fill = "none")+
   ggtitle("c)")+
@@ -269,7 +262,7 @@ autoplot(lm_phyto_fg)
 
 # F-test
 an_zoo_fg <- anova(lm_zoo_fg)
-an_zoo_fg <- anova(lm_phyto_fg)
+an_phyto_fg <- anova(lm_phyto_fg)
 
 summary(an_zoo_fg)
 summary(an_phyto_fg)
