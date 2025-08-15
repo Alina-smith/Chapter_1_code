@@ -15,13 +15,7 @@ library(paletteer)
 
 location_list <- read_rds("R/Data_outputs/database_products/final_products/locations_list.rds")
 source_list <- read_rds("R/Data_outputs/database_products/final_products/sources_list.rds")
-bs_data <- readRDS("R/Data_outputs/database_products/final_products/plankton_genus_traits.rds") %>% 
-  mutate(
-    functional.group = if_else(
-      is.na(functional.group), "Unassigned",
-      functional.group
-    )
-  )
+bs_data <- readRDS("R/Data_outputs/database_products/final_products/plankton_database.rds")
 
 # Map ----
 ## format data ----
@@ -288,7 +282,7 @@ world_map_zoo <- ggplot(world) +
       x = longitude,
       y = latitude
     ),
-    pie_scale = 0.000015,
+    pie_scale = 0.5,
     cols = "functional.group",
     long_format = TRUE
   ) +
@@ -331,8 +325,7 @@ country_spread_data <- bs_data %>%
   select(location.code, type) %>% 
   separate_rows(location.code, sep = ";") %>%
   left_join(location_list, by = "location.code") %>% 
-  distinct(habitat)
-  #distinct(location.code, .keep_all = TRUE) %>% 
+  distinct(location.code, .keep_all = TRUE) %>% 
   group_by(habitat) %>% 
   summarise(
     count = n()
@@ -340,7 +333,6 @@ country_spread_data <- bs_data %>%
   mutate(
     per = (count/sum(count))*100
   )
-  filter(!is.na(country))
   
 
 country_spread_data$country <- factor(country_spread_data$country, levels = c("Netherlands", "Ireland", "Austria", "Spain",  "Germany", "France", "Finland", "Norway", "UK", "Sweeden", "Belgium", "Czechia","Denmark","Russia", "Hungary", "Poland", "Greece", "Italy", 
